@@ -409,6 +409,50 @@ test("visibility loss clears an accepted condition reference", async ({ page }) 
   await expect(page.locator("#condition-card")).toBeHidden();
 });
 
+for (const phase of ["report", "follow-up setup"] as const) {
+  test(`pagehide clears the accepted reference from ${phase} before page restoration`, async ({ page }) => {
+    await installAmbientBrowserFixture(page, "dual-lane");
+    await page.goto(appUrl);
+    await consentAndStart(page);
+    await expect(page.locator("#phase-label")).toHaveText("Ambient session");
+    await page.locator("#finish-button").click();
+    await expect(page.locator("#phase-label")).toHaveText("Report ready");
+    await page.locator("#accept-reference-button").click();
+    await expect(page.locator("#condition-status")).toContainText(
+      "Reference accepted in page memory"
+    );
+    if (phase === "follow-up setup") {
+      await page.locator("#follow-up-button").click();
+      await expect(page.locator("#affected-side-left")).toBeDisabled();
+    }
+
+    // Exercise pagehide independently of visibilitychange. A cached document
+    // can be restored with its JavaScript heap and rendered report intact.
+    await page.evaluate(() => {
+      window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+      window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+    });
+
+    await expect(page.locator("#welcome-view")).toBeVisible();
+    await expect(page.locator("#affected-side-left")).not.toBeChecked();
+    await expect(page.locator("#affected-side-left")).toBeEnabled();
+    await expect(page.locator("#consent-checkbox")).not.toBeChecked();
+    await expect(page.locator("#report-sections")).toBeEmpty();
+    await expect(page.locator("#condition-card")).toBeHidden();
+    await expect(page.locator("#condition-side-badge")).toHaveText("Affected side not set");
+    await expect(page.locator("#follow-up-button")).toBeHidden();
+
+    // A fresh capture must become a first observation, never an implicit
+    // comparison with the reference that existed before leaving the page.
+    await consentAndStart(page);
+    await expect(page.locator("#phase-label")).toHaveText("Ambient session");
+    await page.locator("#finish-button").click();
+    await expect(page.locator("#phase-label")).toHaveText("Report ready");
+    await expect(page.locator("#accept-reference-button")).toBeVisible();
+    await expect(page.locator("#condition-card")).toBeHidden();
+  });
+}
+
 test("withdrawing the follow-up clears its accepted reference", async ({ page }) => {
   await installAmbientBrowserFixture(page, "dual-lane");
   await page.goto(appUrl);

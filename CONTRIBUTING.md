@@ -6,7 +6,9 @@ Thank you for contributing to PhenoMetrix.
 
 1. Read the [architecture](docs/architecture.md) and
    [safety requirements](docs/safety.md), then review the
-   [current ambient-capture design](docs/superpowers/specs/2026-07-18-ambient-biomarker-capture-design.md).
+   [development baseline](docs/development-baseline.md). Historical designs in
+   `docs/superpowers/` preserve earlier decisions and may describe superseded
+   behavior; use the baseline and current architecture for implementation status.
 2. State the intended use of the change.
 3. Identify which of the three product capabilities it strengthens.
 4. Document expected failures, quality requirements, and validation status.
@@ -36,9 +38,16 @@ review gate and may not execute the decision automatically.
 ## Checks
 
 ```bash
+pnpm verify
+```
+
+This runs all automated gates, including the isolated Python service tests.
+The individual commands are:
+
+```bash
 pnpm test
 pnpm test:browser
-uv run --project services/voice-inference --extra dev python -m pytest services/voice-inference/tests
+pnpm test:voice
 ```
 
 `pnpm test` runs the structure and asset validator, unit tests, TypeScript

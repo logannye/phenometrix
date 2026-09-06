@@ -6,6 +6,11 @@
 PhenoMetrix derives bounded, quality-aware face and voice measurements from an
 ordinary conversation, in the browser, without recording it.
 
+The [development baseline](docs/development-baseline.md) records the integrated
+starting point, verification commands, and remaining engineering and validation
+work. The [platform vision](docs/telehealth-platform-vision.md) describes future
+scope; it is not an implementation checklist.
+
 A clinician watching a video visit reads a great deal from how someone looks and
 sounds — facial symmetry, blink rate, vocal effort, how long they can speak
 before drawing breath. Almost none of it reaches the record, because it is hard
@@ -37,8 +42,9 @@ an indication where the finding *is* an asymmetry.
 
 ## Current implementation
 
-The implemented browser path can run one generic ambient session or the full
-two-capture unilateral facial movement research demonstration:
+The implemented browser path runs the unilateral facial movement research
+demonstration. Each capture produces the full generic ambient report, and the
+operator may stop after the first report or complete the two-capture flow:
 
 ```text
 participant-asserted affected side + consent
@@ -254,6 +260,10 @@ The optional WavLM research service has separate instructions in
 behavior.
 
 ## Validate
+
+Run every automated gate from the repository root with `pnpm verify`. This
+requires the Node/pnpm environment above, Chrome, and uv with Python 3.11 for
+the optional voice service's isolated tests. Individual gates remain available:
 
 ```bash
 pnpm run check

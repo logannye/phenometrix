@@ -4,7 +4,7 @@
 
 - macOS with current Chrome, hardware acceleration, and a working camera and
   microphone;
-- Node.js 22 or newer;
+- Node.js 22.12+ on the Node 22 line, or Node 24+;
 - pnpm 9.12.3; and
 - localhost or HTTPS for camera and microphone access.
 
@@ -114,8 +114,8 @@ must remain disabled by default and bound to loopback.
   Withheld and incompatible rows deliberately have no delta; never substitute
   a value or relax compatibility.
 
-The supported hardware claim is deliberately narrow: current Chrome on the
-target MacBook. Secure-context permission policy, device drivers,
+The intended hardware target is current Chrome on macOS; the named-hardware
+acceptance checklist is still pending. Secure-context permission policy, device drivers,
 AudioWorklet, workers, `OffscreenCanvas`, WebGL, and acceleration behavior vary
 elsewhere; a successful automated fixture is not evidence that another browser
 or device is supported.

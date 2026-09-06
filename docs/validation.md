@@ -6,6 +6,11 @@ fitness.
 
 ## Required commands
 
+From the repository root, `pnpm verify` runs all automated gates below. It
+includes the optional voice service's isolated tests and requires uv/Python in
+addition to the browser application's prerequisites. `pnpm demo:smoke` is an
+alias for the same browser suite and does not add a separate gate.
+
 ```bash
 pnpm install --frozen-lockfile
 pnpm run check
@@ -62,7 +67,8 @@ real-hardware repeatability.
 - browser consent, affected-side gating, permission denial, independent
   calibration, report display, explicit reference acceptance, second live
   capture, six-row card, page-local accept/dismiss, reset, no-upload/no-storage
-  behavior, discard, withdrawal, and late-stream cleanup; and
+  behavior, discard, withdrawal, pagehide/restoration without a visibility
+  event, and late-stream cleanup; and
 - optional WavLM health, CORS, request validation, and transient summary output
   using a deterministic fake adapter.
 

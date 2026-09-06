@@ -11,6 +11,7 @@ required_files=(
   "SECURITY.md"
   "CONTRIBUTING.md"
   "docs/architecture.md"
+  "docs/development-baseline.md"
   "docs/demo-experience.md"
   "docs/operator-guide.md"
   "docs/safety.md"
@@ -84,6 +85,8 @@ node <<'NODE'
     "test",
     "test:unit",
     "test:browser",
+    "test:voice",
+    "verify",
     "typecheck",
     "build",
     "demo:smoke"

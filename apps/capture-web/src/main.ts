@@ -1612,7 +1612,7 @@ async function resetApplication(preserveConditionDemo = false): Promise<void> {
   cameraPlaceholder.textContent = "Camera is preparing";
   sessionClock.textContent = "00:00";
   reportSections.replaceChildren();
-  clearConditionEvidenceCard(conditionEvidenceView);
+  renderConditionPanel();
   renderWorkflow();
 }
 
@@ -1712,8 +1712,15 @@ document.addEventListener("visibilitychange", () => {
 });
 
 window.addEventListener("pagehide", () => {
-  if (["requesting-permission", "calibrating", "observing", "finalizing"].includes(workflow.phase)) {
+  const phaseBeforePageHide = workflow.phase;
+  // A document placed in the back/forward cache retains its heap and DOM.
+  // Clear accepted references even when no capture is active and no preceding
+  // visibility event has performed the reset.
+  conditionDemo.clear();
+  if (["requesting-permission", "calibrating", "observing", "finalizing"].includes(phaseBeforePageHide)) {
     dispatch({ type: "discard-requested", reason: "page-unloaded" });
+  } else if (phaseBeforePageHide === "idle" || phaseBeforePageHide === "report") {
+    void resetApplication(false);
   }
 });
 

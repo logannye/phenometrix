@@ -49,4 +49,4 @@ jobs:
         with:
           python-version: "3.11"
       - run: uv sync --project services/voice-inference --extra dev --locked
-      - run: uv run --project services/voice-inference --extra dev python -m pytest services/voice-inference/tests
+      - run: uv run --project services/voice-inference --extra dev --locked python -m pytest services/voice-inference/tests

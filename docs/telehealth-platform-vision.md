@@ -1,11 +1,13 @@
 # PhenoMetrix platform vision
 
-> **Current implementation note (2026-07-21):** this document describes a
-> long-term platform direction. The shipping research prototype is the
-> session-only ambient-v3 path documented in `README.md` and
-> `docs/architecture.md`. Persistence, trajectory wiring, retained snippets,
-> narrative drafting, clinician review, export, PHI workflows, and clinical
-> validation below are future work.
+> **Implementation status (2026-09-06):** this document describes the long-term
+> platform direction. The local research prototype now connects ambient-v3
+> capture, one explicitly accepted in-memory reference, a strict six-metric
+> comparison, and a deterministic evidence card with page-local accept/dismiss.
+> See [the development baseline](development-baseline.md), `README.md`, and
+> `docs/architecture.md` for implemented behavior. Durable history, baseline and
+> trend estimation, retained snippets, narrative drafting, authenticated clinical
+> review, export, PHI workflows, and clinical validation remain future work.
 
 ## Purpose
 
@@ -482,7 +484,9 @@ milestones rather than hidden dependencies of the voice foundation.
 
 1. Add a derived-measurement store with identity, authorization, audit, and
    retention policy.
-2. Implement a v3-native trajectory engine over accepted observations.
+2. Extend the implemented v3-native two-observation comparator to governed
+   history; explicit reference acceptance and strict compatibility already work
+   within one page lifetime.
 3. Establish multi-visit baselines and minimum-data rules.
 4. Add protocol and algorithm migration handling.
 5. Present change with compatible-history and missingness explanations.

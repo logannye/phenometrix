@@ -46,9 +46,9 @@ live energy/pitch history. Canvas painting is animation-frame throttled and the
 history is cleared on finalization, discard, permission failure, reset, or page
 exit. It does not feed an extractor or report.
 
-The face worker owns MediaPipe inference. Native bitmaps, 478 landmarks,
-blendshapes, and transformation matrices are scoped to worker processing and
-are not returned. The application receives normalized geometry, pose, compact
+The face worker owns MediaPipe inference. Native bitmaps, 478 landmarks, and
+transformation matrices are scoped to worker processing and are not returned.
+Blendshape output is disabled. The application receives normalized geometry, pose, compact
 image-quality facts, cadence, processor provenance, face count, and track
 continuity only.
 
@@ -143,7 +143,9 @@ reference ObservationV3, latest ObservationV3, and latest condition card in
 page memory. The operator must explicitly accept the first observation as the
 reference. Starting the follow-up preserves that reference and the asserted
 side while resetting capture state and requiring consent again. New-participant
-reset, document visibility loss, or reload clears the condition state.
+reset, document visibility loss, or page exit clears the condition state. The
+`pagehide` handler also clears idle/reference and report state independently of
+`visibilitychange`, so a cached-page restoration starts a new participant flow.
 
 ## Strict previous-session comparison
 
