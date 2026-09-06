@@ -1,7 +1,7 @@
 # Cinematic Live-Capture Visuals — Design
 
 - **Date:** 2026-07-23
-- **Status:** Approved (design); implementation not started
+- **Status:** Historical approved design; implemented in the capture surface
 - **Author:** Logan Nye (with Claude)
 - **Scope:** `apps/capture-web` presentation layer only
 

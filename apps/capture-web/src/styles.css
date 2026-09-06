@@ -21,11 +21,11 @@
 
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 
-button, input { font: inherit; }
+button, input, select { font: inherit; }
 
 button { cursor: pointer; }
 
-button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible {
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, a:focus-visible {
   outline: 3px solid #4aa98a;
   outline-offset: 3px;
 }
@@ -66,6 +66,12 @@ h2 { margin: 0; font-size: 1.25rem; }
 .consent-card, .message-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: clamp(1.2rem, 3vw, 1.85rem); box-shadow: var(--shadow); }
 .consent-card ul { margin: .9rem 0; padding-left: 1.15rem; color: var(--muted); line-height: 1.5; font-size: .92rem; }
 .consent-card ul li { margin-bottom: .25rem; }
+.side-fieldset { margin: 0 0 .85rem; padding: .8rem; border: 1px solid var(--line); border-radius: 12px; }
+.side-fieldset legend { padding: 0 .35rem; font-size: .86rem; font-weight: 800; }
+.side-fieldset > p { margin: 0 0 .65rem; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+.side-options { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+.side-options label { display: flex; align-items: center; gap: .5rem; padding: .65rem .7rem; border: 1px solid var(--line); border-radius: 10px; background: #f7f8f6; font-size: .84rem; font-weight: 700; }
+.side-options input { width: 1.05rem; height: 1.05rem; accent-color: var(--green); }
 .consent-control { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: start; padding: .85rem; background: #f7f8f6; border: 1px solid var(--line); border-radius: 12px; line-height: 1.45; font-size: .9rem; }
 .consent-control input { width: 1.2rem; height: 1.2rem; margin-top: .12rem; accent-color: var(--green); }
 
@@ -147,6 +153,32 @@ h2 { margin: 0; font-size: 1.25rem; }
 
 .report-boundary { max-width: 70ch; margin: 1.2rem 0 .35rem; padding: .8rem 1rem; border-radius: 10px; color: #694b0d; background: var(--amber-soft); line-height: 1.5; }
 .report-source { color: var(--muted); line-height: 1.5; }
+.condition-panel { display: grid; gap: 1rem; margin-bottom: 1.75rem; padding: 1.25rem; border: 1px solid #bdd6cc; border-radius: 18px; background: linear-gradient(145deg, #f7fbf9, #fff); box-shadow: var(--shadow); }
+.condition-panel-header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.condition-panel-header .eyebrow { margin-bottom: .3rem; }
+.side-badge { display: inline-flex; align-items: center; min-height: 2rem; padding: .4rem .65rem; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: .75rem; font-weight: 800; }
+.condition-status { margin: 0; color: var(--ink); font-weight: 700; line-height: 1.45; }
+.condition-boundary { margin: 0; padding: .8rem 1rem; border-radius: 10px; background: var(--amber-soft); color: #694b0d; font-size: .86rem; line-height: 1.5; }
+.condition-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.condition-primary { width: auto; margin: 0; }
+.condition-card { display: grid; gap: 1rem; }
+.condition-card-summary { color: var(--muted); line-height: 1.5; }
+.condition-card-rows { display: grid; gap: .65rem; }
+.condition-row { display: grid; grid-template-columns: minmax(210px, 1.3fr) repeat(3, minmax(110px, .55fr)); gap: .8rem; align-items: start; padding: .9rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.condition-row-label strong, .condition-row-value strong { display: block; }
+.condition-row-label span, .condition-row-value span, .condition-row-detail { color: var(--muted); font-size: .75rem; line-height: 1.4; }
+.condition-row-label .sign-convention { display: block; margin-top: .2rem; }
+.condition-row-label .affected-side-marker { display: block; width: max-content; margin-top: .4rem; padding: .2rem .45rem; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: .67rem; font-weight: 800; }
+.condition-row-value strong { font-variant-numeric: tabular-nums; }
+.condition-row-value.is-missing strong { color: var(--amber); }
+.condition-row-detail { grid-column: 1 / -1; margin: 0; }
+.condition-row details { grid-column: 1 / -1; }
+.condition-row details summary { width: max-content; color: var(--green); cursor: pointer; font-size: .78rem; font-weight: 700; }
+.condition-review { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+.condition-review > span { font-size: .82rem; font-weight: 800; }
+.condition-review > div { display: flex; gap: .6rem; flex-wrap: wrap; }
+.condition-review .secondary-button, .condition-review .text-button { min-height: 42px; padding: .6rem .8rem; }
+.engineering-report-title { margin: 0 0 .85rem; }
 .report-sections { display: grid; gap: 1.25rem; }
 .report-section { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
 .report-section > h2 { padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--line); }
@@ -176,6 +208,8 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .75r
   .capture-grid { height: auto; }
   .preview-card { height: 63vh; }
   .capture-heading, .report-header { flex-direction: column; }
+  .condition-row { grid-template-columns: 1fr 1fr; }
+  .condition-row-label, .condition-row-detail, .condition-row details { grid-column: 1 / -1; }
   .metric-row { grid-template-columns: 1fr 1fr; }
   .metric-evidence { grid-column: 1 / -1; }
   .header-status #phase-label { display: none; }
@@ -189,6 +223,9 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .75r
   .consent-card { border-radius: 16px; padding: 1.1rem; }
   .preview-card { border-radius: 14px; }
   .readiness-lanes { grid-template-columns: 1fr; }
+  .side-options, .condition-row { grid-template-columns: 1fr; }
+  .condition-row-label, .condition-row-detail, .condition-row details { grid-column: auto; }
+  .condition-review { align-items: flex-start; flex-direction: column; }
   .metric-row { grid-template-columns: 1fr; }
   .metric-evidence { grid-column: auto; }
 }

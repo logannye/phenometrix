@@ -12,10 +12,18 @@
     "check": "bash scripts/validate-structure.sh",
     "test:unit": "pnpm -r --if-present run test:unit",
     "test:browser": "pnpm --filter @phenometrix/capture-web test:browser",
+    "test:voice": "uv run --project services/voice-inference --extra dev --locked python -m pytest services/voice-inference/tests",
+    "verify": "pnpm test && pnpm test:browser && pnpm test:voice",
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "npm run check && npm run test:unit && npm run typecheck && npm run build"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "nanoid@<3.3.18": "3.3.18",
+      "postcss@<=8.5.22": "8.5.26"
+    }
   }
 }

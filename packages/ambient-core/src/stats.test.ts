@@ -26,6 +26,12 @@ describe("stats utilities", () => {
     expect(medianAbsoluteDeviation([2, 4, 6])).toBe(2);
   });
 
+  it("keeps the midpoint of large finite values finite", () => {
+    expect(median([Number.MAX_VALUE, Number.MAX_VALUE])).toBe(
+      Number.MAX_VALUE
+    );
+  });
+
   it("interpolates percentiles deterministically", () => {
     expect(percentile([0, 10, 20], 0.9)).toBe(18);
     expect(() => percentile([], 0.5)).toThrow(/at least one/);

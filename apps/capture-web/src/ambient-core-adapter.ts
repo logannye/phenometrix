@@ -39,8 +39,15 @@ export interface AmbientObservationBuildInput {
   faceCalibration: AmbientFaceCalibration | null;
   voiceLaneAvailable: boolean;
   faceLaneAvailable: boolean;
+  voiceLaneFailureReason?: AmbientLaneFailureReason | null;
+  faceLaneFailureReason?: AmbientLaneFailureReason | null;
   processors: readonly ProcessorProvenanceV1[];
 }
+
+export type AmbientLaneFailureReason = Extract<
+  WithheldReasonCode,
+  "modality-unavailable" | "processor-unavailable" | "asset-integrity-failed"
+>;
 
 function safeId(value: string): string {
   return value.replace(/[^A-Za-z0-9._:-]/gu, "-").slice(0, 150);
@@ -120,6 +127,42 @@ function primaryTrack(outcome: AmbientMetricOutcome): string {
   return outcome.evidence.trackSegmentIds.length > 1
     ? `${outcome.modality}-mixed-provenance`
     : `${outcome.modality}-track-unavailable`;
+}
+
+function measuredProcessorFailureReason(
+  outcome: AmbientMetricOutcome,
+  processorRef: string,
+  processors: readonly ProcessorProvenanceV1[]
+): AmbientLaneFailureReason | null {
+  const matches = processors.filter(
+    (processor) => processor.processorRef === processorRef
+  );
+  if (
+    matches.length !== 1 ||
+    matches[0].modality !== outcome.modality
+  ) return "processor-unavailable";
+  const processor = matches[0];
+  return processor.assetIntegrityVerified &&
+    processor.assetPath !== null &&
+    processor.assetSha256 !== null
+    ? null
+    : "asset-integrity-failed";
+}
+
+function unavailableProcessorRef(
+  modality: "voice" | "face",
+  processors: readonly ProcessorProvenanceV1[]
+): string {
+  const base = `${modality}-processor-unavailable`;
+  let candidate = base;
+  let suffix = 1;
+  while (
+    processors.some((processor) => processor.processorRef === candidate)
+  ) {
+    candidate = `${base}:${suffix}`;
+    suffix += 1;
+  }
+  return candidate;
 }
 
 /**
@@ -250,41 +293,6 @@ function reportCaptureDiagnostics(
   const report = `PhenoMetrix capture diagnostics\n${lines.join("\n")}`;
   // eslint-disable-next-line no-console
   console.log(report);
-  publishDiagnosticsReport(report);
-}
-
-/**
- * Makes the diagnostics copyable from the finish screen.
- *
- * Calibration is an iterate-and-rerun loop, and console-only output made every
- * round cost a hand-copy or the whole session. Clipboard on an explicit click
- * is the same act as selecting the text by hand: no storage, no file, no
- * network, and nothing retained after the page closes.
- */
-function publishDiagnosticsReport(report: string): void {
-  // The adapter is exercised headlessly in unit tests, where there is no DOM
-  // and no clipboard. Diagnostics are a browser affordance, not part of what
-  // this function computes.
-  if (typeof document === "undefined") return;
-  const button = document.querySelector<HTMLButtonElement>(
-    "#copy-diagnostics"
-  );
-  if (!button || typeof navigator === "undefined" || !navigator.clipboard) {
-    return;
-  }
-  button.hidden = false;
-  button.onclick = () => {
-    void navigator.clipboard
-      .writeText(report)
-      .then(() => {
-        button.textContent = "Diagnostics copied";
-      })
-      .catch(() => {
-        // Clipboard permission can be refused; say so rather than appearing to
-        // have worked.
-        button.textContent = "Copy failed - select the console output";
-      });
-  };
 }
 
 function relevantEventCount(
@@ -344,7 +352,8 @@ function qualityFacts(evidence: AmbientMetricEvidence): Record<string, number> {
     ["maximumFrameGapMs", evidence.maximumFrameGapMs],
     ["dataPerBinMs", evidence.dataPerBinMs],
     ["samplesPerBin", evidence.samplesPerBin],
-    ["binSpanMs", evidence.binSpanMs]
+    ["binSpanMs", evidence.binSpanMs],
+    ["observationSpanMs", evidence.observationSpanMs]
   ];
   for (const [name, value] of optional) {
     if (value !== undefined && Number.isFinite(value)) facts[name] = value;
@@ -400,9 +409,17 @@ function windowsFor(
 export function contractReason(
   outcome: AmbientMetricOutcome,
   definition: MetricDefinition,
-  laneAvailable: boolean
+  laneAvailable: boolean,
+  laneFailureReason: AmbientLaneFailureReason = "modality-unavailable"
 ): WithheldReasonCode {
-  if (!laneAvailable) return "modality-unavailable";
+  if (!laneAvailable) {
+    if (!definition.withheldReasonCodes.includes(laneFailureReason)) {
+      throw new Error(
+        `Ambient lane failure reason ${laneFailureReason} is not registered for ${definition.code}.`
+      );
+    }
+    return laneFailureReason;
+  }
   if (outcome.status === "measured") return "quality-threshold-failed";
   const reason = WithheldReasonCodeSchema.parse(outcome.reasonCode);
   if (!definition.withheldReasonCodes.includes(reason)) {
@@ -422,19 +439,51 @@ function outcomeArtifacts(
   measurement: ObservationV3["measurements"][number] | null;
 } {
   const definition = metricDefinition(outcome.code);
-  const processorRef = primaryProcessor(outcome, input.processors);
+  const attributedProcessorRef = primaryProcessor(outcome, input.processors);
   const trackSegmentId = primaryTrack(outcome);
   const exactAttribution =
     outcome.evidence.processorRefs.length === 1 &&
     outcome.evidence.trackSegmentIds.length === 1;
-  const projectAsMeasured = outcome.status === "measured" && exactAttribution;
+  const processorFailureReason =
+    outcome.status === "measured" && exactAttribution
+      ? measuredProcessorFailureReason(
+          outcome,
+          attributedProcessorRef,
+          input.processors
+        )
+      : null;
+  const projectAsMeasured =
+    outcome.status === "measured" &&
+    exactAttribution &&
+    processorFailureReason === null;
+  const globallyResolvedProcessors = input.processors.filter(
+    (processor) => processor.processorRef === attributedProcessorRef
+  );
+  const processorRef =
+    projectAsMeasured ||
+    (
+      globallyResolvedProcessors.length === 1 &&
+      globallyResolvedProcessors[0].modality === outcome.modality
+    )
+      ? attributedProcessorRef
+      : unavailableProcessorRef(outcome.modality, input.processors);
   const laneAvailable =
     definition.modality === "voice"
       ? input.voiceLaneAvailable
       : input.faceLaneAvailable;
+  const laneFailureReason =
+    definition.modality === "voice"
+      ? input.voiceLaneFailureReason
+      : input.faceLaneFailureReason;
   const withheldReason = projectAsMeasured
     ? null
-    : contractReason(outcome, definition, laneAvailable);
+    : processorFailureReason ??
+      contractReason(
+        outcome,
+        definition,
+        laneAvailable,
+        laneFailureReason ?? "modality-unavailable"
+      );
   const identity = {
     protocolPackId: AMBIENT_LOCAL_PROTOCOL_PACK.packId,
     protocolVersion: AMBIENT_LOCAL_PROTOCOL_PACK.version,
@@ -500,7 +549,12 @@ function outcomeArtifacts(
     eligibleDurationMs: outcome.evidence.eligibleDurationMs,
     activeDurationMs: outcome.evidence.activeSpeechDurationMs ?? 0,
     segmentCount: outcome.evidence.segmentCount,
-    windowCount: outcome.evidence.sourceWindowRefs.length,
+    // `windowsFor` always emits a bounded fallback window when the extractor
+    // has no qualifying source windows. The count describes the ObservationV3
+    // evidence that is actually referenced, not only the extractor's input
+    // list, so source-binding validation remains exact for short/withheld
+    // sessions as well as measured sessions.
+    windowCount: windows.length,
     binCount: outcome.evidence.qualifyingBinCount,
     eventCount: relevantEventCount(definition.code, outcome.evidence),
     sampleCount: outcome.evidence.sampleCount,
@@ -561,11 +615,15 @@ function outcomeArtifacts(
       ...common,
       status: "withheld",
       reasonCode: withheldReason ?? "quality-threshold-failed",
-      detail: !laneAvailable
-        ? `The ${definition.modality} modality was unavailable in this session.`
-        : outcome.status === "measured"
-          ? "Measurement was withheld because processor or track provenance was mixed or missing."
-          : outcome.detail.slice(0, 240),
+      detail:
+        !laneAvailable || processorFailureReason !== null
+          ? laneFailureDetail(
+              definition.modality,
+              withheldReason ?? "modality-unavailable"
+            )
+          : outcome.status === "measured"
+            ? "Measurement was withheld because processor or track provenance was mixed or missing."
+            : outcome.detail.slice(0, 240),
       technicalQualityScore: null,
       technicalDispersion: null
     },
@@ -574,12 +632,38 @@ function outcomeArtifacts(
   };
 }
 
+function laneFailureDetail(
+  modality: "voice" | "face",
+  reason: WithheldReasonCode
+): string {
+  if (reason === "asset-integrity-failed") {
+    return `The required local ${modality} asset could not be loaded and verified.`;
+  }
+  if (reason === "processor-unavailable") {
+    return `The local ${modality} processor was unavailable in this session.`;
+  }
+  return `The ${modality} capture device was unavailable in this session.`;
+}
+
 function ensureProcessorRefs(
   processors: readonly ProcessorProvenanceV1[],
   outcomes: readonly MetricOutcomeV1[]
 ): ProcessorProvenanceV1[] {
-  const byRef = new Map(processors.map((processor) => [processor.processorRef, processor]));
+  const refCounts = new Map<string, number>();
+  for (const processor of processors) {
+    refCounts.set(
+      processor.processorRef,
+      (refCounts.get(processor.processorRef) ?? 0) + 1
+    );
+  }
+  const byRef = new Map<string, ProcessorProvenanceV1>();
+  for (const processor of processors) {
+    if (refCounts.get(processor.processorRef) === 1) {
+      byRef.set(processor.processorRef, processor);
+    }
+  }
   for (const outcome of outcomes) {
+    if (outcome.status === "measured") continue;
     if (byRef.has(outcome.processorRef)) continue;
     byRef.set(outcome.processorRef, {
       modality: outcome.modality,
@@ -623,20 +707,31 @@ export function buildAmbientObservation(
   const measurements = artifacts.flatMap((artifact) =>
     artifact.measurement ? [artifact.measurement] : []
   );
-  const laneSummary = (modality: "voice" | "face", available: boolean) => {
+  const laneSummary = (
+    modality: "voice" | "face",
+    available: boolean,
+    failureReason: AmbientLaneFailureReason | null | undefined
+  ) => {
     const laneOutcomes = outcomes.filter((outcome) => outcome.modality === modality);
     const measured = laneOutcomes.filter((outcome) => outcome.status === "measured");
     return {
-      state: !available ? "unavailable" as const : measured.length > 0 ? "ready" as const : "withheld" as const,
+      state: measured.length > 0
+        ? "ready" as const
+        : !available
+          ? "unavailable" as const
+          : "withheld" as const,
       eligibleDurationMs: Math.max(0, ...laneOutcomes.map((outcome) => outcome.evidence.eligibleDurationMs)),
       technicalQualityScore:
         measured.length === 0
           ? null
           : measured.reduce((sum, outcome) => sum + outcome.technicalQualityScore, 0) /
             measured.length,
-      reasonCodes: [...new Set(laneOutcomes.flatMap((outcome) =>
-        outcome.status === "withheld" ? [outcome.reasonCode] : []
-      ))]
+      reasonCodes: [...new Set([
+        ...laneOutcomes.flatMap((outcome) =>
+          outcome.status === "withheld" ? [outcome.reasonCode] : []
+        ),
+        ...(!available && failureReason ? [failureReason] : [])
+      ])]
     };
   };
   return ObservationV3Schema.parse({
@@ -667,14 +762,22 @@ export function buildAmbientObservation(
     startedAt: input.startedAt,
     endedAt: input.endedAt,
     durationMs: Math.min(300_000, Math.max(0, input.durationMs)),
-    captureAdapter: { id: "browser-local-media", version: "1.0.0" },
+    captureAdapter: { id: "browser-local-media", version: "1.1.0" },
     processors: ensureProcessorRefs(input.processors, outcomes),
     windows,
     measurements,
     metricOutcomes: outcomes,
     qualitySummary: {
-      voice: laneSummary("voice", input.voiceLaneAvailable),
-      face: laneSummary("face", input.faceLaneAvailable),
+      voice: laneSummary(
+        "voice",
+        input.voiceLaneAvailable,
+        input.voiceLaneFailureReason
+      ),
+      face: laneSummary(
+        "face",
+        input.faceLaneAvailable,
+        input.faceLaneFailureReason
+      ),
       totalWindowCount: windows.length,
       eligibleWindowCount: windows.filter((window) => window.status === "eligible").length,
       withheldWindowCount: windows.filter((window) => window.status === "withheld").length

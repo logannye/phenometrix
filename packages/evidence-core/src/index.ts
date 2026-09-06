@@ -6,3 +6,5 @@ export type {
   BuildPostEncounterReportOptions,
   ProvenanceValidationResult
 } from "./report.js";
+export { buildConditionEvidenceCard } from "./condition-card.js";
+export type { BuildConditionEvidenceCardInput } from "./condition-card.js";

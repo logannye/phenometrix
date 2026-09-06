@@ -11,7 +11,7 @@ browser capability.
 
 ```bash
 uv sync --extra dev
-uv run --extra dev pytest
+uv run --extra dev python -m pytest
 ```
 
 For a manual real-model smoke, install the optional checkpoint runtime and

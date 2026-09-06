@@ -4,6 +4,7 @@ import type {
 } from "@phenometrix/ambient-core";
 
 export interface CaptureResourceHandles {
+  cancelPendingStartup?(): void;
   stopFacePump?(): void;
   stopVoicePipeline?(): Promise<void>;
   disposeFaceWorker?(): Promise<void>;
@@ -38,19 +39,39 @@ async function ignoreFailure(action: (() => void | Promise<void>) | undefined): 
   }
 }
 
+async function cleanupHandles(handles: CaptureResourceHandles): Promise<void> {
+  await ignoreFailure(handles.cancelTimers);
+  await ignoreFailure(handles.cancelPendingStartup);
+  await ignoreFailure(handles.stopFacePump);
+  handles.streams?.forEach((stream) =>
+    stream.getTracks().forEach((track) => track.stop())
+  );
+  if (handles.video) {
+    handles.video.pause();
+    handles.video.srcObject = null;
+  }
+  await ignoreFailure(handles.stopVoicePipeline);
+  await ignoreFailure(handles.disposeFaceWorker);
+  await ignoreFailure(handles.disconnectAudio);
+  if (handles.audioContext && handles.audioContext.state !== "closed") {
+    await ignoreFailure(() => handles.audioContext!.close());
+  }
+}
+
 export class CaptureRuntime {
   private voiceFrames: VoiceSignalFrameV1[] = [];
   private faceFrames: FacialKinematicsFrameV1[] = [];
   private handles: CaptureResourceHandles = {};
   private disposing: Promise<DerivedCaptureSnapshot | null> | null = null;
+  private preserveDerivedOnDispose = false;
   private disposed = false;
+  private pendingLateCleanups = new Set<Promise<void>>();
 
   attach(handles: CaptureResourceHandles): void {
     if (this.disposed || this.disposing) {
-      handles.streams?.forEach((stream) =>
-        stream.getTracks().forEach((track) => track.stop())
-      );
-      void handles.audioContext?.close();
+      const cleanup = cleanupHandles(handles);
+      this.pendingLateCleanups.add(cleanup);
+      void cleanup.finally(() => this.pendingLateCleanups.delete(cleanup));
       return;
     }
     this.handles = handles;
@@ -65,38 +86,42 @@ export class CaptureRuntime {
   }
 
   dispose(preserveDerived: boolean): Promise<DerivedCaptureSnapshot | null> {
-    if (this.disposing) return this.disposing;
+    if (this.disposing) {
+      // A discard/withdrawal racing a report finalization always wins. The
+      // in-flight cleanup must not manufacture a derived snapshot after a
+      // caller has requested destructive disposal.
+      if (!preserveDerived) this.preserveDerivedOnDispose = false;
+      return this.disposing;
+    }
     if (this.disposed) return Promise.resolve(null);
-    this.disposing = this.disposeOnce(preserveDerived);
-    return this.disposing;
+    this.preserveDerivedOnDispose = preserveDerived;
+    const disposal = this.disposeOnce();
+    this.disposing = disposal;
+    void disposal.then(
+      () => {
+        if (this.disposing === disposal) this.disposing = null;
+      },
+      () => {
+        if (this.disposing === disposal) this.disposing = null;
+      }
+    );
+    return disposal;
   }
 
-  private async disposeOnce(
-    preserveDerived: boolean
-  ): Promise<DerivedCaptureSnapshot | null> {
+  private async disposeOnce(): Promise<DerivedCaptureSnapshot | null> {
     const handles = this.handles;
-    await ignoreFailure(handles.cancelTimers);
-    await ignoreFailure(handles.stopFacePump);
-    await ignoreFailure(handles.stopVoicePipeline);
-    await ignoreFailure(handles.disposeFaceWorker);
-    handles.streams?.forEach((stream) =>
-      stream.getTracks().forEach((track) => track.stop())
-    );
-    if (handles.video) {
-      handles.video.pause();
-      handles.video.srcObject = null;
-    }
-    await ignoreFailure(handles.disconnectAudio);
-    if (handles.audioContext && handles.audioContext.state !== "closed") {
-      await ignoreFailure(() => handles.audioContext!.close());
+    await cleanupHandles(handles);
+    while (this.pendingLateCleanups.size > 0) {
+      await Promise.all([...this.pendingLateCleanups]);
     }
 
-    const snapshot = preserveDerived
+    const snapshot = this.preserveDerivedOnDispose
       ? freezeSnapshot(this.voiceFrames, this.faceFrames)
       : null;
     this.voiceFrames.length = 0;
     this.faceFrames.length = 0;
     this.handles = {};
+    this.preserveDerivedOnDispose = false;
     this.disposed = true;
     return snapshot;
   }

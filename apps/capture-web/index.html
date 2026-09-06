@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
     <meta
       name="description"
-      content="Local, nonclinical ambient face and voice engineering measurements."
+      content="A local, nonclinical unilateral facial movement research demonstration."
     />
+    <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./src/styles.css" />
-    <title>PhenoMetrix · Ambient Measurement</title>
+    <title>PhenoMetrix · Unilateral Facial Movement Research Demo</title>
   </head>
   <body>
     <div id="app">
@@ -33,17 +34,19 @@
       <main>
         <section id="welcome-view" class="welcome-layout" aria-labelledby="welcome-title">
           <div class="welcome-copy">
-            <p class="eyebrow">Nonclinical prototype</p>
-            <h1 id="welcome-title">Observe the conversation, locally.</h1>
+            <p class="eyebrow">Nonclinical research prototype</p>
+            <h1 id="welcome-title">Compare two facial movement sessions, locally.</h1>
             <p class="lede">
-              PhenoMetrix derives bounded face and voice engineering measurements
-              during one ambient session of up to five minutes.
+              This demo is for a participant with previously established unilateral
+              peripheral facial palsy. It reports engineering measurements and raw
+              differences between two live sessions without interpreting health change.
             </p>
             <div class="boundary-card">
-              <strong>No recording or upload</strong>
+              <strong>Not for new or sudden facial weakness</strong>
               <p>
-                Camera and microphone signals are processed in this browser.
-                Raw media, transcripts, embeddings, and results are not saved.
+                This prototype does not diagnose facial palsy, grade severity, screen
+                for stroke, or recommend care. New or sudden symptoms require ordinary
+                clinical or emergency evaluation outside this demo.
               </p>
             </div>
           </div>
@@ -53,8 +56,23 @@
             <ul>
               <li>Use a quiet, well-lit space and face the camera.</li>
               <li>Use headphones if another person’s voice may be audible.</li>
-              <li>This prototype does not verify identity or provide clinical interpretation.</li>
+              <li>Raw media and results are not uploaded or saved.</li>
+              <li>This prototype does not verify identity, affected side, or provide clinical interpretation.</li>
             </ul>
+            <fieldset id="affected-side-fieldset" class="side-fieldset">
+              <legend>Previously understood affected side</legend>
+              <p>Participant-asserted for this research demo; PhenoMetrix does not infer or verify it.</p>
+              <div class="side-options">
+                <label for="affected-side-left">
+                  <input id="affected-side-left" name="affected-side" type="radio" value="left" />
+                  <span>Subject-left</span>
+                </label>
+                <label for="affected-side-right">
+                  <input id="affected-side-right" name="affected-side" type="radio" value="right" />
+                  <span>Subject-right</span>
+                </label>
+              </div>
+            </fieldset>
             <label class="consent-control" for="consent-checkbox">
               <input id="consent-checkbox" type="checkbox" />
               <span id="consent-text">
@@ -174,9 +192,43 @@
               <p id="report-boundary" class="report-boundary"></p>
               <p id="report-source" class="report-source"></p>
             </div>
-            <button id="copy-diagnostics" class="secondary-button" type="button" hidden>Copy capture diagnostics</button>
-            <button id="reset-button" class="secondary-button" type="button">Clear and start again</button>
+            <button id="reset-button" class="secondary-button" type="button">New participant · discard all</button>
           </header>
+          <section id="condition-panel" class="condition-panel" aria-labelledby="condition-title">
+            <header class="condition-panel-header">
+              <div>
+                <p class="eyebrow">Condition-oriented research view</p>
+                <h2 id="condition-title">Unilateral facial movement</h2>
+              </div>
+              <span id="condition-side-badge" class="side-badge"></span>
+            </header>
+            <p id="condition-status" class="condition-status" role="status" aria-live="polite"></p>
+            <p class="condition-boundary">
+              Numerical differences are engineering observations only. Measurement repeatability
+              and minimum detectable change are unknown; no value indicates improvement, worsening,
+              recovery, severity, or diagnosis.
+            </p>
+            <div id="condition-card" class="condition-card" hidden>
+              <div id="condition-card-summary" class="condition-card-summary"></div>
+              <div id="condition-card-rows" class="condition-card-rows"></div>
+              <div class="condition-review" aria-label="Research card review">
+                <span id="condition-review-state">Not reviewed</span>
+                <div>
+                  <button id="condition-accept-button" class="secondary-button" type="button">Accept research card</button>
+                  <button id="condition-dismiss-button" class="text-button" type="button">Dismiss research card</button>
+                </div>
+              </div>
+            </div>
+            <div class="condition-actions">
+              <button id="accept-reference-button" class="primary-button condition-primary" type="button">
+                Use this session as in-memory reference
+              </button>
+              <button id="follow-up-button" class="primary-button condition-primary" type="button" hidden>
+                Capture follow-up session
+              </button>
+            </div>
+          </section>
+          <h2 class="engineering-report-title">Full engineering measurement report</h2>
           <section id="report-sections" class="report-sections"></section>
         </section>
       </main>

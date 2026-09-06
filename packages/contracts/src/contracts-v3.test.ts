@@ -8,6 +8,7 @@ import {
   createMeasurementId,
   ObservationV3Schema,
   ProtocolPackV1Schema,
+  WorkflowActorV1Schema,
   verifyProtocolPackDigest
 } from "./index.js";
 
@@ -38,6 +39,25 @@ describe("protocol pack v1", () => {
     const invalid = structuredClone(AMBIENT_LOCAL_PROTOCOL_PACK);
     invalid.metrics[1] = invalid.metrics[0];
     expect(ProtocolPackV1Schema.safeParse(invalid).success).toBe(false);
+  });
+});
+
+describe("workflow actor v1", () => {
+  it("rejects mismatched actor kinds and identifiers", () => {
+    expect(
+      WorkflowActorV1Schema.safeParse({
+        kind: "application",
+        id: "voice-analysis",
+        version: "1.0.0"
+      }).success
+    ).toBe(false);
+    expect(
+      WorkflowActorV1Schema.safeParse({
+        kind: "processor",
+        id: "voice-analysis",
+        version: "1.0.0"
+      }).success
+    ).toBe(true);
   });
 });
 
@@ -220,6 +240,22 @@ describe("observation v3", () => {
     const invalid = observation();
     invalid.metricOutcomes[0].value = Number.NaN;
     expect(ObservationV3Schema.safeParse(invalid).success).toBe(false);
+  });
+
+  it("rejects consent recorded after the observation starts", () => {
+    const invalid = observation();
+    invalid.consent.recordedAt = "2026-07-20T16:00:00.001Z";
+
+    const result = ObservationV3Schema.safeParse(invalid);
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ path: ["consent", "recordedAt"] })
+        ])
+      );
+    }
   });
 
   it("produces stable context-sensitive identities", () => {

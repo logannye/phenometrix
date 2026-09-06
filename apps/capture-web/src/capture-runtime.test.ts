@@ -22,6 +22,7 @@ describe("CaptureRuntime", () => {
     const runtime = new CaptureRuntime();
     runtime.attach({
       cancelTimers: () => order.push("timers"),
+      cancelPendingStartup: () => order.push("startup"),
       stopFacePump: () => order.push("pump"),
       stopVoicePipeline: async () => {
         order.push("voice");
@@ -41,12 +42,13 @@ describe("CaptureRuntime", () => {
     await first;
     expect(order).toEqual([
       "timers",
+      "startup",
       "pump",
-      "voice",
-      "face-worker",
       "track-a",
       "track-b",
       "video",
+      "voice",
+      "face-worker",
       "audio-nodes",
       "audio-context"
     ]);
@@ -62,6 +64,70 @@ describe("CaptureRuntime", () => {
     expect(snapshot?.face).toHaveLength(1);
     expect(Object.isFrozen(snapshot)).toBe(true);
     expect(Object.isFrozen(snapshot?.voice)).toBe(true);
+    expect(
+      (runtime as unknown as { disposing: unknown }).disposing
+    ).toBeNull();
+  });
+
+  it("lets destructive disposal downgrade an in-flight preserved snapshot", async () => {
+    let releaseWorker!: () => void;
+    const worker = new Promise<void>((resolve) => {
+      releaseWorker = resolve;
+    });
+    const runtime = new CaptureRuntime();
+    runtime.addVoiceFrame({ sequence: 1 } as never);
+    runtime.addFaceFrame({ sequence: 2 } as never);
+    runtime.attach({ disposeFaceWorker: () => worker });
+
+    const finalization = runtime.dispose(true);
+    const discard = runtime.dispose(false);
+    expect(discard).toBe(finalization);
+
+    releaseWorker();
+    await expect(finalization).resolves.toBeNull();
+    expect(await runtime.dispose(true)).toBeNull();
+  });
+
+  it("tracks and awaits handles attached after disposal starts", async () => {
+    let releaseInitialWorker!: () => void;
+    const initialWorker = new Promise<void>((resolve) => {
+      releaseInitialWorker = resolve;
+    });
+    const runtime = new CaptureRuntime();
+    runtime.attach({ disposeFaceWorker: () => initialWorker });
+    const disposal = runtime.dispose(false);
+
+    let releaseLateWorker!: () => void;
+    const lateWorkerCleanup = new Promise<void>((resolve) => {
+      releaseLateWorker = resolve;
+    });
+    const lateWorker = vi.fn(() => lateWorkerCleanup);
+    const latePipeline = vi.fn(async () => undefined);
+    const lateTrack = { stop: vi.fn() };
+    runtime.attach({
+      disposeFaceWorker: lateWorker,
+      stopVoicePipeline: latePipeline,
+      streams: [
+        { getTracks: () => [lateTrack] } as unknown as MediaStream
+      ]
+    });
+    await vi.waitFor(() => {
+      expect(latePipeline).toHaveBeenCalledOnce();
+    });
+
+    let disposalCompleted = false;
+    void disposal.then(() => {
+      disposalCompleted = true;
+    });
+    releaseInitialWorker();
+    await vi.waitFor(() => expect(lateWorker).toHaveBeenCalledOnce());
+    await Promise.resolve();
+    expect(disposalCompleted).toBe(false);
+    expect(lateTrack.stop).toHaveBeenCalledOnce();
+
+    releaseLateWorker();
+    await disposal;
+    expect(disposalCompleted).toBe(true);
   });
 
   it("uses a bounded worker-disposal fallback", async () => {
