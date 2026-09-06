@@ -192,6 +192,8 @@ export interface AmbientMetricEvidence {
   samplesPerBin?: number;
   /** Face: shortest wall-clock span of any accepted bin. */
   binSpanMs?: number;
+  /** Face: wall-clock span from the first supporting bin to the last. */
+  observationSpanMs?: number;
   processorRefs: readonly string[];
   trackSegmentIds: readonly string[];
   sourceWindowRefs: readonly string[];
@@ -249,8 +251,9 @@ export interface AmbientExtractionResult<
    *
    * Returned alongside the outcomes rather than folded into them: an outcome
    * carries one value and one dispersion by construction, so an event series
-   * cannot travel inside it. These stay provider-side and are what makes a
-   * measure defined later computable from a session already captured.
+   * cannot travel inside it. The current browser adapter uses these records
+   * only for transient diagnostics and does not retain them. They could support
+   * measures defined later only after a governed persistence contract exists.
    *
    * An absent array means the detector did not run. An empty one means it ran
    * and found nothing, which is a different statement.

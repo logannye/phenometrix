@@ -35,6 +35,12 @@ const FACE_WITHHELD_REASONS = [
 const rawProtocolPack = {
   schemaVersion: "phenometric.protocol-pack.v1",
   packId: "ambient-local-observation",
+  // 3.4.0: fail-closed task/resting-pose/non-finite input handling, aligned
+  // blink and metric-specific bin gates, and continuity-correct voice timing.
+  // 3.3.0: moved the speech SNR floor from timing segmentation to pitch
+  // eligibility and bumped all voice algorithms to 1.1.0.
+  // 3.2.0: changed face pose gates to deviation from a bounded session resting
+  // pose and aligned bin screening with the published data/span requirements.
   // 3.1.0: renamed to PhenoMetrix. No metric, threshold, or algorithm changed,
   // but the consent text a participant reads carries the product name, so the
   // consent digest moves and the pack version has to move with it. Sessions
@@ -43,10 +49,10 @@ const rawProtocolPack = {
   // 3.0.0: brow geometry and per-eye closure added (5 face metrics).
   // Sessions measured under different packs are not comparable, and the
   // content digest below makes that structurally visible rather than implicit.
-  version: "3.3.0",
+  version: "3.4.0",
   // SHA-256 of the canonical pack content with this field omitted.
   contentSha256:
-    "3911909a6f5d7cd0592d2dfe41a0c5a81ea7ef1f0fb6acad50c220ecca97aa9c",
+    "f458ba76c511ba7a392a2fe9d7e523613f8e3c0775157a3e4240ecf7d6fe8b02",
   status: "nonclinical-prototype",
   maximumSessionDurationMs: 300_000,
   supportedTarget: {
@@ -136,7 +142,7 @@ const rawProtocolPack = {
       reportSection: "pitch",
       reportOrder: 0,
       algorithmId: "ambient-f0",
-      algorithmVersion: "1.1.0",
+      algorithmVersion: "1.2.0",
       evidenceRequirements: {
         minimumSegments: 3,
         minimumPitchedDurationMs: 10_000,
@@ -164,7 +170,7 @@ const rawProtocolPack = {
       reportSection: "pitch",
       reportOrder: 1,
       algorithmId: "ambient-f0-variability",
-      algorithmVersion: "1.1.0",
+      algorithmVersion: "1.2.0",
       evidenceRequirements: {
         minimumSegments: 3,
         minimumPitchedDurationMs: 10_000,
@@ -219,7 +225,7 @@ const rawProtocolPack = {
       reportSection: "speech-timing",
       reportOrder,
       algorithmId,
-      algorithmVersion: "1.1.0",
+      algorithmVersion: "1.2.0",
       evidenceRequirements: {
         minimumSegments: 3,
         minimumEligibleSpanMs: 30_000,
@@ -253,7 +259,7 @@ const rawProtocolPack = {
       reportSection: "speech-timing",
       reportOrder: 4,
       algorithmId: "ambient-acoustic-nuclei",
-      algorithmVersion: "1.1.0",
+      algorithmVersion: "1.2.0",
       evidenceRequirements: {
         minimumSegments: 3,
         minimumEligibleSpanMs: 30_000,
@@ -343,7 +349,7 @@ const rawProtocolPack = {
       reportSection,
       reportOrder,
       algorithmId,
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         binDurationMs: 5_000,
         minimumDataPerBinMs: 4_000,
@@ -369,7 +375,7 @@ const rawProtocolPack = {
       reportSection: "blink-behavior",
       reportOrder: 0,
       algorithmId: "ambient-bilateral-blink",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumExposureMs: 60_000,
         minimumCadenceHz: 24,
@@ -401,7 +407,7 @@ const rawProtocolPack = {
       reportSection: "symmetry",
       reportOrder: 2,
       algorithmId: "ambient-rest-mouth-corner-signed",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000
@@ -420,7 +426,7 @@ const rawProtocolPack = {
       reportSection: "symmetry",
       reportOrder: 3,
       algorithmId: "ambient-rest-eye-aperture-signed",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000
@@ -442,7 +448,7 @@ const rawProtocolPack = {
       reportSection: "expression-dynamics",
       reportOrder: 0,
       algorithmId: "ambient-spontaneous-expression",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000
@@ -461,7 +467,7 @@ const rawProtocolPack = {
       reportSection: "expression-dynamics",
       reportOrder: 1,
       algorithmId: "ambient-spontaneous-expression",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000,
@@ -481,7 +487,7 @@ const rawProtocolPack = {
       reportSection: "expression-dynamics",
       reportOrder: 2,
       algorithmId: "ambient-spontaneous-expression",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000,
@@ -501,7 +507,7 @@ const rawProtocolPack = {
       reportSection: "expression-dynamics",
       reportOrder: 3,
       algorithmId: "ambient-oculo-oral-coupling",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000,
@@ -519,9 +525,9 @@ const rawProtocolPack = {
       technicalVerification: "automated-test",
       clinicalValidation: "none"
     },
-    // Frontalis. Forehead sparing is what separates upper- from
-    // lower-motor-neuron facial weakness, so the brow is graded as its own
-    // zone rather than folded into eye geometry.
+    // Brow geometry remains a nonclinical engineering quantity. It is kept as
+    // its own zone rather than folded into eye geometry; it is not a validated
+    // forehead-sparing or central/peripheral weakness assessment.
     ...[
       ["ambient.face.brow_height.left", "Left brow height", 0],
       ["ambient.face.brow_height.right", "Right brow height", 1],
@@ -535,7 +541,7 @@ const rawProtocolPack = {
       reportSection: "brow-geometry",
       reportOrder,
       algorithmId: "ambient-brow-geometry",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000
@@ -559,7 +565,7 @@ const rawProtocolPack = {
       reportSection: "blink-behavior",
       reportOrder,
       algorithmId: "ambient-lid-closure-completeness",
-      algorithmVersion: "1.0.0",
+      algorithmVersion: "1.1.0",
       evidenceRequirements: {
         minimumBins: 3,
         minimumObservationSpanMs: 30_000

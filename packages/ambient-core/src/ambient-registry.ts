@@ -8,9 +8,9 @@ import {
 const AMBIENT_EXPRESSION_MIN_EVENTS = 3;
 
 export const AMBIENT_VOICE_ALGORITHM_VERSION =
-  "1.1.0";
+  "1.2.0";
 export const AMBIENT_FACE_ALGORITHM_VERSION =
-  "1.0.0";
+  "1.1.0";
 
 const voiceQualityInputs = Object.freeze([
   "noise-calibration-duration",

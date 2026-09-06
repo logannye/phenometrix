@@ -46,6 +46,13 @@ export type AmbientWorkflowEvent =
       measurable: boolean;
       atMs: number;
     }
+  | {
+      type: "lane-failed";
+      generation: number;
+      lane: "audio" | "face";
+      remainingLaneActive: boolean;
+      atMs: number;
+    }
   | { type: "setup-timeout"; generation: number; atMs: number }
   | { type: "finish-requested"; generation: number }
   | { type: "capture-limit-reached"; generation: number }
@@ -244,6 +251,12 @@ export function reduceAmbientWorkflow(
     return maybeBeginCalibration(next, event.atMs);
   }
   if (event.type === "calibration-resolved") {
+    if (state.phase === "observing" && event.measurable) {
+      return transition({
+        ...state,
+        [event.lane === "audio" ? "audioLane" : "faceLane"]: "measurable"
+      } as AmbientWorkflowState);
+    }
     if (state.phase !== "calibrating") return transition(state);
     const next = {
       ...state,
@@ -251,6 +264,37 @@ export function reduceAmbientWorkflow(
         event.measurable ? "measurable" : "not-measurable"
     } as AmbientWorkflowState;
     return maybeBeginObservation(next, event.atMs);
+  }
+  if (event.type === "lane-failed") {
+    if (
+      state.phase !== "requesting-permission" &&
+      state.phase !== "calibrating" &&
+      state.phase !== "observing"
+    ) {
+      return transition(state);
+    }
+    const next = {
+      ...state,
+      [event.lane === "audio" ? "audioLane" : "faceLane"]:
+        "not-measurable"
+    } as AmbientWorkflowState;
+    if (state.phase === "requesting-permission") {
+      return maybeBeginCalibration(next, event.atMs);
+    }
+    if (state.phase === "calibrating") {
+      return maybeBeginObservation(next, event.atMs);
+    }
+    if (!event.remainingLaneActive) {
+      return transition(
+        {
+          ...next,
+          phase: "finalizing",
+          terminalReason: "all-active-lanes-failed"
+        },
+        [{ type: "finalize", generation: state.generation }]
+      );
+    }
+    return transition(next);
   }
   if (event.type === "setup-timeout") {
     if (state.phase !== "calibrating") return transition(state);

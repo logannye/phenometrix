@@ -7,7 +7,7 @@ clinical schemas.
 ## Canonical v1/v3 contracts
 
 - `AMBIENT_LOCAL_PROTOCOL_PACK` is the immutable
-  `phenometric.protocol-pack.v1` registry. It defines the 16 supported metrics,
+  `phenometric.protocol-pack.v1` registry. It defines the 27 supported metrics,
   one quality policy, report ordering, consent document digest, source policy,
   supported runtime, and the five-minute limit.
 - `ObservationV3Schema` requires session-local anonymous subject and consent
@@ -58,6 +58,6 @@ observation, measurement, event, and trajectory interfaces were removed on
 2026-07-24, along with the legacy evidence-card, generated-narrative,
 review-decision, and grounding contracts.
 
-Personal Trajectory remains internal and disconnected. Its legacy contract now
-requires an explicit policy and protocol identity and can return
-`not-comparable` when compatible prior evidence is insufficient.
+No Personal Trajectory contract or engine is currently implemented. A future
+trajectory capability must be designed against v3 observations rather than
+resurrecting the removed v2 interfaces.

@@ -348,6 +348,14 @@ export const ObservationV3Schema = z
         message: "Consent must belong to the observation session."
       });
     }
+    const consentRecordedAt = Date.parse(observation.consent.recordedAt);
+    if (consentRecordedAt > start) {
+      context.addIssue({
+        code: "custom",
+        path: ["consent", "recordedAt"],
+        message: "Consent must be recorded no later than the observation start."
+      });
+    }
     if (observation.source.sourceSessionRef !== observation.sessionId) {
       context.addIssue({
         code: "custom",

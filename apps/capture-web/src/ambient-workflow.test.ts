@@ -125,6 +125,116 @@ describe("ambient workflow", () => {
     ]);
   });
 
+  it("continues calibration with the remaining lane after a processor fails", () => {
+    const state = {
+      ...createAmbientWorkflowState(),
+      phase: "calibrating" as const,
+      generation: 3,
+      consented: true,
+      audioLane: "calibrating" as const,
+      faceLane: "calibrating" as const,
+      setupStartedAtMs: 0
+    };
+    const audioFailed = reduceAmbientWorkflow(state, {
+      type: "lane-failed",
+      generation: 3,
+      lane: "audio",
+      remainingLaneActive: true,
+      atMs: 1_000
+    });
+    expect(audioFailed.state).toMatchObject({
+      phase: "calibrating",
+      audioLane: "not-measurable",
+      faceLane: "calibrating"
+    });
+    const faceReady = reduceAmbientWorkflow(audioFailed.state, {
+      type: "calibration-resolved",
+      generation: 3,
+      lane: "face",
+      measurable: true,
+      atMs: 2_000
+    });
+    expect(faceReady.state.phase).toBe("observing");
+  });
+
+  it("marks a post-calibration processor loss without discarding the session", () => {
+    const state = {
+      ...createAmbientWorkflowState(),
+      phase: "observing" as const,
+      generation: 4,
+      consented: true,
+      audioLane: "measurable" as const,
+      faceLane: "measurable" as const,
+      captureStartedAtMs: 2_000
+    };
+    const result = reduceAmbientWorkflow(state, {
+      type: "lane-failed",
+      generation: 4,
+      lane: "face",
+      remainingLaneActive: true,
+      atMs: 3_000
+    });
+    expect(result.state).toMatchObject({
+      phase: "observing",
+      audioLane: "measurable",
+      faceLane: "not-measurable"
+    });
+    expect(result.effects).toEqual([]);
+  });
+
+  it("finalizes when the final active lane fails during observation", () => {
+    const state = {
+      ...createAmbientWorkflowState(),
+      phase: "observing" as const,
+      generation: 6,
+      consented: true,
+      audioLane: "measurable" as const,
+      faceLane: "not-measurable" as const,
+      captureStartedAtMs: 2_000
+    };
+    const result = reduceAmbientWorkflow(state, {
+      type: "lane-failed",
+      generation: 6,
+      lane: "audio",
+      remainingLaneActive: false,
+      atMs: 3_000
+    });
+    expect(result.state).toMatchObject({
+      phase: "finalizing",
+      audioLane: "not-measurable",
+      faceLane: "not-measurable",
+      terminalReason: "all-active-lanes-failed"
+    });
+    expect(result.effects).toEqual([
+      { type: "finalize", generation: 6 }
+    ]);
+  });
+
+  it("accepts late technical calibration after the bounded setup timeout", () => {
+    const state = {
+      ...createAmbientWorkflowState(),
+      phase: "observing" as const,
+      generation: 5,
+      consented: true,
+      audioLane: "measurable" as const,
+      faceLane: "not-measurable" as const,
+      captureStartedAtMs: 15_000
+    };
+    const result = reduceAmbientWorkflow(state, {
+      type: "calibration-resolved",
+      generation: 5,
+      lane: "face",
+      measurable: true,
+      atMs: 20_000
+    });
+    expect(result.state).toMatchObject({
+      phase: "observing",
+      audioLane: "measurable",
+      faceLane: "measurable"
+    });
+    expect(result.effects).toEqual([]);
+  });
+
   it.each([
     "requesting-permission",
     "calibrating",

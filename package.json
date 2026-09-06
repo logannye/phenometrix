@@ -16,6 +16,12 @@
     "test": "npm run check && npm run test:unit && npm run typecheck && npm run build"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "nanoid@<3.3.18": "3.3.18",
+      "postcss@<=8.5.22": "8.5.26"
+    }
   }
 }

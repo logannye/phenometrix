@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { syntheticFacialFrame } from "./test-helpers.js";
-import { extractAmbientFaceMetrics } from "./ambient-face.js";
+import { extractAmbientFaceMetrics, restingPose } from "./ambient-face.js";
 import type {
   AmbientFaceExtractionOptions,
   AmbientFacialFrame
@@ -189,7 +189,18 @@ describe("extractAmbientFaceMetrics", () => {
     });
   });
 
-  it("withholds all face metrics when face count is multiple or unknown", () => {
+  it("does not join a blink across face-track discontinuities", () => {
+    const frames = ambientFaceFrames(60_000, 30, (frame) => ({
+      trackSegmentId: frame.tMs < 1_050 ? "face-a" : "face-b"
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+
+    expect(
+      (result.events?.blinks ?? []).filter((event) => event.onsetMs < 2_000)
+    ).toEqual([]);
+  });
+
+  it("withholds all face metrics when multiple faces are present", () => {
     const frames = ambientFaceFrames(60_000, 30, () => ({ faceCount: 2 }));
     const result = extractAmbientFaceMetrics(frames, OPTIONS);
 
@@ -200,6 +211,74 @@ describe("extractAmbientFaceMetrics", () => {
           outcome.reasonCode === "multiple-faces"
       )
     ).toBe(true);
+  });
+
+  it("does not report multiple faces when no face is visible", () => {
+    const frames = ambientFaceFrames(60_000, 30, () => ({
+      faceVisible: false,
+      faceCount: 0,
+      trackSegmentId: undefined,
+      qualityReasons: ["face-not-visible"]
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+
+    expect(
+      result.outcomes.every(
+        (outcome) =>
+          outcome.status === "withheld" &&
+          outcome.reasonCode === "no-usable-signal"
+      )
+    ).toBe(true);
+  });
+
+  it("ignores frames acquired outside the ambient face task", () => {
+    const frames = ambientFaceFrames(60_000, 30, () => ({
+      taskContext: "neutral-face"
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+
+    expect(result.ignoredFrameCount).toBe(frames.length);
+    expect(
+      result.outcomes.every(
+        (outcome) =>
+          outcome.status === "withheld" &&
+          outcome.reasonCode === "no-usable-signal"
+      )
+    ).toBe(true);
+  });
+
+  it("does not learn the resting pose from invalid no-face frames", () => {
+    const valid = ambientFaceFrames(30_000);
+    const noFace: AmbientFacialFrame[] = valid.flatMap((frame, index) => [
+      {
+        ...frame,
+        sequence: valid.length + index * 2 + 1,
+        faceVisible: false,
+        faceCount: 0,
+        trackSegmentId: undefined,
+        pose: { yawDegrees: 10, pitchDegrees: 0, rollDegrees: 0 },
+        qualityReasons: ["face-not-visible"]
+      },
+      {
+        ...frame,
+        sequence: valid.length + index * 2 + 2,
+        faceVisible: false,
+        faceCount: 0,
+        trackSegmentId: undefined,
+        pose: { yawDegrees: 10, pitchDegrees: 0, rollDegrees: 0 },
+        qualityReasons: ["face-not-visible"]
+      }
+    ]);
+    const frames = [...valid, ...noFace];
+
+    expect(restingPose(frames)).toEqual({
+      yawDegrees: 0,
+      pitchDegrees: 0,
+      rollDegrees: 0
+    });
+    expect(
+      extractAmbientFaceMetrics(frames, OPTIONS).outcomes[0]
+    ).toMatchObject({ status: "measured" });
   });
 
   it("accepts pose and calibrated-size boundaries inclusively", () => {
@@ -215,6 +294,27 @@ describe("extractAmbientFaceMetrics", () => {
 
     expect(result.outcomes.slice(0, 8).every((outcome) => outcome.status === "measured"))
       .toBe(true);
+  });
+
+  it("uses a valid session resting pose instead of the legacy absolute pose gate", () => {
+    const centered = byCode(
+      ambientFaceFrames(30_000),
+      "ambient.face.eye_aperture.left"
+    );
+    const offset = byCode(
+      ambientFaceFrames(30_000, 30, () => ({
+        pose: { yawDegrees: 0, pitchDegrees: 18, rollDegrees: 0 }
+      })),
+      "ambient.face.eye_aperture.left"
+    );
+
+    expect(offset).toMatchObject({ status: "measured" });
+    if (centered?.status === "measured" && offset?.status === "measured") {
+      expect(offset.technicalQualityScore).toBeCloseTo(
+        centered.technicalQualityScore,
+        12
+      );
+    }
   });
 
   it("rejects bins beyond strict ambient pose, gap, and sample thresholds", () => {
@@ -249,6 +349,23 @@ describe("extractAmbientFaceMetrics", () => {
         reasonCode: "no-usable-signal"
       });
     }
+  });
+
+  it("fails closed when finite landmark coordinates overflow derived geometry", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame) => ({
+      mouthCorners: {
+        left: { x: Number.MAX_VALUE, y: frame.mouthCorners!.left.y },
+        right: { x: -Number.MAX_VALUE, y: frame.mouthCorners!.right.y }
+      }
+    }));
+
+    expect(() => extractAmbientFaceMetrics(frames, OPTIONS)).not.toThrow();
+    expect(
+      extractAmbientFaceMetrics(frames, OPTIONS).outcomes[0]
+    ).toMatchObject({
+      status: "withheld",
+      reasonCode: "no-usable-signal"
+    });
   });
 
   it("resets movement at every bin boundary", () => {
@@ -295,6 +412,28 @@ describe("extractAmbientFaceMetrics", () => {
     });
   });
 
+  it("gates blink rate on the minimum accepted-bin cadence in evidence", () => {
+    const frames = [20, ...Array.from({ length: 11 }, () => 30)].flatMap(
+      (cadenceHz, binIndex) =>
+        ambientFaceFrames(5_000, cadenceHz).map((frame, frameIndex) => {
+          const tMs = frame.tMs + binIndex * 5_000;
+          return {
+            ...frame,
+            tMs,
+            acquiredAtMs: tMs,
+            sequence: binIndex * 1_000 + frameIndex + 1
+          };
+        })
+    );
+    const blink = byCode(frames, "ambient.face.blink_rate.bilateral");
+
+    expect(blink).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-frame-cadence",
+      evidence: { cadenceHz: 20 }
+    });
+  });
+
   it("requires a technical calibration and never treats it as an expression baseline", () => {
     const result = extractAmbientFaceMetrics(ambientFaceFrames(), {
       ...OPTIONS,
@@ -310,6 +449,31 @@ describe("extractAmbientFaceMetrics", () => {
     ).toBe(true);
     expect(JSON.stringify(result)).not.toMatch(/neutral|smile|emotion/i);
   });
+
+  it.each([
+    ["duration", { durationMs: Number.NaN }],
+    ["infinite duration", { durationMs: Number.POSITIVE_INFINITY }],
+    ["width", { baselineBoxWidthPixels: Number.NaN }],
+    ["infinite width", { baselineBoxWidthPixels: Number.POSITIVE_INFINITY }],
+    ["height", { baselineBoxHeightPixels: Number.NaN }],
+    ["infinite height", { baselineBoxHeightPixels: Number.POSITIVE_INFINITY }]
+  ])(
+    "withholds every metric for a non-finite calibration %s",
+    (_label, override) => {
+      const result = extractAmbientFaceMetrics(ambientFaceFrames(), {
+        ...OPTIONS,
+        calibration: { ...OPTIONS.calibration!, ...override }
+      });
+
+      expect(
+        result.outcomes.every(
+          (outcome) =>
+            outcome.status === "withheld" &&
+            outcome.reasonCode === "quality-threshold-failed"
+        )
+      ).toBe(true);
+    }
+  );
 
   it("fails closed when qualifying bins cross a face track", () => {
     const frames = ambientFaceFrames(30_000, 30, (frame) => ({
@@ -346,6 +510,34 @@ describe("extractAmbientFaceMetrics", () => {
     }
   });
 
+  it("requires three metric-supporting bins for each eye's closure", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame) => ({
+      eyeAperture: {
+        left:
+          Math.floor(frame.tMs / 5_000) < 2
+            ? frame.eyeAperture!.left
+            : 0,
+        right: frame.eyeAperture!.right
+      }
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+    const left = result.outcomes.find(
+      (outcome) =>
+        outcome.code === "ambient.face.lid_closure_completeness.left"
+    );
+    const right = result.outcomes.find(
+      (outcome) =>
+        outcome.code === "ambient.face.lid_closure_completeness.right"
+    );
+
+    expect(left).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-bins",
+      evidence: { qualifyingBinCount: 2 }
+    });
+    expect(right).toMatchObject({ status: "measured" });
+  });
+
   it("reports incomplete closure on one side without disturbing the other", () => {
     // Unilateral lagophthalmos: the subject-left lid only reaches 0.24 of its
     // 0.3 open reference, while the right still closes fully to 0.1.
@@ -380,6 +572,220 @@ describe("extractAmbientFaceMetrics", () => {
       // Subject-left brow is lower, so left minus right is negative.
       expect(asymmetry.value).toBeCloseTo(-0.06, 3);
     }
+  });
+
+  it("requires three bins carrying brow geometry", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame) => ({
+      browHeight:
+        Math.floor(frame.tMs / 5_000) < 2 ? frame.browHeight : null
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+
+    for (const code of [
+      "ambient.face.brow_height.left",
+      "ambient.face.brow_height.right",
+      "ambient.face.brow_height_asymmetry.signed"
+    ]) {
+      expect(
+        result.outcomes.find((outcome) => outcome.code === code)
+      ).toMatchObject({
+        status: "withheld",
+        reasonCode: "insufficient-bins",
+        evidence: { qualifyingBinCount: 2 }
+      });
+    }
+  });
+
+  it("uses only metric-supporting bins for brow evidence and span", () => {
+    const frames = ambientFaceFrames(60_000, 30, (frame) => ({
+      browHeight:
+        Math.floor(frame.tMs / 5_000) < 3 ? frame.browHeight : null
+    }));
+    const brow = byCode(frames, "ambient.face.brow_height.left");
+
+    expect(brow).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-duration",
+      evidence: {
+        qualifyingBinCount: 3,
+        eligibleDurationMs: 15_000,
+        observationSpanMs: 15_000
+      }
+    });
+    expect(brow?.evidence.sourceWindowRefs).toHaveLength(3);
+    expect(brow?.evidence.sampleCount).toBe(450);
+  });
+
+  it("uses only movement-supporting bins for movement evidence and span", () => {
+    const frames = ambientFaceFrames(60_000, 30, (frame) => ({
+      regionalMovementSpeed:
+        Math.floor(frame.tMs / 5_000) < 3
+          ? frame.regionalMovementSpeed
+          : null
+    }));
+    const movement = byCode(frames, "ambient.face.landmark_speed.p90");
+
+    expect(movement).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-duration",
+      evidence: {
+        qualifyingBinCount: 3,
+        observationSpanMs: 15_000
+      }
+    });
+    expect(movement?.evidence.eligibleDurationMs).toBeCloseTo(14_966.667, 3);
+    expect(movement?.evidence.sourceWindowRefs).toHaveLength(3);
+    expect(movement?.evidence.sampleCount).toBe(449);
+  });
+
+  it("does not let isolated optional-geometry samples borrow a whole bin", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame, index) => ({
+      browHeight:
+        index % 150 === 0 ? frame.browHeight : null,
+      regionalMovementSpeed:
+        index % 150 === 1 ? frame.regionalMovementSpeed : null
+    }));
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+
+    for (const code of [
+      "ambient.face.brow_height.left",
+      "ambient.face.brow_height.right",
+      "ambient.face.brow_height_asymmetry.signed",
+      "ambient.face.landmark_speed.p90"
+    ]) {
+      expect(
+        result.outcomes.find((outcome) => outcome.code === code)
+      ).toMatchObject({
+        status: "withheld",
+        reasonCode: "insufficient-bins",
+        evidence: {
+          qualifyingBinCount: 0,
+          eligibleDurationMs: 0,
+          sampleCount: 0
+        }
+      });
+    }
+  });
+
+  it("computes signed brow asymmetry from contemporaneous samples", () => {
+    const left = [0.1, 0.8, 0.9];
+    const right = [0.1, 0.2, 0.8];
+    const frames = ambientFaceFrames(30_000, 30, (_frame, index) => ({
+      browHeight: {
+        left: left[index % left.length],
+        right: right[index % right.length]
+      }
+    }));
+    const asymmetry = byCode(
+      frames,
+      "ambient.face.brow_height_asymmetry.signed"
+    );
+
+    expect(asymmetry).toMatchObject({ status: "measured" });
+    if (asymmetry?.status === "measured") {
+      expect(asymmetry.value).toBeCloseTo(0.1, 6);
+    }
+  });
+
+  it("excludes brow pairs whose finite operands overflow on subtraction", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame) => ({
+      browHeight:
+        frame.tMs < 15_000
+          ? { left: Number.MAX_VALUE, right: -Number.MAX_VALUE }
+          : { left: 0.2, right: 0.1 }
+    }));
+    const asymmetry = byCode(
+      frames,
+      "ambient.face.brow_height_asymmetry.signed"
+    );
+
+    expect(asymmetry).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-duration",
+      evidence: {
+        qualifyingBinCount: 3,
+        eligibleDurationMs: 15_000,
+        observationSpanMs: 15_000,
+        sampleCount: 450
+      }
+    });
+  });
+
+  it("does not abort extraction when finite brow dispersion is very large", () => {
+    const amplitude = 6e307;
+    const frames = ambientFaceFrames(30_000, 30, (frame) => ({
+      browHeight:
+        frame.tMs < 15_000
+          ? { left: amplitude, right: -amplitude }
+          : { left: -amplitude, right: amplitude }
+    }));
+
+    expect(() => extractAmbientFaceMetrics(frames, OPTIONS)).not.toThrow();
+    const asymmetry = byCode(
+      frames,
+      "ambient.face.brow_height_asymmetry.signed"
+    );
+    expect(asymmetry).toMatchObject({ status: "measured" });
+    if (asymmetry?.status === "measured") {
+      expect(asymmetry.value).toBe(0);
+      expect(asymmetry.technicalDispersion).toBe(1.2e308);
+    }
+  });
+
+  it("takes the median of paired brow differences", () => {
+    const left = [0.1, 0.8, 0.9, 0.1, 0.8, 0.9];
+    const right = [0.1, 0.2, 0.8, 0.1, 0.2, 0.8];
+    const frames = ambientFaceFrames(30_000, 30, (frame) => {
+      const binIndex = Math.floor(frame.tMs / 5_000);
+      return {
+        browHeight: { left: left[binIndex], right: right[binIndex] }
+      };
+    });
+    const asymmetry = byCode(
+      frames,
+      "ambient.face.brow_height_asymmetry.signed"
+    );
+
+    expect(asymmetry).toMatchObject({ status: "measured" });
+    if (asymmetry?.status === "measured") {
+      expect(asymmetry.value).toBeCloseTo(0.1, 6);
+    }
+  });
+
+  it("requires paired brow support for signed asymmetry", () => {
+    const frames = ambientFaceFrames(30_000, 30, (frame) => {
+      const binIndex = Math.floor(frame.tMs / 5_000);
+      return {
+        browHeight: {
+          left: [0, 2, 5].includes(binIndex)
+            ? frame.browHeight!.left
+            : Number.NaN,
+          right:
+            [0, 3, 5].includes(binIndex)
+              ? frame.browHeight!.right
+              : Number.NaN
+        }
+      };
+    });
+    const result = extractAmbientFaceMetrics(frames, OPTIONS);
+    const byMetric = (code: string) =>
+      result.outcomes.find((outcome) => outcome.code === code);
+
+    expect(byMetric("ambient.face.brow_height.left")).toMatchObject({
+      status: "measured",
+      evidence: { qualifyingBinCount: 3 }
+    });
+    expect(byMetric("ambient.face.brow_height.right")).toMatchObject({
+      status: "measured",
+      evidence: { qualifyingBinCount: 3 }
+    });
+    expect(
+      byMetric("ambient.face.brow_height_asymmetry.signed")
+    ).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-bins",
+      evidence: { qualifyingBinCount: 2 }
+    });
   });
 });
 

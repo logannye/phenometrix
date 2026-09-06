@@ -110,7 +110,7 @@ describe("extractAmbientVoiceMetrics", () => {
     }
     expect(pauses).toMatchObject({
       status: "measured",
-      evidence: { pauseCount: 9 }
+      evidence: { pauseCount: 11 }
     });
     expect(medianPause).toMatchObject({ status: "measured" });
     if (medianPause?.status === "measured") {
@@ -204,6 +204,87 @@ describe("extractAmbientVoiceMetrics", () => {
       .toBe(true);
   });
 
+  it("scopes variability evidence to segments that contribute valid pitch bins", () => {
+    const frames = ambientVoiceFrames(40_000, 10, (frame) =>
+      frame.tMs < 30_000
+        ? {
+            speechActive: true,
+            periodic: true,
+            snrDb: 26,
+            f0Hz: 150 + Math.sin(frame.tMs / 175) * 8,
+            f0Confidence: 0.9,
+            estimatorAgreement: 0.9,
+            qualityReasons: []
+          }
+        : {
+            speechActive: true,
+            periodic: false,
+            snrDb: 15,
+            f0Hz: null,
+            f0Confidence: 0,
+            estimatorAgreement: 0,
+            clippedSampleFraction: 0.01,
+            lostBlockFraction: 0.05,
+            qualityReasons: []
+          }
+    );
+    const variability = byCode(
+      frames,
+      "ambient.voice.f0.variability"
+    );
+
+    expect(variability).toMatchObject({
+      status: "measured",
+      technicalQualityScore: 0.92,
+      evidence: {
+        eligibleDurationMs: 30_000,
+        segmentCount: 3,
+        validBinsPerSegment: 20,
+        sourceWindowRefs: [
+          "voice:1:local-microphone-1:0:10000",
+          "voice:1:local-microphone-1:10000:20000",
+          "voice:1:local-microphone-1:20000:30000"
+        ]
+      }
+    });
+  });
+
+  it("does not use noncontributing pitch to clear variability evidence gates", () => {
+    const frames = ambientVoiceFrames(40_000, 10, (frame) => {
+      const segmentIndex = Math.floor(frame.tMs / 10_000);
+      const withinSegmentMs = frame.tMs % 10_000;
+      const speechActive = segmentIndex < 3
+        ? withinSegmentMs < 3_100
+        : withinSegmentMs % 500 < 290;
+      const periodic = segmentIndex < 3
+        ? withinSegmentMs < 2_000 && withinSegmentMs % 500 < 350
+        : speechActive;
+      return {
+        speechActive,
+        periodic,
+        snrDb: speechActive ? 26 : 0,
+        f0Hz: periodic ? 160 : null,
+        f0Confidence: periodic ? 0.9 : 0,
+        estimatorAgreement: periodic ? 0.9 : 0,
+        qualityReasons: speechActive ? [] : ["signal-too-quiet"]
+      };
+    });
+
+    expect(byCode(frames, "ambient.voice.f0.median")).toMatchObject({
+      status: "measured",
+      evidence: { pitchedDurationMs: 10_000 }
+    });
+    expect(byCode(frames, "ambient.voice.f0.variability")).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-pitched-speech",
+      evidence: {
+        pitchedDurationMs: 4_200,
+        segmentCount: 3,
+        validBinsPerSegment: 4
+      }
+    });
+  });
+
   it("requires two seconds of quiet calibration", () => {
     const result = extractAmbientVoiceMetrics(ambientVoiceFrames(), {
       ...OPTIONS,
@@ -218,6 +299,51 @@ describe("extractAmbientVoiceMetrics", () => {
       )
     ).toBe(true);
   });
+
+  it.each([
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+    Number.NEGATIVE_INFINITY
+  ])(
+    "withholds every metric for non-finite calibration duration %s",
+    (duration) => {
+      const result = extractAmbientVoiceMetrics(ambientVoiceFrames(), {
+        ...OPTIONS,
+        noiseCalibrationDurationMs: duration
+      });
+
+      expect(
+        result.outcomes.every(
+          (outcome) =>
+            outcome.status === "withheld" &&
+            outcome.reasonCode === "quality-threshold-failed"
+        )
+      ).toBe(true);
+    }
+  );
+
+  it.each([
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+    Number.NEGATIVE_INFINITY
+  ])(
+    "withholds rather than crashing for non-finite frame SNR %s",
+    (snrDb) => {
+      const result = extractAmbientVoiceMetrics(
+        ambientVoiceFrames(30_000, 10, () => ({ snrDb })),
+        OPTIONS
+      );
+
+      expect(result.outcomes).toHaveLength(7);
+      expect(
+        result.outcomes.every(
+          (outcome) =>
+            outcome.status === "withheld" &&
+            outcome.reasonCode === "no-usable-signal"
+        )
+      ).toBe(true);
+    }
+  );
 
   it("produces deterministic, context-and-provenance-bound identities", () => {
     const first = extractAmbientVoiceMetrics(ambientVoiceFrames(), OPTIONS);
@@ -267,6 +393,110 @@ describe("extractAmbientVoiceMetrics", () => {
 });
 
 describe("pause and speech-run events", () => {
+  it("does not turn ten-second analysis boundaries into speech runs", () => {
+    const result = extractAmbientVoiceMetrics(
+      ambientVoiceFrames(60_000, 10, (frame) => ({
+        speechActive: true,
+        periodic: true,
+        snrDb: 26,
+        rms: 0.08,
+        f0Hz: 160,
+        f0Confidence: 0.9,
+        estimatorAgreement: 0.9,
+        qualityReasons: [],
+        syllabicNucleus: frame.tMs % 500 === 0
+      })),
+      OPTIONS
+    );
+    expect(result.events?.speechRuns).toHaveLength(1);
+    expect(result.events?.speechRuns?.[0]).toMatchObject({
+      startMs: 0,
+      endMs: 60_000,
+      durationMs: 60_000
+    });
+    expect(
+      result.outcomes.find(
+        (outcome) =>
+          outcome.code === "ambient.voice.speech_run_duration.median"
+      )
+    ).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-events"
+    });
+  });
+
+  it("preserves a pause that crosses a ten-second analysis boundary", () => {
+    const result = extractAmbientVoiceMetrics(
+      ambientVoiceFrames(30_000, 10, (frame) => {
+        const speechActive = frame.tMs < 9_800 || frame.tMs >= 10_300;
+        return {
+          speechActive,
+          periodic: speechActive,
+          snrDb: speechActive ? 26 : 0,
+          rms: speechActive ? 0.08 : 0.0002,
+          f0Hz: speechActive ? 160 : null,
+          f0Confidence: speechActive ? 0.9 : 0,
+          estimatorAgreement: speechActive ? 0.9 : 0,
+          qualityReasons: speechActive ? [] : ["signal-too-quiet"]
+        };
+      }),
+      OPTIONS
+    );
+    expect(result.events?.pauses).toEqual([
+      expect.objectContaining({
+        startMs: 9_800,
+        endMs: 10_300,
+        durationMs: 500
+      })
+    ]);
+    expect(
+      result.outcomes.find(
+        (outcome) => outcome.code === "ambient.voice.pause_rate"
+      )
+    ).toMatchObject({ status: "measured", evidence: { pauseCount: 1 } });
+  });
+
+  it("does not rejoin timing across a raw frame gap above the limit", () => {
+    const frames = ambientVoiceFrames(60_000, 10, (frame) => ({
+      speechActive: true,
+      periodic: true,
+      snrDb: 26,
+      rms: 0.08,
+      f0Hz: 160,
+      f0Confidence: 0.9,
+      estimatorAgreement: 0.9,
+      qualityReasons: []
+    })).filter(
+      (frame) => frame.tMs < 10_000 || frame.tMs >= 10_040
+    );
+    const runs = extractAmbientVoiceMetrics(frames, OPTIONS).events
+      ?.speechRuns ?? [];
+
+    expect(runs).toHaveLength(2);
+    expect(runs[0]).toMatchObject({ startMs: 0, endMs: 10_000 });
+    expect(runs[1].startMs).toBe(10_040);
+  });
+
+  it("does not rejoin timing across an observed rejected frame", () => {
+    const frames = ambientVoiceFrames(60_000, 10, (frame) => ({
+      speechActive: true,
+      periodic: true,
+      snrDb: 26,
+      rms: 0.08,
+      f0Hz: 160,
+      f0Confidence: 0.9,
+      estimatorAgreement: 0.9,
+      qualityReasons: frame.tMs === 10_000 ? ["audio-frame-gap"] : [],
+      blockGapMs: frame.tMs === 10_000 ? 5_000 : 10
+    }));
+    const runs = extractAmbientVoiceMetrics(frames, OPTIONS).events
+      ?.speechRuns ?? [];
+
+    expect(runs).toHaveLength(2);
+    expect(runs[0]).toMatchObject({ startMs: 0, endMs: 10_000 });
+    expect(runs[1]).toMatchObject({ startMs: 10_010, endMs: 60_000 });
+  });
+
   it("records every pause, including ones the published metrics filter out", () => {
     // The duration metrics keep only pauses in [200, 1999] ms and drop the
     // leading and trailing quiet. Those exclusions are correct for a median but

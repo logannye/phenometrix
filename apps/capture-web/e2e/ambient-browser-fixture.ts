@@ -4,13 +4,23 @@ export type AmbientBrowserFixtureMode =
   | "deny-all"
   | "audio-only"
   | "dual-lane"
-  | "late-audio";
+  | "late-audio"
+  | "late-worklet"
+  | "video-with-late-audio";
 
 export interface AmbientBrowserProbe {
   trackStops: number;
+  audioTrackStops: number;
+  videoTrackStops: number;
   audioContextsClosed: number;
   workersTerminated: number;
+  voiceWorkersTerminated: number;
+  faceWorkersTerminated: number;
+  workletModuleRequests: number;
   resolveLateAudio(): void;
+  resolveLateWorklet(): void;
+  failAudioProcessor(): void;
+  failFaceWorker(): void;
 }
 
 export async function installAmbientBrowserFixture(
@@ -20,16 +30,36 @@ export async function installAmbientBrowserFixture(
   await page.addInitScript((fixtureMode) => {
     interface MutableProbe extends AmbientBrowserProbe {
       lateAudioResolver: (() => void) | null;
+      lateWorkletResolver: (() => void) | null;
     }
+
+    let audioProcessorFailureHook: (() => void) | null = null;
+    let faceWorkerFailureHook: (() => void) | null = null;
 
     const probe: MutableProbe = {
       trackStops: 0,
+      audioTrackStops: 0,
+      videoTrackStops: 0,
       audioContextsClosed: 0,
       workersTerminated: 0,
+      voiceWorkersTerminated: 0,
+      faceWorkersTerminated: 0,
+      workletModuleRequests: 0,
       lateAudioResolver: null,
+      lateWorkletResolver: null,
       resolveLateAudio() {
         this.lateAudioResolver?.();
         this.lateAudioResolver = null;
+      },
+      resolveLateWorklet() {
+        this.lateWorkletResolver?.();
+        this.lateWorkletResolver = null;
+      },
+      failAudioProcessor() {
+        audioProcessorFailureHook?.();
+      },
+      failFaceWorker() {
+        faceWorkerFailureHook?.();
       }
     };
     Object.defineProperty(window, "__ambientTestProbe", {
@@ -39,6 +69,7 @@ export async function installAmbientBrowserFixture(
 
     function fakeTrack(kind: "audio" | "video"): MediaStreamTrack {
       let readyState: MediaStreamTrackState = "live";
+      const events = new EventTarget();
       return {
         kind,
         get readyState() {
@@ -48,6 +79,8 @@ export async function installAmbientBrowserFixture(
           if (readyState === "live") {
             readyState = "ended";
             probe.trackStops += 1;
+            if (kind === "audio") probe.audioTrackStops += 1;
+            else probe.videoTrackStops += 1;
           }
         },
         getSettings() {
@@ -60,7 +93,10 @@ export async function installAmbientBrowserFixture(
                 autoGainControl: false
               }
             : { width: 1280, height: 720, frameRate: 30, facingMode: "user" };
-        }
+        },
+        addEventListener: events.addEventListener.bind(events),
+        removeEventListener: events.removeEventListener.bind(events),
+        dispatchEvent: events.dispatchEvent.bind(events)
       } as MediaStreamTrack;
     }
 
@@ -81,13 +117,22 @@ export async function installAmbientBrowserFixture(
       if (fixtureMode === "deny-all") {
         throw new DOMException("Permission denied by browser fixture.", "NotAllowedError");
       }
-      if (fixtureMode === "dual-lane" && videoRequested) {
+      if (
+        (
+          fixtureMode === "dual-lane" ||
+          fixtureMode === "video-with-late-audio"
+        ) &&
+        videoRequested
+      ) {
         return fakeStream("video");
       }
       if (!audioRequested) {
         throw new DOMException("Permission denied by browser fixture.", "NotAllowedError");
       }
-      if (fixtureMode === "late-audio") {
+      if (
+        fixtureMode === "late-audio" ||
+        fixtureMode === "video-with-late-audio"
+      ) {
         return await new Promise<MediaStream>((resolve) => {
           probe.lateAudioResolver = () => resolve(fakeStream("audio"));
         });
@@ -186,7 +231,16 @@ export async function installAmbientBrowserFixture(
       readonly sampleRate = 48_000;
       readonly currentTime = 0;
       readonly destination = audioNode();
-      readonly audioWorklet = { addModule: async () => undefined };
+      readonly audioWorklet = {
+        addModule: async () => {
+          probe.workletModuleRequests += 1;
+          if (fixtureMode === "late-worklet") {
+            await new Promise<void>((resolve) => {
+              probe.lateWorkletResolver = resolve;
+            });
+          }
+        }
+      };
       state: AudioContextState = "running";
 
       createMediaStreamSource(): MediaStreamAudioSourceNode {
@@ -209,8 +263,14 @@ export async function installAmbientBrowserFixture(
       value: AudioContextMock
     });
 
-    class AudioWorkletNodeMock {
-      readonly port = { postMessage() {} };
+    class AudioWorkletNodeMock extends EventTarget {
+      readonly port = { postMessage() {}, close() {} };
+      constructor() {
+        super();
+        audioProcessorFailureHook = () => {
+          this.dispatchEvent(new Event("processorerror"));
+        };
+      }
       connect(): AudioNode {
         return audioNode();
       }
@@ -239,6 +299,11 @@ export async function installAmbientBrowserFixture(
       constructor(scriptUrl: URL | string) {
         super();
         this.scriptUrl = String(scriptUrl);
+        if (this.scriptUrl.includes("face-worker")) {
+          faceWorkerFailureHook = () => {
+            this.dispatchEvent(new Event("error"));
+          };
+        }
       }
 
       private emit(data: unknown): void {
@@ -349,7 +414,8 @@ export async function installAmbientBrowserFixture(
                 skippedFrameFraction: 0,
                 processingLatencyMs: 4,
                 qualityReasons: [],
-                processorRef: "mediapipe-face-landmarker@fixture"
+                processorRef:
+                  "mediapipe-face-landmarker:0.10.35:fixture:bilateral-geometry-v2:cpu"
               }
             }), 0);
           } else if (message.type === "dispose") {
@@ -526,6 +592,11 @@ export async function installAmbientBrowserFixture(
         this.timers.forEach((timer) => window.clearTimeout(timer));
         this.timers = [];
         probe.workersTerminated += 1;
+        if (this.scriptUrl.includes("face-worker")) {
+          probe.faceWorkersTerminated += 1;
+        } else if (this.scriptUrl.includes("voice-worker")) {
+          probe.voiceWorkersTerminated += 1;
+        }
       }
     }
     Object.defineProperty(window, "Worker", {
@@ -546,9 +617,17 @@ export async function ambientProbe(page: Page): Promise<AmbientBrowserProbe> {
     const probe = browserWindow.__ambientTestProbe;
     return {
       trackStops: probe.trackStops,
+      audioTrackStops: probe.audioTrackStops,
+      videoTrackStops: probe.videoTrackStops,
       audioContextsClosed: probe.audioContextsClosed,
       workersTerminated: probe.workersTerminated,
-      resolveLateAudio() {}
+      voiceWorkersTerminated: probe.voiceWorkersTerminated,
+      faceWorkersTerminated: probe.faceWorkersTerminated,
+      workletModuleRequests: probe.workletModuleRequests,
+      resolveLateAudio() {},
+      resolveLateWorklet() {},
+      failAudioProcessor() {},
+      failFaceWorker() {}
     };
   });
 }
@@ -559,5 +638,32 @@ export async function resolveLateAudio(page: Page): Promise<void> {
       __ambientTestProbe?: AmbientBrowserProbe;
     };
     browserWindow.__ambientTestProbe?.resolveLateAudio();
+  });
+}
+
+export async function resolveLateWorklet(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const browserWindow = window as Window & {
+      __ambientTestProbe?: AmbientBrowserProbe;
+    };
+    browserWindow.__ambientTestProbe?.resolveLateWorklet();
+  });
+}
+
+export async function failAudioProcessor(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const browserWindow = window as Window & {
+      __ambientTestProbe?: AmbientBrowserProbe;
+    };
+    browserWindow.__ambientTestProbe?.failAudioProcessor();
+  });
+}
+
+export async function failFaceWorker(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const browserWindow = window as Window & {
+      __ambientTestProbe?: AmbientBrowserProbe;
+    };
+    browserWindow.__ambientTestProbe?.failFaceWorker();
   });
 }

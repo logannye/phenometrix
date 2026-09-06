@@ -22,18 +22,22 @@ export const WorkflowStageV1Schema = z.enum([
 ]);
 export type WorkflowStageV1 = z.infer<typeof WorkflowStageV1Schema>;
 
-export const WorkflowActorV1Schema = z
-  .object({
-    kind: z.enum(["application", "processor"]),
-    id: z.enum([
-      "capture-web",
-      "voice-analysis",
-      "facial-analysis",
-      "report-builder"
-    ]),
-    version: z.string().min(1)
-  })
-  .strict();
+export const WorkflowActorV1Schema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("application"),
+      id: z.enum(["capture-web", "report-builder"]),
+      version: z.string().min(1)
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal("processor"),
+      id: z.enum(["voice-analysis", "facial-analysis"]),
+      version: z.string().min(1)
+    })
+    .strict()
+]);
 export type WorkflowActorV1 = z.infer<typeof WorkflowActorV1Schema>;
 
 const WorkflowEventBaseShape = {

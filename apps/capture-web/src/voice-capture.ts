@@ -26,6 +26,7 @@ export interface VoiceCaptureStartOptions {
   captureEpoch: number;
   taskContext: VoiceTaskContext;
   workletUrl: string;
+  startupSignal?: AbortSignal;
   callbacks: VoiceCaptureCallbacks;
 }
 
@@ -55,163 +56,213 @@ export async function startVoiceCapturePipeline(
   await options.audioContext.audioWorklet.addModule(
     options.workletUrl
   );
-  const worker = new Worker(
-    new URL("./voice-worker.ts", import.meta.url),
-    { type: "module" }
-  );
-  const source =
-    options.audioContext.createMediaStreamSource(options.stream);
-  const worklet = new AudioWorkletNode(
-    options.audioContext,
-    /*
-     * Deliberately NOT renamed with the rest of PhenoMetrix.
-     *
-     * This is a runtime registration identifier, the same category as the
-     * "phenometric.<name>.vN" schema strings that were left alone for the same
-     * reason. Worse, the worklet is served from public/ at a fixed unhashed
-     * URL, so browsers cache it hard: a stale copy registers the old name while
-     * a fresh bundle asks for the new one, AudioWorkletNode throws, and the
-     * voice lane dies silently -- live telemetry simply stops. Renaming it was
-     * cosmetic and cost exactly that.
-     */
-    "phenometric-voice-capture",
-    {
-      numberOfInputs: 1,
-      numberOfOutputs: 1,
-      outputChannelCount: [1],
-      channelCount: 1,
-      channelCountMode: "explicit"
-    }
-  );
-  const mutedOutput = options.audioContext.createGain();
-  mutedOutput.gain.value = 0;
-  source.connect(worklet);
-  worklet.connect(mutedOutput);
-  mutedOutput.connect(options.audioContext.destination);
-
-  const channel = new MessageChannel();
+  if (options.startupSignal?.aborted) {
+    throw new Error("voice-capture-startup-aborted");
+  }
+  let worker: Worker | null = null;
+  let source: MediaStreamAudioSourceNode | null = null;
+  let worklet: AudioWorkletNode | null = null;
+  let mutedOutput: GainNode | null = null;
+  let channel: MessageChannel | null = null;
   let captureEpoch = options.captureEpoch;
   let stopped = false;
   let disposedResolver: (() => void) | null = null;
+  let stopPromise: Promise<void> | null = null;
 
-  worker.addEventListener(
-    "message",
-    (event: MessageEvent<VoiceWorkerResponse>) => {
-      if (!isCurrentVoiceWorkerResponse(event.data, captureEpoch)) {
-        return;
-      }
-      if (event.data.type === "disposed") {
-        options.callbacks.onDiagnostics(event.data.diagnostics);
-        disposedResolver?.();
-        disposedResolver = null;
-        return;
-      }
-      if (stopped) return;
-      if (event.data.type === "ready") {
-        options.callbacks.onReady(event.data.provenance);
-      } else if (event.data.type === "signal-frame") {
-        options.callbacks.onFrame(
-          event.data.frame,
-          event.data.processingLatencyMs
-        );
-      } else if (event.data.type === "diagnostics") {
-        options.callbacks.onDiagnostics(event.data.diagnostics);
-      } else if (event.data.type === "error") {
-        options.callbacks.onFailure(event.data.reason);
-      }
-    }
-  );
-  worker.addEventListener("error", () => {
-    if (!stopped) {
-      options.callbacks.onFailure("voice-worker-unavailable");
-    }
-  });
-
-  worklet.port.postMessage(
-    { type: "attach-port", port: channel.port1 },
-    [channel.port1]
-  );
-  worklet.port.postMessage({
-    type: "capture-epoch",
-    captureEpoch
-  });
-  worker.postMessage(
-    request({
-      type: "initialize",
-      captureEpoch,
-      port: channel.port2,
-      sessionOriginPerformanceMs: performance.now(),
-      audioContextOriginSeconds: options.audioContext.currentTime,
-      captureSettings: options.captureSettings,
-      taskContext: options.taskContext
-    }),
-    [channel.port2]
-  );
-
-  return {
-    get captureEpoch() {
-      return captureEpoch;
-    },
-    setTask(taskContext) {
-      if (stopped) return;
-      worker.postMessage(
-        request({ type: "set-task", captureEpoch, taskContext })
-      );
-    },
-    setNoiseFloor(noiseFloorRms) {
-      if (stopped || !Number.isFinite(noiseFloorRms)) return;
-      worker.postMessage(
-        request({
-          type: "set-noise-floor",
-          captureEpoch,
-          noiseFloorRms
-        })
-      );
-    },
-    reset(nextEpoch, taskContext) {
-      if (stopped) return;
-      captureEpoch = nextEpoch;
-      worklet.port.postMessage({
-        type: "capture-epoch",
-        captureEpoch
-      });
-      worker.postMessage(
-        request({ type: "reset", captureEpoch, taskContext })
-      );
-    },
-    async stop() {
-      if (stopped) return;
-      stopped = true;
-      const acknowledgement = new Promise<void>((resolve) => {
-        disposedResolver = resolve;
-      });
+  const releaseResources = (): void => {
+    for (const node of [source, worklet, mutedOutput]) {
       try {
-        worklet.port.postMessage({ type: "dispose" });
-        worker.postMessage(
-          request({ type: "dispose", captureEpoch })
-        );
+        node?.disconnect();
       } catch {
-        // A failed worker already released its message ports.
-        disposedResolver?.();
-        disposedResolver = null;
+        // A partially constructed graph can already be disconnected.
       }
-      let timeout: ReturnType<typeof setTimeout> | undefined;
-      await Promise.race([
-        acknowledgement,
-        new Promise<void>((resolve) => {
-          timeout = setTimeout(resolve, 500);
-        })
-      ]);
-      if (timeout !== undefined) clearTimeout(timeout);
-      for (const node of [source, worklet, mutedOutput]) {
-        try {
-          node.disconnect();
-        } catch {
-          // Nodes can already be disconnected when context startup failed.
+    }
+    for (const port of [channel?.port1, channel?.port2, worklet?.port]) {
+      try {
+        port?.close();
+      } catch {
+        // Transferred or failed ports can already be detached.
+      }
+    }
+    try {
+      worker?.terminate();
+    } catch {
+      // Construction failure can leave a non-operational worker handle.
+    }
+    disposedResolver = null;
+  };
+
+  try {
+    worker = new Worker(
+      new URL("./voice-worker.ts", import.meta.url),
+      { type: "module" }
+    );
+    const activeWorker = worker;
+    source = options.audioContext.createMediaStreamSource(options.stream);
+    const activeSource = source;
+    worklet = new AudioWorkletNode(
+      options.audioContext,
+      /*
+       * Deliberately NOT renamed with the rest of PhenoMetrix.
+       *
+       * This is a runtime registration identifier, the same category as the
+       * "phenometric.<name>.vN" schema strings that were left alone for the same
+       * reason. Worse, the worklet is served from public/ at a fixed unhashed
+       * URL, so browsers cache it hard: a stale copy registers the old name while
+       * a fresh bundle asks for the new one, AudioWorkletNode throws, and the
+       * voice lane dies silently -- live telemetry simply stops. Renaming it was
+       * cosmetic and cost exactly that.
+       */
+      "phenometric-voice-capture",
+      {
+        numberOfInputs: 1,
+        numberOfOutputs: 1,
+        outputChannelCount: [1],
+        channelCount: 1,
+        channelCountMode: "explicit"
+      }
+    );
+    const activeWorklet = worklet;
+    mutedOutput = options.audioContext.createGain();
+    const activeMutedOutput = mutedOutput;
+    activeMutedOutput.gain.value = 0;
+    activeSource.connect(activeWorklet);
+    activeWorklet.connect(activeMutedOutput);
+    activeMutedOutput.connect(options.audioContext.destination);
+
+    channel = new MessageChannel();
+    const activeChannel = channel;
+
+    activeWorker.addEventListener(
+      "message",
+      (event: MessageEvent<VoiceWorkerResponse>) => {
+        if (!isCurrentVoiceWorkerResponse(event.data, captureEpoch)) {
+          return;
+        }
+        if (event.data.type === "disposed") {
+          options.callbacks.onDiagnostics(event.data.diagnostics);
+          disposedResolver?.();
+          disposedResolver = null;
+          return;
+        }
+        if (stopped) return;
+        if (event.data.type === "ready") {
+          options.callbacks.onReady(event.data.provenance);
+        } else if (event.data.type === "signal-frame") {
+          options.callbacks.onFrame(
+            event.data.frame,
+            event.data.processingLatencyMs
+          );
+        } else if (event.data.type === "diagnostics") {
+          options.callbacks.onDiagnostics(event.data.diagnostics);
+        } else if (event.data.type === "error") {
+          options.callbacks.onFailure(event.data.reason);
         }
       }
-      worker.terminate();
-      disposedResolver = null;
+    );
+    activeWorker.addEventListener("error", () => {
+      if (!stopped) {
+        options.callbacks.onFailure("voice-worker-unavailable");
+      }
+    });
+    activeWorklet.addEventListener("processorerror", () => {
+      if (!stopped) {
+        options.callbacks.onFailure("audio-worklet-processor-failed");
+      }
+    }, { once: true });
+
+    activeWorklet.port.postMessage(
+      { type: "attach-port", port: activeChannel.port1 },
+      [activeChannel.port1]
+    );
+    activeWorklet.port.postMessage({
+      type: "capture-epoch",
+      captureEpoch
+    });
+    activeWorker.postMessage(
+      request({
+        type: "initialize",
+        captureEpoch,
+        port: activeChannel.port2,
+        sessionOriginPerformanceMs: performance.now(),
+        audioContextOriginSeconds: options.audioContext.currentTime,
+        captureSettings: options.captureSettings,
+        taskContext: options.taskContext
+      }),
+      [activeChannel.port2]
+    );
+
+    return {
+      get captureEpoch() {
+        return captureEpoch;
+      },
+      setTask(taskContext) {
+        if (stopped) return;
+        activeWorker.postMessage(
+          request({ type: "set-task", captureEpoch, taskContext })
+        );
+      },
+      setNoiseFloor(noiseFloorRms) {
+        if (stopped || !Number.isFinite(noiseFloorRms)) return;
+        activeWorker.postMessage(
+          request({
+            type: "set-noise-floor",
+            captureEpoch,
+            noiseFloorRms
+          })
+        );
+      },
+      reset(nextEpoch, taskContext) {
+        if (stopped) return;
+        captureEpoch = nextEpoch;
+        activeWorklet.port.postMessage({
+          type: "capture-epoch",
+          captureEpoch
+        });
+        activeWorker.postMessage(
+          request({ type: "reset", captureEpoch, taskContext })
+        );
+      },
+      stop() {
+        if (stopPromise) return stopPromise;
+        stopped = true;
+        stopPromise = (async () => {
+          const acknowledgement = new Promise<void>((resolve) => {
+            disposedResolver = resolve;
+          });
+          try {
+            activeWorklet.port.postMessage({ type: "dispose" });
+          } catch {
+            // A failed worklet can already have released its message port.
+          }
+          try {
+            activeWorker.postMessage(
+              request({ type: "dispose", captureEpoch })
+            );
+          } catch {
+            disposedResolver?.();
+            disposedResolver = null;
+          }
+          let timeout: ReturnType<typeof setTimeout> | undefined;
+          await Promise.race([
+            acknowledgement,
+            new Promise<void>((resolve) => {
+              timeout = setTimeout(resolve, 500);
+            })
+          ]);
+          if (timeout !== undefined) clearTimeout(timeout);
+          releaseResources();
+        })();
+        return stopPromise;
+      }
+    };
+  } catch (error) {
+    try {
+      worklet?.port.postMessage({ type: "dispose" });
+    } catch {
+      // The processor may not have completed construction.
     }
-  };
+    releaseResources();
+    throw error;
+  }
 }

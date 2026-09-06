@@ -11,7 +11,11 @@ export function stdDev(values: number[]): number {
 export function median(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+  // Halving before addition keeps the midpoint finite when both central
+  // operands are large finite numbers with the same sign.
+  return sorted.length % 2 === 0
+    ? sorted[mid - 1] / 2 + sorted[mid] / 2
+    : sorted[mid];
 }
 
 export function medianAbsoluteDeviation(values: number[]): number {

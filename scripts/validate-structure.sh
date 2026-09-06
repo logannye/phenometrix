@@ -24,6 +24,8 @@ required_files=(
   "apps/capture-web/src/ambient-core-adapter.ts"
   "apps/capture-web/src/ambient-workflow.ts"
   "apps/capture-web/src/capture-runtime.ts"
+  "apps/capture-web/src/condition-demo-controller.ts"
+  "apps/capture-web/src/condition-evidence-view.ts"
   "apps/capture-web/src/face-worker.ts"
   "apps/capture-web/src/main.ts"
   "apps/capture-web/src/static-assets.ts"
@@ -33,10 +35,17 @@ required_files=(
   "packages/ambient-core/src/ambient-registry.ts"
   "packages/ambient-core/src/ambient-voice.ts"
   "packages/contracts/src/ambient-protocol.ts"
+  "packages/contracts/src/condition-demo.ts"
+  "packages/contracts/src/condition-evidence-card.ts"
   "packages/contracts/src/observation-v3.ts"
+  "packages/contracts/src/previous-visit-comparison.ts"
   "packages/contracts/src/report.ts"
   "packages/contracts/src/workflow-event.ts"
   "packages/evidence-core/src/report.ts"
+  "packages/evidence-core/src/condition-card.ts"
+  "packages/condition-profiles/src/unilateral-facial-movement.ts"
+  "packages/trajectory-core/src/compatibility.ts"
+  "packages/trajectory-core/src/compare-previous.ts"
   "packages/event-log/src/journal.ts"
   "agents/ambient-capture/README.md"
   "agents/personal-trajectory/README.md"
@@ -46,6 +55,7 @@ required_files=(
   "services/voice-inference/phenometrix_voice/app.py"
   "services/voice-inference/tests/test_service.py"
   "services/voice-inference/uv.lock"
+  "scripts/condition-profile-digest.mjs"
 )
 
 for required_file in "${required_files[@]}"; do
@@ -117,6 +127,36 @@ node <<'NODE'
       throw new Error(`Invalid static-asset entry: ${name}`);
     }
   }
+
+  const conditionUiFiles = [
+    "apps/capture-web/index.html",
+    "apps/capture-web/src/main.ts",
+    "apps/capture-web/src/condition-evidence-view.ts"
+  ];
+  const prohibitedConditionClaims = [
+    /has improved/i,
+    /has worsened/i,
+    /has recovered/i,
+    /diagnosed as/i,
+    /severity score/i,
+    /synkinesis (?:was )?detected/i,
+    /stroke (?:is )?likely/i,
+    /treatment (?:is )?recommended/i,
+    /forehead sparing/i,
+    /house-brackmann/i,
+    /sunnybrook/i,
+    /\beFACE\b/
+  ];
+  for (const file of conditionUiFiles) {
+    const source = fs.readFileSync(file, "utf8");
+    for (const claim of prohibitedConditionClaims) {
+      if (claim.test(source)) {
+        throw new Error(
+          `Prohibited condition interpretation ${claim} appears in ${file}.`
+        );
+      }
+    }
+  }
 NODE
 
 agent_count="$(find agents -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')"
@@ -140,6 +180,10 @@ pnpm --filter @phenometrix/capture-web verify:assets
 # The pack's contentSha256 is hand-edited hex. The runtime check compares the
 # pack against itself, so a stale digest ships to the browser and stamps every
 # observation without anything objecting. Fail the gate instead.
-npx tsx scripts/protocol-digest.mjs --check
+pnpm --filter @phenometrix/capture-web exec tsx \
+  ../../scripts/protocol-digest.mjs --check
+
+pnpm --filter @phenometrix/capture-web exec tsx \
+  ../../scripts/condition-profile-digest.mjs --check
 
 echo "PhenoMetrix ambient-v3 structure and static assets are valid."

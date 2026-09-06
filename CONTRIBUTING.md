@@ -38,7 +38,7 @@ review gate and may not execute the decision automatically.
 ```bash
 pnpm test
 pnpm test:browser
-uv run --project services/voice-inference --extra dev pytest services/voice-inference/tests
+uv run --project services/voice-inference --extra dev python -m pytest services/voice-inference/tests
 ```
 
 `pnpm test` runs the structure and asset validator, unit tests, TypeScript

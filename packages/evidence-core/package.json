@@ -13,10 +13,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@phenometrix/condition-profiles": "workspace:*",
     "@phenometrix/contracts": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.6.3",
-    "vitest": "2.1.4"
+    "vitest": "4.1.11"
   }
 }

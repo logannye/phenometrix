@@ -27,5 +27,6 @@ and the potential impact. Do not include real health data.
 - immutable audit events;
 - scoped service identities;
 - dependency and secret scanning before production use;
+- an HTTP response CSP (including `frame-ancestors`) from the deployment edge;
 - threat modeling for media capture, prompt injection, model supply chain, and
   cross-tenant data access.

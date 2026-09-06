@@ -37,6 +37,15 @@ const server = createServer((request, response) => {
 
 server.listen(4173, "127.0.0.1");
 
+let stopping = false;
 for (const signal of ["SIGINT", "SIGTERM"] as const) {
-  process.on(signal, () => server.close(() => process.exit(0)));
+  process.on(signal, () => {
+    if (stopping) return;
+    stopping = true;
+    server.close(() => process.exit(0));
+    // Playwright may still have HTTP keep-alive sockets open when it stops the
+    // webServer process. Closing them prevents a green smoke run from hanging
+    // forever in `server.close()` during teardown.
+    server.closeAllConnections();
+  });
 }

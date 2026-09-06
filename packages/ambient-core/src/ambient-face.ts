@@ -22,6 +22,7 @@ import {
   withheldOutcome
 } from "./ambient-outcomes.js";
 import {
+  AMBIENT_FACE_TASK_CONTEXT,
   AMBIENT_MAX_CAPTURE_DURATION_MS,
   type AmbientExtractionResult,
   type AmbientFaceExtractionOptions,
@@ -97,6 +98,7 @@ export function restingPose(
   frames: readonly AmbientFacialFrame[]
 ): RestingPose | null {
   const poses = frames
+    .filter(restingPoseFrameUsable)
     .map((frame) => frame.pose)
     .filter((pose): pose is NonNullable<typeof pose> => pose !== null)
     .filter(
@@ -168,6 +170,8 @@ interface FacialBinValues {
   eyeClosedRight: number;
   browLeft: number | null;
   browRight: number | null;
+  /** Median of contemporaneous subject-left minus subject-right samples. */
+  browAsymmetry: number | null;
   mouthWidth: number;
   mouthApertureMedian: number;
   mouthApertureP90: number;
@@ -192,7 +196,7 @@ interface FacialBin {
 
 interface BinScreening {
   bins: FacialBin[];
-  attributionFailureCount: number;
+  multipleFaceFrameCount: number;
   qualityFailureCount: number;
   diagnostics: FaceScreeningDiagnostics;
 }
@@ -276,6 +280,24 @@ function faceTrackSegmentId(frame: AmbientFacialFrame): string | null {
     : null;
 }
 
+/**
+ * A resting reference may relax only the absolute pose gate. It must not be
+ * learned from another task, a missing or ambiguously attributed face, or a
+ * frame whose image/geometry failed the remaining acquisition contract.
+ */
+function restingPoseFrameUsable(frame: AmbientFacialFrame): boolean {
+  return (
+    frame.taskContext === AMBIENT_FACE_TASK_CONTEXT &&
+    frame.faceVisible &&
+    frame.faceCount === 1 &&
+    faceTrackSegmentId(frame) !== null &&
+    completeGeometry(frame) &&
+    evaluateVisualQuality(frame, null).reasonCodes.every(
+      (reason) => reason === "pose-out-of-range"
+    )
+  );
+}
+
 function nominalStepMs(frames: readonly AmbientFacialFrame[]): number {
   const gaps = frames
     .slice(1)
@@ -322,7 +344,7 @@ function validPoint(point: { x: number; y: number }): boolean {
 }
 
 function completeGeometry(frame: AmbientFacialFrame): boolean {
-  return (
+  const complete =
     frame.eyeAperture !== null &&
     finite(frame.eyeAperture.left) &&
     frame.eyeAperture.left >= 0 &&
@@ -333,7 +355,17 @@ function completeGeometry(frame: AmbientFacialFrame): boolean {
     validPoint(frame.mouthCorners.right) &&
     frame.mouthApertureRatio !== null &&
     finite(frame.mouthApertureRatio) &&
-    frame.mouthApertureRatio >= 0
+    frame.mouthApertureRatio >= 0;
+  if (!complete) return false;
+  // Finite operands can still overflow in the geometric combinations the
+  // extractor consumes. Reject those frames here so bin summarization cannot
+  // throw or publish an infinite derived quantity.
+  return (
+    finite(
+      Math.abs(frame.eyeAperture!.left - frame.eyeAperture!.right)
+    ) &&
+    finite(mouthWidth(frame)) &&
+    finite(mouthCornerAsymmetry(frame))
   );
 }
 
@@ -371,9 +403,15 @@ export function frameGateFailures(
 ): string[] {
   const reasons: string[] = [];
   const pose = frame.pose;
+  if (frame.taskContext !== AMBIENT_FACE_TASK_CONTEXT) {
+    reasons.push("task-context");
+  }
   if (frame.faceCount !== 1) reasons.push("face-count");
   if (faceTrackSegmentId(frame) === null) reasons.push("no-track-id");
-  if (!evaluateVisualQuality(frame, null).usable) reasons.push("image-quality");
+  const visualReasons = evaluateVisualQuality(frame, null).reasonCodes;
+  if (visualReasons.some((reason) => reason !== "pose-out-of-range")) {
+    reasons.push("image-quality");
+  }
   if (pose === null) {
     reasons.push("no-pose");
   } else {
@@ -435,6 +473,7 @@ function ambientFrameUsable(
  */
 function tier2FrameUsable(frame: AmbientFacialFrame): boolean {
   if (
+    frame.taskContext !== AMBIENT_FACE_TASK_CONTEXT ||
     frame.faceCount !== 1 ||
     faceTrackSegmentId(frame) === null ||
     !completeGeometry(frame)
@@ -451,6 +490,29 @@ function tier2FrameUsable(frame: AmbientFacialFrame): boolean {
   return evaluateVisualQuality(frame, null).reasonCodes.every(
     (reason) => reason === "pose-out-of-range"
   );
+}
+
+function tier2ProvenanceStreams(
+  frames: readonly AmbientFacialFrame[]
+): AmbientFacialFrame[][] {
+  const streams: AmbientFacialFrame[][] = [];
+  let current: AmbientFacialFrame[] = [];
+  for (const frame of frames) {
+    const prior = current.at(-1);
+    if (
+      prior &&
+      (frame.captureEpoch !== prior.captureEpoch ||
+        frame.processorRef !== prior.processorRef ||
+        faceTrackSegmentId(frame) !== faceTrackSegmentId(prior) ||
+        frame.tMs <= prior.tMs)
+    ) {
+      streams.push(current);
+      current = [];
+    }
+    current.push(frame);
+  }
+  if (current.length > 0) streams.push(current);
+  return streams;
 }
 
 /** Whether every frame spanning an event stayed inside the Tier-3 pose limits. */
@@ -512,6 +574,13 @@ function binValues(
   );
   const browLeft = makeTimed(frames, (frame) => frame.browHeight?.left ?? null);
   const browRight = makeTimed(frames, (frame) => frame.browHeight?.right ?? null);
+  const browAsymmetry = makeTimed(frames, (frame) => {
+    const left = frame.browHeight?.left;
+    const right = frame.browHeight?.right;
+    return left !== undefined && right !== undefined && finite(left) && finite(right)
+      ? left - right
+      : null;
+  });
   const widths = makeTimed(frames, mouthWidth);
   const apertures = makeTimed(frames, (frame) => frame.mouthApertureRatio);
   const cornerAsymmetry = makeTimed(frames, mouthCornerAsymmetry);
@@ -542,6 +611,10 @@ function binValues(
     eyeClosedRight: Math.min(...eyeRight.map((sample) => sample.value)),
     browLeft: browLeft.length > 0 ? timedPercentile(browLeft, 0.5, stepMs) : null,
     browRight: browRight.length > 0 ? timedPercentile(browRight, 0.5, stepMs) : null,
+    browAsymmetry:
+      browAsymmetry.length > 0
+        ? timedPercentile(browAsymmetry, 0.5, stepMs)
+        : null,
     mouthWidth: timedPercentile(widths, 0.5, stepMs),
     mouthApertureMedian: timedPercentile(apertures, 0.5, stepMs),
     mouthApertureP90: timedPercentile(apertures, 0.9, stepMs),
@@ -678,12 +751,10 @@ function screenBins(
   // One reference for the whole session, so every bin is judged against the
   // same baseline rather than drifting with local head position.
   const resting = restingPose(frames);
-  let attributionFailureCount = 0;
+  let multipleFaceFrameCount = 0;
   let qualityFailureCount = 0;
   for (const frame of frames) {
-    if (frame.faceCount !== 1 || faceTrackSegmentId(frame) === null) {
-      attributionFailureCount += 1;
-    }
+    if ((frame.faceCount ?? 0) > 1) multipleFaceFrameCount += 1;
     if (!ambientFrameUsable(frame, options, resting)) qualityFailureCount += 1;
     const index = Math.floor(
       (frame.tMs - options.sessionStartedAtMs) / AMBIENT_FACE_BIN_MS
@@ -767,7 +838,7 @@ function screenBins(
   });
   return {
     bins,
-    attributionFailureCount,
+    multipleFaceFrameCount,
     qualityFailureCount,
     diagnostics: {
       frameCount: frames.length,
@@ -793,6 +864,29 @@ function screenBins(
   };
 }
 
+/**
+ * Re-qualify a base face bin using only frames that carry the optional
+ * geometry a metric actually consumes. This prevents a lone brow or movement
+ * sample from borrowing the duration, sample count, and continuity of the
+ * otherwise complete face bin around it.
+ */
+function metricSpecificBins(
+  bins: readonly FacialBin[],
+  supportsMetric: (frame: AmbientFacialFrame) => boolean,
+  options: AmbientFaceExtractionOptions,
+  resting: RestingPose | null
+): FacialBin[] {
+  return bins.flatMap((bin) => {
+    const metricBin = qualifyBin(
+      bin.index,
+      bin.frames.filter(supportsMetric),
+      options,
+      resting
+    );
+    return metricBin ? [metricBin] : [];
+  });
+}
+
 function evidenceFor(
   sourceFrames: readonly AmbientFacialFrame[],
   bins: readonly FacialBin[],
@@ -812,6 +906,10 @@ function evidenceFor(
       )
     ).size,
     qualifyingBinCount: bins.length,
+    observationSpanMs:
+      bins.length > 0
+        ? bins.at(-1)!.endMs - bins[0].startMs
+        : 0,
     processorRefs: sortedUnique(
       bins.length > 0
         ? bins.map((bin) => bin.processorRef)
@@ -862,13 +960,21 @@ function maximumGap(bins: readonly FacialBin[]): number {
 }
 
 function dispersion(values: readonly number[]): number | null {
-  return values.length >= 2
-    ? medianAbsoluteDeviation([...values])
-    : null;
+  if (values.length < 2) return null;
+  const value = medianAbsoluteDeviation([...values]);
+  return finite(value) ? value : null;
 }
 
-function technicalQualityScore(bins: readonly FacialBin[]): number {
+function technicalQualityScore(
+  bins: readonly FacialBin[],
+  resting: RestingPose | null
+): number {
   if (bins.length === 0) return 0;
+  const reference = resting ?? {
+    yawDegrees: 0,
+    pitchDegrees: 0,
+    rollDegrees: 0
+  };
   const cadence = clamp01(
     median(bins.map((bin) => bin.cadenceHz)) / 30
   );
@@ -897,10 +1003,12 @@ function technicalQualityScore(bins: readonly FacialBin[]): number {
         return clamp01(
           1 -
             Math.max(
-              Math.abs(value.yawDegrees) / AMBIENT_FACE_MAX_YAW_DEGREES,
-              Math.abs(value.pitchDegrees) /
+              Math.abs(value.yawDegrees - reference.yawDegrees) /
+                AMBIENT_FACE_MAX_YAW_DEGREES,
+              Math.abs(value.pitchDegrees - reference.pitchDegrees) /
                 AMBIENT_FACE_MAX_PITCH_DEGREES,
-              Math.abs(value.rollDegrees) / AMBIENT_FACE_MAX_ROLL_DEGREES
+              Math.abs(value.rollDegrees - reference.rollDegrees) /
+                AMBIENT_FACE_MAX_ROLL_DEGREES
             )
         );
       })
@@ -918,6 +1026,7 @@ function commonFailure(
   const calibration = options.calibration;
   if (
     calibration === null ||
+    !finite(calibration.durationMs) ||
     calibration.durationMs < 1_500 ||
     !finite(calibration.baselineBoxWidthPixels) ||
     calibration.baselineBoxWidthPixels <= 0 ||
@@ -931,7 +1040,7 @@ function commonFailure(
     };
   }
   if (screening.bins.length === 0) {
-    if (screening.attributionFailureCount > 0) {
+    if (screening.multipleFaceFrameCount > 0) {
       return {
         reasonCode: "multiple-faces",
         detail:
@@ -1183,6 +1292,7 @@ export function extractAmbientFaceMetrics(
   const inRange = frames
     .filter(
       (frame) =>
+        frame.taskContext === AMBIENT_FACE_TASK_CONTEXT &&
         finite(frame.tMs) &&
         frame.tMs >= options.sessionStartedAtMs &&
         frame.tMs < captureEndMs
@@ -1200,15 +1310,20 @@ export function extractAmbientFaceMetrics(
   const tier2Frames = [...inRange]
     .filter(tier2FrameUsable)
     .sort((left, right) => left.tMs - right.tMs);
+  const tier2Streams = tier2ProvenanceStreams(tier2Frames);
   const screening = screenBins(inRange, options);
   const evidence = evidenceFor(inRange, screening.bins);
   const failure = commonFailure(screening, options);
-  const qualityScore = technicalQualityScore(screening.bins);
+  const qualityScore = technicalQualityScore(
+    screening.bins,
+    sessionRestingPose
+  );
   const outcomes: AmbientMetricOutcome[] = [];
 
   const selectors: ReadonlyArray<{
     code: Exclude<AmbientFaceMetricCode, "ambient.face.blink_rate.bilateral">;
     select: (values: FacialBinValues) => number | null;
+    supportsMetric?: (frame: AmbientFacialFrame) => boolean;
   }> = [
     {
       code: "ambient.face.eye_aperture.left",
@@ -1240,24 +1355,59 @@ export function extractAmbientFaceMetrics(
     },
     {
       code: "ambient.face.landmark_speed.p90",
-      select: (values) => values.movementP90
+      select: (values) => values.movementP90,
+      supportsMetric: (frame) =>
+        frame.regionalMovementSpeed !== null &&
+        finite(frame.regionalMovementSpeed) &&
+        frame.regionalMovementSpeed >= 0 &&
+        frame.interResultGapMs !== null &&
+        frame.interResultGapMs > 0 &&
+        frame.interResultGapMs <= AMBIENT_FACE_MAX_FRAME_GAP_MS
     }
   ];
 
-  for (const { code, select } of selectors) {
-    const values = screening.bins.flatMap((bin) => {
+  for (const { code, select, supportsMetric } of selectors) {
+    const candidateBins = supportsMetric
+      ? metricSpecificBins(
+          screening.bins,
+          supportsMetric,
+          options,
+          sessionRestingPose
+        )
+      : screening.bins;
+    const supporting = candidateBins.flatMap((bin) => {
       const value = select(bin.values);
-      return value !== null && finite(value) ? [value] : [];
+      return value !== null && finite(value) ? [{ bin, value }] : [];
     });
-    if (failure || values.length < AMBIENT_FACE_MIN_BINS) {
+    const metricBins = supporting.map(({ bin }) => bin);
+    const values = supporting.map(({ value }) => value);
+    const metricEvidence = evidenceFor(inRange, metricBins);
+    const metricSpanTooShort =
+      (metricEvidence.observationSpanMs ?? 0) < AMBIENT_FACE_MIN_SPAN_MS;
+    if (
+      failure ||
+      metricBins.length < AMBIENT_FACE_MIN_BINS ||
+      metricSpanTooShort
+    ) {
+      const metricFailure = failure ??
+        (metricBins.length < AMBIENT_FACE_MIN_BINS
+          ? {
+              reasonCode: "insufficient-bins" as const,
+              detail:
+                "The metric did not have a finite value in three qualifying face bins."
+            }
+          : {
+              reasonCode: "insufficient-duration" as const,
+              detail:
+                "Metric-supporting face bins must span at least 30 seconds."
+            });
       outcomes.push(
         withheldOutcome(
           code,
           options,
-          evidence,
-          failure?.reasonCode ?? "insufficient-bins",
-          failure?.detail ??
-            "The metric did not have a finite value in three qualifying face bins."
+          metricEvidence,
+          metricFailure.reasonCode,
+          metricFailure.detail
         )
       );
     } else {
@@ -1265,9 +1415,9 @@ export function extractAmbientFaceMetrics(
         measuredOutcome(
           code,
           options,
-          evidence,
+          metricEvidence,
           median(values),
-          qualityScore,
+          technicalQualityScore(metricBins, sessionRestingPose),
           dispersion(values)
         )
       );
@@ -1283,10 +1433,10 @@ export function extractAmbientFaceMetrics(
   const blinkEvidenceBase = evidenceFor(inRange, screening.bins, {
     frontalExposureMs
   });
-  const cadenceHz =
-    frontalExposureMs > 0
-      ? blinkEvidenceBase.sampleCount / (frontalExposureMs / 1_000)
-      : 0;
+  // `evidenceFor` reports the worst (minimum) cadence among accepted bins.
+  // Gate on that same statistic so a high-cadence bin cannot average away a
+  // low-cadence bin and produce a metric that report validation must reject.
+  const cadenceHz = blinkEvidenceBase.cadenceHz ?? 0;
   let blinkFailure = failure;
   if (!blinkFailure && frontalExposureMs < AMBIENT_BLINK_MIN_EXPOSURE_MS) {
     blinkFailure = {
@@ -1333,15 +1483,13 @@ export function extractAmbientFaceMetrics(
    * different question -- what did the session actually contain -- and a
    * session whose bins all failed the pose gate still contained blinks.
    */
-  if (tier2Frames.length > 0) {
-    for (const event of detectBlinkEvents([
-      { index: 0, frames: tier2Frames }
-    ])) {
+  for (const [index, stream] of tier2Streams.entries()) {
+    for (const event of detectBlinkEvents([{ index, frames: stream }])) {
       const { binIndex: _binIndex, ...record } = event;
       blinkEvents.push({
         ...record,
         poseWithinMeasurementLimits: poseWithinLimits(
-          tier2Frames,
+          stream,
           record.onsetMs,
           record.offsetMs,
           options,
@@ -1400,27 +1548,26 @@ export function extractAmbientFaceMetrics(
    * still come from the qualifying bins; these events are the record of what
    * the session contained.
    */
-  const looseExpressions =
-    tier2Frames.length > 0
-      ? summarizeExpressions(
-          tier2Frames,
-          tier2Frames.length > 1
-            ? tier2Frames.at(-1)!.tMs - tier2Frames[0].tMs
-            : 0
+  const expressionEvents: ExpressionEventRecord[] = tier2Streams.flatMap(
+    (stream) => {
+      const summary = summarizeExpressions(
+        stream,
+        stream.length > 1
+          ? stream.at(-1)!.tMs - stream[0].tMs
+          : 0
+      );
+      return (summary?.events ?? []).map((event) => ({
+        ...event,
+        poseWithinMeasurementLimits: poseWithinLimits(
+          stream,
+          event.startMs,
+          event.endMs,
+          options,
+          sessionRestingPose
         )
-      : null;
-  const expressionEvents: ExpressionEventRecord[] = (
-    looseExpressions?.events ?? []
-  ).map((event) => ({
-    ...event,
-    poseWithinMeasurementLimits: poseWithinLimits(
-      tier2Frames,
-      event.startMs,
-      event.endMs,
-      options,
-      sessionRestingPose
-    )
-  }));
+      }));
+    }
+  );
 
   const expressionEvidence = evidenceFor(inRange, screening.bins, {
     expressionEventCount: expressionSummary?.eventCount,
@@ -1528,10 +1675,11 @@ export function extractAmbientFaceMetrics(
   // every other face metric, so they inherit the identical pose, scale,
   // cadence, and attribution gates.
   const binStat = (
+    bins: readonly FacialBin[],
     select: (values: FacialBinValues) => number | null,
     probability = 0.5
   ): number | null => {
-    const values = screening.bins
+    const values = bins
       .map((bin) => select(bin.values))
       .filter((value): value is number => value !== null && finite(value));
     if (values.length === 0) return null;
@@ -1539,11 +1687,62 @@ export function extractAmbientFaceMetrics(
       ? median(values)
       : percentile(values, probability);
   };
-  const binMedian = (select: (values: FacialBinValues) => number | null) =>
-    binStat(select);
+  const supportingBins = (
+    select: (values: FacialBinValues) => number | null,
+    accept: (value: number) => boolean = () => true
+  ): FacialBin[] =>
+    screening.bins.filter((bin) => {
+      const value = select(bin.values);
+      return value !== null && finite(value) && accept(value);
+    });
 
-  const browLeft = binMedian((values) => values.browLeft);
-  const browRight = binMedian((values) => values.browRight);
+  const browLeftBins = metricSpecificBins(
+    screening.bins,
+    (frame) =>
+      frame.browHeight?.left !== undefined &&
+      finite(frame.browHeight.left),
+    options,
+    sessionRestingPose
+  );
+  const browRightBins = metricSpecificBins(
+    screening.bins,
+    (frame) =>
+      frame.browHeight?.right !== undefined &&
+      finite(frame.browHeight.right),
+    options,
+    sessionRestingPose
+  );
+  const pairedBrowBins = metricSpecificBins(
+    screening.bins,
+    (frame) => {
+      const left = frame.browHeight?.left;
+      const right = frame.browHeight?.right;
+      return left !== undefined &&
+        right !== undefined &&
+        finite(left) &&
+        finite(right) &&
+        finite(left - right);
+    },
+    options,
+    sessionRestingPose
+  ).filter(
+    (bin) =>
+      bin.values.browAsymmetry !== null &&
+      finite(bin.values.browAsymmetry)
+  );
+  const browLeftValues = browLeftBins.map((bin) => bin.values.browLeft!);
+  const browRightValues = browRightBins.map((bin) => bin.values.browRight!);
+  const browAsymmetryValues = pairedBrowBins.map(
+    (bin) => bin.values.browAsymmetry!
+  );
+  const browLeft =
+    browLeftValues.length > 0 ? median(browLeftValues) : null;
+  const browRight =
+    browRightValues.length > 0 ? median(browRightValues) : null;
+  const browAsymmetry =
+    pairedBrowBins.length > 0
+      ? median(browAsymmetryValues)
+      : null;
   // Completeness of 1 means the lid reaches full closure; 0 means it never
   // moves off its open reference. Referenced to the eye's OWN open state, so
   // it is a within-eye ratio and does not depend on face scale.
@@ -1564,30 +1763,61 @@ export function extractAmbientFaceMetrics(
   // reporting an eye that half-closes when it in fact closes fully. P25 is
   // low enough to sit in a blink-bearing bin at any normal blink rate while
   // still discarding a single mistracked bin.
+  const closureLeftBins = screening.bins.filter(
+    (bin) =>
+      finite(bin.values.eyeLeft) &&
+      bin.values.eyeLeft > 0 &&
+      finite(bin.values.eyeClosedLeft)
+  );
+  const closureRightBins = screening.bins.filter(
+    (bin) =>
+      finite(bin.values.eyeRight) &&
+      bin.values.eyeRight > 0 &&
+      finite(bin.values.eyeClosedRight)
+  );
   const closureLeft = closure(
-    binMedian((values) => values.eyeLeft),
-    binStat((values) => values.eyeClosedLeft, 0.25)
+    binStat(closureLeftBins, (values) => values.eyeLeft),
+    binStat(closureLeftBins, (values) => values.eyeClosedLeft, 0.25)
   );
   const closureRight = closure(
-    binMedian((values) => values.eyeRight),
-    binStat((values) => values.eyeClosedRight, 0.25)
+    binStat(closureRightBins, (values) => values.eyeRight),
+    binStat(closureRightBins, (values) => values.eyeClosedRight, 0.25)
   );
 
-  const zoneEvidence = evidenceFor(inRange, screening.bins);
   const emitZone = (
     code: AmbientFaceMetricCode,
     value: number | null,
-    dispersionValues: number[]
+    dispersionValues: number[],
+    metricBins: readonly FacialBin[]
   ): void => {
-    if (failure || value === null || !finite(value)) {
+    const tooFewMetricBins = metricBins.length < AMBIENT_FACE_MIN_BINS;
+    const zoneEvidence = evidenceFor(inRange, metricBins);
+    const metricSpanTooShort =
+      (zoneEvidence.observationSpanMs ?? 0) < AMBIENT_FACE_MIN_SPAN_MS;
+    if (
+      failure ||
+      tooFewMetricBins ||
+      metricSpanTooShort ||
+      value === null ||
+      !finite(value)
+    ) {
       outcomes.push(
         withheldOutcome(
           code,
           options,
           zoneEvidence,
-          failure?.reasonCode ?? "no-usable-signal",
+          failure?.reasonCode ??
+            (tooFewMetricBins
+              ? "insufficient-bins"
+              : metricSpanTooShort
+                ? "insufficient-duration"
+                : "no-usable-signal"),
           failure?.detail ??
-            "The eligible bins did not carry the geometry this metric requires."
+            (tooFewMetricBins
+              ? `At least ${AMBIENT_FACE_MIN_BINS} qualifying bins carrying this metric's geometry are required.`
+              : metricSpanTooShort
+                ? "Metric-supporting face bins must span at least 30 seconds."
+                : "The eligible bins did not carry the geometry this metric requires.")
         )
       );
       return;
@@ -1598,34 +1828,42 @@ export function extractAmbientFaceMetrics(
         options,
         zoneEvidence,
         value,
-        qualityScore,
+        technicalQualityScore(metricBins, sessionRestingPose),
         dispersionValues.length > 0 ? dispersion(dispersionValues) : null
       )
     );
   };
 
-  const perBin = (select: (values: FacialBinValues) => number | null) =>
-    screening.bins
-      .map((bin) => select(bin.values))
-      .filter((value): value is number => value !== null && finite(value));
-
   emitZone(
     "ambient.face.brow_height.left",
     browLeft,
-    perBin((values) => values.browLeft)
+    browLeftValues,
+    browLeftBins
   );
   emitZone(
     "ambient.face.brow_height.right",
     browRight,
-    perBin((values) => values.browRight)
+    browRightValues,
+    browRightBins
   );
   emitZone(
     "ambient.face.brow_height_asymmetry.signed",
-    browLeft !== null && browRight !== null ? browLeft - browRight : null,
-    []
+    browAsymmetry,
+    browAsymmetryValues,
+    pairedBrowBins
   );
-  emitZone("ambient.face.lid_closure_completeness.left", closureLeft, []);
-  emitZone("ambient.face.lid_closure_completeness.right", closureRight, []);
+  emitZone(
+    "ambient.face.lid_closure_completeness.left",
+    closureLeft,
+    [],
+    closureLeftBins
+  );
+  emitZone(
+    "ambient.face.lid_closure_completeness.right",
+    closureRight,
+    [],
+    closureRightBins
+  );
 
   return {
     outcomes: FACE_CODES.map((code) => {

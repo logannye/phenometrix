@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   AMBIENT_LOCAL_PROTOCOL_PACK,
   type ConsentRecordV1,
-  type MetricDefinition
+  type MetricDefinition,
+  type ProcessorProvenanceV1
 } from "@phenometrix/contracts";
 import {
   finalizeAmbientMetrics,
@@ -38,6 +39,26 @@ function consent(): ConsentRecordV1 {
     withdrawnAt: null
   };
 }
+
+const VERIFIED_VOICE_PROCESSOR: ProcessorProvenanceV1 = {
+  modality: "voice",
+  processorRef: "browser-voice-dsp@1.0",
+  runtime: "audio-worklet-voice-worker",
+  runtimeVersion: "1.0.0",
+  assetPath: "voice-capture-worklet.js",
+  assetSha256: "1".repeat(64),
+  assetIntegrityVerified: true
+};
+
+const VERIFIED_FACE_PROCESSOR: ProcessorProvenanceV1 = {
+  modality: "face",
+  processorRef: "mediapipe-face-landmarker@test",
+  runtime: "mediapipe-tasks-vision",
+  runtimeVersion: "0.10.35",
+  assetPath: "models/face_landmarker.task",
+  assetSha256: "2".repeat(64),
+  assetIntegrityVerified: true
+};
 
 function definition(code: string): MetricDefinition {
   const value = AMBIENT_LOCAL_PROTOCOL_PACK.metrics.find(
@@ -193,7 +214,7 @@ function voiceObservation(voicedFraction: number) {
     faceCalibration: null,
     voiceLaneAvailable: true,
     faceLaneAvailable: false,
-    processors: []
+    processors: [VERIFIED_VOICE_PROCESSOR]
   });
 }
 
@@ -236,6 +257,59 @@ describe("speech-timing evidence is gated on timing coverage, not voicing", () =
   });
 });
 
+describe("pitch-variability evidence follows its contributing segments", () => {
+  it("builds and validates a report when a later timing segment has no valid pitch bins", () => {
+    const frames = voiceFrames(1, 40_000).map((frame) =>
+      frame.tMs < 30_000
+        ? frame
+        : {
+            ...frame,
+            periodic: false,
+            f0Hz: null,
+            f0Confidence: 0,
+            estimatorAgreement: 0
+          }
+    );
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:00:40.000Z",
+      durationMs: 40_000,
+      voiceFrames: frames,
+      faceFrames: [],
+      noiseCalibrationDurationMs: 2_000,
+      faceCalibration: null,
+      voiceLaneAvailable: true,
+      faceLaneAvailable: false,
+      processors: [VERIFIED_VOICE_PROCESSOR]
+    });
+    const variability = observation.metricOutcomes.find(
+      (candidate) =>
+        candidate.metricCode === "ambient.voice.f0.variability"
+    );
+
+    expect(variability).toMatchObject({
+      status: "measured",
+      evidence: {
+        eligibleDurationMs: 30_000,
+        segmentCount: 3,
+        windowCount: 3,
+        qualityFacts: { validBinsPerSegment: 16 }
+      }
+    });
+    expect(
+      validateObservationProvenance(observation, AMBIENT_LOCAL_PROTOCOL_PACK)
+    ).toEqual({ status: "pass", errors: [] });
+    expect(() =>
+      buildPostEncounterReport(observation, AMBIENT_LOCAL_PROTOCOL_PACK, {
+        generatedAt: "2026-07-20T17:00:40.000Z"
+      })
+    ).not.toThrow();
+  });
+});
+
 describe("expression evidence requirements resolve to emitted facts", () => {
   // Every published evidence requirement needs a fact behind it. When one has
   // none, `evidenceFactFor` returns undefined and the gate is silently
@@ -259,7 +333,7 @@ describe("expression evidence requirements resolve to emitted facts", () => {
       },
       voiceLaneAvailable: false,
       faceLaneAvailable: true,
-      processors: []
+      processors: [VERIFIED_FACE_PROCESSOR]
     });
     const rate = observation.metricOutcomes.find(
       (candidate) =>
@@ -295,6 +369,13 @@ describe("ambient observation adapter", () => {
     });
     expect(observation.metricOutcomes).toHaveLength(27);
     expect(observation.metricOutcomes.every((outcome) => outcome.status === "withheld")).toBe(true);
+    expect(
+      observation.metricOutcomes.every(
+        (outcome) =>
+          outcome.evidence.windowCount ===
+          outcome.evidence.refs.filter((ref) => ref.kind === "window").length
+      )
+    ).toBe(true);
     expect(
       validateObservationProvenance(
         observation,
@@ -357,6 +438,183 @@ describe("ambient observation adapter", () => {
     ).toBe(reasonCode);
   });
 
+  it.each([
+    "modality-unavailable",
+    "processor-unavailable",
+    "asset-integrity-failed"
+  ] as const)("preserves the exact unavailable-lane cause %s", (reasonCode) => {
+    const code = "ambient.voice.f0.median";
+    expect(
+      contractReason(
+        emptyExtractionOutcome(code),
+        definition(code),
+        false,
+        reasonCode
+      )
+    ).toBe(reasonCode);
+  });
+
+  it("projects processor failure instead of collapsing it to modality unavailable", () => {
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:00:01.000Z",
+      durationMs: 1_000,
+      voiceFrames: [],
+      faceFrames: [],
+      noiseCalibrationDurationMs: 0,
+      faceCalibration: null,
+      voiceLaneAvailable: false,
+      faceLaneAvailable: false,
+      voiceLaneFailureReason: "processor-unavailable",
+      processors: []
+    });
+    const voiceOutcomes = observation.metricOutcomes.filter(
+      (outcome) => outcome.modality === "voice"
+    );
+    expect(voiceOutcomes).toHaveLength(7);
+    expect(
+      voiceOutcomes.every(
+        (outcome) =>
+          outcome.status === "withheld" &&
+          outcome.reasonCode === "processor-unavailable"
+      )
+    ).toBe(true);
+    expect(observation.qualitySummary.voice.reasonCodes).toEqual([
+      "processor-unavailable"
+    ]);
+  });
+
+  it.each([
+    {
+      label: "missing processor provenance",
+      processors: [] as ProcessorProvenanceV1[],
+      reasonCode: "processor-unavailable" as const
+    },
+    {
+      label: "duplicate processor provenance",
+      processors: [VERIFIED_FACE_PROCESSOR, { ...VERIFIED_FACE_PROCESSOR }],
+      reasonCode: "processor-unavailable" as const
+    },
+    {
+      label: "processor ref reused by another modality",
+      processors: [
+        VERIFIED_FACE_PROCESSOR,
+        {
+          ...VERIFIED_VOICE_PROCESSOR,
+          processorRef: VERIFIED_FACE_PROCESSOR.processorRef
+        }
+      ],
+      reasonCode: "processor-unavailable" as const
+    },
+    {
+      label: "unverified asset provenance",
+      processors: [{
+        ...VERIFIED_FACE_PROCESSOR,
+        assetIntegrityVerified: false
+      }],
+      reasonCode: "asset-integrity-failed" as const
+    },
+    {
+      label: "missing asset path",
+      processors: [{ ...VERIFIED_FACE_PROCESSOR, assetPath: null }],
+      reasonCode: "asset-integrity-failed" as const
+    },
+    {
+      label: "missing asset digest",
+      processors: [{ ...VERIFIED_FACE_PROCESSOR, assetSha256: null }],
+      reasonCode: "asset-integrity-failed" as const
+    }
+  ])("withholds measured extraction with $label", ({ processors, reasonCode }) => {
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:00:30.000Z",
+      durationMs: 30_000,
+      voiceFrames: [],
+      faceFrames: faceFrames(),
+      noiseCalibrationDurationMs: 0,
+      faceCalibration: {
+        durationMs: 1_500,
+        baselineBoxWidthPixels: 384,
+        baselineBoxHeightPixels: 360
+      },
+      voiceLaneAvailable: false,
+      faceLaneAvailable: true,
+      processors
+    });
+    const eyeAperture = observation.metricOutcomes.find(
+      (outcome) => outcome.metricCode === "ambient.face.eye_aperture.left"
+    );
+
+    expect(eyeAperture).toMatchObject({
+      status: "withheld",
+      reasonCode
+    });
+    expect(
+      observation.measurements.some(
+        (measurement) => measurement.modality === "face"
+      )
+    ).toBe(false);
+    const fabricated = observation.processors.filter(
+      (processor) => processor.runtime === "unavailable"
+    );
+    expect(fabricated.every(
+      (processor) =>
+        processor.assetIntegrityVerified === false &&
+        processor.assetPath === null &&
+        processor.assetSha256 === null
+    )).toBe(true);
+    expect(observation.measurements.every(
+      (measurement) =>
+        !fabricated.some(
+          (processor) =>
+            processor.modality === measurement.modality &&
+            processor.processorRef === measurement.processorRef
+        )
+    )).toBe(true);
+    expect(new Set(
+      observation.processors.map((processor) => processor.processorRef)
+    ).size).toBe(observation.processors.length);
+  });
+
+  it("keeps a synthetic withheld processor ref distinct from a supplied ref", () => {
+    const collidingVoiceProcessor = {
+      ...VERIFIED_VOICE_PROCESSOR,
+      processorRef: "face-processor-unavailable"
+    };
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:00:30.000Z",
+      durationMs: 30_000,
+      voiceFrames: [],
+      faceFrames: faceFrames(),
+      noiseCalibrationDurationMs: 0,
+      faceCalibration: {
+        durationMs: 1_500,
+        baselineBoxWidthPixels: 384,
+        baselineBoxHeightPixels: 360
+      },
+      voiceLaneAvailable: false,
+      faceLaneAvailable: true,
+      processors: [collidingVoiceProcessor]
+    });
+
+    const refs = observation.processors.map(
+      (processor) => processor.processorRef
+    );
+    expect(new Set(refs).size).toBe(refs.length);
+    expect(refs).toContain("face-processor-unavailable");
+    expect(refs).toContain("face-processor-unavailable:1");
+  });
+
   it("fails closed when a reason is not registered for the metric", () => {
     expect(() =>
       contractReason(
@@ -385,7 +643,7 @@ describe("ambient observation adapter", () => {
       },
       voiceLaneAvailable: false,
       faceLaneAvailable: true,
-      processors: []
+      processors: [VERIFIED_FACE_PROCESSOR]
     });
     const outcome = observation.metricOutcomes.find(
       (candidate) => candidate.metricCode === "ambient.face.eye_aperture.left"
@@ -407,6 +665,104 @@ describe("ambient observation adapter", () => {
       [20_000, 25_000],
       [25_000, 30_000]
     ]);
+    expect(
+      validateObservationProvenance(observation, AMBIENT_LOCAL_PROTOCOL_PACK)
+    ).toEqual({ status: "pass", errors: [] });
+  });
+
+  it("keeps metric-specific face evidence internally consistent when geometry drops out", () => {
+    const partialGeometryFrames = faceFrames(60_000).map((frame) => ({
+      ...frame,
+      browHeight: frame.tMs < 15_000 ? frame.browHeight : null,
+      regionalMovementSpeed:
+        frame.tMs < 15_000 ? frame.regionalMovementSpeed : null
+    }));
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:01:00.000Z",
+      durationMs: 60_000,
+      voiceFrames: [],
+      faceFrames: partialGeometryFrames,
+      noiseCalibrationDurationMs: 0,
+      faceCalibration: {
+        durationMs: 1_500,
+        baselineBoxWidthPixels: 384,
+        baselineBoxHeightPixels: 360
+      },
+      voiceLaneAvailable: false,
+      faceLaneAvailable: true,
+      processors: [VERIFIED_FACE_PROCESSOR]
+    });
+    const brow = observation.metricOutcomes.find(
+      (candidate) => candidate.metricCode === "ambient.face.brow_height.left"
+    );
+    expect(brow).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-duration",
+      evidence: {
+        windowCount: 3,
+        binCount: 3,
+        sampleCount: 450,
+        qualityFacts: { observationSpanMs: 15_000 }
+      }
+    });
+    const movement = observation.metricOutcomes.find(
+      (candidate) => candidate.metricCode === "ambient.face.landmark_speed.p90"
+    );
+    expect(movement).toMatchObject({
+      status: "withheld",
+      reasonCode: "insufficient-duration",
+      evidence: {
+        windowCount: 3,
+        binCount: 3,
+        sampleCount: 449,
+        qualityFacts: { observationSpanMs: 15_000 }
+      }
+    });
+    expect(movement?.evidence.eligibleDurationMs).toBeCloseTo(14_966.667, 3);
+    expect(
+      validateObservationProvenance(observation, AMBIENT_LOCAL_PROTOCOL_PACK)
+    ).toEqual({ status: "pass", errors: [] });
+    expect(() =>
+      buildPostEncounterReport(observation, AMBIENT_LOCAL_PROTOCOL_PACK, {
+        generatedAt: "2026-07-20T17:01:00.000Z"
+      })
+    ).not.toThrow();
+  });
+
+  it("preserves late lane failure in a ready summary when prior evidence measured", () => {
+    const observation = buildAmbientObservation({
+      sessionId: "session-adapter",
+      subjectRef: "subject-session-adapter",
+      consent: consent(),
+      startedAt: "2026-07-20T17:00:00.000Z",
+      endedAt: "2026-07-20T17:00:30.000Z",
+      durationMs: 30_000,
+      voiceFrames: [],
+      faceFrames: faceFrames(),
+      noiseCalibrationDurationMs: 0,
+      faceCalibration: {
+        durationMs: 1_500,
+        baselineBoxWidthPixels: 384,
+        baselineBoxHeightPixels: 360
+      },
+      voiceLaneAvailable: false,
+      faceLaneAvailable: false,
+      faceLaneFailureReason: "processor-unavailable",
+      processors: [VERIFIED_FACE_PROCESSOR]
+    });
+    expect(
+      observation.metricOutcomes.some(
+        (outcome) => outcome.modality === "face" && outcome.status === "measured"
+      )
+    ).toBe(true);
+    expect(observation.qualitySummary.face).toMatchObject({
+      state: "ready",
+      reasonCodes: expect.arrayContaining(["processor-unavailable"])
+    });
     expect(
       validateObservationProvenance(observation, AMBIENT_LOCAL_PROTOCOL_PACK)
     ).toEqual({ status: "pass", errors: [] });
@@ -455,7 +811,7 @@ describe("every published gate is verified on the success path", () => {
       },
       voiceLaneAvailable: true,
       faceLaneAvailable: true,
-      processors: []
+      processors: [VERIFIED_VOICE_PROCESSOR, VERIFIED_FACE_PROCESSOR]
     });
   }
 

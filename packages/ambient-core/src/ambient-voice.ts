@@ -78,6 +78,8 @@ interface PreparedVoiceFrame {
   speechActive: boolean;
   periodic: boolean;
   trackSegmentId: string;
+  /** Increments at every observed acquisition/continuity rejection. */
+  continuityGroup: number;
 }
 
 interface VoiceSegment {
@@ -92,6 +94,7 @@ interface VoiceSegment {
   trackSegmentId: string;
   captureEpoch: number;
   sourceWindowRef: string;
+  continuityGroup: number;
 }
 
 /**
@@ -161,8 +164,12 @@ export function voiceFrameGateFailures(frame: AmbientVoiceFrame): string[] {
       Math.abs(frame.dcOffset) > AMBIENT_VOICE_MAX_ABSOLUTE_DC_OFFSET) {
     reasons.push("dc-offset");
   }
-  // Speech SNR is NOT a timing gate. See timingFrameUsable.
-  if (active && (!finite(frame.snrDb) || frame.snrDb < AMBIENT_VOICE_MIN_SPEECH_SNR_DB)) {
+  // A finite but low speech SNR is NOT a timing gate. See timingFrameUsable.
+  // A non-finite value is malformed acquisition data and cannot contribute to
+  // any metric or its technical quality score.
+  if (!finite(frame.snrDb)) {
+    reasons.push("non-finite-snr");
+  } else if (active && frame.snrDb < AMBIENT_VOICE_MIN_SPEECH_SNR_DB) {
     reasons.push("speech-snr-pitch-only");
   }
   const blocking = frame.qualityReasons.filter((reason) =>
@@ -194,8 +201,11 @@ function timingFrameUsable(frame: AmbientVoiceFrame): boolean {
     finite(frame.dcOffset) &&
     Math.abs(frame.dcOffset) <=
       AMBIENT_VOICE_MAX_ABSOLUTE_DC_OFFSET &&
+    finite(frame.snrDb) &&
     /*
-     * Speech SNR is deliberately absent here.
+     * The speech SNR floor is deliberately absent here. A finite value is
+     * still required above so malformed acquisition data cannot enter an
+     * outcome or its quality score.
      *
      * It gated segmentation, and eligibleSegments ends a segment on any
      * unusable frame -- so scattered sub-threshold frames fragmented every
@@ -304,6 +314,7 @@ function segmentFromFrames(
     processorRef: first.frame.processorRef,
     trackSegmentId: first.trackSegmentId,
     captureEpoch: first.frame.captureEpoch,
+    continuityGroup: first.continuityGroup,
     sourceWindowRef: [
       "voice",
       first.frame.captureEpoch,
@@ -321,6 +332,7 @@ function eligibleSegments(
   const segments: VoiceSegment[] = [];
   let current: PreparedVoiceFrame[] = [];
   let currentBucket: number | null = null;
+  let continuityGroup = 0;
 
   const flush = (): void => {
     const segment = segmentFromFrames(current);
@@ -332,34 +344,83 @@ function eligibleSegments(
   for (const frame of frames) {
     if (!timingFrameUsable(frame)) {
       flush();
+      // A rejected frame is an observed hole, even when the accepted frames on
+      // either side remain within the nominal 40 ms cadence limit. Preserve it
+      // as a hard boundary when bounded ten-second windows are later rejoined.
+      continuityGroup += 1;
       continue;
+    }
+    const bucket = Math.floor(
+      (frame.tMs - sessionStartedAtMs) / AMBIENT_VOICE_SEGMENT_MAX_MS
+    );
+    const prior = current.at(-1);
+    const hardBreak =
+      prior !== undefined &&
+      (frame.tMs <= prior.frame.tMs ||
+        frame.tMs - prior.frame.tMs > AMBIENT_VOICE_MAX_GAP_MS ||
+        frame.captureEpoch !== prior.frame.captureEpoch ||
+        frame.processorRef !== prior.frame.processorRef ||
+        frame.trackSegmentId !== prior.trackSegmentId);
+    if (hardBreak || (prior !== undefined && bucket !== currentBucket)) {
+      flush();
+      if (hardBreak) continuityGroup += 1;
     }
     const prepared: PreparedVoiceFrame = {
       frame,
       speechActive: frame.speechActive,
       periodic: frame.periodic,
-      trackSegmentId: frame.trackSegmentId
+      trackSegmentId: frame.trackSegmentId,
+      continuityGroup
     };
-    const bucket = Math.floor(
-      (frame.tMs - sessionStartedAtMs) / AMBIENT_VOICE_SEGMENT_MAX_MS
-    );
-    const prior = current.at(-1);
-    if (
-      prior &&
-      (frame.tMs <= prior.frame.tMs ||
-        frame.tMs - prior.frame.tMs > AMBIENT_VOICE_MAX_GAP_MS ||
-        frame.captureEpoch !== prior.frame.captureEpoch ||
-        frame.processorRef !== prior.frame.processorRef ||
-        prepared.trackSegmentId !== prior.trackSegmentId ||
-        bucket !== currentBucket)
-    ) {
-      flush();
-    }
     currentBucket = bucket;
     current.push(prepared);
   }
   flush();
   return segments;
+}
+
+/**
+ * Rejoin adjacent bounded analysis windows for speech-timing events.
+ *
+ * Ten-second windows bound pitch/evidence calculations, but they are not
+ * physiological boundaries. Treating each window edge as a speech transition
+ * fabricates runs and turns a real pause spanning an edge into two truncated
+ * fragments. Only provenance- and cadence-contiguous windows are rejoined.
+ */
+function timingContinuitySegments(
+  segments: readonly VoiceSegment[]
+): VoiceSegment[] {
+  const joined: VoiceSegment[] = [];
+  let frames: PreparedVoiceFrame[] = [];
+  let prior: VoiceSegment | null = null;
+
+  const flush = (): void => {
+    const segment = segmentFromFrames(frames);
+    if (segment) joined.push(segment);
+    frames = [];
+    prior = null;
+  };
+
+  for (const segment of segments) {
+    const rawGapMs = prior === null
+      ? 0
+      : segment.startMs - prior.frames.at(-1)!.frame.tMs;
+    if (
+      prior &&
+      (rawGapMs <= 0 ||
+        rawGapMs > AMBIENT_VOICE_MAX_GAP_MS ||
+        segment.continuityGroup !== prior.continuityGroup ||
+        segment.captureEpoch !== prior.captureEpoch ||
+        segment.processorRef !== prior.processorRef ||
+        segment.trackSegmentId !== prior.trackSegmentId)
+    ) {
+      flush();
+    }
+    frames.push(...segment.frames);
+    prior = segment;
+  }
+  flush();
+  return joined;
 }
 
 function pitchValues(segment: VoiceSegment): number[] {
@@ -472,7 +533,7 @@ function internalRuns(segment: VoiceSegment): SegmentRuns {
   for (let position = 0; position < raw.length; position += 1) {
     const run = raw[position];
     const startMs = timeAt(run.startIndex);
-    const endMs = timeAt(run.endIndex);
+    const endMs = timeAt(run.endIndex) + weights[run.endIndex];
     if (run.active) {
       let phonatedMs = 0;
       let nucleusCount = 0;
@@ -755,7 +816,10 @@ export function extractAmbientVoiceMetrics(
   const segments = eligibleSegments(inRange, options.sessionStartedAtMs);
   const baseEvidence = evidenceFor(inRange, segments);
 
-  if (options.noiseCalibrationDurationMs < 2_000) {
+  if (
+    !finite(options.noiseCalibrationDurationMs) ||
+    options.noiseCalibrationDurationMs < 2_000
+  ) {
     return {
       ignoredFrameCount,
       outcomes: VOICE_CODES.map((code) =>
@@ -819,24 +883,64 @@ export function extractAmbientVoiceMetrics(
 
   const variabilityCode: AmbientVoiceMetricCode =
     "ambient.voice.f0.variability";
-  const variabilitySegments = pitchSegments.flatMap((segment) => {
+  const variabilityContributions = pitchSegments.flatMap((segment) => {
     const subwindows = validPitchSubwindows(segment);
     return subwindows.length >= AMBIENT_VOICE_MIN_VALID_BINS_PER_SEGMENT
       ? [
-          semitoneStdDev(
-            subwindows.map((values) => median(values))
-          )
+          {
+            segment,
+            validBinCount: subwindows.length,
+            value: semitoneStdDev(
+              subwindows.map((values) => median(values))
+            )
+          }
         ]
       : [];
   });
-  if (pitchFailure || variabilitySegments.length < 3) {
+  const variabilityEvidence = evidenceFor(
+    inRange,
+    variabilityContributions.map((contribution) => contribution.segment),
+    {
+      validBinsPerSegment:
+        variabilityContributions.length > 0
+          ? Math.min(
+              ...variabilityContributions.map(
+                (contribution) => contribution.validBinCount
+              )
+            )
+          : undefined
+    }
+  );
+  const variabilityValues = variabilityContributions.map(
+    (contribution) => contribution.value
+  );
+  const variabilityPitchFailure =
+    variabilityContributions.length >= AMBIENT_VOICE_MIN_SEGMENTS &&
+    ((variabilityEvidence.pitchedDurationMs ?? 0) <
+      AMBIENT_VOICE_PITCH_MIN_MS ||
+      (variabilityEvidence.pitchCoverage ?? 0) <
+        AMBIENT_VOICE_MIN_PITCH_COVERAGE)
+      ? {
+          reasonCode: "insufficient-pitched-speech" as const,
+          detail:
+            "Pitch requires three eligible segments with at least one pitched second each, ten pitched seconds total, and 60% pitch coverage."
+        }
+      : null;
+  if (
+    pitchFailure ||
+    variabilityPitchFailure ||
+    variabilityContributions.length < AMBIENT_VOICE_MIN_SEGMENTS
+  ) {
     outcomes.push(
       withheldOutcome(
         variabilityCode,
         options,
-        baseEvidence,
-        pitchFailure?.reasonCode ?? "insufficient-pitch-bins",
+        variabilityEvidence,
+        pitchFailure?.reasonCode ??
+          variabilityPitchFailure?.reasonCode ??
+          "insufficient-pitch-bins",
         pitchFailure?.detail ??
+          variabilityPitchFailure?.detail ??
           "Pitch variability requires four valid 500 ms subwindows in each of three eligible segments."
       )
     );
@@ -845,15 +949,20 @@ export function extractAmbientVoiceMetrics(
       measuredOutcome(
         variabilityCode,
         options,
-        baseEvidence,
-        median(variabilitySegments),
-        qualityScore,
-        dispersion(variabilitySegments)
+        variabilityEvidence,
+        median(variabilityValues),
+        technicalQualityScore(
+          variabilityContributions.map(
+            (contribution) => contribution.segment
+          )
+        ),
+        dispersion(variabilityValues)
       )
     );
   }
 
-  const runsBySegment = segments.map((segment) => internalRuns(segment));
+  const timingSegments = timingContinuitySegments(segments);
+  const runsBySegment = timingSegments.map((segment) => internalRuns(segment));
   const pauses = runsBySegment.flatMap((runs) => runs.durations.pausesMs);
   const speechRuns = runsBySegment.flatMap(
     (runs) => runs.durations.speechRunsMs
@@ -921,7 +1030,7 @@ export function extractAmbientVoiceMetrics(
       )
     );
   } else {
-    const rates = segments.map((segment, index) =>
+    const rates = timingSegments.map((segment, index) =>
       segment.durationMs > 0
         ? runsBySegment[index].durations.pausesMs.length /
           (segment.durationMs / 60_000)

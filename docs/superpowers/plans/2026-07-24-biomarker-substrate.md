@@ -1,6 +1,9 @@
 # Quantitative biomarker substrate — implementation plan
 
 Date: 2026-07-24
+Status: Historical plan, partially implemented. Tier-1 derived frames and
+Tier-2 events exist only in session memory; the planned end-of-session export
+was not implemented.
 Scope decision: **Layers 0–2** (no new Tier-3 metric codes)
 Persistence decision: **Session RAM + explicit end-of-session export**
 

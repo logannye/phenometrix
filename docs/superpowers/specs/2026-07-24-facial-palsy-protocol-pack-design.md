@@ -1,9 +1,10 @@
 # Facial Palsy Protocol Pack — Spontaneous Expression Measurement — Design
 
-Status: Approved (design). Implemented 2026-07-24 (PRs #24, #25),
-except where noted in §13.
+Status: Historical approved design. Eleven related measurement primitives were
+implemented in the generic nonclinical pack in PRs #24 and #25, with known
+divergences from this design. No separate clinical protocol pack exists.
 Date: 2026-07-24
-Supersedes: nothing. Specifies the "first protocol pack" decision recorded in
+Supersedes: nothing. Records the "first protocol pack" design decision in
 `docs/telehealth-platform-vision.md`.
 
 > Nonclinical research prototype. Nothing in this document is a validated
@@ -262,7 +263,34 @@ Indication-specific validation would additionally require:
 - explicit subgroup testing across skin tone, facial hair, eyewear, and camera
   hardware.
 
-## 12. Decisions recorded
+## 12. Current generic-pack divergences
+
+The eleven related metrics now present in `ambient-local-observation` are
+engineering primitives, not an implementation of the clinical pack described
+above. In particular:
+
+- expression segmentation runs during end-of-session extraction over compact
+  derived geometry on the application side of the worker boundary, not over
+  cached native landmarks inside the face worker;
+- an event is opened when either commissure clears the elevation threshold;
+  the detector does not require the bilateral elevation plus concurrent mouth
+  widening specified in §5.2;
+- `spontaneous_excursion.p90` is an absolute larger-side excursion magnitude.
+  It is permissible only as a nonclinical engineering metric and does not meet
+  §5's clinical-pack rule that every published excursion be a within-face
+  contrast;
+- asymmetry and oculo-oral coupling are signed anatomical left-minus-right.
+  The extractor does not establish an affected side, so it cannot produce the
+  affected-minus-unaffected construct or support the interpretation table in
+  §5.5; and
+- resting geometry uses a robust median over all usable frames rather than a
+  second pass restricted to frames outside detected events.
+
+These differences need an explicit design decision, calibrated thresholds,
+and validation data before a separate condition-specific pack can be created.
+They must not be hidden by relabelling the current generic metrics.
+
+## 13. Decisions recorded
 
 1. Facial palsy is the first protocol pack. Confirms the ordering already
    recommended in the platform vision.
@@ -277,7 +305,7 @@ Indication-specific validation would additionally require:
 8. Per-event timelines are not exported.
 9. Acute stroke screening is a written product boundary.
 
-## 13. Not addressed here
+## 14. Not addressed here
 
 - Regional/zonal grading beyond eye, commissure, and brow (nasolabial fold,
   nasal ala, lower lip depressor).

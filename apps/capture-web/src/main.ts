@@ -1,5 +1,7 @@
 import {
+  AMBIENT_FACE_ALGORITHM_VERSION,
   AMBIENT_FACE_TASK_CONTEXT,
+  AMBIENT_VOICE_ALGORITHM_VERSION,
   AMBIENT_VOICE_TASK_CONTEXT,
   type AmbientFacialFrame,
   type AmbientVoiceFrame
@@ -15,10 +17,15 @@ import {
   type FaceCalibration,
   type PostEncounterReportV1,
   type ProcessorProvenanceV1,
-  type VisualPipelineProvenance
+  type VisualPipelineProvenance,
+  type WithheldReasonCode
 } from "@phenometrix/contracts";
-import { buildPostEncounterReport } from "@phenometrix/evidence-core";
+import {
+  buildConditionEvidenceCard,
+  buildPostEncounterReport
+} from "@phenometrix/evidence-core";
 import { InMemoryEventJournal } from "@phenometrix/event-log";
+import { comparePreviousVisit } from "@phenometrix/trajectory-core";
 import { buildAmbientObservation } from "./ambient-core-adapter.js";
 import {
   AMBIENT_CAPTURE_LIMIT_MS,
@@ -30,7 +37,21 @@ import {
   type AmbientWorkflowState
 } from "./ambient-workflow.js";
 import { classifyFaceCalibration } from "./capture-calibration.js";
-import { CaptureRuntime, withTimeout } from "./capture-runtime.js";
+import { ConditionDemoController } from "./condition-demo-controller.js";
+import {
+  clearConditionEvidenceCard,
+  renderConditionEvidenceCard,
+  type ConditionEvidenceViewElements
+} from "./condition-evidence-view.js";
+import {
+  cleanupAudioLaneResources,
+  cleanupFaceLaneResources
+} from "./capture-lane-cleanup.js";
+import {
+  CaptureRuntime,
+  withTimeout,
+  type DerivedCaptureSnapshot
+} from "./capture-runtime.js";
 import {
   VISUAL_WORKER_MESSAGE_VERSION,
   createVideoCaptureSettings,
@@ -42,8 +63,10 @@ import {
 import { FaceOverlayController } from "./face-overlay-controller.js";
 import { LiveVoiceVisualizer } from "./live-voice-visualizer.js";
 import {
-  loadAndVerifyStaticAssets,
-  type ResolvedStaticAssets
+  loadAndVerifyFaceStaticAssets,
+  loadAndVerifyVoiceStaticAssets,
+  type ResolvedFaceStaticAssets,
+  type ResolvedVoiceStaticAssets
 } from "./static-assets.js";
 import {
   LatestFrameScheduler,
@@ -78,6 +101,9 @@ const reportView = element<HTMLElement>("report-view");
 const consentForm = element<HTMLFormElement>("consent-form");
 const consentCheckbox = element<HTMLInputElement>("consent-checkbox");
 const consentText = element<HTMLElement>("consent-text");
+const affectedSideFieldset = element<HTMLFieldSetElement>("affected-side-fieldset");
+const affectedSideLeft = element<HTMLInputElement>("affected-side-left");
+const affectedSideRight = element<HTMLInputElement>("affected-side-right");
 const startButton = element<HTMLButtonElement>("start-button");
 const finishButton = element<HTMLButtonElement>("finish-button");
 const discardButton = element<HTMLButtonElement>("discard-button");
@@ -103,6 +129,20 @@ const sessionClock = element<HTMLTimeElement>("session-clock");
 const reportBoundary = element<HTMLElement>("report-boundary");
 const reportSource = element<HTMLElement>("report-source");
 const reportSections = element<HTMLElement>("report-sections");
+const conditionSideBadge = element<HTMLElement>("condition-side-badge");
+const conditionStatus = element<HTMLElement>("condition-status");
+const acceptReferenceButton = element<HTMLButtonElement>("accept-reference-button");
+const followUpButton = element<HTMLButtonElement>("follow-up-button");
+const conditionAcceptButton = element<HTMLButtonElement>("condition-accept-button");
+const conditionDismissButton = element<HTMLButtonElement>("condition-dismiss-button");
+const conditionEvidenceView: ConditionEvidenceViewElements = {
+  card: element<HTMLElement>("condition-card"),
+  summary: element<HTMLElement>("condition-card-summary"),
+  rows: element<HTMLElement>("condition-card-rows"),
+  reviewState: element<HTMLElement>("condition-review-state"),
+  acceptButton: conditionAcceptButton,
+  dismissButton: conditionDismissButton
+};
 const faceOverlay = new FaceOverlayController(
   landmarkOverlay,
   faceMeshStatus
@@ -126,6 +166,7 @@ consentText.textContent = AMBIENT_LOCAL_CONSENT_TEXT;
 
 let workflow: AmbientWorkflowState = createAmbientWorkflowState();
 let runtime = new CaptureRuntime();
+const conditionDemo = new ConditionDemoController();
 let sessionId = "";
 let subjectRef = "";
 let consentRecord: ConsentRecordV1 | null = null;
@@ -137,13 +178,17 @@ let audioStream: MediaStream | null = null;
 let videoStream: MediaStream | null = null;
 let audioContext: AudioContext | null = null;
 let voicePipeline: VoiceCapturePipeline | null = null;
+let voiceStartupAbortController: AbortController | null = null;
+let audioLaneTeardownPromise: Promise<void> | null = null;
 let faceWorker: Worker | null = null;
 let faceScheduler: LatestFrameScheduler<ImageBitmap> | null = null;
 let facePump: VideoFramePump<ImageBitmap> | null = null;
 let faceDisposedResolver: (() => void) | null = null;
+let faceLaneTeardownPromise: Promise<void> | null = null;
 let setupTimer: ReturnType<typeof setTimeout> | null = null;
 let captureLimitTimer: ReturnType<typeof setTimeout> | null = null;
 let clockTimer: ReturnType<typeof setInterval> | null = null;
+let pendingDisposal: Promise<void> | null = null;
 let quietStartedAtMs: number | null = null;
 let quietCalibrationRms: number[] = [];
 let noiseCalibrationDurationMs = 0;
@@ -157,30 +202,62 @@ let voiceObservationOriginMs = 0;
 let audioProvenance: AudioPipelineProvenance | null = null;
 let visualProvenance: VisualPipelineProvenance | null = null;
 let processorProvenance: ProcessorProvenanceV1[] = [];
-let staticAssets: ResolvedStaticAssets | null = null;
-let staticManifestError: string | null = null;
+let voiceStaticAssetsPromise: Promise<ResolvedVoiceStaticAssets> | null = null;
+let faceStaticAssetsPromise: Promise<ResolvedFaceStaticAssets> | null = null;
 let journal: InMemoryEventJournal | null = null;
 let audioLaneFailureReason: string | null = null;
 let faceLaneFailureReason: string | null = null;
+type LaneContractFailureReason = Extract<
+  WithheldReasonCode,
+  "modality-unavailable" | "processor-unavailable" | "asset-integrity-failed"
+>;
+let audioLaneContractFailureReason: LaneContractFailureReason | null = null;
+let faceLaneContractFailureReason: LaneContractFailureReason | null = null;
 let faceCalibrationGuidance: string | null = null;
 
-const staticAssetsPromise = loadAndVerifyStaticAssets(document.baseURI)
-  .then((assets) => {
-    staticAssets = assets;
-    return assets;
-  })
-  .catch((error: unknown) => {
-    staticManifestError = error instanceof Error ? error.message : "asset-manifest-unavailable";
-    return null;
-  });
+function verifiedVoiceAssets(): Promise<ResolvedVoiceStaticAssets> {
+  if (!voiceStaticAssetsPromise) {
+    const pending = loadAndVerifyVoiceStaticAssets(document.baseURI);
+    voiceStaticAssetsPromise = pending;
+    void pending.catch(() => {
+      if (voiceStaticAssetsPromise === pending) voiceStaticAssetsPromise = null;
+    });
+  }
+  return voiceStaticAssetsPromise;
+}
+
+function verifiedFaceAssets(): Promise<ResolvedFaceStaticAssets> {
+  if (!faceStaticAssetsPromise) {
+    const pending = loadAndVerifyFaceStaticAssets(document.baseURI);
+    faceStaticAssetsPromise = pending;
+    void pending.catch(() => {
+      if (faceStaticAssetsPromise === pending) faceStaticAssetsPromise = null;
+    });
+  }
+  return faceStaticAssetsPromise;
+}
 
 function nowIso(): string {
   return new Date().toISOString();
 }
 
+function selectedAffectedSide(): "left" | "right" | null {
+  if (affectedSideLeft.checked) return "left";
+  if (affectedSideRight.checked) return "right";
+  return null;
+}
+
+function updateStartButton(): void {
+  startButton.disabled =
+    !consentCheckbox.checked || selectedAffectedSide() === null;
+}
+
 function createSessionIdentity(): void {
+  const affectedSide = selectedAffectedSide();
+  if (!affectedSide) throw new Error("condition-demo-affected-side-required");
   sessionId = crypto.randomUUID();
-  subjectRef = `subject-${crypto.randomUUID()}`;
+  subjectRef = conditionDemo.context?.subjectRef ?? `subject-${crypto.randomUUID()}`;
+  conditionDemo.startParticipant(subjectRef, affectedSide);
   sessionStartedAtIso = nowIso();
   consentRecord = {
     schemaVersion: "phenometric.consent-record.v1",
@@ -226,7 +303,9 @@ function clearTimers(): void {
 
 function isCurrent(generation: number): boolean {
   return generation === workflow.generation &&
-    !["discarded", "error", "report"].includes(workflow.phase);
+    ["requesting-permission", "calibrating", "observing"].includes(
+      workflow.phase
+    );
 }
 
 function laneCopy(state: AmbientWorkflowState["audioLane"]): {
@@ -252,6 +331,100 @@ function readableFailure(error: unknown, fallback: string): string {
   return fallback;
 }
 
+function processorFailureReason(error: unknown): LaneContractFailureReason {
+  return readableFailure(error, "processor-unavailable").startsWith("asset-")
+    ? "asset-integrity-failed"
+    : "processor-unavailable";
+}
+
+function disposeJournal(): void {
+  journal?.dispose();
+  journal = null;
+}
+
+function stopAudioLaneResources(): Promise<void> {
+  if (audioLaneTeardownPromise) return audioLaneTeardownPromise;
+  const stream = audioStream;
+  const context = audioContext;
+  const pipeline = voicePipeline;
+  const startupAbortController = voiceStartupAbortController;
+  audioStream = null;
+  audioContext = null;
+  voicePipeline = null;
+  voiceStartupAbortController = null;
+  audioLaneTeardownPromise = cleanupAudioLaneResources({
+    cancelPendingStartup: () => startupAbortController?.abort(),
+    stream,
+    pipeline,
+    audioContext: context
+  });
+  return audioLaneTeardownPromise;
+}
+
+function stopFaceLaneResources(generation: number): Promise<void> {
+  if (faceLaneTeardownPromise) return faceLaneTeardownPromise;
+  const stream = videoStream;
+  const pump = facePump;
+  const scheduler = faceScheduler;
+  const worker = faceWorker;
+  videoStream = null;
+  facePump = null;
+  faceScheduler = null;
+  faceWorker = null;
+  faceLaneTeardownPromise = cleanupFaceLaneResources({
+    stream,
+    pump,
+    scheduler,
+    video: cameraPreview,
+    deactivate: () => {
+      cameraPlaceholder.hidden = false;
+    },
+    disposeWorker: () => faceWorkerDisposed(generation, worker)
+  });
+  return faceLaneTeardownPromise;
+}
+
+function markLaneFailed(
+  generation: number,
+  lane: "audio" | "face",
+  detail: string,
+  reason: LaneContractFailureReason
+): void {
+  if (!isCurrent(generation)) return;
+  const existingReason = lane === "audio"
+    ? audioLaneContractFailureReason
+    : faceLaneContractFailureReason;
+  if (existingReason !== null) return;
+
+  if (lane === "audio") {
+    audioLaneFailureReason = detail;
+    audioLaneContractFailureReason = reason;
+    audioCalibrationResolved = true;
+    // A track or processor can fail while addModule is still pending. Prevent
+    // that stale startup from constructing a worker and audio graph after the
+    // lane has already terminalized.
+    liveVoiceVisualizer.setUnavailable();
+    void stopAudioLaneResources();
+  } else {
+    faceLaneFailureReason = detail;
+    faceLaneContractFailureReason = reason;
+    faceCalibrationResolved = true;
+    faceOverlay.markUnavailable();
+    cameraPlaceholder.textContent = "Camera unavailable";
+    void stopFaceLaneResources(generation);
+  }
+  const remainingLaneActive = lane === "audio"
+    ? faceLaneContractFailureReason === null && streamIsLive(videoStream)
+    : audioLaneContractFailureReason === null && streamIsLive(audioStream);
+  dispatch({
+    type: "lane-failed",
+    generation,
+    lane,
+    remainingLaneActive,
+    atMs: performance.now()
+  });
+}
+
 function renderWorkflow(): void {
   const active = [
     "requesting-permission",
@@ -259,6 +432,7 @@ function renderWorkflow(): void {
     "observing",
     "finalizing"
   ].includes(workflow.phase);
+  const devicesLive = streamIsLive(audioStream) || streamIsLive(videoStream);
   welcomeView.hidden = workflow.phase !== "idle";
   captureView.hidden = !active;
   reportView.hidden = workflow.phase !== "report";
@@ -266,8 +440,8 @@ function renderWorkflow(): void {
     messageView.hidden = false;
     messageTitle.textContent = workflow.phase === "error" ? "Session unavailable" : "Session discarded";
     messageDetail.textContent = workflow.phase === "error"
-      ? "The local capture could not continue. Devices are off and no report was created."
-      : "No report was created and all local session data was cleared.";
+      ? "The local capture could not continue. No report was created; local cleanup is in progress."
+      : "No report was created. Local session cleanup is in progress.";
   } else {
     messageView.hidden = true;
   }
@@ -283,14 +457,15 @@ function renderWorkflow(): void {
     error: "Devices off"
   };
   phaseLabel.textContent = labels[workflow.phase];
-  privacyState.textContent = active ? "Devices active · local only" : "Devices off";
-  privacyState.classList.toggle("is-live", active);
+  privacyState.textContent = devicesLive ? "Devices active · local only" : "Devices off";
+  privacyState.classList.toggle("is-live", devicesLive);
   finishButton.disabled = workflow.phase !== "observing";
 
   const audioCopy = laneCopy(workflow.audioLane);
   const audioCapturingWithoutCalibration =
     workflow.phase === "observing" &&
     workflow.audioLane === "not-measurable" &&
+    audioLaneContractFailureReason === null &&
     streamIsLive(audioStream);
   audioLaneState.textContent = audioCapturingWithoutCalibration
     ? "On"
@@ -306,6 +481,7 @@ function renderWorkflow(): void {
   const faceCapturingWithoutCalibration =
     workflow.phase === "observing" &&
     workflow.faceLane === "not-measurable" &&
+    faceLaneContractFailureReason === null &&
     streamIsLive(videoStream);
   faceLaneState.textContent = faceCapturingWithoutCalibration
     ? "On"
@@ -341,6 +517,7 @@ function dispatch(event: AmbientWorkflowEvent): void {
   if (
     event.type === "calibration-resolved" &&
     event.measurable &&
+    workflow.phase === "calibrating" &&
     journal
   ) {
     journal.append({
@@ -350,7 +527,10 @@ function dispatch(event: AmbientWorkflowEvent): void {
       actor: {
         kind: "processor",
         id: event.lane === "audio" ? "voice-analysis" : "facial-analysis",
-        version: "1.0.0"
+        version:
+          event.lane === "audio"
+            ? AMBIENT_VOICE_ALGORITHM_VERSION
+            : AMBIENT_FACE_ALGORITHM_VERSION
       },
       type: "capture.lane.ready",
       stage: "calibrating",
@@ -399,6 +579,19 @@ async function requestLane(
     }
     if (lane === "audio") audioStream = stream;
     else videoStream = stream;
+    // CaptureRuntime must own each granted stream as soon as that individual
+    // permission resolves. The other lane may remain pending indefinitely.
+    attachRuntimeHandles(generation);
+    stream.getTracks().forEach((track) => {
+      track.addEventListener("ended", () => {
+        markLaneFailed(
+          generation,
+          lane,
+          `${lane}-track-ended`,
+          "modality-unavailable"
+        );
+      }, { once: true });
+    });
     dispatch({
       type: "permission-resolved",
       generation,
@@ -411,9 +604,13 @@ async function requestLane(
     const reason = readableFailure(error, `${lane}-permission-unavailable`);
     if (lane === "audio") {
       audioLaneFailureReason = reason;
+      audioLaneContractFailureReason = "modality-unavailable";
       liveVoiceVisualizer.setUnavailable();
     }
-    else faceLaneFailureReason = reason;
+    else {
+      faceLaneFailureReason = reason;
+      faceLaneContractFailureReason = "modality-unavailable";
+    }
     dispatch({
       type: "permission-resolved",
       generation,
@@ -442,7 +639,10 @@ function handleVoiceFrame(frameInput: AmbientVoiceFrame): void {
   };
   liveVoiceVisualizer.push(frame);
   lastVoiceFrameTMs = frame.tMs;
-  if (workflow.phase === "calibrating" && !audioCalibrationResolved) {
+  if (
+    !audioCalibrationResolved &&
+    (workflow.phase === "calibrating" || workflow.phase === "observing")
+  ) {
     const quiet = !frame.speechActive && frame.blockGapMs <= 40 &&
       frame.clippedSampleFraction <= 0.01 && Math.abs(frame.dcOffset) <= 0.02;
     if (!quiet) {
@@ -478,20 +678,21 @@ function handleVoiceFrame(frameInput: AmbientVoiceFrame): void {
 
 async function startAudioLane(generation: number): Promise<void> {
   if (!audioStream) {
-    liveVoiceVisualizer.setUnavailable();
-    dispatch({
-      type: "calibration-resolved",
+    markLaneFailed(
       generation,
-      lane: "audio",
-      measurable: false,
-      atMs: performance.now()
-    });
+      "audio",
+      "audio-track-unavailable",
+      "modality-unavailable"
+    );
     return;
   }
+  let startupAbortController: AbortController | null = null;
   try {
-    const assets = staticAssets ?? await staticAssetsPromise;
-    if (!assets) throw new Error(staticManifestError ?? "asset-manifest-unavailable");
-    if (!isCurrent(generation)) return;
+    const assets = await verifiedVoiceAssets();
+    if (
+      !isCurrent(generation) ||
+      audioLaneContractFailureReason !== null
+    ) return;
     audioContext = new AudioContext({ sampleRate: 48_000, latencyHint: "interactive" });
     attachRuntimeHandles(generation);
     const track = audioStream.getAudioTracks()[0];
@@ -506,15 +707,22 @@ async function startAudioLane(generation: number): Promise<void> {
       settings.channelCount ?? 1,
       browserProcessing
     );
-    voicePipeline = await startVoiceCapturePipeline({
+    startupAbortController = new AbortController();
+    voiceStartupAbortController = startupAbortController;
+    attachRuntimeHandles(generation);
+    const startedPipeline = await startVoiceCapturePipeline({
       stream: audioStream,
       audioContext,
       captureSettings,
       captureEpoch: generation,
       taskContext: "quiet-calibration",
       workletUrl: assets.voiceWorkletUrl,
+      startupSignal: startupAbortController.signal,
       callbacks: {
         onReady(provenance) {
+          if (!isCurrent(generation) || audioLaneContractFailureReason !== null) {
+            return;
+          }
           audioProvenance = provenance;
           processorProvenance.push({
             modality: "voice",
@@ -527,39 +735,58 @@ async function startAudioLane(generation: number): Promise<void> {
           });
         },
         onFrame(frame) {
-          if (isCurrent(generation)) handleVoiceFrame(frame as AmbientVoiceFrame);
+          if (isCurrent(generation) && audioLaneContractFailureReason === null) {
+            handleVoiceFrame(frame as AmbientVoiceFrame);
+          }
         },
         onDiagnostics() {},
         onFailure(reason) {
-          audioLaneFailureReason = reason;
           console.error("Audio processor failed:", reason);
-          if (!audioCalibrationResolved && isCurrent(generation)) {
-            audioCalibrationResolved = true;
-            dispatch({
-              type: "calibration-resolved",
-              generation,
-              lane: "audio",
-              measurable: false,
-              atMs: performance.now()
-            });
-          }
+          markLaneFailed(
+            generation,
+            "audio",
+            reason,
+            "processor-unavailable"
+          );
         }
       }
     });
-    if (!isCurrent(generation)) await voicePipeline.stop();
+    if (voiceStartupAbortController === startupAbortController) {
+      voiceStartupAbortController = null;
+    }
+    if (
+      !isCurrent(generation) ||
+      audioLaneContractFailureReason !== null
+    ) {
+      const latePipelineStop = startedPipeline.stop();
+      const priorTeardown = audioLaneTeardownPromise ?? Promise.resolve();
+      audioLaneTeardownPromise = Promise.all([
+        priorTeardown,
+        latePipelineStop
+      ]).then(() => undefined);
+      if (!isCurrent(generation)) {
+        // CaptureRuntime may already be disposing. A late attachment makes the
+        // local pipeline part of its pending-cleanup barrier as well.
+        runtime.attach({
+          stopVoicePipeline: () => audioLaneTeardownPromise!
+        });
+      }
+      await audioLaneTeardownPromise;
+      return;
+    }
+    voicePipeline = startedPipeline;
   } catch (error) {
+    if (voiceStartupAbortController === startupAbortController) {
+      voiceStartupAbortController = null;
+    }
     if (!isCurrent(generation)) return;
-    audioLaneFailureReason = readableFailure(error, "audio-processor-unavailable");
     console.error("Audio lane setup failed:", error);
-    liveVoiceVisualizer.setUnavailable();
-    audioCalibrationResolved = true;
-    dispatch({
-      type: "calibration-resolved",
+    markLaneFailed(
       generation,
-      lane: "audio",
-      measurable: false,
-      atMs: performance.now()
-    });
+      "audio",
+      readableFailure(error, "audio-processor-unavailable"),
+      processorFailureReason(error)
+    );
   }
 }
 
@@ -577,7 +804,10 @@ function handleFaceFrame(
         ? [...new Set([...frameInput.qualityReasons, "multiple-faces" as const])]
         : frameInput.qualityReasons
   };
-  if (workflow.phase === "calibrating" && !faceCalibrationResolved) {
+  if (
+    !faceCalibrationResolved &&
+    (workflow.phase === "calibrating" || workflow.phase === "observing")
+  ) {
     if (faceCount !== 1) {
       faceCalibrationGuidance =
         faceCount > 1
@@ -630,8 +860,10 @@ function handleFaceFrame(
   if (workflow.phase === "observing") runtime.addFaceFrame(frame);
 }
 
-function faceWorkerDisposed(generation: number): Promise<void> {
-  const worker = faceWorker;
+function faceWorkerDisposed(
+  generation: number,
+  worker: Worker | null
+): Promise<void> {
   faceOverlay.clear();
   if (!worker) {
     faceOverlay.releaseWorker();
@@ -652,31 +884,36 @@ function faceWorkerDisposed(generation: number): Promise<void> {
     .then(() => {
       worker.terminate();
       faceDisposedResolver = null;
-      if (faceWorker === worker) faceWorker = null;
       faceOverlay.releaseWorker();
     });
 }
 
 async function startFaceLane(generation: number): Promise<void> {
   if (!videoStream) {
-    dispatch({
-      type: "calibration-resolved",
+    markLaneFailed(
       generation,
-      lane: "face",
-      measurable: false,
-      atMs: performance.now()
-    });
+      "face",
+      "face-track-unavailable",
+      "modality-unavailable"
+    );
     return;
   }
   try {
-    const assets = staticAssets ?? await staticAssetsPromise;
-    if (!assets) throw new Error(staticManifestError ?? "asset-manifest-unavailable");
-    if (!isCurrent(generation)) return;
-    cameraPreview.srcObject = videoStream;
+    const assets = await verifiedFaceAssets();
+    if (
+      !isCurrent(generation) ||
+      faceLaneContractFailureReason !== null
+    ) return;
+    const stream = videoStream;
+    if (!stream) return;
+    cameraPreview.srcObject = stream;
     await cameraPreview.play();
-    if (!isCurrent(generation)) return;
+    if (
+      !isCurrent(generation) ||
+      faceLaneContractFailureReason !== null
+    ) return;
     cameraPlaceholder.hidden = true;
-    const track = videoStream.getVideoTracks()[0];
+    const track = stream.getVideoTracks()[0];
     const settings = track?.getSettings() ?? {};
     const captureSettings = createVideoCaptureSettings({
       width: settings.width ?? (cameraPreview.videoWidth || 1280),
@@ -694,7 +931,12 @@ async function startFaceLane(generation: number): Promise<void> {
       faceWorker = worker;
       attachRuntimeHandles(generation);
       worker.addEventListener("error", () => {
-        faceOverlay.markUnavailable();
+        markLaneFailed(
+          generation,
+          "face",
+          "face-worker-unavailable",
+          "processor-unavailable"
+        );
         reject(new Error("face-worker-unavailable"));
       }, { once: true });
       worker.addEventListener("message", (event: MessageEvent<VisualWorkerResponse>) => {
@@ -705,6 +947,10 @@ async function startFaceLane(generation: number): Promise<void> {
         ) return;
         if (message.type === "ready") {
           workerReady = true;
+          if (!isCurrent(generation) || faceLaneContractFailureReason !== null) {
+            resolve();
+            return;
+          }
           visualProvenance = message.provenance;
           processorProvenance.push({
             modality: "face",
@@ -716,15 +962,17 @@ async function startFaceLane(generation: number): Promise<void> {
             assetIntegrityVerified: true
           });
           resolve();
-        } else if (message.type === "frame") {
+        } else if (
+          message.type === "frame" &&
+          isCurrent(generation) &&
+          faceLaneContractFailureReason === null
+        ) {
           faceScheduler?.accept({
             captureEpoch: message.captureEpoch,
             sequence: message.sequence,
             acquisitionTimestampMs: message.acquiredAtMs
           });
-          if (isCurrent(generation)) {
-            handleFaceFrame(message.frame as AmbientFacialFrame, message.faceCount);
-          }
+          handleFaceFrame(message.frame as AmbientFacialFrame, message.faceCount);
         } else if (message.type === "overlay-status") {
           faceOverlay.acknowledge(message.captureEpoch, message.attached);
         } else if (message.type === "discarded") {
@@ -741,8 +989,13 @@ async function startFaceLane(generation: number): Promise<void> {
               acquisitionTimestampMs: message.acquiredAtMs
             });
           }
-          if (message.code === "initialization-failed") {
-            faceOverlay.markUnavailable();
+          if (!message.recoverable) {
+            markLaneFailed(
+              generation,
+              "face",
+              message.code,
+              "processor-unavailable"
+            );
             reject(new Error(message.code));
           }
         } else if (message.type === "disposed") {
@@ -768,7 +1021,11 @@ async function startFaceLane(generation: number): Promise<void> {
       () => false
     );
     if (!readyBeforeTimeout) throw new Error("face-worker-ready-timeout");
-    if (!isCurrent(generation) || !faceWorker) return;
+    if (
+      !isCurrent(generation) ||
+      faceLaneContractFailureReason !== null ||
+      !faceWorker
+    ) return;
     faceScheduler = new LatestFrameScheduler<ImageBitmap>({
       captureEpoch: generation,
       onSubmit(scheduled: ScheduledVisualFrame<ImageBitmap>) {
@@ -790,17 +1047,13 @@ async function startFaceLane(generation: number): Promise<void> {
     facePump.start();
   } catch (error) {
     if (!isCurrent(generation)) return;
-    faceLaneFailureReason = readableFailure(error, "face-processor-unavailable");
     console.error("Face lane setup failed:", error);
-    faceOverlay.markUnavailable();
-    faceCalibrationResolved = true;
-    dispatch({
-      type: "calibration-resolved",
+    markLaneFailed(
       generation,
-      lane: "face",
-      measurable: false,
-      atMs: performance.now()
-    });
+      "face",
+      readableFailure(error, "face-processor-unavailable"),
+      processorFailureReason(error)
+    );
   }
 }
 
@@ -809,9 +1062,10 @@ function attachRuntimeHandles(generation: number): void {
   if (audioStream) streams.push(audioStream);
   if (videoStream) streams.push(videoStream);
   runtime.attach({
+    cancelPendingStartup: () => voiceStartupAbortController?.abort(),
     stopFacePump: () => facePump?.stop(),
-    stopVoicePipeline: async () => voicePipeline?.stop(),
-    disposeFaceWorker: () => faceWorkerDisposed(generation),
+    stopVoicePipeline: () => stopAudioLaneResources(),
+    disposeFaceWorker: () => stopFaceLaneResources(generation),
     streams,
     video: cameraPreview,
     disconnectAudio: () => undefined,
@@ -847,7 +1101,7 @@ async function beginCalibration(generation: number): Promise<void> {
   if (workflow.audioLane === "calibrating") starts.push(startAudioLane(generation));
   if (workflow.faceLane === "calibrating") starts.push(startFaceLane(generation));
   await Promise.allSettled(starts);
-  attachRuntimeHandles(generation);
+  if (isCurrent(generation)) attachRuntimeHandles(generation);
 }
 
 function beginObservation(generation: number): void {
@@ -892,14 +1146,38 @@ function clearSessionReferences(): void {
   videoStream = null;
   audioContext = null;
   voicePipeline = null;
+  voiceStartupAbortController = null;
+  audioLaneTeardownPromise = null;
   faceWorker = null;
   faceScheduler = null;
   facePump = null;
   faceDisposedResolver = null;
+  faceLaneTeardownPromise = null;
   audioProvenance = null;
   visualProvenance = null;
+  sessionId = "";
+  subjectRef = "";
+  consentRecord = null;
+  sessionStartedAtIso = "";
+  observationStartedAtIso = "";
+  observationStartedAtPerformanceMs = 0;
+  observationEndedAtIso = "";
+  quietStartedAtMs = null;
   quietCalibrationRms = [];
+  noiseCalibrationDurationMs = 0;
   faceCalibrationFrames = [];
+  faceCalibration = null;
+  lastFaceCalibrationAtMs = null;
+  audioCalibrationResolved = false;
+  faceCalibrationResolved = false;
+  lastVoiceFrameTMs = 0;
+  voiceObservationOriginMs = 0;
+  processorProvenance = [];
+  audioLaneFailureReason = null;
+  faceLaneFailureReason = null;
+  audioLaneContractFailureReason = null;
+  faceLaneContractFailureReason = null;
+  faceCalibrationGuidance = null;
 }
 
 async function finalizeSession(generation: number): Promise<void> {
@@ -926,9 +1204,18 @@ async function finalizeSession(generation: number): Promise<void> {
     AMBIENT_CAPTURE_LIMIT_MS,
     Math.max(0, performance.now() - observationStartedAtPerformanceMs)
   );
-  const snapshot = await runtime.dispose(true);
+  let disposal: Promise<DerivedCaptureSnapshot | null> | null =
+    runtime.dispose(true);
+  await Promise.all([
+    audioLaneTeardownPromise ?? Promise.resolve(),
+    faceLaneTeardownPromise ?? Promise.resolve()
+  ]);
+  let snapshot: DerivedCaptureSnapshot | null = await disposal;
+  disposal = null;
   if (generation !== workflow.generation || workflow.phase !== "finalizing") return;
   if (!snapshot || !consentRecord) {
+    disposeJournal();
+    conditionDemo.clear();
     dispatch({ type: "finalization-failed", generation, reason: "derived-snapshot-unavailable" });
     return;
   }
@@ -950,10 +1237,16 @@ async function finalizeSession(generation: number): Promise<void> {
             baselineBoxHeightPixels: faceCalibration.baselineBoxHeightPixels
           }
         : null,
-      voiceLaneAvailable: workflow.audioLane === "measurable",
-      faceLaneAvailable: workflow.faceLane === "measurable",
+      voiceLaneAvailable: audioLaneContractFailureReason === null,
+      faceLaneAvailable: faceLaneContractFailureReason === null,
+      voiceLaneFailureReason: audioLaneContractFailureReason,
+      faceLaneFailureReason: faceLaneContractFailureReason,
       processors: processorProvenance
     });
+    // ObservationV3 is now the only retained source artifact. Explicitly drop
+    // the last local binding to derived frame arrays before report/card work or
+    // any result view is rendered.
+    snapshot = null;
     for (const outcome of observation.metricOutcomes) {
       if (outcome.status === "measured") {
         const measurement = observation.measurements.find(
@@ -1032,12 +1325,34 @@ async function finalizeSession(generation: number): Promise<void> {
       payload: { reportId: report.reportId, observationId: observation.observationId },
       evidenceRefs: []
     });
+    conditionDemo.recordFinalizedObservation(observation);
+    const acceptedReference = conditionDemo.acceptedReference;
+    const currentContext = conditionDemo.context;
+    if (
+      acceptedReference &&
+      currentContext &&
+      acceptedReference.observation.observationId !== observation.observationId
+    ) {
+      const comparison = comparePreviousVisit({
+        currentContext,
+        acceptedReference,
+        currentObservation: observation
+      });
+      const card = buildConditionEvidenceCard({
+        comparison,
+        generatedAt: observationEndedAtIso
+      });
+      conditionDemo.recordCard(card);
+    }
+    disposeJournal();
     renderReport(report);
     clearSessionReferences();
     dispatch({ type: "finalization-completed", generation });
   } catch (error) {
     console.error(error);
+    disposeJournal();
     clearSessionReferences();
+    conditionDemo.clear();
     dispatch({ type: "finalization-failed", generation, reason: "report-validation-failed" });
   }
 }
@@ -1063,10 +1378,19 @@ async function discardSession(): Promise<void> {
       evidenceRefs: []
     });
   }
-  await runtime.dispose(false);
-  journal?.dispose();
-  journal = null;
+  const disposal = runtime.dispose(false);
+  await Promise.all([
+    audioLaneTeardownPromise ?? Promise.resolve(),
+    faceLaneTeardownPromise ?? Promise.resolve()
+  ]);
+  await disposal;
+  disposeJournal();
   clearSessionReferences();
+  conditionDemo.clear();
+  if (workflow.phase === "discarded" || workflow.phase === "error") {
+    messageDetail.textContent =
+      "No report was created. Devices are off and all local session data was cleared.";
+  }
 }
 
 async function executeEffect(effect: AmbientWorkflowEffect): Promise<void> {
@@ -1080,7 +1404,13 @@ async function executeEffect(effect: AmbientWorkflowEffect): Promise<void> {
   } else if (effect.type === "finalize") {
     await finalizeSession(effect.generation);
   } else if (effect.type === "dispose") {
-    await discardSession();
+    const disposal = discardSession();
+    pendingDisposal = disposal;
+    try {
+      await disposal;
+    } finally {
+      if (pendingDisposal === disposal) pendingDisposal = null;
+    }
   }
 }
 
@@ -1100,6 +1430,55 @@ function appendTraceItem(container: HTMLElement, label: string, value: string): 
   code.textContent = value;
   item.append(name, code);
   container.append(item);
+}
+
+function renderConditionPanel(): void {
+  const context = conditionDemo.context;
+  const reference = conditionDemo.acceptedReference;
+  const observation = conditionDemo.latestObservation;
+  const card = conditionDemo.latestCard;
+  conditionSideBadge.textContent = context
+    ? `Asserted affected side · subject-${context.assertedAffectedSide.side}`
+    : "Affected side not set";
+
+  if (!context || !observation) {
+    conditionStatus.textContent =
+      "Complete a live session before creating a comparison reference.";
+    acceptReferenceButton.hidden = true;
+    followUpButton.hidden = true;
+    clearConditionEvidenceCard(conditionEvidenceView);
+    return;
+  }
+
+  if (!reference) {
+    conditionStatus.textContent =
+      "This live session is ready to be explicitly accepted as the page-memory comparison reference.";
+    acceptReferenceButton.hidden = false;
+    followUpButton.hidden = true;
+    clearConditionEvidenceCard(conditionEvidenceView);
+    return;
+  }
+
+  acceptReferenceButton.hidden = true;
+  if (observation.observationId === reference.observation.observationId) {
+    conditionStatus.textContent =
+      "Reference accepted in page memory. Capture a second live session to calculate raw compatible-session differences.";
+    followUpButton.hidden = false;
+    clearConditionEvidenceCard(conditionEvidenceView);
+    return;
+  }
+
+  followUpButton.hidden = true;
+  if (!card) {
+    conditionStatus.textContent =
+      "No condition comparison card was produced for this session.";
+    clearConditionEvidenceCard(conditionEvidenceView);
+    return;
+  }
+
+  conditionStatus.textContent =
+    "Follow-up comparison ready. Inspect measured, withheld, and incompatible rows before reviewing this research card.";
+  renderConditionEvidenceCard(conditionEvidenceView, card);
 }
 
 function renderReport(report: PostEncounterReportV1): void {
@@ -1178,11 +1557,23 @@ function renderReport(report: PostEncounterReportV1): void {
     }
     reportSections.append(card);
   }
+  renderConditionPanel();
 }
 
-function resetApplication(): void {
-  journal?.dispose();
-  journal = null;
+async function resetApplication(preserveConditionDemo = false): Promise<void> {
+  const disposal = pendingDisposal;
+  if (disposal) {
+    resetButton.disabled = true;
+    messageResetButton.disabled = true;
+    try {
+      await disposal;
+    } finally {
+      resetButton.disabled = false;
+      messageResetButton.disabled = false;
+    }
+  }
+  if (!preserveConditionDemo) conditionDemo.clear();
+  disposeJournal();
   clearTimers();
   workflow = reduceAmbientWorkflow(workflow, { type: "reset" }).state;
   runtime = new CaptureRuntime();
@@ -1206,26 +1597,37 @@ function resetApplication(): void {
   processorProvenance = [];
   audioLaneFailureReason = null;
   faceLaneFailureReason = null;
+  audioLaneContractFailureReason = null;
+  faceLaneContractFailureReason = null;
   faceCalibrationGuidance = null;
   liveVoiceVisualizer.reset();
   faceOverlay.resetCanvas();
   consentCheckbox.checked = false;
-  startButton.disabled = true;
+  const retainedSide = conditionDemo.context?.assertedAffectedSide.side ?? null;
+  affectedSideLeft.checked = retainedSide === "left";
+  affectedSideRight.checked = retainedSide === "right";
+  affectedSideFieldset.disabled = retainedSide !== null;
+  updateStartButton();
   cameraPlaceholder.hidden = false;
   cameraPlaceholder.textContent = "Camera is preparing";
   sessionClock.textContent = "00:00";
   reportSections.replaceChildren();
+  clearConditionEvidenceCard(conditionEvidenceView);
   renderWorkflow();
 }
 
 consentCheckbox.addEventListener("change", () => {
   dispatch({ type: "consent-changed", consented: consentCheckbox.checked });
-  startButton.disabled = !consentCheckbox.checked;
+  updateStartButton();
 });
+
+affectedSideLeft.addEventListener("change", updateStartButton);
+affectedSideRight.addEventListener("change", updateStartButton);
 
 consentForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  if (!consentCheckbox.checked) return;
+  if (!consentCheckbox.checked || selectedAffectedSide() === null) return;
+  affectedSideFieldset.disabled = true;
   createSessionIdentity();
   journal?.append({
     sessionId,
@@ -1249,11 +1651,64 @@ discardButton.addEventListener("click", () => {
   dispatch({ type: "discard-requested", reason: "participant-discarded" });
 });
 
-resetButton.addEventListener("click", resetApplication);
-messageResetButton.addEventListener("click", resetApplication);
+resetButton.addEventListener("click", () => {
+  void resetApplication(false);
+});
+messageResetButton.addEventListener("click", () => {
+  void resetApplication(false);
+});
+
+acceptReferenceButton.addEventListener("click", () => {
+  try {
+    conditionDemo.acceptLatestAsReference({
+      referenceId: `reference-${crypto.randomUUID()}`,
+      acceptedAt: nowIso()
+    });
+    renderConditionPanel();
+  } catch (error) {
+    console.error(error);
+    conditionStatus.textContent =
+      "The current observation could not be accepted as a comparison reference.";
+  }
+});
+
+followUpButton.addEventListener("click", () => {
+  try {
+    conditionDemo.prepareFollowUp();
+    void resetApplication(true);
+  } catch (error) {
+    console.error(error);
+    conditionStatus.textContent =
+      "A valid accepted reference is required before a follow-up capture.";
+  }
+});
+
+conditionAcceptButton.addEventListener("click", () => {
+  try {
+    const card = conditionDemo.reviewLatestCard("accept-card", nowIso());
+    renderConditionEvidenceCard(conditionEvidenceView, card);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+conditionDismissButton.addEventListener("click", () => {
+  try {
+    const card = conditionDemo.reviewLatestCard("dismiss-card", nowIso());
+    renderConditionEvidenceCard(conditionEvidenceView, card);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) dispatch({ type: "visibility-lost" });
+  if (!document.hidden) return;
+  const phaseBeforeVisibilityLoss = workflow.phase;
+  conditionDemo.clear();
+  dispatch({ type: "visibility-lost" });
+  if (phaseBeforeVisibilityLoss === "idle" || phaseBeforeVisibilityLoss === "report") {
+    void resetApplication(false);
+  }
 });
 
 window.addEventListener("pagehide", () => {
@@ -1265,8 +1720,4 @@ window.addEventListener("pagehide", () => {
 if (!window.isSecureContext) {
   captureStatus.textContent = "Camera and microphone require a secure context.";
 }
-if (staticManifestError) {
-  captureStatus.textContent = `Local asset verification unavailable: ${staticManifestError}`;
-}
-
 renderWorkflow();

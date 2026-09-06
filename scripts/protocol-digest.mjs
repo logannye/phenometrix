@@ -8,8 +8,10 @@
  * A wrong digest therefore reaches the browser and stamps every observation.
  * This makes regenerating it mechanical and drift detectable in CI.
  *
- *   npx tsx scripts/protocol-digest.mjs --check    verify, exit 1 on drift
- *   npx tsx scripts/protocol-digest.mjs --write    rewrite the literal in place
+ *   pnpm --filter @phenometrix/capture-web exec tsx \
+ *     ../../scripts/protocol-digest.mjs --check    verify, exit 1 on drift
+ *   pnpm --filter @phenometrix/capture-web exec tsx \
+ *     ../../scripts/protocol-digest.mjs --write    rewrite the literal in place
  *
  * Run under tsx: the script imports the parsed pack, and the contracts sources
  * use NodeNext ".js" specifiers that plain node will not remap to ".ts".
@@ -81,7 +83,9 @@ async function main() {
       console.error("Protocol pack digest is stale:");
       console.error(`  actual   ${actual}`);
       console.error(`  expected ${expected}`);
-      console.error("\nRun: npx tsx scripts/protocol-digest.mjs --write");
+      console.error(
+        "\nRun: pnpm --filter @phenometrix/capture-web exec tsx ../../scripts/protocol-digest.mjs --write"
+      );
       process.exit(1);
     }
     console.log("Protocol pack digest is current.");

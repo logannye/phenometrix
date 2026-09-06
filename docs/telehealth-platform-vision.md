@@ -158,7 +158,7 @@ The current participant experience offers one nonclinical ambient observation
 of up to five minutes. It has no exercises or scripted prompts. Camera and
 microphone permissions and calibration remain independent, so one lane can
 continue when the other is unavailable. The immutable protocol registry emits
-seven voice and nine face metric outcomes under `ambient.*`, each measured or
+seven voice and 20 face metric outcomes under `ambient.*`, each measured or
 specifically withheld. There is no fused score or cross-modal interpretation.
 These are descriptive engineering measurements, not validated clinical
 endpoints or scores.
@@ -482,7 +482,7 @@ milestones rather than hidden dependencies of the voice foundation.
 
 1. Add a derived-measurement store with identity, authorization, audit, and
    retention policy.
-2. Connect the existing trajectory engine to accepted observations.
+2. Implement a v3-native trajectory engine over accepted observations.
 3. Establish multi-visit baselines and minimum-data rules.
 4. Add protocol and algorithm migration handling.
 5. Present change with compatible-history and missingness explanations.
@@ -502,7 +502,9 @@ prospective multisite study—not market size alone.
 
 **Selected (2026-07-24): unilateral facial nerve palsy.** Design recorded in
 `docs/superpowers/specs/2026-07-24-facial-palsy-protocol-pack-design.md`.
-Not implemented.
+Eleven condition-oriented measurement primitives are implemented inside the
+generic nonclinical pack. A distinct clinical protocol pack and its validation,
+uncertainty, claims, and human workflow are not implemented.
 
 Two properties drove the choice. The face metrics are a within-frame left/right
 contrast, so the cross-visit confounds that make voice comparison fragile—

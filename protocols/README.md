@@ -4,7 +4,7 @@ The active nonclinical protocol pack is the immutable
 `AMBIENT_LOCAL_PROTOCOL_PACK` in
 `packages/contracts/src/ambient-protocol.ts`. It defines the local source and
 consent policy, five-minute limit, quality thresholds, report ordering, and
-exactly 16 ambient metrics.
+exactly 27 ambient metrics.
 
 The JSON files in this directory are archival guided-demo fixtures. They are
 not imported by the live browser, are not accepted as ObservationV3 protocol
