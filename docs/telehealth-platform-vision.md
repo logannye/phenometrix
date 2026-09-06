@@ -148,11 +148,15 @@ Short tasks create more comparable contexts. Candidate tasks include:
 Prompted tasks must remain optional at the platform level and required only by
 a specific protocol pack.
 
-### Hybrid encounters
+### Ordinary encounters first
 
-The preferred long-term workflow combines ambient collection with one or two
-brief microtasks selected by the care context. The encounter should remain
-clinically usable when a modality or task fails.
+The default workflow preserves the clinic's existing visit link, media setup,
+conversation, and chart. PhenoMetrix starts only within an authorized encounter,
+calibrates opportunistically, and withholds unavailable measurements without
+requesting exercises, repositioning, questionnaires, extra visits, or mandatory
+review. Optional research tasks must never become a hidden dependency of the
+routine product's usefulness. The treatment-response pilot uses natural behavior
+only. See [encounter integration](encounter-integration.md).
 
 ### Current prototype foundation
 

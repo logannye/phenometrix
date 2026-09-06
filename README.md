@@ -1,304 +1,168 @@
 # PhenoMetrix
 
-> Nonclinical research prototype. Not a medical device. Not for diagnosis,
-> treatment, emergency detection, or use with protected health information.
+> Nonclinical research prototype. Not a medical device. No validated diagnostic,
+> treatment, emergency-detection, or disease-severity claims. Local development
+> uses synthetic participants; real-patient deployment requires separate
+> institutional authorization and integration work.
 
-PhenoMetrix derives bounded, quality-aware face and voice measurements from an
-ordinary conversation, in the browser, without recording it.
+PhenoMetrix derives quality-aware face and voice measurements from ordinary
+telehealth conversation. Its three capabilities are **Ambient Capture**,
+**Personal Trajectory**, and **Clinician Evidence Card**.
 
-The [development baseline](docs/development-baseline.md) records the integrated
-starting point, verification commands, and remaining engineering and validation
-work. The [platform vision](docs/telehealth-platform-vision.md) describes future
-scope; it is not an implementation checklist.
+The default integration direction is an analysis branch inside the patient's
+existing telehealth client, imported treatment context, and evidence available
+without interrupting care. The repository implements that integration substrate
+alongside the original local demo. It does not include a provisioned Zoom
+installation or a connected clinical EHR.
 
-A clinician watching a video visit reads a great deal from how someone looks and
-sounds — facial symmetry, blink rate, vocal effort, how long they can speak
-before drawing breath. Almost none of it reaches the record, because it is hard
-to quantify consistently and impossible to quantify the same way twice. The aim
-here is to turn those transient observations into measurements that can be
-compared: to the other side of the same face, to the start of the same session,
-and eventually to the same patient last month.
+See the [integration runbook](docs/encounter-integration.md),
+[architecture](docs/architecture.md), [development baseline](docs/development-baseline.md),
+and [validation boundaries](docs/validation.md). The
+[platform vision](docs/telehealth-platform-vision.md) describes the broader direction.
 
-Everything is built on one rule: **measure only technically qualified signal,
-report `Not measurable` otherwise, and dispose of the media before showing the
-report.** An abstention with a reason code is a first-class result, not a
-failure.
+## Implemented encounter path
 
-## Why contrast, not absolute value
+```text
+existing clinic identity, encounter binding, and modality-specific consent
+  → authorized branch on the host's patient media tracks
+  → local face/voice workers and bounded transient primitives
+  → up to five-minute derived observations throughout the encounter
+  → scoped API + append-only PostgreSQL history + leased analysis worker
+  → immutable history snapshot + protocol + treatment-alignment specification
+  → descriptive points, qualified baseline differences, and phase coverage
+  → nonblocking evidence panel and durable clinician review
+```
 
-Every measurement here earns its keep by cancelling a confound rather than by
-being accurate in isolation:
+`createEmbeddedEncounter()` uses a host-owned stream, video element, and running
+audio context. It does not request devices, open another login, add a capture
+screen, or stop capture merely because the page becomes hidden. Encounter
+lifecycle, source attribution, authorization, and resource failure govern
+capture. Host tracks retain their existing owner. `startIntegratedEncounter()`
+connects capture to the scoped service client; hosts must supply their actual
+authenticated encounter integration.
 
-| Contrast | Cancels | Status |
-|---|---|---|
-| Left vs. right, within one frame | lighting, camera, distance, individual anatomy | implemented |
-| Early vs. late, within one session | all of the above, plus mood, medication timing, effort | substrate in place |
-| Previous live session vs. current live session | all of the above, plus a within-page reference | implemented narrowly; no durable visit history |
+Treatment-time qualification also requires a measured host clock calibration;
+the default timing uncertainty is explicitly unqualified.
 
-Absolute values across people are where the confounds live. A measurement that
-compares a face to itself reduces that problem, which is why the first
-condition-oriented measurement work targets unilateral facial nerve palsy —
-an indication where the finding *is* an asymmetry.
+The service implements signed tenant/study/participant authorization, explicit
+grants and bindings, idempotent ingestion, append-only corrections, transactional
+analysis jobs, worker leases, stale-publication protection, and source-linked
+reviews. A FHIR R4 normalizer and configured-source sync preserve administration
+versus order status, dose units, revisions, and date precision. EHR credentials,
+terminology mappings, patient matching, and scheduling remain external.
 
-## Current implementation
+A Zoom RTMS reference adapter implements transport and participant-attribution
+boundaries. Transport tests do not qualify Zoom-derived measurements. The initial
+HFS protocol excludes platform patient tracks pending acquisition validation.
 
-The implemented browser path runs the unilateral facial movement research
-demonstration. Each capture produces the full generic ambient report, and the
-operator may stop after the first report or complete the two-capture flow:
+## Initial treatment-alignment research protocol
+
+The new protocol targets research with adults who already have a clinician
+diagnosis of hemifacial spasm and receive botulinum injections. It compares four
+existing engineering measurements: left/right eye aperture and left/right lid
+closure completeness. These are **not spasm counts, spasm burden, clinical
+severity, or proof of treatment response**.
+
+The deterministic core uses a sealed protocol/specification and immutable
+history. It selects a compatible pretreatment baseline, aggregates by encounter,
+preserves source versions and exclusions, flags concurrent treatments and
+possible carryover, and stops index-cycle comparisons at a subsequent documented
+injection. Unknown treatment timing permits technically qualified calendar
+observations but disables treatment alignment and baseline deltas.
+
+Sparse data remains sparse. There are no fitted curves, interpolated
+observations, causal effects, peak-response or wearing-off estimates, dose
+recommendations, or automatic clinical actions. Measurement error and minimum
+detectable change are unknown. Quality thresholds and windows are engineering
+choices awaiting validation.
+
+## Existing local demo
+
+`pnpm dev` retains the unilateral facial movement research demonstration:
 
 ```text
 participant-asserted affected side + consent
-  → independent camera and microphone permission
-  → bounded technical calibration
-  → first live ambient observation (up to five minutes)
-  → ObservationV3 + session-only structured report, after media disposal
+  → independent camera/microphone permission and calibration
+  → first live capture → ObservationV3 + report after media disposal
   → explicit acceptance as the page-memory reference
-  → a second, independently consented and calibrated live observation
-  → second ObservationV3 + structured report, after media disposal
-  → strict six-row current-versus-reference comparison
-  → page-memory-only research evidence card and optional accept/dismiss
-  → discard all on reset, visibility loss, or reload
+  → second independently consented live capture
+  → strict six-row comparison + page-local accept/dismiss
+  → discard on reset, visibility loss, or reload
 ```
 
-There are no exercises, scripted prompts, LLM calls, server APIs, retained
-recordings, transcripts, embeddings, durable persistence, export, or clinical
-interpretation in this path. The microphone remains part of the generic
-ambient capture during both sessions; the condition comparison allowlists six
-face metrics and does not compare voice outcomes.
+This demo has no server requests, durable history, retained recordings,
+transcripts, embeddings, or authenticated review. Voice contributes to its
+generic 27-outcome report; the condition comparison selects six facial metrics.
+Its affected side and identity are unverified. Review buttons update page memory.
+The new durable contract is separate; legacy ObservationV3 remains unchanged.
 
-### Ambient Capture
+Both paths reuse the versioned `ambient-core` registry: 7 voice and 20 facial
+metrics. Measurements require qualified source windows; otherwise they are
+withheld with reasons. Native landmarks, image frames, and raw audio stay outside
+observation contracts. Facial geometry is derived in the worker.
 
-`apps/capture-web` uses two independent local processing lanes:
+## Privacy and clinical boundaries
 
-- Audio is captured in 20 ms worklet blocks and analyzed in a worker using 40
-  ms windows with a 10 ms hop. Only compact `VoiceSignalFrameV1` values cross
-  into application state. Those same derived frames drive an eight-second live
-  level and pitch display; the display is not a provisional report.
-- MediaPipe Face Landmarker runs in a worker. Native video frames, landmarks,
-  and transformation matrices remain inside that boundary. The worker draws its
-  complete 478-point mesh and contours directly onto a transferred presentation
-  canvas, while only compact `FacialKinematicsFrameV1` geometry and quality
-  values are emitted.
+- Capture, analysis, retention, and permitted modalities require explicit
+  authorization. An HFS session can authorize face only.
+- Routine capture retains derived observations through the governed service;
+  it does not upload raw media, transcripts, voiceprints, or embeddings.
+- Optional research clips use a separate, disabled-by-default governance
+  package requiring separate consent, retention policy, encrypted storage,
+  authorization, and audit adapters. No production media store is bundled.
+- Evidence access checks current source consent. Corrections create new
+  versions and analyses instead of rewriting prior evidence.
+- Software controls do not establish patient identity proofing, institutional
+  approval, measurement validity, or clinical readiness.
 
-  Blendshapes are deliberately **not** computed. They are the obvious shortcut
-  to Action Unit intensities and the wrong instrument for this: the rig is
-  trained for avatar retargeting and carries a symmetry prior that suppresses
-  exactly the left-right difference being measured. Action Units are derived
-  geometrically from landmarks instead.
+Acute stroke screening remains a standing product exclusion. See
+[safety.md](docs/safety.md). No metric supports disease grading or equivalence
+to House-Brackmann, Sunnybrook, or an HFS clinical scale.
 
-Permission, calibration, measurement, and abstention are independent by
-modality. One lane can continue when the other is unavailable.
+## Run and verify
 
-### Three tiers
-
-Session metrics are the smallest of three representations, not the only one:
-
-| Tier | Rate | Content | Boundary |
-|---|---|---|---|
-| Substrate | ~100 Hz voice / analyzed cadence face | per-frame geometric and acoustic vectors | extractor memory only; not retained |
-| Event | per blink, expression, breath-group | kinematic parameters | extractor memory only; not retained |
-| Summary | per session | the 27 published metrics | crosses any boundary |
-
-The design principle for a future durable substrate is to **store physical
-quantities, not clinical constructs**. The current browser persists none of
-these tiers: per-frame and event records exist transiently inside the extractor
-and are discarded after the session report is built. A construct like a palsy grade is terminal; a quantity like
-"nasolabial angle, left versus right, over time" recombines. Every clinical
-scale is a function of quantities, so an archive of quantities can produce a
-scale invented after the data was collected — an archive of constructs cannot.
-
-Concretely: a blink is not a count. It is a closing edge, a closed interval, and
-a reopening edge. Reduced rate is hypomimia, shallow depth is incomplete
-closure, delayed reopening is fatigable — one waveform, three findings, none of
-them recoverable from a number.
-
-### Active metric registry
-
-The immutable `ambient-local-observation` protocol pack is content-addressed by
-a SHA-256 digest over its own canonical form, and contains exactly 27
-nonclinical metrics across 10 report sections: pitch, speech timing, eye
-geometry, mouth geometry, symmetry, expression dynamics, brow geometry,
-movement, blink behaviour, and capture quality.
-
-Every metric carries its unit, context, algorithm version, evidence
-requirements, permitted withheld reasons, technical-verification status, and
-`clinicalValidation: "none"`. Every evidence requirement the pack publishes is
-re-verified at the report boundary against the same statistic the extractor
-enforced; a metric that cannot produce the evidence its own pack entry demands
-fails provenance rather than passing quietly.
-
-### Observation and report
-
-`buildAmbientObservation()` converts extractor outcomes into the strict
-`phenometric.encounter-observation.v3` schema. Each terminal metric outcome is
-either measured or withheld and resolves to exact evidence windows, processor
-and track provenance, and a deterministic aggregate identity.
-
-`buildPostEncounterReport()` validates that provenance against the active
-protocol pack and creates a ten-section structured report for each capture.
-The report is screen-only and exists only in page memory.
-
-For the condition demo, the first ObservationV3 can be explicitly accepted
-from its report screen as the one in-memory reference.
-`@phenometrix/trajectory-core` then compares the second ObservationV3 with that
-reference only when subject, condition profile,
-asserted side, protocol, capture adapter, metric context/unit/algorithm, and
-processor provenance are compatible. Each of the six rows terminates as
-`measured`, `withheld`, or `incompatible`. Only a measured row exposes both
-source values and the raw native-unit `current - reference` difference;
-withheld and incompatible rows expose no delta.
-
-`@phenometrix/evidence-core` projects that comparison into a deterministic
-six-row card with fixed profile labels, source traces, quality counts, and a
-page-local pending/accepted/dismissed state. It does not generate narrative or
-assign clinical meaning.
-
-## Capability status
-
-1. **Ambient Capture:** implemented as the local v3 prototype described above;
-   the same generic camera-and-microphone workflow produces each live
-   ObservationV3.
-2. **Personal Trajectory:** implemented only as one deterministic comparison of
-   an explicitly accepted live reference with a later live observation in the
-   same page. There is no importer, durable participant identity, baseline,
-   trend, or multi-visit history.
-3. **Clinician Evidence Card:** implemented as the deterministic 27-outcome
-   session report plus the fixed six-row condition card. Accept/dismiss is a
-   local research-demo action, not authenticated clinician approval or a
-   durable review record.
-
-The superseded v2 `trajectory-core` implementation was removed in July 2026.
-The current package is a new ObservationV3-native, strictly compatible
-previous-session comparator; it does not restore the old unordered history
-model.
-
-The restored `services/voice-inference` WavLM service is an optional,
-disabled-by-default research surface. The browser does not import or call it.
-
-## Privacy and safety boundary
-
-- Consent is required before device access.
-- Camera and microphone permissions are requested separately.
-- Raw media is not uploaded or written to storage.
-- PCM, spectral arrays, transcripts, embeddings, native landmarks, and native
-  video frames are excluded from ObservationV3 and report contracts.
-- Device tracks, workers, audio nodes, timers, derived frame buffers, and the
-  in-memory event journal are disposed on finish, discard (which is also the
-  in-session consent-withdrawal path), visibility loss, or reset.
-- Identity is not verified and speaker attribution is explicitly unverified.
-- `Not measurable` is a valid terminal result; missing evidence is never
-  imputed as a measurement.
-
-## Deliberately not implemented
-
-- durable or more-than-one-reference history, baseline, trend, or import;
-- retained evidence snippets or clips;
-- narrative generation or authenticated/durable clinician review;
-- authentication, PHI workflows, EHR/FHIR integration, or export;
-- diagnosis, progression classification, risk prediction, or treatment advice;
-- analytical or clinical validation against a reference standard;
-- clinical validation of any protocol pack, including facial palsy;
-- voluntary-movement grading (House-Brackmann / Sunnybrook equivalence).
-
-## Refused capability
-
-Acute stroke screening is a standing product boundary, not a gap. Forehead
-sparing—the discriminator between central and peripheral facial weakness—is not
-measurable here, and an ambient capture that abstains on low quality is the
-wrong shape for an emergency instrument. See `docs/safety.md`.
-
-## First condition-oriented measurement substrate
-
-The runnable condition-oriented profile is the **Unilateral Facial Movement
-Research Demo** for an adult who asserts a previously established unilateral
-peripheral facial palsy. It uses spontaneous expression captured ambiently
-rather than elicited movement. The affected side is participant-asserted and
-unverified; the application never infers it.
-
-The profile selects exactly six face metrics from the generic, nonclinical
-`ambient-local-observation` pack, in a fixed order: resting mouth difference,
-resting eye-aperture difference, subject-left and subject-right lid closure
-completeness, spontaneous excursion difference, and experimental oculo-oral
-coupling difference. The last label is deliberately safer than the internal
-metric code: the UI does not claim that synkinesis was detected.
-
-This is a versioned nonclinical demo profile, not a clinical protocol pack. It
-has no reference standard, validated claim, repeatability estimate, minimum
-detectable change, governed clinical workflow, or scale equivalence. Raw
-current-minus-reference differences cannot be interpreted as improvement,
-worsening, recovery, progression, severity, or clinically meaningful change.
-
-Full design, including the new primitives required, the contract implications,
-and why equivalence to House-Brackmann and Sunnybrook is explicitly not
-claimed: `docs/superpowers/specs/2026-07-24-facial-palsy-protocol-pack-design.md`.
-
-## Run locally
-
-Requirements: Node.js 22.12+ on the Node 22 line (or Node 24+), pnpm 9.12.3,
-and current Chrome on macOS.
+Use Node 22.12+ on the Node 22 line (or Node 24+), pnpm 9.12.3, and current
+Chrome on macOS for the browser prototype.
 
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open `http://127.0.0.1:4173`. Camera and microphone access requires localhost
-or HTTPS. Select the participant-asserted affected side, complete and accept a
-first live session as the in-memory reference, then complete the second live
-session to see the condition card. Consent is collected again for the second
-capture. `Ctrl-C` stops the Vite development server.
-
-The live implementation currently targets current Chrome on macOS with working
-camera and microphone hardware, but the two-capture condition flow has not yet
-completed the named-hardware manual acceptance checklist. Permission policy,
-secure-context rules, AudioWorklet, worker, `OffscreenCanvas`,
-WebGL/hardware-acceleration, and device behavior can vary across environments;
-no real-hardware support statement is made yet.
-
-The optional WavLM research service has separate instructions in
-`services/voice-inference/README.md`; starting it does not alter browser
-behavior.
-
-## Validate
-
-Run every automated gate from the repository root with `pnpm verify`. This
-requires the Node/pnpm environment above, Chrome, and uv with Python 3.11 for
-the optional voice service's isolated tests. Individual gates remain available:
+The legacy demo runs at `http://127.0.0.1:4173`. Start the synthetic evidence
+preview with `pnpm dev:evidence` at `http://127.0.0.1:4175`. The durable synthetic
+service requires PostgreSQL; follow the [integration runbook](docs/encounter-integration.md)
+and [service README](apps/encounter-service/README.md) before `pnpm dev:encounter`.
+Do not use real patient data in synthetic development.
 
 ```bash
-pnpm run check
-pnpm test
-pnpm test:browser
-pnpm demo:smoke
-uv sync --project services/voice-inference --extra dev --locked
-uv run --project services/voice-inference --extra dev python -m pytest services/voice-inference/tests
+pnpm verify
+pnpm test:postgres
+git diff --check
 ```
 
-`pnpm test` runs structure and static-asset checks, the protocol-pack digest
-check, all unit tests, TypeScript typechecking, and the production build.
-Browser smoke tests and the optional Python service remain separate CI jobs.
-
-The pack digest is regenerated with `pnpm --filter
-@phenometrix/capture-web exec tsx ../../scripts/protocol-digest.mjs --write`
-and enforced by `--check` in the repository gate. Changing any pack
-content — including the consent wording, whose SHA is a field inside the pack —
-requires regenerating it and bumping the pack version, deliberately.
+`pnpm verify` runs structure/digest checks, unit tests, TypeScript, production
+builds, browser suites, and isolated Python tests. It requires Chrome and
+uv/Python 3.11. PostgreSQL tests run separately against a configured test database.
+Mocked media tests do not establish real-device or platform support. The optional
+[WavLM service](services/voice-inference/README.md) remains disabled by default
+and disconnected from browser capture.
 
 ## Repository map
 
-```text
-apps/capture-web/          static ambient browser application
-apps/clinician-review/     documentation-only future surface
-packages/ambient-core/     deterministic face and voice extractors
-packages/condition-profiles/ versioned unilateral movement demo profile
-packages/contracts/        v3, comparison, card, and provenance schemas
-packages/evidence-core/    report and deterministic condition-card builders
-packages/event-log/        session-only workflow journal
-packages/trajectory-core/  strict two-observation comparison engine
-services/voice-inference/  optional disconnected WavLM research service
-agents/                    exactly three capability boundary documents
-protocols/ and examples/   archival guided/v2 demo artifacts
-```
-
-See `docs/architecture.md`, `docs/safety.md`, and `docs/validation.md` before
-changing an active boundary.
+| Path | Responsibility |
+| --- | --- |
+| `apps/capture-web` | Legacy local demo and embedded host capture entry points |
+| `apps/encounter-service` | Scoped API, PostgreSQL, workers, FHIR boundaries |
+| `apps/clinician-review` | Embeddable evidence panel and synthetic preview |
+| `packages/ambient-core` | Deterministic face and voice extraction |
+| `packages/contracts` | Legacy v3 and separate durable contracts |
+| `packages/condition-profiles` | Facial movement demo and HFS research protocol |
+| `packages/encounter-capture` | Capture controller, ambient bridge, RTMS reference |
+| `packages/encounter-client` | Existing-host scoped API client |
+| `packages/trajectory-core` | Legacy pair comparison and multi-visit analysis |
+| `packages/evidence-core` | Source-preserving reports and evidence projections |
+| `packages/research-governance` | Optional research-media boundary |
+| `packages/event-log` | Legacy session-only journal |
+| `services/voice-inference` | Optional disconnected WavLM service |
+| `protocols`, `examples` | Archival guided/v2 artifacts |

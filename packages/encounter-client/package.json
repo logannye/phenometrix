@@ -1,0 +1,7 @@
+{
+  "name": "@phenometrix/encounter-client", "version": "0.1.0", "private": true, "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc --noEmit", "test:unit": "vitest run" },
+  "dependencies": { "@phenometrix/contracts": "workspace:*" },
+  "devDependencies": { "typescript": "5.6.3", "vitest": "4.1.11" }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@phenometrix/encounter-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "worker": "tsx src/worker-main.ts",
+    "migrate": "tsx src/migrate.ts",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run --exclude '**/*.postgres.test.ts'",
+    "test:postgres": "vitest run src/repository.postgres.test.ts"
+  },
+  "dependencies": {
+    "@phenometrix/contracts": "workspace:*",
+    "@phenometrix/condition-profiles": "workspace:*",
+    "@phenometrix/trajectory-core": "workspace:*",
+    "jose": "6.1.0",
+    "pg": "8.16.3",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.0",
+    "@types/pg": "8.15.5",
+    "tsx": "4.20.6",
+    "typescript": "5.6.3",
+    "vitest": "4.1.11"
+  }
+}
