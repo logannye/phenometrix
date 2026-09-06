@@ -50,3 +50,31 @@ jobs:
           python-version: "3.11"
       - run: uv sync --project services/voice-inference --extra dev --locked
       - run: uv run --project services/voice-inference --extra dev --locked python -m pytest services/voice-inference/tests
+
+  encounter-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: phenometrix
+          POSTGRES_PASSWORD: synthetic-ci
+          POSTGRES_DB: phenometrix_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U phenometrix -d phenometrix_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://phenometrix:synthetic-ci@127.0.0.1:5432/phenometrix_test
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:postgres

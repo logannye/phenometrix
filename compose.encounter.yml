@@ -1,0 +1,19 @@
+# Local synthetic development only. Production uses a governed managed database.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: phenometrix
+      POSTGRES_PASSWORD: synthetic-development
+      POSTGRES_DB: phenometrix_synthetic
+    ports:
+      - "127.0.0.1:55439:5432"
+    volumes:
+      - encounter_synthetic_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U phenometrix -d phenometrix_synthetic"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+volumes:
+  encounter_synthetic_pg:

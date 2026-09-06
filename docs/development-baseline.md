@@ -1,104 +1,107 @@
 # Development baseline — 2026-09-06
 
-This is the starting point for the next PhenoMetrix development cycle. It
-records implemented software separately from remaining product and validation
-work. The canonical checkout is `/Users/logannye/Projects/phenometrix`; the
-repository is [logannye/phenometrix](https://github.com/logannye/phenometrix).
+The canonical checkout is `/Users/logannye/Projects/phenometrix`; the repository
+is [logannye/phenometrix](https://github.com/logannye/phenometrix).
+This document distinguishes implemented software from deployment and validation
+work. It does not imply that the current working branch has been merged.
+See the [integration runbook](encounter-integration.md) for exact setup.
 
-## Integrated scope
+## Implemented starting point
 
-The browser now connects all three product capabilities in one local research
-demonstration:
+The three product capabilities now have two implementations:
 
-1. **Ambient Capture:** independently consented camera/microphone setup,
-   calibration, local workers, bounded capture, 27 terminal metric outcomes,
-   strict ObservationV3 provenance, and a ten-section report after media disposal.
-2. **Personal Trajectory:** explicit acceptance of the first observation and
-   comparison with a second live observation for the same page-local subject.
-   Exactly six facial metrics terminate as measured, withheld, or incompatible.
-3. **Clinician Evidence Card:** a deterministic comparison card with exact
-   source traces and page-local accept/dismiss. This is a research review action.
+| Capability | Retained local demo | New encounter integration |
+| --- | --- | --- |
+| Ambient Capture | Explicit device setup, two independently consented captures, 27-outcome ObservationV3 reports | Authorized branch on existing patient tracks; modality-specific consent; rotating bounded derived observations |
+| Personal Trajectory | One accepted page-memory reference and six compatible facial comparisons | Immutable multi-visit snapshots, versioned treatment timelines, deterministic baseline/delta and phase coverage |
+| Clinician Evidence Card | Page-local report/card and unauthenticated accept/dismiss | Embeddable source-linked evidence panel, scoped service reads, exact-run durable review API |
 
-The integration includes the previously uncommitted condition profile,
-comparison/card contracts, trajectory package, UI wiring, measurement quality
-and provenance fixes, independent lane failure/cleanup handling, dependency
-lockfile updates, and regression coverage. Voice remains part of each generic
-capture but does not influence the condition comparison.
+The new modular TypeScript service and worker use PostgreSQL, append-only source
+and evidence history, idempotency, revision checks, transactional jobs, and worker
+leases. The service client reuses the host's scoped authentication. FHIR
+normalization and configured-source sync preserve source status, knowledge time,
+clinical date precision, corrections, and dose units. These are implemented
+integration boundaries; no clinical EHR or Zoom installation is provisioned.
 
-The optional WavLM service is isolated, disabled by default, and unused by the
-browser. The active path has no LLM calls, transcript, server, durable storage,
-or export. Media, derived frames, and results follow the lifecycle in the
-[architecture](architecture.md) and [safety boundary](safety.md).
+The first HFS research protocol selects four existing engineering metrics:
+left/right eye aperture and left/right lid closure completeness. It does not
+measure spasm burden or establish clinical treatment response. Compatible
+pretreatment observations can establish an encounter-weighted baseline. Missing
+timing, incompatible sources, sparse phases, concurrent treatments, and prior
+cycles remain explicit. Fitted models and causal/clinical claims are disabled.
 
-## Versioned measurement identity
+The optional clip-governance package is separate and disabled by default.
+Storage, identity, audit, and retention adapters are required before use.
+The optional WavLM service remains isolated and unused by browser capture.
 
-| Component | Baseline identity |
+## Versioned identity
+
+| Component | Identity |
 | --- | --- |
-| Measurement pack | `ambient-local-observation` 3.4.0 |
-| Face algorithms | 1.1.0 |
-| Voice algorithms | 1.2.0 |
-| Condition profile | `unilateral-facial-movement-research-demo` 1.0.0 |
-| Observation contract | `phenometric.encounter-observation.v3` |
+| Generic measurement pack | `ambient-local-observation` 3.4.0 |
+| Face / voice algorithms | 1.1.0 / 1.2.0 |
+| Legacy condition profile | `unilateral-facial-movement-research-demo` 1.0.0 |
+| Legacy observation | `phenometric.encounter-observation.v3` (unchanged) |
+| New durable observation | `phenometric.durable-observation.v1` |
+| HFS protocol | `hfs-ambient-treatment-alignment-research` 1.0.0 |
+| Descriptive engine | `descriptive-treatment-alignment.1.0.0` |
 
-Protocol/profile content digests and static-asset hashes are checked by
-`pnpm run check`. The canonical digests live in source, not in this document.
-These identities describe measurement behavior and compatibility; none denotes
+Canonical digests live in source. Protocol, specification, snapshot, run, and
+processor identities control reproducibility and compatibility; none denotes
 clinical validation.
 
-## Repository reconciliation
+## Reproduce verification
 
-The pre-integration main revision was `22caba7` (PR #29). GitHub had no open
-pull requests or issues at review. The three remaining feature branch tips
-were already ancestors of main:
-
-| Historical branch | Last tip | Merged work |
-| --- | --- | --- |
-| `codex/visual-foundation-hardening` | `c5c7329` | PR #14 |
-| `codex/voice-foundation-hardening` | `87273c9` | PR #15 |
-| `codex/demo-ui-simplification` | `c3d6d62` | PRs #16–20 |
-
-Those commits are preserved in main's history. The new two-capture work was
-checkpointed as `113a14c` before baseline cleanup. Historical plans, guided/v2
-protocols, and examples remain explicitly archival; they are not active inputs.
-
-## Reproduce the automated checks
-
-Use Node 22.12+ on the Node 22 line (or Node 24+), pnpm 9.12.3, Chrome, and uv
-with Python 3.11. From the canonical checkout:
+Use Node 22.12+ on the Node 22 line (or Node 24+), pnpm 9.12.3, Chrome, and
+uv/Python 3.11. From the canonical checkout:
 
 ```bash
 pnpm install --frozen-lockfile
 uv sync --project services/voice-inference --extra dev --locked
 pnpm verify
+pnpm test:postgres
+git diff --check
 ```
 
-`pnpm verify` runs the structure and digest checks, workspace unit tests,
-TypeScript checks, production build, browser lifecycle suite, and isolated
-Python service tests. `pnpm test:voice` runs only the latter. Browser fixtures
-substitute media/worker APIs; Python tests use a deterministic fake adapter.
-These checks do not exercise real camera/microphone measurement or WavLM weights.
+`pnpm verify` includes structure/digest checks, workspace unit tests, TypeScript,
+production builds, both browser suites, and isolated Python service tests.
+PostgreSQL integration tests require an explicitly configured test database and
+run separately; see the [service README](../apps/encounter-service/README.md).
+Browser tests use simulated media/worker outputs, and Python tests use a fake
+adapter. They do not establish real-device measurements or WavLM performance.
 
-Verification on 2026-09-06 passed: 420 workspace unit tests, 12 browser lifecycle
-tests, 4 Python service tests, TypeScript, production build, and structure/
-digest/static-asset gates. Both pagehide cases were added after reproducing
-retained reference/report state in the previous handler. Frozen pnpm and uv
-installs passed, and `pnpm audit --audit-level=high` reported no known
-vulnerabilities. The local run used Node 24.3.0, pnpm 9.12.3, uv 0.11.2,
-Python 3.11.15, and macOS 26.2. This is an automated test environment record,
-not real-device acceptance. GitHub CI verifies the integrated branch separately.
+The encounter implementation passed **574 workspace tests, 17 Chrome browser
+tests, 4 Python tests, typechecking, production/embedded builds, and
+structure/digest checks** on 2026-09-06. Six additional integration tests passed
+against actual local PostgreSQL 16.14. The browser suite includes a real
+dedicated-worker calculation on synthetic derived voice frames and cancellation
+without device access. This validates software behavior, not clinical accuracy.
 
-## Remaining work and acceptance boundaries
+The earlier local-demo baseline had 420 workspace tests and 12 browser tests.
 
-| Work | Current boundary / completion evidence needed |
+## Remaining acceptance boundaries
+
+| Work | Required completion evidence |
 | --- | --- |
-| Real-device acceptance | Pending: named Mac/Chrome version, repeat sessions, anatomical laterality, adverse capture conditions, accessibility, and five-minute memory/performance checks in the [implementation plan](superpowers/plans/2026-08-21-unilateral-facial-palsy-prototype.md#8-manual-acceptance-and-gono-go). |
-| Measurement validity | No reference-standard accuracy, repeatability, measurement error, minimum detectable change, or clinical validation. Raw differences carry no health interpretation. |
-| Condition algorithm design | The generic pack's expression segmentation and resting baseline differ from the historical clinical design. Resolve the [recorded divergences](superpowers/specs/2026-07-24-facial-palsy-protocol-pack-design.md#12-current-generic-pack-divergences) with a versioned decision and validation data. |
-| Asset execution integrity | Hash checks establish delivery self-consistency; the manifest has no independent trust anchor and processors reload asset URLs. Trusted identity and binding of checked bytes to executed bytes remain deployment work. |
-| Camera-only consent/capture | The current generic contract includes camera and microphone. A face-only path needs its own explicit contract and consent design. |
-| Durable longitudinal product | Participant identity, retained derived observations, multi-visit history, robust baselines/trends, migrations, authorization, and retention governance are unbuilt. |
-| Clinical workflow/integration | Authenticated review, durable audit, narrative, export, EHR/FHIR and telehealth-platform integration are unbuilt. |
+| Host/Zoom integration | Installed and authorized platform integration, exact patient-track binding, actual transport/decode support, permission/lifecycle checks; RTMS metrics remain excluded by the HFS protocol |
+| Existing identity and clinical workflow | Trusted signed claims, patient enrollment and matching, consent lifecycle, host review integration, and institutional research authorization |
+| EHR connection | Provisioned credentials, source/terminology configuration, date/timezone reconciliation, and operational sync |
+| Real-device acceptance | Named Mac/Chrome and devices, source replacement and mute/unmute, background behavior, long-call resource bounds, calibrated timing, and anatomical laterality |
+| Measurement validity | Reference-standard agreement, repeatability, minimum detectable change, clinical association, subgroup performance, and prospective workflow utility |
+| Treatment-response validity | HFS reference outcomes, measurement sensitivity to symptoms and adverse effects, carryover/concurrent-treatment interpretation, and validation before any fitted curve |
+| Research clips | Production encrypted storage, exact observation authorization, separately consented retention/annotation, purge/backup policy, auditing, and governance approval |
+| Deployment integrity | Trusted manifests/executed assets, secrets and database operations, authorization configuration, retention, monitoring, and backup/recovery |
 
-The remaining items require deliberate scope or validation decisions. The next
-development cycle can choose among them without treating old branch names or
-historical design prose as outstanding implementation work.
+Legacy facial-palsy design divergences remain documented in the
+[historical design](superpowers/specs/2026-07-24-facial-palsy-protocol-pack-design.md#12-current-generic-pack-divergences).
+They do not grant clinical interpretation to the new HFS protocol.
+
+## Earlier repository reconciliation
+
+This implementation branch started at `8506ad5` (PR #30), after the earlier
+baseline reconciliation. Before that reconciliation, main was `22caba7` (PR #29). At that earlier review,
+GitHub had no open pull requests or issues; the historical visual-foundation,
+voice-foundation, and demo-UI feature tips were already ancestors of main.
+The two-capture work was checkpointed as `113a14c` before baseline cleanup.
+These are historical reconciliation facts, not a current remote-status check.
+Guided/v2 examples and plans remain archival.

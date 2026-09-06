@@ -32,3 +32,7 @@ data/
 *.mp4
 *.mov
 *.webm
+
+# Built host integration bundles
+**/dist-embedded/
+**/dist-library/

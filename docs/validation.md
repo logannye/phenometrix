@@ -6,10 +6,11 @@ fitness.
 
 ## Required commands
 
-From the repository root, `pnpm verify` runs all automated gates below. It
-includes the optional voice service's isolated tests and requires uv/Python in
-addition to the browser application's prerequisites. `pnpm demo:smoke` is an
-alias for the same browser suite and does not add a separate gate.
+From the repository root, `pnpm verify` runs workspace checks, both browser
+suites, and the optional voice service's isolated tests. It requires uv/Python
+in addition to the browser prerequisites. PostgreSQL integration tests run
+separately against a configured test database. `pnpm demo:smoke` runs only the
+legacy capture browser suite; it does not cover the new evidence preview.
 
 ```bash
 pnpm install --frozen-lockfile
@@ -17,27 +18,65 @@ pnpm run check
 pnpm test
 pnpm test:browser
 pnpm demo:smoke
+pnpm test:postgres
 uv sync --project services/voice-inference --extra dev --locked
 uv run --project services/voice-inference --extra dev python -m pytest services/voice-inference/tests
 git diff --check
 ```
 
-`pnpm run check` validates the active ambient-v3 and condition-demo structure,
-exactly three capability directories, absence of tracked media, required JSON
-manifests, the committed static-asset digests, and the content digest of the
-unilateral facial movement demo profile.
+`pnpm run check` validates repository structure, exactly three capability
+directories, absence of tracked media, required manifests, committed static-asset
+digests, and the legacy condition profile digest. New treatment-response
+protocol/specification and snapshot/run digests are also exercised by their
+unit tests and verified at runtime boundaries.
 
 `pnpm test` runs all workspace unit tests, TypeScript typechecks, and the
 production build. Browser and Python tests are separate because they have
 different runtimes and CI jobs.
 
-The checked-in Playwright lifecycle suite replaces media devices, audio
-processing, workers, and image capture with deterministic mocks. It verifies
-the browser workflow, teardown contract, and two-capture page-memory condition
-flow, but it does not prove real MediaPipe/AudioWorklet measurement or
-real-hardware repeatability.
+The legacy Playwright lifecycle suite replaces media devices, audio processing,
+workers, and image capture with deterministic mocks. The clinician panel suite
+uses fabricated evidence. Embedded-host unit/integration tests simulate media
+and worker boundaries while exercising real derived-data extraction and service
+composition. None proves live MediaPipe/AudioWorklet performance, real-hardware
+repeatability, or a deployed telehealth integration.
 
-## Automated coverage
+PostgreSQL tests use an actual configured database and isolated test schemas.
+They are distinct from the in-memory repository's unit tests. See the
+[service README](../apps/encounter-service/README.md) for database configuration
+and the [integration runbook](encounter-integration.md) for end-to-end setup.
+
+## Encounter architecture coverage
+
+- Strict durable observation, consent, binding, treatment/context revision,
+  protocol/specification, snapshot/run, and review contracts; scope and digest
+  validation; evidence-window and temporal consistency.
+- Deterministic history ordering/replay, explicit correction chains,
+  encounter-weighted baseline selection, exact source compatibility, unknown
+  treatment anchors, sparse coverage, concurrent treatment and cycle boundaries,
+  and explicit exclusions without fitted or causal estimates.
+- Face-only consent, exact participant attribution, stale worker suppression,
+  consent expiry/revocation, bounded raw ownership, rotating window rebasing,
+  persistence failure, and preservation of host-owned tracks/audio contexts.
+- RTMS handshake/participant transport fixtures and unsupported-media rejection;
+  these do not qualify RTMS measurements for the HFS protocol.
+- Signed scoped authorization, idempotent source writes, immutable histories,
+  revision conflicts, consent-sensitive evidence access, leased worker fencing,
+  failed jobs, and exact-run durable review.
+- FHIR patient/source checks, completed versus planned treatments, original
+  effective dates and trusted receipt time, date precision, dose units, version
+  ordering, corrections, and configured-source synchronization.
+- Evidence projection, calendar/treatment-time presentation, source/quality
+  inspection, stale refresh/abort handling, safe text rendering, and synthetic
+  preview behavior.
+- Disabled-by-default research-media governance, separate retention/annotation
+  permissions, scope/observation binding, expiry/withdrawal access, transient
+  buffers, audit, and deletion retry behavior with test adapters.
+
+These are engineering contract checks, not evidence that the four HFS metrics
+measure spasm frequency, burden, clinical severity, or treatment benefit.
+
+## Retained local-demo coverage
 
 - voice and face quality thresholds and abstention;
 - deterministic 7-voice/20-face metric registry ordering;
@@ -72,7 +111,30 @@ real-hardware repeatability.
 - optional WavLM health, CORS, request validation, and transient summary output
   using a deterministic fake adapter.
 
-## Manual hardware acceptance
+## Embedded-host acceptance still required
+
+Exercise the actual authorized telehealth host on named hardware before any
+live pilot; do not substitute the standalone demo for this acceptance:
+
+1. Confirm existing enrollment, signed scope, modality-specific consent, and
+   exact patient-track binding without a new capture screen or device prompt.
+2. Verify host tracks continue normally when analysis ends, fails, or withdraws.
+   Test track replacement, source-element replacement, mute/unmute, multiple
+   faces, permission loss, and suspended audio contexts.
+3. Verify hidden-page operation, long encounters, window rebasing, bounded
+   memory, calibrated clock uncertainty, missed intervals, and worker failure.
+4. Exercise remote consent changes, in-flight delivery cancellation, server
+   revision conflicts, disconnect/retry, worker crashes, and database restarts.
+5. Verify chart evidence belongs to the authenticated participant, suppresses
+   stale current results, preserves source quality/exclusions, and binds review
+   to the exact run. Missing evidence must not block routine care.
+6. Reconcile actual clinical source terminology, patient identity, dose units,
+   source corrections, timezone precision, concurrent therapies, and cycles.
+7. Keep RTMS sources excluded from the HFS protocol until platform acquisition
+   and metrics are qualified. Verify any separately enabled research-media
+   deployment's consent, storage, audit, deletion, and backup policies.
+
+## Legacy demo hardware acceptance
 
 In current Chrome on the target MacBook:
 
@@ -109,8 +171,9 @@ In current Chrome on the target MacBook:
 16. Accept a new reference, then hide or reload the page and confirm no
     comparison state remains.
 
-No live media or resulting health-related artifact may be saved or committed.
-Manual acceptance applies only to current Chrome on the target macOS hardware;
+Do not save or commit live media or health-related artifacts during local-demo
+acceptance. Separately authorized research retention uses its governed path,
+not this demo. Manual acceptance applies only to the tested Chrome/macOS setup;
 localhost/HTTPS permission behavior, actual camera and microphone devices,
 AudioWorklet, workers, `OffscreenCanvas`, WebGL, and hardware acceleration must
 all be exercised. Passing mocked browser tests does not extend support to other
@@ -118,8 +181,10 @@ browsers or hardware.
 
 ## Not validated
 
-No metric has reference-standard accuracy, repeatability, normative ranges,
-minimum detectable change, disease association, subgroup performance, or
-clinical workflow evidence. The two-capture arithmetic is technically tested,
-but its deltas have no established health meaning. Every active metric remains
-`clinicalValidation: "none"`, and the condition profile has no validated claim.
+No metric has established reference-standard accuracy, repeatability, normative
+ranges, minimum detectable change, disease association, subgroup performance,
+or clinical workflow utility. The two-capture and multi-visit arithmetic are
+technically tested; their deltas have no established health meaning. Every
+active metric and the HFS protocol remain clinically unvalidated. No study has
+established peak response, wearing off, causal efficacy, dosing guidance, or
+equivalence to an HFS or facial-palsy clinical scale for this implementation.

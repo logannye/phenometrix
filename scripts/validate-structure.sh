@@ -12,6 +12,7 @@ required_files=(
   "CONTRIBUTING.md"
   "docs/architecture.md"
   "docs/development-baseline.md"
+  "docs/encounter-integration.md"
   "docs/demo-experience.md"
   "docs/operator-guide.md"
   "docs/safety.md"
@@ -30,12 +31,22 @@ required_files=(
   "apps/capture-web/src/face-worker.ts"
   "apps/capture-web/src/main.ts"
   "apps/capture-web/src/static-assets.ts"
+  "apps/capture-web/src/integrated-encounter.ts"
+  "apps/capture-web/vite.embedded.config.ts"
+  "apps/clinician-review/src/panel.ts"
+  "apps/encounter-service/src/main.ts"
+  "apps/encounter-service/src/repository.postgres.ts"
+  "apps/encounter-service/src/fhir-sync.ts"
   "apps/capture-web/src/voice-worker.ts"
   "packages/ambient-core/src/ambient-face.ts"
   "packages/ambient-core/src/ambient-metrics.ts"
   "packages/ambient-core/src/ambient-registry.ts"
   "packages/ambient-core/src/ambient-voice.ts"
   "packages/contracts/src/ambient-protocol.ts"
+  "packages/contracts/src/treatment-response.ts"
+  "packages/encounter-capture/src/zoom-rtms.ts"
+  "packages/encounter-client/src/index.ts"
+  "packages/research-governance/src/index.ts"
   "packages/contracts/src/condition-demo.ts"
   "packages/contracts/src/condition-evidence-card.ts"
   "packages/contracts/src/observation-v3.ts"
@@ -86,6 +97,7 @@ node <<'NODE'
     "test:unit",
     "test:browser",
     "test:voice",
+    "test:postgres",
     "verify",
     "typecheck",
     "build",

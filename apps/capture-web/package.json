@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 4173 --strictPort",
-    "build": "node scripts/generate-asset-manifest.mjs && vite build",
+    "build": "node scripts/generate-asset-manifest.mjs && vite build && vite build --config vite.embedded.config.ts",
     "demo:smoke": "pnpm test:browser",
     "verify:assets": "node scripts/generate-asset-manifest.mjs --check",
     "test:unit": "vitest run",
@@ -19,6 +19,8 @@
     "@phenometrix/contracts": "workspace:*",
     "@phenometrix/evidence-core": "workspace:*",
     "@phenometrix/event-log": "workspace:*",
+    "@phenometrix/encounter-capture": "workspace:*",
+    "@phenometrix/encounter-client": "workspace:*",
     "@phenometrix/trajectory-core": "workspace:*",
     "zod": "4.4.3"
   },
@@ -29,5 +31,8 @@
     "typescript": "5.6.3",
     "vite": "8.1.5",
     "vitest": "4.1.11"
+  },
+  "exports": {
+    "./embedded": "./src/embedded.ts"
   }
 }

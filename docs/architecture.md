@@ -1,213 +1,185 @@
 # PhenoMetrix architecture
 
-This document describes the implemented ambient-v3 prototype and its narrow
-two-live-capture unilateral facial movement research demo. Long-term platform
-ideas in `telehealth-platform-vision.md` are not shipping behavior.
+The repository implements an ambient encounter integration substrate and retains
+the original local ObservationV3 demo. Both serve the same three capabilities:
+Ambient Capture, Personal Trajectory, and Clinician Evidence Card. Neither has
+clinical validation. See the [integration runbook](encounter-integration.md) for
+deployment interfaces and the [platform vision](telehealth-platform-vision.md)
+for longer-term scope.
 
-## Implemented flow
+## Existing-host encounter path
 
 ```mermaid
 flowchart LR
-    CONTEXT["Participant-asserted affected side"] --> C1["Consent + live capture 1"]
-    C1 --> O1["Dispose media; ObservationV3 + report"]
-    O1 --> ACCEPT["Explicitly accept in page memory"]
-    ACCEPT --> REF["One accepted reference ObservationV3"]
-    REF --> C2["Consent + live capture 2"]
-    C2 --> O2["Dispose media; ObservationV3 + report"]
-    REF --> COMPARE["Strict compatibility + six terminal rows"]
-    O2 --> COMPARE
-    COMPARE --> CARD["Deterministic condition evidence card"]
-    CARD --> REVIEW["Optional page-local accept or dismiss"]
-    REVIEW --> CLEAR["Reset, visibility loss, or reload clears all"]
+    HOST["Existing telehealth host: identity, consent, patient track"] --> CAPTURE["Capture controller + local workers"]
+    CAPTURE --> OBS["Bounded durable derived observation"]
+    OBS --> API["Scoped encounter API"]
+    FHIR["Configured clinical source"] --> API
+    API --> DB["PostgreSQL: immutable inputs + transactional jobs"]
+    DB --> WORKER["Leased worker"]
+    WORKER --> CORE["Immutable snapshot + protocol + specification"]
+    CORE --> RUN["Deterministic descriptive run"]
+    RUN --> DB
+    DB --> PANEL["Source-linked clinician panel"]
+    PANEL --> REVIEW["Scoped durable review"]
 ```
 
-Each `live capture` node contains the same independent camera-and-microphone
-permission, calibration, ambient observation, worker processing, and
-deterministic 27-metric extraction lifecycle described below. The microphone
-remains part of this generic lifecycle in both sessions even though the
-condition comparator selects only face metrics.
+A host supplies its authenticated session, encounter identity, participant track,
+and explicit modality-specific consent. `packages/encounter-client` retrieves
+the scoped capture context and submits derived observations. The browser entry
+points are `apps/capture-web/src/embedded-encounter.ts` and
+`integrated-encounter.ts`. They add no device prompt, patient login, questionnaire,
+or capture screen. Provider review is optional and does not block the visit.
 
-The browser is a static Vite application. It has no application server and
-makes no measurement, comparison, or report API request. Nothing in the
-diagram survives the current page.
+`packages/encounter-capture` owns capture authorization, participant attribution,
+modality availability, stale-result rejection, and resource bounds. Its local
+adapter attaches analysis to existing host media; it does not own the call's
+tracks. Page visibility does not define encounter end. Host lifecycle and
+authorization updates must be delivered to the controller.
 
-## Capture boundary
+The RTMS adapter is a reference transport with explicit participant selection,
+handshake checks, and unsupported-format abstention. It supplies no qualified
+RTMS measurement processor. The HFS protocol currently permits local pre-codec
+and synthetic sources, not platform patient tracks. A real Zoom installation,
+permissions, webhook trust, credentials, and acquisition validation remain
+external integration work.
 
-Audio and face processing are independent.
+## Media and measurement boundary
 
-The audio worklet transfers 20 ms PCM blocks to a worker. The worker maintains
-a bounded two-second ring and emits only content-free signal frames. PCM,
-waveforms, FFT bins, cepstra, MFCCs, formant tracks, transcripts,
-spectrograms, embeddings, voiceprints, and device identifiers cannot enter an
-observation.
+The existing audio worklet transfers 20 ms PCM blocks to a worker with a bounded
+ring. Face inference uses MediaPipe inside a worker. Native bitmaps, landmarks,
+transformation matrices, and raw PCM do not enter durable observations.
+Blendshapes are disabled. Only compact signal/geometry and quality primitives
+reach the deterministic extractor.
 
-The browser projects those compact frames into an eight-second, 800-sample
-live energy/pitch history. Canvas painting is animation-frame throttled and the
-history is cleared on finalization, discard, permission failure, reset, or page
-exit. It does not feed an extractor or report.
+The generic ambient registry contains 7 voice and 20 facial metrics. Extractors
+screen qualified voice segments and facial bins, returning measured or withheld
+outcomes with source windows and reasons. No transcript, embedding, or generated
+clinical narrative is involved.
 
-The face worker owns MediaPipe inference. Native bitmaps, 478 landmarks, and
-transformation matrices are scoped to worker processing and are not returned.
-Blendshape output is disabled. The application receives normalized geometry, pose, compact
-image-quality facts, cadence, processor provenance, face count, and track
-continuity only.
+The encounter bridge rotates at most five-minute derived windows throughout a
+longer visit. It rebases each window's analysis clock while retaining acquisition
+timestamps, disposes transient primitives, and does not invent measurements in
+gaps. Automatic facial calibration uses available qualified frames; voice
+requires a valid measured noise calibration or abstains. Capture source and
+processor versions are compatibility inputs. Device settings cannot establish
+hardware identity or acquisition validity by themselves.
 
-For presentation, the application transfers a canvas to the face worker once
-per session. The worker draws all 478 points, 2,556 tessellation edges, and the
-eye, iris, brow, lip, and oval contours. Landmark updates follow inference
-cadence while the presentation renderer may animate between updates.
-The surface clears for zero or multiple faces and on every teardown path; its
-pixels and landmark coordinates never enter application state.
+The host can supply a measured, expiring UTC clock calibration. Without one,
+capture records explicitly unqualified clock uncertainty and the HFS trajectory
+gate excludes those observations. A local browser clock is not silently treated
+as accurate treatment timing. Expired calibration or detected clock disruption
+stops analysis.
 
-## Calibration and lifecycle
+## Durable contracts and storage
 
-After consent, camera and microphone permissions resolve separately. Available
-lanes calibrate independently:
+The new contracts live in `packages/contracts/src/treatment-response.ts`.
+They are separate from the unchanged legacy v3 schema:
 
-- audio requires a two-second technically quiet interval;
-- face requires a 1.5-second stable, frontal, single-face interval; and
-- setup terminalizes after 15 seconds.
+- `DurableObservationV1`: scoped encounter, consent/binding references,
+  measurement protocol, capture provenance, bounded evidence windows, terminal
+  metrics, and explicit correction identity.
+- Consent and participant binding: scoped authorization with modality limits
+  and immutable envelope versions in the service.
+- Treatment/context revisions: effective clinical time distinct from recorded
+  knowledge time, date precision, source identity, product-specific dose units,
+  cycles, concurrent context, and retractions.
+- Protocol/specification: sealed intended use, metric definitions, source
+  compatibility, baseline/phase rules, and prohibited claims.
+- Snapshot/run/review: content-addressed analytical inputs/results and review
+  bound to an exact run and digest.
 
-At least one capture-capable lane is required to continue. A timed-out lane is
-shown as not measurable rather than blocking the other lane. The ambient
-observation can run for at most 300 seconds and can be ended or discarded at
-any time.
+`apps/encounter-service` uses PostgreSQL for episode metadata, append-only source
+envelopes, immutable evidence, and reviews. A source write and its analysis job
+commit in one transaction. Revision checks protect validation against concurrent
+changes. Worker leases and input-revision fences prevent stale publication.
+Expired leases can be reclaimed; repeated analysis failure becomes explicit
+failed state. Replaying an old run requires its source revision and explicit
+analysis time, including the authorization versions known then.
 
-Finish stops acquisition before creating the report. Discard, page hiding,
-page unload, and stale asynchronous media resolution all use the same
-generation-guarded disposal path. There is no separate in-session withdraw
-control; during an active session, consent withdrawal is performed through
-Discard, which routes to that same disposal path.
+Authentication verifies signed issuer/audience and tenant, study, participant,
+role, permission, and data-class claims. These claims must come from the host's
+trusted identity integration. They do not provide enrollment or identity proofing.
+Evidence retrieval checks current authorization and the actual source consents;
+an unrelated new grant does not reopen withdrawn evidence.
 
-## Measurement and abstention
+FHIR ingestion is a bounded configured-source integration, not a general EHR
+installation. Complete administrations and mapped procedures may establish
+treatments; orders remain planned and medication statements remain context.
+Source versions, receipt time, original dates, dose units, and unknown/day/exact
+precision are preserved. Terminology, timezone mapping, patient matching, remote
+credentials, and source provisioning require deployment configuration.
 
-`@phenometrix/ambient-core` owns the frozen 27-metric registry and deterministic
-extractors. Extractors receive derived frames only. They screen evidence into
-qualified voice segments or five-second face bins, then return one terminal
-outcome for every registered metric. Tier-1 frames and Tier-2 event records are
-transient extractor inputs/outputs in the current browser; they do not enter
-ObservationV3 and are not retained for later recomputation.
+## Descriptive treatment alignment
 
-Abstention is first-class. Withheld reasons are closed, metric-specific protocol
-values such as `no-usable-signal`, `insufficient-pitched-speech`,
-`insufficient-bins`, `insufficient-exposure`, and `multiple-faces`. The adapter
-must preserve these reasons exactly; an unregistered extractor reason is an
-invariant failure, not a generic fallback.
+`packages/trajectory-core/src/treatment-response.ts` is a pure deterministic
+analysis over a sealed immutable history snapshot, protocol, and specification.
+It does not query a database, call an LLM, infer an injection from conversation,
+or execute a clinical action.
 
-## Observation and evidence
+The first HFS research protocol selects existing left/right eye aperture and
+left/right lid closure completeness. It does not detect or quantify spasms.
+Its default engineering baseline uses at least two independent pretreatment
+encounters within 56 days and a median of encounter medians. Follow-up phase
+coverage extends to 112 days. These windows and thresholds are not validated
+clinical recommendations.
 
-`buildAmbientObservation()` creates a strict ObservationV3 containing:
+The engine enforces scope, consent, binding, exact source/context/version
+compatibility, quality, and chronology. It reports exclusions explicitly,
+preserves treatment-date uncertainty, flags concurrent context and prior-cycle
+carryover, and prevents index-cycle pooling across a subsequent injection.
+Unknown or unverified treatment anchors retain qualified calendar measurements
+without treatment-relative timing or baseline deltas.
 
-- anonymous session and subject references;
-- the exact protocol and consent document digests;
-- explicit, non-identity-verified source attribution;
-- processor and asset-integrity provenance;
-- exact source-window intervals;
-- measured values only when evidence and attribution qualify; and
-- one measured or withheld terminal outcome for all 27 metrics.
+Each run freezes its selected baseline and source versions. Corrections create a
+new run while the previous run remains immutable. Sparse coverage and unknown
+measurement error remain explicit. There are no fitted response curves,
+interpolation, causal efficacy estimates, or clinical significance thresholds.
 
-The in-memory workflow journal records consent, permission, calibration,
-capture, measurement/withholding, observation, and report lifecycle events.
-It is not a durable audit log.
+## Evidence and optional research media
 
-`@phenometrix/evidence-core` validates the observation against the canonical
-protocol registry and resolves evidence references before building the report.
-The report contains capture quality plus nine metric sections. It has no
-generated prose or clinical claim.
+`packages/evidence-core` creates a deterministic source-preserving projection.
+`apps/clinician-review` provides an embeddable panel with calendar/treatment-time
+views, native-unit points, exclusions, coverage, and per-point source/quality
+inspection. Loading, pending, missing, withdrawn, and failed states are explicit.
+The panel can use the existing-host service client. Durable clinician review
+binds the authenticated actor to the exact evidence run.
 
-## Condition profile and page-memory state
+`packages/research-governance` is a separate disabled-by-default clip boundary.
+It requires separate research consent, scope/observation authorization, encrypted
+storage, durable metadata, audit, retention limits, and deletion handling.
+Routine capture does not invoke it. No production blob store, patient clip flow,
+or institutional research approval is supplied. Access denial and physical
+deletion are distinct operations; deployment retention workers and backup policy
+must cover the latter.
 
-`@phenometrix/condition-profiles` owns the immutable, content-addressed
-`unilateral-facial-movement-research-demo` profile. Its intended use is a
-within-page repeatability demonstration for an adult participant who asserts a
-previously established unilateral peripheral facial palsy. The selected side
-is participant-asserted, unverified, and locked across the two captures. Face
-attribution still requires exactly one visible face and does not verify
-identity.
+## Legacy local demo retained
 
-The profile allowlists exactly six rows, in fixed display order:
+`pnpm dev` serves the original static browser demo. A participant asserts an
+affected side, consents to separate device permissions, completes calibration,
+and captures up to five minutes. Acquisition is disposed before the
+ObservationV3 report is displayed. The generic report contains 27 outcomes.
 
-1. Resting mouth difference (subject-left minus subject-right)
-2. Resting eye-aperture difference (subject-left minus subject-right)
-3. Subject-left lid closure completeness
-4. Subject-right lid closure completeness
-5. Spontaneous excursion difference (subject-left minus subject-right)
-6. Oculo-oral coupling difference
+The first live observation can be explicitly accepted in page memory, followed
+by an independently consented second capture. The legacy comparator checks
+subject, side, profile, protocol, metric, and processor compatibility before
+showing six fixed facial rows and raw current-minus-reference differences.
+Withheld/incompatible sources have no numeric delta. Accept/dismiss is local
+demo state, not authenticated clinical review.
 
-The last two are marked experimental. **Oculo-oral coupling difference** is the
-fixed safe label for an internal metric code that contains `synkinesis`; neither
-the profile nor the UI may turn it into a claim that synkinesis was detected.
+Reset, visibility loss, and page exit erase this demo's reference/report state.
+This teardown policy is intentionally different from the embedded host path,
+whose call continues when hidden. Legacy capture does not call the new service.
+The old v2 history implementation remains removed; guided examples are archival.
+The optional WavLM service is disconnected and disabled by default.
 
-`ConditionDemoController` owns only the current participant context, accepted
-reference ObservationV3, latest ObservationV3, and latest condition card in
-page memory. The operator must explicitly accept the first observation as the
-reference. Starting the follow-up preserves that reference and the asserted
-side while resetting capture state and requiring consent again. New-participant
-reset, document visibility loss, or page exit clears the condition state. The
-`pagehide` handler also clears idle/reference and report state independently of
-`visibilitychange`, so a cached-page restoration starts a new participant flow.
+## Deployment and validation limits
 
-## Strict previous-session comparison
+Static asset checks establish delivery self-consistency. A trusted manifest and
+binding checked bytes to executed assets still require deployment integrity work.
+Real-device timing, host-track identity, browser lifecycle, platform quality,
+and measurement repeatability require acceptance and validation beyond mocks.
 
-`@phenometrix/trajectory-core` is a synchronous, deterministic
-ObservationV3-native comparator. It accepts exactly one explicitly accepted
-reference, the current condition context, and one later current observation.
-It does not query history or select a baseline.
-
-Compatibility is fail-closed across subject reference, profile ID/version/
-digest, asserted side, protocol ID/version/digest, capture-adapter ID/version,
-chronology, metric presence, context, modality, native unit, algorithm version,
-and processor reference/runtime/version/asset/integrity provenance. Every
-allowlisted metric remains visible as one terminal `measured`, `withheld`, or
-`incompatible` row with ordered reason codes; no row is silently dropped.
-
-Only a compatible pair of measured outcomes produces a raw native-unit delta,
-defined exactly as `current - reference`. A withheld or incompatible row has a
-null delta. Its source objects are trace-only and deliberately cannot carry a
-measured numeric value. Analytical repeatability and minimum detectable change
-are fixed to `unknown`; no direction or clinical significance is inferred.
-
-`@phenometrix/evidence-core` copies those exact comparison rows into a
-deterministic six-row card and joins only fixed display metadata from the
-condition profile. The card contains derived quality counts/minima, fixed
-boundary and source disclosures, and a pending/accepted/dismissed page-local
-review value. It has no narrative field, persistence, or export.
-
-## Static assets
-
-The browser verifies a committed SHA-256 manifest for the face model, voice
-worklet, and MediaPipe WASM assets before device processing. Missing or changed
-assets cause the affected lane to fail closed.
-
-This currently verifies delivery-time self-consistency only: the manifest has
-no independent trust anchor, and the verified bytes are discarded before the
-processor loads the same URL again. Binding the executed bytes to a trusted
-digest remains a required integrity design before deployment.
-
-## Retained legacy boundaries
-
-The guided calibration interfaces remain for compile compatibility and research
-tests. They are disconnected from ObservationV3 and the live application.
-
-The old `@phenometrix/trajectory-core` implementation and the v2 observation,
-measurement, and event interfaces were removed on 2026-07-24. That package
-compared one session scalar against an unordered bag of priors, was built on
-superseded v2 contracts, and had no importers. The current package reuses the
-name but is a new strict two-ObservationV3 comparator. It does not restore v2
-history or persistence. Capture-provenance types shared with the former v2
-files (`AudioPipelineProvenance`, `VideoCaptureSettings`, and siblings) remain
-live.
-
-The Python WavLM sidecar is restored as an optional loopback research service.
-It is disabled by default, separately tested, and has no browser consumer.
-
-Top-level guided protocol and example files are archival. They are not runtime
-inputs and are not part of the active structure gate.
-
-## Deferred
-
-Persistence, more-than-one-reference history, baseline/trend estimation,
-retained snippets, narrative synthesis, authenticated or durable clinician
-review, export, PHI workflows, identity verification, analytical validation,
-and clinical validation are intentionally absent. The page-local accept/dismiss
-control is a research-demo state change, not governed clinical review.
+No analytical or clinical validation, clinically meaningful change threshold,
+scale equivalence, dose recommendation, emergency screening, or automated
+clinical action is implemented. See [validation.md](validation.md).
