@@ -13,6 +13,7 @@ create only fabricated participant records:
 ```sh
 PHENOMETRIX_MODE=synthetic \
 DATABASE_URL=postgresql://logannye@127.0.0.1:55439/phenometrix_test \
+ALLOWED_ORIGINS=http://127.0.0.1:4173,http://127.0.0.1:4175 \
 pnpm --filter @phenometrix/encounter-service dev
 ```
 
@@ -28,6 +29,11 @@ ID, only in explicit synthetic mode and only on loopback. Never put that token
 in a URL or persist it in source files. Use `Authorization: Bearer <token>` for
 all `/v1` requests. The in-memory repository is for isolated tests, not a
 fallback when PostgreSQL is unavailable.
+
+Configure `ALLOWED_ORIGINS` for the exact existing host origins. The example
+uses the local capture and chart development ports; replace or extend them for
+the actual embedding application. A service's default port-5173 origins do not
+authorize the port-4173/4175 applications automatically.
 
 ## Host API
 

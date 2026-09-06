@@ -1,9 +1,29 @@
 # Capture web application
 
-This is the static ambient-v3 browser application and the runnable
-two-live-capture unilateral facial movement research demo.
+This package supplies an embedded capture entry point for existing telehealth
+hosts and retains the static two-live-capture unilateral facial movement
+research demo. The two paths have different lifecycle and persistence boundaries.
 
-## Runtime responsibilities
+## Embedded encounter entry
+
+Import `startIntegratedEncounter` from `@phenometrix/capture-web/embedded` to
+attach to an existing authorized patient stream. The host supplies its signed
+encounter context, verified participant binding, applicable consent, and
+lifecycle events. This path adds no device request, capture control, calibration
+screen, exercise, or mandatory review.
+
+Face and voice workers process transient inputs, and a dedicated finalization
+worker emits bounded durable observations through the encounter-service client.
+Five-minute windows rotate automatically. Page visibility does not reset the
+encounter; termination, withdrawal, source ambiguity and host resource pressure
+govern capture. The host retains ownership of its media tracks and audio context.
+
+`pnpm --filter @phenometrix/capture-web build` builds the legacy demo in `dist`
+and the embedded module, workers and static assets in `dist-embedded`. The
+[integration runbook](../../docs/encounter-integration.md) describes host wiring,
+database/service setup, acquisition qualification and remaining deployment gates.
+
+## Legacy demo responsibilities
 
 - record explicit session-local consent;
 - request microphone and camera independently;
@@ -29,7 +49,7 @@ verified. The microphone remains active as an independent generic ambient lane
 in both captures, so each full report can still contain voice outcomes; the
 condition card allowlists exactly six face metrics and does not compare voice.
 
-The application has no server route, API key, LLM, persistence layer, export,
+The legacy demo has no server route, API key, LLM, persistence layer, export,
 guided task mode, or synthetic production capture mode. The accepted
 reference, latest observation, comparison, card, and card review exist only in
 JavaScript memory for the current page. **New participant · discard all**,
@@ -79,7 +99,7 @@ pnpm --filter @phenometrix/capture-web build
 The Playwright suite injects media and worker mocks with `page.addInitScript`.
 Those fixtures are not compiled into the production application.
 
-In development, open `http://127.0.0.1:4173/` in current Chrome on macOS. The
+For the legacy demo, open `http://127.0.0.1:4173/` in current Chrome on macOS. The
 browser UI owns consent, capture start, end/discard, reference acceptance,
 page-local card review, and reset. Camera and microphone access requires
 localhost or HTTPS and real device permission. Other browsers, operating

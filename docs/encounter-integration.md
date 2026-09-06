@@ -43,9 +43,10 @@ From the repository root:
 
 ```sh
 pnpm install --frozen-lockfile
-docker compose -f compose.encounter.yml up -d
+docker compose -f compose.encounter.yml up -d --wait
 PHENOMETRIX_MODE=synthetic \
 DATABASE_URL=postgresql://phenometrix:synthetic-development@127.0.0.1:55439/phenometrix_synthetic \
+ALLOWED_ORIGINS=http://127.0.0.1:4173,http://127.0.0.1:4175 \
 pnpm dev:encounter
 ```
 
@@ -55,6 +56,10 @@ short-lived synthetic token; it is unavailable in live mode. Source records,
 jobs and reviews survive restarts. Development signing keys intentionally do
 not. A local PostgreSQL 16 installation can replace Docker using a database
 explicitly named `test`, `synthetic`, or `dev`.
+
+`ALLOWED_ORIGINS` must match the exact browser origins of the actual embedding
+hosts, including scheme and port. The example permits the two local development
+origins; add the local host application's origin if it uses another port.
 
 In another terminal, `pnpm dev:evidence` opens the fabricated chart preview at
 `http://127.0.0.1:4175`. The preview has no camera, microphone, patient data, or
@@ -165,7 +170,10 @@ and the [RTMS event schema](https://developers.zoom.us/docs/api/rtms/events/).
 ## Clinical records and response analysis
 
 Deployment-configured code mappings import actual administrations/procedures,
-prescriptions, medication statements and encounters. Actual treatment remains
+prescriptions and medication statements. The sync connector also fetches
+Encounter resources, but the current normalizer excludes them as unsupported;
+appointment and participant binding comes from the existing host integration.
+Actual treatment remains
 distinct from orders and reported use. Unknown dose, formulation, sites,
 laterality and timing remain unknown; no cross-product unit conversion occurs.
 The importer preserves source version, content hash, original timing and
@@ -183,9 +191,11 @@ resting eye aperture and lid closure completeness. It does not implement an
 HFS spasm classifier, weakness diagnosis or clinical severity score. Independent
 clinician annotations remain separate from ambient measurements.
 
-References are selected by versioned protocol rules. A single eligible visit
-is labeled as a single reference; baseline support counts independent
-encounters, not five-minute windows. Pre-cycle references retain prior exposure
+References are selected by versioned protocol rules. The default HFS protocol
+requires at least two eligible observations from two separate baseline encounters;
+one visit remains descriptive-only. Protocols permitting one reference label it
+as a single reference. Baseline support counts independent encounters, not
+five-minute windows. Pre-cycle references retain prior exposure
 uncertainty. Unknown or unverified treatment timing leaves calendar observations
 visible without treatment alignment. Missing visits produce gaps. No fitted
 curve, onset, recurrence, durability or forecast is enabled, and a difference
