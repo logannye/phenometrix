@@ -18,6 +18,14 @@ Five-minute windows rotate automatically. Page visibility does not reset the
 encounter; termination, withdrawal, source ambiguity and host resource pressure
 govern capture. The host retains ownership of its media tracks and audio context.
 
+The integrated entry automatically obtains and renews service-backed clock
+estimates. Live accuracy requires an external monitored UTC attestation; missing
+or expired evidence never silently qualifies treatment timing. Voice readiness
+can screen natural acoustic intervals without a calibration prompt, with
+explicit engineering-only provenance. Continuity changes close prior evidence
+before resetting calibration. Exhausted uploads stop the measurement branch;
+withdrawal cancels pending delivery, including after normal encounter end.
+
 `pnpm --filter @phenometrix/capture-web build` builds the legacy demo in `dist`
 and the embedded module, workers and static assets in `dist-embedded`. The
 [integration runbook](../../docs/encounter-integration.md) describes host wiring,

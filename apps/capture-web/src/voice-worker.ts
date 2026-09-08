@@ -88,7 +88,10 @@ function diagnostics(): AudioStreamDiagnostics {
   };
 }
 
-function reset(epoch: number): void {
+function reset(epoch: number, nextNoiseFloorRms?: number): void {
+  // PCM uses a separate MessagePort. Updating the epoch and reference in one
+  // worker turn prevents a new-epoch frame from carrying the prior noise floor.
+  if (nextNoiseFloorRms !== undefined) noiseFloorRms = nextNoiseFloorRms;
   captureEpoch = epoch;
   ring?.clear();
   lastBlockSequence = 0;
@@ -334,6 +337,8 @@ function handleBlock(event: MessageEvent<unknown>): void {
 worker.addEventListener("message", (event: MessageEvent<VoiceWorkerRequest>) => {
   const message = event.data;
   if (message?.schemaVersion !== VOICE_WORKER_MESSAGE_VERSION) return;
+  if ((message.type === "initialize" || message.type === "reset") && message.noiseFloorRms !== undefined
+    && (!Number.isFinite(message.noiseFloorRms) || message.noiseFloorRms < 0.0001 || message.noiseFloorRms > 1)) return;
   if (message.type === "initialize") {
     port?.close();
     port = message.port;
@@ -347,7 +352,7 @@ worker.addEventListener("message", (event: MessageEvent<VoiceWorkerRequest>) => 
     ring = new BoundedPcmRingBuffer(
       Math.round(sampleRateHz * 2)
     );
-    reset(message.captureEpoch);
+    reset(message.captureEpoch, message.noiseFloorRms);
     port.addEventListener("message", handleBlock);
     port.start();
     post({
@@ -372,7 +377,7 @@ worker.addEventListener("message", (event: MessageEvent<VoiceWorkerRequest>) => 
   }
   if (message.type === "reset") {
     taskContext = message.taskContext;
-    reset(message.captureEpoch);
+    reset(message.captureEpoch, message.noiseFloorRms);
     return;
   }
   if (message.type === "dispose") {

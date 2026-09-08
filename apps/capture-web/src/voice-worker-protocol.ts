@@ -39,6 +39,8 @@ export type VoiceWorkerRequest =
       audioContextOriginSeconds: number;
       captureSettings: AudioCaptureSettings;
       taskContext: VoiceTaskContext;
+      /** Applied atomically before this epoch can process PCM. */
+      noiseFloorRms?: number;
     }
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
@@ -57,6 +59,8 @@ export type VoiceWorkerRequest =
       type: "reset";
       captureEpoch: number;
       taskContext: VoiceTaskContext;
+      /** Applied in the same worker turn as the epoch change. */
+      noiseFloorRms?: number;
     }
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;

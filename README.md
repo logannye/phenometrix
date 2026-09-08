@@ -41,8 +41,12 @@ capture. Host tracks retain their existing owner. `startIntegratedEncounter()`
 connects capture to the scoped service client; hosts must supply their actual
 authenticated encounter integration.
 
-Treatment-time qualification also requires a measured host clock calibration;
-the default timing uncertainty is explicitly unqualified.
+The integrated entry point automatically probes the authenticated service and
+renews a bounded UTC estimate before it expires. Live accuracy requires a fresh
+attestation from the deployment's clock monitor; missing evidence remains
+unqualified. Voice calibration can use screened natural listening periods,
+without a patient prompt. This passive estimator is engineering-only and still
+requires real-device and clinical qualification.
 
 The service implements signed tenant/study/participant authorization, explicit
 grants and bindings, idempotent ingestion, append-only corrections, transactional

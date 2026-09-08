@@ -3,6 +3,9 @@ import { ZodError } from "zod";
 import type { Authenticate } from "./auth.js";
 import { ServiceError,invariant } from "./errors.js";
 import type { EncounterService } from "./service.js";
+import { EncounterClockSampleV1Schema } from "@phenometrix/contracts";
+import type { EncounterClockSourceProvider } from "./clock-source.js";
+import { withinDeadline } from "./deadline.js";
 
 async function readJson(request:IncomingMessage):Promise<unknown> {
   invariant(request.headers["content-type"]?.split(";")[0]==="application/json",415,"json-required","Only JSON derived records are accepted; raw media uploads are disabled.");
@@ -23,10 +26,18 @@ function respond(response:ServerResponse,status:number,payload:unknown){
 }
 export function createEncounterHttpServer(options:{
   service:EncounterService;authenticate:Authenticate;allowedOrigins:readonly string[];
+  clockSource?:EncounterClockSourceProvider;
+  clockSourceTimeoutMs?:number;
+  /** Test/deployment clock injection; production defaults to the host's Date.now. */
+  now?:()=>number;
   /** Exposed only by the explicit loopback synthetic launcher. */
   developmentSession?:()=>Promise<unknown>
 }){
+  const clockSourceTimeoutMs=options.clockSourceTimeoutMs??250;
+  const now=options.now??Date.now;
+  invariant(Number.isSafeInteger(clockSourceTimeoutMs)&&clockSourceTimeoutMs>0&&clockSourceTimeoutMs<=2000,500,"clock-source-timeout-config","Clock source timeout must be between 1 and 2000 milliseconds.");
   const server=createServer(async(request,response)=>{
+    const serverReceivedAtMs=now();
     try{
       const origin=request.headers.origin;
       if(origin){
@@ -47,6 +58,30 @@ export function createEncounterHttpServer(options:{
         respond(response,200,await options.developmentSession());return;
       }
       const principal=await options.authenticate(request.headers.authorization);
+      const clockProbe=/^\/v1\/episodes\/([A-Za-z0-9._:-]+)\/capture-context\/([A-Za-z0-9._:-]+)\/clock$/.exec(url.pathname);
+      if(clockProbe&&request.method==="GET"){
+        const initial=await options.service.captureContext(principal,clockProbe[1]!,clockProbe[2]!);
+        const signal=AbortSignal.timeout(clockSourceTimeoutMs);
+        let source:unknown=null;
+        if(options.clockSource){
+          try{source=await withinDeadline(options.clockSource({signal}),signal);}catch{source=null;}
+        }
+        // A monitor lookup must not let an expired session or revoked capture
+        // authorization survive an asynchronous dependency boundary.
+        const currentPrincipal=await options.authenticate(request.headers.authorization);
+        invariant(currentPrincipal.sub===principal.sub&&currentPrincipal.tenantId===principal.tenantId,403,"clock-session-changed","Clock probe identity changed during the request.");
+        const current=await options.service.captureContext(currentPrincipal,clockProbe[1]!,clockProbe[2]!);
+        invariant(current.scope.tenantId===initial.scope.tenantId&&current.scope.studyId===initial.scope.studyId&&current.scope.participantId===initial.scope.participantId,403,"scope-mismatch","Clock probe scope changed during the request.");
+        const serverSentAtMs=now();
+        const envelope={schemaVersion:"phenometric.encounter-clock-sample.v1",scope:current.scope,episodeId:clockProbe[1]!,encounterId:clockProbe[2]!,serverReceivedAtMs,serverSentAtMs};
+        const parsed=EncounterClockSampleV1Schema.safeParse({...envelope,source});
+        if(!parsed.success||!parsed.data.source||parsed.data.source.validUntilMs<=serverSentAtMs||parsed.data.source.validUntilMs-serverSentAtMs>60_000||
+          (parsed.data.source.kind==="synthetic"&&currentPrincipal.dataClass!=="synthetic"))source=null;
+        else source=parsed.data.source;
+        const sample=EncounterClockSampleV1Schema.safeParse({...envelope,source});
+        invariant(sample.success,503,"clock-sample-unavailable","The server clock could not produce a valid bounded sample.");
+        respond(response,200,sample.data);return;
+      }
       const captureContext=/^\/v1\/episodes\/([A-Za-z0-9._:-]+)\/capture-context\/([A-Za-z0-9._:-]+)$/.exec(url.pathname);
       if(captureContext && request.method==="GET"){
         respond(response,200,await options.service.captureContext(principal,captureContext[1]!,captureContext[2]!));return;

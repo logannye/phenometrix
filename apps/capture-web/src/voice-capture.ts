@@ -25,6 +25,7 @@ export interface VoiceCaptureStartOptions {
   captureSettings: AudioCaptureSettings;
   captureEpoch: number;
   taskContext: VoiceTaskContext;
+  noiseFloorRms?: number;
   workletUrl: string;
   startupSignal?: AbortSignal;
   callbacks: VoiceCaptureCallbacks;
@@ -33,7 +34,7 @@ export interface VoiceCaptureStartOptions {
 export interface VoiceCapturePipeline {
   setTask(taskContext: VoiceTaskContext): void;
   setNoiseFloor(noiseFloorRms: number): void;
-  reset(captureEpoch: number, taskContext: VoiceTaskContext): void;
+  reset(captureEpoch: number, taskContext: VoiceTaskContext, noiseFloorRms?: number): void;
   stop(): Promise<void>;
   readonly captureEpoch: number;
 }
@@ -50,6 +51,8 @@ function request(
 export async function startVoiceCapturePipeline(
   options: VoiceCaptureStartOptions
 ): Promise<VoiceCapturePipeline> {
+  if (options.noiseFloorRms !== undefined && (!Number.isFinite(options.noiseFloorRms)
+    || options.noiseFloorRms < 0.0001 || options.noiseFloorRms > 1)) throw new Error("invalid-noise-floor");
   if (!options.audioContext.audioWorklet) {
     throw new Error("audio-worklet-unavailable");
   }
@@ -187,7 +190,8 @@ export async function startVoiceCapturePipeline(
         sessionOriginPerformanceMs: performance.now(),
         audioContextOriginSeconds: options.audioContext.currentTime,
         captureSettings: options.captureSettings,
-        taskContext: options.taskContext
+        taskContext: options.taskContext,
+        ...(options.noiseFloorRms === undefined ? {} : { noiseFloorRms: options.noiseFloorRms })
       }),
       [activeChannel.port2]
     );
@@ -212,15 +216,18 @@ export async function startVoiceCapturePipeline(
           })
         );
       },
-      reset(nextEpoch, taskContext) {
+      reset(nextEpoch, taskContext, noiseFloorRms) {
         if (stopped) return;
+        if (noiseFloorRms !== undefined && (!Number.isFinite(noiseFloorRms)
+          || noiseFloorRms < 0.0001 || noiseFloorRms > 1)) throw new Error("invalid-noise-floor");
         captureEpoch = nextEpoch;
         activeWorklet.port.postMessage({
           type: "capture-epoch",
           captureEpoch
         });
         activeWorker.postMessage(
-          request({ type: "reset", captureEpoch, taskContext })
+          request({ type: "reset", captureEpoch, taskContext,
+            ...(noiseFloorRms === undefined ? {} : { noiseFloorRms }) })
         );
       },
       stop() {

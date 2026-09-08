@@ -10,7 +10,7 @@ import {
   type VersionedArtifactRefV1
 } from "@phenometrix/contracts";
 
-export const TREATMENT_RESPONSE_ENGINE_VERSION = "descriptive-treatment-alignment.1.0.0";
+export const TREATMENT_RESPONSE_ENGINE_VERSION = "descriptive-treatment-alignment.1.0.1";
 const DAY = 86_400_000;
 const lexical = (left: string, right: string): number => left < right ? -1 : left > right ? 1 : 0;
 const same = (left: unknown, right: unknown): boolean => canonicalTreatmentResponseJson(left) === canonicalTreatmentResponseJson(right);
@@ -119,7 +119,8 @@ function observationReasons(observation: DurableObservationV1, snapshot: Treatme
   }
   if (!protocol.permittedSourceKinds.includes(observation.capture.sourceKind)) reasons.push("source-kind-not-permitted");
   if (!same(observation.measurementProtocolRef, protocol.measurementProtocolRef)) reasons.push("measurement-protocol-mismatch");
-  if (observation.capture.clockUncertaintyMs > specification.maximumClockUncertaintyMs) reasons.push("clock-uncertain");
+  if (observation.capture.clockUncertaintyMs > specification.maximumClockUncertaintyMs ||
+    (observation.capture.clockSource?.kind === "synthetic" && observation.capture.sourceKind !== "synthetic")) reasons.push("clock-uncertain");
   return reasons;
 }
 

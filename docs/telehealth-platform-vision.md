@@ -1,13 +1,13 @@
 # PhenoMetrix platform vision
 
-> **Implementation status (2026-09-06):** this document describes the long-term
-> platform direction. The local research prototype now connects ambient-v3
-> capture, one explicitly accepted in-memory reference, a strict six-metric
-> comparison, and a deterministic evidence card with page-local accept/dismiss.
-> See [the development baseline](development-baseline.md), `README.md`, and
-> `docs/architecture.md` for implemented behavior. Durable history, baseline and
-> trend estimation, retained snippets, narrative drafting, authenticated clinical
-> review, export, PHI workflows, and clinical validation remain future work.
+> **Implementation status (2026-09-08):** this document describes the long-term
+> platform direction. The repository now includes an existing-host encounter
+> path, durable source history, descriptive treatment alignment and an embedded
+> evidence panel, alongside the original page-local demo. See
+> [the development baseline](development-baseline.md), `README.md`, and
+> `docs/architecture.md` for exact implemented behavior and qualification gaps.
+> Live Zoom/EHR deployment, clinical validation, fitted response curves and
+> narrative drafting remain future work.
 
 ## Purpose
 

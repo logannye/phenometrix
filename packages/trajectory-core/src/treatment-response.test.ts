@@ -124,6 +124,13 @@ describe("treatment-aligned descriptive analysis", () => {
     expect(run.rows[0].exclusions.find(exclusion => exclusion.observationId === "before-2")?.reasonCodes).toContain("binding-encounter-mismatch");
     expect(run.rows[0].exclusions.every(exclusion => exclusion.reasonCodes.includes("consent-not-applicable"))).toBe(true);
   });
+  it("never treats a synthetic clock as qualification for live acquisition", async () => {
+    const input = history();
+    input.observations[2].capture.clockSource = { sourceId: "fixture-clock", kind: "synthetic" };
+    const run = await analyzeTreatmentResponse(await setup(input));
+    expect(run.rows[0].points.map(point => point.observationId)).not.toContain("after");
+    expect(run.rows[0].exclusions.find(exclusion => exclusion.observationId === "after")?.reasonCodes).toContain("clock-uncertain");
+  });
 
   it("withdrawal blocks later analysis and late consent cannot authorize earlier capture", async () => {
     const withdrawn = history(); withdrawn.consents[0].withdrawnAt = date(8);

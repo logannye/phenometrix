@@ -98,7 +98,6 @@ const capture = await startIntegratedEncounter({
   stream: patient.localStream,
   video: patient.unmirroredSourceVideo,
   assetBaseUrl: configuration.phenometrixAssetBase,
-  clockCalibration: hostClock.currentEstimate,
   modalities: ["face"],
   subscribeLifecycle: listener => hostEvents.subscribe(appointment, listener)
 });
@@ -117,9 +116,38 @@ by this repository. The trusted host issues `ended`, `consent-withdrawn`,
 `binding-lost`, and `resource-pressure` lifecycle events. Existing call-quality
 signals suspend the measurement branch without restarting it during the visit.
 Withdrawal and ambiguous binding discard
-pending capture and cancel delivery. An external consent refresh runs every
-30 seconds; a host withdrawal event stops immediately. Requests have timeouts,
+pending capture and cancel delivery. Clock and external consent refresh runs at
+most 20 seconds apart, with earlier renewal for short-lived accuracy evidence;
+a host withdrawal event stops immediately, including during final delivery.
+Requests have timeouts,
 and the API checks current authorization transactionally on every write.
+
+The entry point automatically obtains three authenticated clock probes before
+resolving capture context. No provider or patient clock entry is required.
+For live timing qualification, configure the service's trusted UTC-monitor
+attestation described in the [service runbook](../apps/encounter-service/README.md).
+Transport timing alone does not prove UTC accuracy. The client includes the
+full round trip, attested server error, 2 ms timestamp resolution and 100 ppm
+local drift over at most 60 seconds in its engineering bound. These assumptions
+require deployment qualification. Expired or inconsistent renewal stops
+measurement; it never changes earlier timestamps or reduces their uncertainty.
+A missing initial attestation permits unqualified capture, with treatment
+alignment withheld. Synthetic clock sources cannot qualify live observations.
+
+Voice capture can use an existing host noise reference or wait automatically
+for the versioned passive noise screen. It requires natural acoustic contrast
+followed by sufficient stable low-amplitude evidence; it does not use the
+noise-dependent speech/SNR labels to bootstrap itself. Digital silence, unknown
+or enhanced audio settings, instability, and insufficient evidence withhold
+readiness. This remains an engineering heuristic, not validated nonspeech or
+speaker detection. No audio, transcript, or raw calibration buffer is persisted.
+Reference method and version are retained; clinical qualification remains open.
+
+Camera/audio continuity loss closes earlier evidence before resetting the
+affected calibration. Recalibration cannot qualify earlier frames. Transient
+upload failures retry the identical observation revision once with a 250 ms
+delay and 2.5-second attempt bounds; exhaustion stops measurement and remains
+visible to host telemetry. No retry prompt is shown to the appointment.
 
 `pnpm build` produces both the existing demo and `apps/capture-web/dist-embedded`
 with its workers and static assets, plus `apps/clinician-review/dist-library`.
@@ -185,6 +213,11 @@ reads from a configured HTTPS FHIR source. Invoke it from existing encounter or
 record-change events, not a provider button. Remote pagination cannot escape
 the configured origin/path. See the [service runbook](../apps/encounter-service/README.md)
 for terminology configuration, API contracts and authentication requirements.
+Concurrent observation writes no longer abort a valid clinical import on the
+first revision conflict: synchronization retries up to three import attempts
+with the same source event and already-fetched bundle. Each attempt rechecks
+authorization and source/patient binding. The host can supply its existing
+session revalidation callback; revoked access and changed binding are not retried.
 
 The current HFS protocol selects four existing engineering metrics: left/right
 resting eye aperture and lid closure completeness. It does not implement an
@@ -240,3 +273,8 @@ test database; CI runs it against PostgreSQL 16. It tests transactions,
 concurrency, immutable history, reconnect/recovery and stale-worker fencing.
 Synthetic host integration tests cover authenticated capture ingestion through
 analysis and chart evidence, with no manual capture, baseline or review step.
+The connected browser test runs the real controller, finalization worker,
+signed HTTP service, trajectory engine and chart panel across multiple windows,
+camera gaps, hidden-chart use, a transient upload failure, scope refusal and
+withdrawal. It fabricates media/model outputs and UTC monitoring; it establishes
+software behavior, not actual hardware throughput, call quality or clinical accuracy.

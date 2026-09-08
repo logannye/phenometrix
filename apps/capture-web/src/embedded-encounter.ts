@@ -1,7 +1,8 @@
 import { EmbeddedLocalAdapter, EncounterCaptureController, RotatingAmbientEncounter,
   type CaptureAuthorization, type CaptureEvent, type CaptureSourceContext, type CaptureSourceSink,
   type LocalCaptureBranch } from "@phenometrix/encounter-capture";
-import { calculateSha256Hex, type FaceCalibration, type DurableObservationV1 } from "@phenometrix/contracts";
+import { calculateSha256Hex, EncounterClockCalibrationV1Schema,
+  type EncounterClockCalibrationV1, type FaceCalibration, type DurableObservationV1 } from "@phenometrix/contracts";
 import type { AmbientFacialFrame } from "@phenometrix/ambient-core";
 import { startVoiceCapturePipeline, type VoiceCapturePipeline } from "./voice-capture.js";
 import { requestedAudioCaptureSettings } from "./voice-worker-protocol.js";
@@ -10,6 +11,7 @@ import { createVideoCaptureSettings, createVisualWorkerInitializeMessage, create
   FACE_LANDMARKER_MODEL_SHA256, type VisualWorkerResponse } from "./face-worker-protocol.js";
 import { LatestFrameScheduler, VideoFramePump } from "./visual-frame-pump.js";
 import { classifyFaceCalibration } from "./capture-calibration.js";
+import { PassiveNoiseCalibration, PASSIVE_NOISE_PROCESSOR_REF } from "./passive-noise-calibration.js";
 import { loadAndVerifyFaceStaticAssets, loadAndVerifyVoiceStaticAssets,
   type ResolvedFaceStaticAssets, type ResolvedVoiceStaticAssets } from "./static-assets.js";
 
@@ -26,8 +28,8 @@ export interface EmbeddedEncounterOptions {
   /** Application base containing its integrity manifest and immutable worker assets. */
   assetBaseUrl?: string;
   /** Host/server clock estimate. Validity timestamps use the local Date.now clock. */
-  clockCalibration?: { localMeasuredAtMs: number; localExpiresAtMs: number; utcOffsetMs: number; uncertaintyMs: number };
-  /** Measured by host calibration, if available. Absence abstains from voice metrics. */
+  clockCalibration?: EncounterClockCalibrationV1;
+  /** Existing measured host reference, if available; otherwise passive acoustic screening runs. */
   noiseCalibration?: { noiseFloorRms: number; durationMs: number };
   onEvent?(event: CaptureEvent): void;
   onObservation?(observation: DurableObservationV1, signal: AbortSignal): void | Promise<void>;
@@ -40,16 +42,22 @@ export interface EmbeddedEncounterOptions {
  */
 export function createEmbeddedEncounter(options: EmbeddedEncounterOptions) {
   const authorization = structuredClone(options.authorization);
-  const clock = options.clockCalibration ? { ...options.clockCalibration } : null;
-  if (clock && (Object.values(clock).some(v => !Number.isFinite(v)) || clock.uncertaintyMs < 0
-    || clock.localMeasuredAtMs > Date.now() || clock.localExpiresAtMs <= Date.now())) throw new Error("Invalid host clock calibration");
-  const now = () => Date.now() + (clock?.utcOffsetMs ?? 0);
+  let clock = options.clockCalibration ? validClock(options.clockCalibration) : null;
+  const initialLocalMs = Date.now(), initialPerformanceMs = performance.now();
+  const initialOffsetMs = clock?.utcOffsetMs ?? 0;
+  // A single monotonic map owns the encounter. Renewal never rewrites existing timestamps.
+  const localMonotonicNow = () => initialLocalMs + performance.now() - initialPerformanceMs;
+  const now = () => localMonotonicNow() + initialOffsetMs;
+  let clockUncertaintyMs = clock ? clock.uncertaintyMs + 2 : Number.MAX_SAFE_INTEGER;
+  let clockTimer: ReturnType<typeof setTimeout> | null = null;
+  const clockUsable = () => !clock || (Date.now() < clock.localExpiresAtMs
+    && Math.abs(Date.now() - localMonotonicNow()) <= Math.max(2, Math.min(1_000, clockUncertaintyMs)));
   let window: RotatingAmbientEncounter | null = null;
   let rotationTimer: ReturnType<typeof setInterval> | null = null;
+  let faceCalibrationReady = false, noiseCalibrationReady = false;
   const adapter = new EmbeddedLocalAdapter(async (context, sink, signal) => {
-    if (clock && Date.now() >= clock.localExpiresAtMs) throw new Error("Host clock calibration expired");
-    const clockTimer = clock ? setTimeout(() => controller.stop("transport-interrupted"),
-      Math.min(2_147_483_647, clock.localExpiresAtMs - Date.now())) : null;
+    if (!clockUsable()) throw new Error("Host clock calibration expired or discontinuous");
+    armClockExpiry();
     signal.addEventListener("abort", () => { if (clockTimer) clearTimeout(clockTimer); }, { once: true });
     const performanceOrigin = performance.now();
     const unixOrigin = now();
@@ -59,34 +67,67 @@ export function createEmbeddedEncounter(options: EmbeddedEncounterOptions) {
     if (signal.aborted) return { stop() {} };
     window = new RotatingAmbientEncounter({ authorization,
       observationId: options.observationId, revisionId: options.revisionId, startedAtMs: context.startedAtMs,
-      adapterId: "embedded-local", adapterVersion: "1.0.0", sourceKind: "patient-local-pre-codec",
+      adapterId: "embedded-local", adapterVersion: "1.1.0", sourceKind: "patient-local-pre-codec",
       deviceClass: "browser-host-track:hardware-attestation-unavailable",
       // Sentinel uncertainty explicitly prevents treatment-timing qualification without a host clock estimate.
-      clockUncertaintyMs: clock?.uncertaintyMs ?? Number.MAX_SAFE_INTEGER, acquisitionFingerprint,
+      clockUncertaintyMs, acquisitionFingerprint,
+      ...(clock ? { clockSource: { sourceId: clock.sourceId, kind: clock.sourceKind } } : {}),
       finalizeMetrics: finalizeMetricsInWorker,
       onObservation: options.onObservation,
       onFailure: () => controller.stop("processor-failed") });
     rotationTimer = setInterval(() => {
-      if ((clock && Date.now() >= clock.localExpiresAtMs) || Math.abs(now() - toUnix(performance.now())) > 1_000) {
+      if (!clockUsable() || Math.abs(now() - toUnix(performance.now())) > 1_000) {
         controller.stop("transport-interrupted"); return;
       }
       try { window?.advance(now()); } catch { controller.stop("processor-failed"); }
     }, 1_000);
     signal.addEventListener("abort", () => { if (rotationTimer) clearInterval(rotationTimer); }, { once: true });
-    if (validNoiseCalibration(options.noiseCalibration))
-      window.setCalibration({ noiseDurationMs: options.noiseCalibration.durationMs });
     return attachBrowserWorkers(options, assets, context, sink, signal, toUnix,
-      calibration => window?.setCalibration({ face: calibration }));
+      calibration => {
+        if (faceCalibrationReady && !calibration) window?.flushBoundary(now());
+        faceCalibrationReady = !!calibration;
+        window?.setCalibration({ face: calibration });
+      },
+      reference => {
+        if (noiseCalibrationReady && !reference) window?.flushBoundary(now());
+        noiseCalibrationReady = !!reference;
+        window?.setCalibration({ noiseDurationMs: reference?.durationMs ?? 0 });
+        window?.setCaptureReadiness({ audioNoiseCalibration: reference ? {
+          method: reference.processorRef === PASSIVE_NOISE_PROCESSOR_REF ? "passive-screened" : "host-supplied",
+          algorithmVersion: reference.processorRef, qualification: "engineering-only" } : null });
+      });
   });
   const controller = new EncounterCaptureController({ adapter, now, onEvent: event => {
     if (event.type === "stopped" && event.reason !== "encounter-inactive") window?.discard();
     options.onEvent?.(event);
   },
-    onDerived: derived => { window?.append(derived); } });
+    onDerived: derived => {
+      if (!clockUsable()) { controller.stop("transport-interrupted"); return; }
+      window?.append(derived);
+    } });
+  function armClockExpiry() {
+    if (clockTimer) clearTimeout(clockTimer);
+    clockTimer = clock ? setTimeout(() => controller.stop("transport-interrupted"), Math.max(0, clock.localExpiresAtMs - Date.now())) : null;
+  }
   return {
     controller,
     start: () => controller.start(authorization),
+    updateClockCalibration(next: EncounterClockCalibrationV1): boolean {
+      try {
+        const parsed = validClock(next);
+        if (!clock || !clockUsable() || controller.status !== "active"
+          || parsed.sourceId !== clock.sourceId || parsed.sourceKind !== clock.sourceKind
+          || parsed.localMeasuredAtMs <= clock.localMeasuredAtMs
+          || Math.abs(parsed.utcOffsetMs - clock.utcOffsetMs) > parsed.uncertaintyMs + clock.uncertaintyMs) throw new Error("Clock renewal changed its source or time bound");
+        clockUncertaintyMs = Math.max(clockUncertaintyMs,
+          Math.abs(parsed.utcOffsetMs - initialOffsetMs + Date.now() - localMonotonicNow()) + parsed.uncertaintyMs + 2);
+        window?.setCaptureReadiness({ clockUncertaintyMs, clockSource: { sourceId: parsed.sourceId, kind: parsed.sourceKind } });
+        clock = parsed; armClockExpiry();
+        return true;
+      } catch { controller.stop("transport-interrupted"); window?.discard(); return false; }
+    },
     async finish() {
+      if (!clockUsable()) controller.stop("transport-interrupted");
       controller.encounterEnded();
       if (!window) throw new Error("Encounter was not started");
       return window.finish(now());
@@ -99,7 +140,13 @@ export function createEmbeddedEncounter(options: EmbeddedEncounterOptions) {
 
 function validNoiseCalibration(value: EmbeddedEncounterOptions["noiseCalibration"]): value is NonNullable<EmbeddedEncounterOptions["noiseCalibration"]> {
   return !!value && Number.isFinite(value.durationMs) && value.durationMs >= 2_000
-    && Number.isFinite(value.noiseFloorRms) && value.noiseFloorRms > 0;
+    && Number.isFinite(value.noiseFloorRms) && value.noiseFloorRms >= 0.0001 && value.noiseFloorRms <= 1;
+}
+
+function validClock(value: EncounterClockCalibrationV1): EncounterClockCalibrationV1 {
+  const parsed = EncounterClockCalibrationV1Schema.parse(value);
+  if (parsed.localMeasuredAtMs > Date.now() || parsed.localExpiresAtMs <= Date.now()) throw new Error("Invalid host clock calibration");
+  return parsed;
 }
 
 interface VerifiedAssets { voice: ResolvedVoiceStaticAssets | null; face: ResolvedFaceStaticAssets | null }
@@ -121,6 +168,7 @@ async function fingerprintHostTracks(stream: MediaStream, modalities: readonly (
   // These are browser-provided settings, not proof of a consistent physical device.
   return calculateSha256Hex(JSON.stringify({
     scope,
+    audioReadiness: modalities.includes("voice") ? PASSIVE_NOISE_PROCESSOR_REF : null,
     assets: { voice: assets.voice?.manifest ?? null, face: assets.face?.manifest ?? null },
     audio: audio ? { device: audio.deviceId ?? "unknown", sampleRate: audio.sampleRate ?? "unknown",
       channelCount: audio.channelCount ?? "unknown", echoCancellation: audio.echoCancellation ?? "unknown",
@@ -132,7 +180,8 @@ async function fingerprintHostTracks(stream: MediaStream, modalities: readonly (
 
 async function attachBrowserWorkers(options: EmbeddedEncounterOptions, assets: VerifiedAssets, context: CaptureSourceContext,
   sink: CaptureSourceSink, signal: AbortSignal, toUnix: (time: number) => number,
-  onFaceCalibration: (calibration: FaceCalibration | null) => void): Promise<LocalCaptureBranch> {
+  onFaceCalibration: (calibration: FaceCalibration | null) => void,
+  onNoiseCalibration: (reference: { durationMs: number; processorRef: string } | null) => void): Promise<LocalCaptureBranch> {
   let stopped = false;
   let voice: VoiceCapturePipeline | null = null;
   let faceWorker: Worker | null = null;
@@ -143,6 +192,15 @@ async function attachBrowserWorkers(options: EmbeddedEncounterOptions, assets: V
   const faceEpoch = 1;
   let voiceEpoch = 1;
   let voiceSequence = 0;
+  const passiveNoise = new PassiveNoiseCalibration();
+  let noiseReference: { noiseFloorRms: number; durationMs: number; processorRef: string } | null =
+    context.modalities.includes("voice") && validNoiseCalibration(options.noiseCalibration)
+      ? { ...options.noiseCalibration, processorRef: "host-noise-reference@1.0.0" } : null;
+  let lastVoiceFrameAtMs: number | null = null;
+  const invalidateNoise = () => {
+    passiveNoise.reset(); noiseReference = null; lastVoiceFrameAtMs = null;
+    onNoiseCalibration(null); voice?.reset(++voiceEpoch, "ambient-speech-turn");
+  };
   const cleanup: (() => void)[] = [];
   const branch: LocalCaptureBranch = { stop() {
     if (stopped) return;
@@ -152,6 +210,7 @@ async function attachBrowserWorkers(options: EmbeddedEncounterOptions, assets: V
     try { faceWorker?.terminate(); } catch { /* Already unavailable. */ } faceWorker = null;
     // Existing voice pipeline disconnects/terminates within its 500 ms disposal bound.
     void voice?.stop().catch(() => {}); voice = null;
+    passiveNoise.reset(); noiseReference = null; lastVoiceFrameAtMs = null;
     faceCalibrationFrames = []; faceCalibration = null;
   } };
   signal.addEventListener("abort", () => branch.stop(), { once: true });
@@ -196,21 +255,36 @@ async function attachBrowserWorkers(options: EmbeddedEncounterOptions, assets: V
           { echoCancellation: settings.echoCancellation ?? true, noiseSuppression: settings.noiseSuppression ?? true,
             autoGainControl: settings.autoGainControl ?? true }),
         captureEpoch: voiceEpoch, taskContext: "ambient-speech-turn", workletUrl: assets.voice.voiceWorkletUrl,
+        ...(noiseReference ? { noiseFloorRms: noiseReference.noiseFloorRms } : {}),
         startupSignal: signal,
         callbacks: {
           onFrame(frame) {
             if (stopped || !verifySource("voice") || !enabled(audioTrack) || frame.captureEpoch !== voiceEpoch) return;
+            if ((lastVoiceFrameAtMs !== null && (frame.acquiredAtMs <= lastVoiceFrameAtMs || frame.acquiredAtMs - lastVoiceFrameAtMs > 40))
+              || frame.blockGapMs > 40 || frame.lostBlockFraction > 0) { invalidateNoise(); return; }
+            lastVoiceFrameAtMs = frame.acquiredAtMs;
+            if (!noiseReference) {
+              const reference = passiveNoise.observe(frame);
+              if (reference && voice) {
+                noiseReference = reference; onNoiseCalibration(reference);
+                // Old frames used the uncalibrated DSP floor. Never reinterpret or retain them.
+                voice.reset(++voiceEpoch, "ambient-speech-turn", reference.noiseFloorRms);
+                lastVoiceFrameAtMs = null;
+              }
+              return;
+            }
             const acquiredAtMs = toUnix(frame.acquiredAtMs);
             sink.derived({ encounterId: context.encounterId, platformParticipantId: context.platformParticipantId,
               attribution: "individual-track", modality: "voice", trackId: `local-audio-${voiceEpoch}`,
               sequence: ++voiceSequence, acquiredAtMs,
-              batch: { voiceFrames: [{ ...frame, acquiredAtMs, tMs: acquiredAtMs - context.startedAtMs }] } });
+              batch: { voiceFrames: [{ ...frame, acquiredAtMs, tMs: acquiredAtMs - context.startedAtMs,
+                processorRef: `${frame.processorRef}+${noiseReference.processorRef}:engineering-only` }] } });
           },
           onReady() {}, onDiagnostics() {},
-          onFailure() { sink.availability("voice", false); void voice?.stop(); }
+          onFailure() { invalidateNoise(); sink.availability("voice", false); void voice?.stop().catch(() => {}); }
         } });
-      if (validNoiseCalibration(options.noiseCalibration)) voice.setNoiseFloor(options.noiseCalibration.noiseFloorRms);
-      watch(audioTrack, "voice", () => voice?.reset(++voiceEpoch, "ambient-speech-turn"));
+      if (noiseReference) onNoiseCalibration(noiseReference);
+      watch(audioTrack, "voice", invalidateNoise);
       const clockStateChanged = () => { if (options.audioContext?.state !== "running") sink.interruption("audio-clock-discontinuity"); };
       options.audioContext.addEventListener?.("statechange", clockStateChanged);
       cleanup.push(() => options.audioContext?.removeEventListener?.("statechange", clockStateChanged));
@@ -264,6 +338,9 @@ async function attachBrowserWorkers(options: EmbeddedEncounterOptions, assets: V
               faceCalibrationFrames = faceCalibrationFrames.filter(f => frame.acquiredAtMs - f.acquiredAtMs <= 5_000).slice(-180);
               const assessed = classifyFaceCalibration(faceCalibrationFrames);
               if (assessed.quality === "strong") { faceCalibration = assessed.calibration; onFaceCalibration(faceCalibration); faceCalibrationFrames = []; }
+              // The worker produced this frame without a qualified baseline.
+              // Calibration completion only applies to subsequent worker input.
+              return;
             }
             sink.derived({ encounterId: context.encounterId, platformParticipantId: context.platformParticipantId,
               attribution: "individual-track", modality: "face", trackId: `local-video-${faceEpoch}`,

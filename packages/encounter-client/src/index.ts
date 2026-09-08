@@ -2,8 +2,11 @@ import {
   DerivedDataConsentV1Schema, ParticipantBindingV1Schema, DurableObservationV1Schema,
   TreatmentResponseScopeV1Schema, VersionedArtifactRefV1Schema,
   TreatmentResponseRunV1Schema, TreatmentResponseReviewV1Schema, canonicalTreatmentResponseJson, verifyTreatmentResponseArtifact,
+  EncounterClockSampleV1Schema, type EncounterClockCalibrationV1,
   type DurableObservationV1, type TreatmentResponseScopeV1
 } from "@phenometrix/contracts";
+import { calibrationFromProbe, selectClockCalibration } from "./clock.js";
+export { calibrationFromProbe, selectClockCalibration } from "./clock.js";
 
 export interface EncounterClientOptions {
   baseUrl: string; episodeId: string; scope: TreatmentResponseScopeV1;
@@ -39,6 +42,7 @@ export function createEncounterClient(options: EncounterClientOptions) {
   const { accessToken, fetch: fetcher = globalThis.fetch, timeoutMs = 10_000 } = options;
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > 2_147_483_647) throw new Error("encounter-invalid-timeout");
   let latestRevision = -1;
+  let clock: EncounterClockCalibrationV1 | null = null;
   const revision = (value: unknown): number => {
     if (!Number.isSafeInteger(value) || Number(value) < 0) throw new Error("encounter-invalid-revision");
     return Number(value);
@@ -66,6 +70,25 @@ export function createEncounterClient(options: EncounterClientOptions) {
     return { payload, requestSignal };
   };
   return {
+    /** Authenticated, scoped probes use the host session and show no UI. Missing
+     * UTC monitoring remains unqualified; server wall time alone is insufficient. */
+    async calibrateClock(encounterId: string, signal?: AbortSignal): Promise<EncounterClockCalibrationV1 | null> {
+      const samples: EncounterClockCalibrationV1[] = [];
+      const probeSignal = AbortSignal.any([AbortSignal.timeout(2_000), ...(signal ? [signal] : [])]);
+      for (let index = 0; index < 3; index++) {
+        const localSentAtMs = Date.now(), monotonicStart = performance.now();
+        const { payload } = await request(`${prefix}/capture-context/${id(encounterId)}/clock`, "GET", undefined, undefined, probeSignal);
+        const localReceivedAtMs = Date.now(), elapsedMs = performance.now() - monotonicStart;
+        const sample = EncounterClockSampleV1Schema.parse(payload);
+        if (!matches(sample.scope) || sample.episodeId !== episodeId || sample.encounterId !== encounterId) throw new Error("encounter-clock-scope-mismatch");
+        const calibrated = calibrationFromProbe({ sample, localSentAtMs, localReceivedAtMs, elapsedMs });
+        if (!calibrated) return null; // The previous bound may remain valid; it is never extended here.
+        samples.push(calibrated);
+      }
+      probeSignal.throwIfAborted();
+      clock = selectClockCalibration(samples, Date.now());
+      return clock;
+    },
     async captureContext(encounterId: string, signal?: AbortSignal) {
       const { payload: result, requestSignal } = await request(`${prefix}/capture-context/${id(encounterId)}`, "GET", undefined, undefined, signal);
       if (!matches(result.scope) || result.episodeId !== episodeId) throw new Error("encounter-scope-mismatch");
@@ -73,10 +96,12 @@ export function createEncounterClient(options: EncounterClientOptions) {
       const consent = DerivedDataConsentV1Schema.parse(result.consent);
       const binding = ParticipantBindingV1Schema.parse(result.binding);
       if (!matches(consent.scope) || !matches(binding.scope) || binding.encounterId !== encounterId) throw new Error("encounter-binding-mismatch");
-      const now = Date.now();
+      const localNow = Date.now();
+      const validClock = clock && localNow >= clock.localMeasuredAtMs && localNow < clock.localExpiresAtMs ? clock : null;
+      const now = localNow + (validClock?.utcOffsetMs ?? 0), error = validClock?.uncertaintyMs ?? 0;
       if (!consent.permissions.capture || !consent.permissions.derivedAnalysis || !consent.permissions.derivedRetention || consent.withdrawnAt !== null ||
-        Date.parse(consent.grantedAt) > now || (consent.expiresAt !== null && Date.parse(consent.expiresAt) <= now) ||
-        binding.status !== "verified" || binding.revokedAt !== null || Date.parse(binding.recordedAt) > now) throw new Error("encounter-capture-unavailable");
+        Date.parse(consent.grantedAt) > now - error || (consent.expiresAt !== null && Date.parse(consent.expiresAt) <= now + error) ||
+        binding.status !== "verified" || binding.revokedAt !== null || Date.parse(binding.recordedAt) > now - error) throw new Error("encounter-capture-unavailable");
       const measurementProtocolRef = VersionedArtifactRefV1Schema.parse(result.measurementProtocolRef);
       requestSignal.throwIfAborted();
       return { consent, binding, encounterId, inputRevision: acceptRevision(result.inputRevision), measurementProtocolRef };
@@ -84,6 +109,23 @@ export function createEncounterClient(options: EncounterClientOptions) {
     async ingestObservation(value: DurableObservationV1, signal?: AbortSignal) {
       const observation = DurableObservationV1Schema.parse(value);
       if (!matches(observation.scope)) throw new Error("encounter-scope-mismatch");
+      // A bounded UTC estimate can be slightly ahead of the server. Wait until
+      // even its earliest possible UTC has reached recordedAt, rather than
+      // weakening the service's immutable knowledge-time rule.
+      const now = Date.now();
+      if (clock && now >= clock.localMeasuredAtMs && now < clock.localExpiresAtMs) {
+        const delayMs = Math.max(0, Math.ceil(Date.parse(observation.recordedAt) - (now + clock.utcOffsetMs - clock.uncertaintyMs)));
+        if (delayMs > 2_000 || now + delayMs >= clock.localExpiresAtMs) throw new Error("encounter-clock-delivery-unavailable");
+        if (delayMs > 0) {
+          const delaySignal = AbortSignal.any([AbortSignal.timeout(timeoutMs), ...(signal ? [signal] : [])]);
+          await new Promise<void>((resolve, reject) => {
+            const aborted = () => { clearTimeout(timer); delaySignal.removeEventListener("abort", aborted); reject(delaySignal.reason); };
+            const timer = setTimeout(() => { delaySignal.removeEventListener("abort", aborted); resolve(); }, delayMs);
+            delaySignal.addEventListener("abort", aborted, { once: true });
+            if (delaySignal.aborted) aborted();
+          });
+        }
+      }
       const { payload: result, requestSignal } = await request(`${prefix}/sessions`, "POST", { data: observation }, id(observation.revisionId), signal);
       const saved = record(result.record);
       if (saved.episodeId !== episodeId || saved.kind !== "session" || saved.logicalId !== observation.observationId || saved.idempotencyKey !== observation.revisionId ||

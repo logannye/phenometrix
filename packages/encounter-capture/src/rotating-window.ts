@@ -21,14 +21,32 @@ export class RotatingAmbientEncounter {
   private discarded = false;
   private finished = false;
   private deliveryFailed = false;
+  private captureReadiness: Parameters<AmbientEncounterWindow["setCaptureReadiness"]>[0] = {};
   constructor(private readonly options: RotatingAmbientOptions) {
     this.startMs = options.startedAtMs;
     this.current = this.createWindow();
   }
   get currentWindowStartMs() { return this.startMs; }
+  setCaptureReadiness(input: Parameters<AmbientEncounterWindow["setCaptureReadiness"]>[0]): void {
+    if (this.discarded || this.finished) return;
+    this.current.setCaptureReadiness(input);
+    this.captureReadiness = { ...this.captureReadiness, ...structuredClone(input),
+      ...(input.clockUncertaintyMs === undefined ? {} : { clockUncertaintyMs:
+        Math.max(this.captureReadiness.clockUncertaintyMs ?? this.options.clockUncertaintyMs, input.clockUncertaintyMs) }) };
+  }
   setCalibration(input: typeof this.calibration): void {
     this.calibration = { ...this.calibration, ...input };
     this.current.setCalibration(input);
+  }
+  /** Close existing evidence before a source or calibration boundary; never rewrite it later. */
+  flushBoundary(nowMs: number): void {
+    if (this.discarded || this.finished || this.deliveryFailed) return;
+    this.advance(nowMs);
+    if (this.discarded || this.deliveryFailed || this.current.frameCount === 0 || nowMs <= this.startMs) return;
+    this.lastDelivery = this.deliver(this.current, nowMs);
+    if (this.discarded || this.deliveryFailed) return;
+    this.startMs = nowMs; this.index++; this.current = this.createWindow();
+    this.current.setCaptureReadiness(this.captureReadiness); this.current.setCalibration(this.calibration);
   }
   append(value: AcceptedDerived): boolean {
     if (this.discarded || this.finished || this.deliveryFailed) return false;
@@ -54,6 +72,7 @@ export class RotatingAmbientEncounter {
     this.startMs = nowMs - endMs >= AMBIENT_MAX_CAPTURE_DURATION_MS ? nowMs : endMs;
     this.index++;
     this.current = this.createWindow();
+    this.current.setCaptureReadiness(this.captureReadiness);
     this.current.setCalibration(this.calibration);
   }
   async finish(nowMs: number): Promise<DurableObservationV1> {

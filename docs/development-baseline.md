@@ -1,4 +1,4 @@
-# Development baseline — 2026-09-06
+# Development baseline — 2026-09-08
 
 The canonical checkout is `/Users/logannye/Projects/phenometrix`; the repository
 is [logannye/phenometrix](https://github.com/logannye/phenometrix).
@@ -34,6 +34,15 @@ The optional clip-governance package is separate and disabled by default.
 Storage, identity, audit, and retention adapters are required before use.
 The optional WavLM service remains isolated and unused by browser capture.
 
+Automatic readiness now includes authenticated clock probing and renewable
+accuracy bounds, opportunistic engineering-only voice noise screening, and
+continuity boundaries that preserve earlier evidence without retroactive
+calibration. Failed derived uploads propagate through the measurement lifecycle;
+FHIR synchronization tolerates bounded revision conflicts while rechecking
+authority and source binding. The connected browser acceptance test exercises
+the actual capture controller, finalization worker, signed service, analysis and
+chart using fabricated media and clock monitoring.
+
 ## Versioned identity
 
 | Component | Identity |
@@ -44,7 +53,10 @@ The optional WavLM service remains isolated and unused by browser capture.
 | Legacy observation | `phenometric.encounter-observation.v3` (unchanged) |
 | New durable observation | `phenometric.durable-observation.v1` |
 | HFS protocol | `hfs-ambient-treatment-alignment-research` 1.0.0 |
-| Descriptive engine | `descriptive-treatment-alignment.1.0.0` |
+| Embedded adapter / durable bridge | 1.1.0 / `ambient-bridge.1.1.0` |
+| Passive noise screen | `passive-screened-noise@1.0.0` (engineering-only) |
+| Clock sample | `phenometric.encounter-clock-sample.v1` |
+| Descriptive engine | `descriptive-treatment-alignment.1.0.1` |
 
 Canonical digests live in source. Protocol, specification, snapshot, run, and
 processor identities control reproducibility and compatibility; none denotes
@@ -70,14 +82,18 @@ run separately; see the [service README](../apps/encounter-service/README.md).
 Browser tests use simulated media/worker outputs, and Python tests use a fake
 adapter. They do not establish real-device measurements or WavLM performance.
 
-The encounter implementation passed **574 workspace tests, 17 Chrome browser
+The readiness implementation passed **642 workspace tests, 18 Chrome browser
 tests, 4 Python tests, typechecking, production/embedded builds, and
-structure/digest checks** on 2026-09-06. Six additional integration tests passed
+structure/digest checks** on 2026-09-08. Six additional integration tests passed
 against actual local PostgreSQL 16.14. The browser suite includes a real
 dedicated-worker calculation on synthetic derived voice frames and cancellation
-without device access. This validates software behavior, not clinical accuracy.
+without device access, plus a connected multi-window encounter-to-chart test.
+The connected test passed two consecutive runs after its simulated-clock/network
+barrier was corrected; development reloads are isolated from worker tests.
+This validates software behavior, not clinical accuracy.
 
-The earlier local-demo baseline had 420 workspace tests and 12 browser tests.
+The September 6 encounter baseline had 574 workspace and 17 browser tests; the
+earlier local-demo baseline had 420 workspace tests and 12 browser tests.
 
 ## Remaining acceptance boundaries
 

@@ -96,5 +96,23 @@ describe("host-authorized client", () => {
     expect(await fromResponse(response).ingestObservation(observation)).toEqual(response);
     await expect(fromResponse({ ...response, record: { ...response.record, episodeId: "other" } }).ingestObservation(observation)).rejects.toThrow("ingest-mismatch");
     await expect(fromResponse({ ...response, record: { ...response.record, payload: { ...observation, observationId: "other" } } }).ingestObservation(observation)).rejects.toThrow("ingest-mismatch");
+    // A fresh record may be slightly ahead of real UTC while still inside its
+    // declared error bound. Delivery waits without changing recorded evidence.
+    vi.useFakeTimers({ now: Date.parse(observation.recordedAt), toFake: ["Date", "performance", "setTimeout", "clearTimeout"] });
+    try {
+      let writes = 0;
+      const clocked = createEncounterClient({ baseUrl: "https://clinic.example", episodeId: "episode", scope, accessToken: async () => "token",
+        fetch: (async (url: RequestInfo | URL) => {
+          const serverNow = Date.now() - 50;
+          if (String(url).endsWith("/clock")) return new Response(JSON.stringify({ schemaVersion: "phenometric.encounter-clock-sample.v1", scope, episodeId: "episode", encounterId: "encounter",
+            serverReceivedAtMs: serverNow, serverSentAtMs: serverNow, source: { sourceId: "monitor", kind: "monitored-utc", maximumUtcErrorMs: 100, validUntilMs: serverNow + 60_000 } }));
+          writes++; expect(Date.parse(observation.recordedAt)).toBeLessThanOrEqual(serverNow);
+          return new Response(JSON.stringify(response));
+        }) as typeof fetch });
+      await clocked.calibrateClock("encounter");
+      const delivery = clocked.ingestObservation(observation);
+      await vi.advanceTimersByTimeAsync(157); expect(writes).toBe(0);
+      await vi.advanceTimersByTimeAsync(1); expect(await delivery).toEqual(response); expect(writes).toBe(1);
+    } finally { vi.useRealTimers(); }
   });
 });

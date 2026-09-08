@@ -14,6 +14,8 @@ export interface AmbientWindowOptions {
   sourceKind: DurableObservationV1["capture"]["sourceKind"];
   deviceClass: string;
   clockUncertaintyMs: number;
+  clockSource?: DurableObservationV1["capture"]["clockSource"];
+  audioNoiseCalibration?: DurableObservationV1["capture"]["audioNoiseCalibration"];
   /** Hash of relevant acquisition settings and opaque device identity; never raw hardware IDs. */
   acquisitionFingerprint?: string;
   /** Browser hosts supply a dedicated worker; server workers may use the pure default. */
@@ -30,14 +32,36 @@ export class AmbientEncounterWindow {
   private closed = false;
   private readonly finalizationAbort = new AbortController();
   private readonly maxFrames: number;
+  private captureReadiness: Pick<DurableObservationV1["capture"], "clockUncertaintyMs" | "clockSource" | "audioNoiseCalibration">;
   constructor(private readonly options: AmbientWindowOptions) {
     if (authorizationFailure(options.authorization, options.startedAtMs) || !options.authorization.consent.permissions.derivedRetention)
       throw new Error("Durable observation authorization required");
     this.options = { ...options, authorization: structuredClone(options.authorization) };
+    this.captureReadiness = { clockUncertaintyMs: options.clockUncertaintyMs,
+      ...(options.clockSource ? { clockSource: structuredClone(options.clockSource) } : {}),
+      ...(options.audioNoiseCalibration ? { audioNoiseCalibration: structuredClone(options.audioNoiseCalibration) } : {}) };
     this.maxFrames = options.maxFrames ?? 60_000;
     if (!Number.isSafeInteger(this.maxFrames) || this.maxFrames < 1) throw new Error("Invalid frame limit");
   }
   get frameCount() { return this.voice.length + this.face.length; }
+  setCaptureReadiness(input: { clockUncertaintyMs?: number; clockSource?: DurableObservationV1["capture"]["clockSource"];
+    audioNoiseCalibration?: DurableObservationV1["capture"]["audioNoiseCalibration"] | null }): void {
+    if (this.closed) return;
+    if (input.clockUncertaintyMs !== undefined) {
+      if (!Number.isFinite(input.clockUncertaintyMs) || input.clockUncertaintyMs < 0) throw new Error("Invalid clock uncertainty");
+      this.captureReadiness.clockUncertaintyMs = Math.max(this.captureReadiness.clockUncertaintyMs, input.clockUncertaintyMs);
+    }
+    if (input.clockSource) {
+      if (this.captureReadiness.clockSource && (this.captureReadiness.clockSource.sourceId !== input.clockSource.sourceId
+        || this.captureReadiness.clockSource.kind !== input.clockSource.kind))
+        throw new Error("Clock source changed inside an observation");
+      this.captureReadiness.clockSource = structuredClone(input.clockSource);
+    }
+    if (input.audioNoiseCalibration !== undefined) {
+      if (input.audioNoiseCalibration === null) delete this.captureReadiness.audioNoiseCalibration;
+      else this.captureReadiness.audioNoiseCalibration = structuredClone(input.audioNoiseCalibration);
+    }
+  }
   setCalibration(input: { noiseDurationMs?: number; face?: AmbientFaceCalibration | null }): void {
     if (this.closed) return;
     if (input.noiseDurationMs !== undefined) this.noiseDurationMs = input.noiseDurationMs;
@@ -68,15 +92,21 @@ export class AmbientEncounterWindow {
     if (!Number.isFinite(endedAtMs) || endedAtMs < this.options.startedAtMs
       || endedAtMs - this.options.startedAtMs > AMBIENT_MAX_CAPTURE_DURATION_MS) throw new Error("Use bounded ambient windows of at most five minutes");
     this.closed = true;
+    const captureReadiness = structuredClone(this.captureReadiness);
     try {
       const protocol = AMBIENT_LOCAL_PROTOCOL_REF;
+      const duration = endedAtMs - this.options.startedAtMs;
+      // Facial source evidence uses complete fixed 5-second bins. A partial last
+      // bin must not claim time after encounter end or a calibration boundary.
+      const faceEndMs = Math.floor(duration / 5_000) * 5_000;
       const input = { identity: { sessionId: this.options.observationId,
         protocolVersion: protocol.version, protocolContentSha256: protocol.contentSha256,
         // The core's analysis clock and tMs are both relative to this bounded window.
         // Unix acquisition timestamps remain separate provenance, never the analysis origin.
         sessionStartedAtMs: 0 },
-      voice: { frames: this.voice, noiseCalibrationDurationMs: this.noiseDurationMs },
-      face: { frames: this.face, calibration: this.faceCalibration } };
+      // Core voice evidence ends one 10 ms hop beyond its last frame timestamp.
+      voice: { frames: this.voice.filter(frame => frame.tMs + 10 <= duration), noiseCalibrationDurationMs: this.noiseDurationMs },
+      face: { frames: this.face.filter(frame => frame.tMs < faceEndMs), calibration: this.faceCalibration } };
       const signal = externalSignal ? AbortSignal.any([externalSignal, this.finalizationAbort.signal]) : this.finalizationAbort.signal;
       signal.throwIfAborted();
       const result = this.options.finalizeMetrics ? await this.options.finalizeMetrics(input, signal) : finalizeAmbientMetrics(input);
@@ -87,7 +117,6 @@ export class AmbientEncounterWindow {
       const outcomes = result.outcomes.filter(outcome => this.options.authorization.modalities.includes(outcome.modality));
       const windows: DurableObservationV1["windows"] = [];
       const windowMap = new Map<string, string>();
-      const duration = endedAtMs - this.options.startedAtMs;
       for (const outcome of outcomes) for (const source of outcome.evidence.sourceWindowRefs) {
         if (windowMap.has(source)) continue;
         const parts = source.split(":");
@@ -111,9 +140,9 @@ export class AmbientEncounterWindow {
         endedAt: new Date(endedAtMs).toISOString(), status: "available",
         measurementProtocolRef: { id: protocol.packId, version: protocol.version, contentSha256: protocol.contentSha256 },
         capture: { adapterId: this.options.adapterId, adapterVersion: this.options.adapterVersion,
-          sourceKind: this.options.sourceKind, pipelineVersion: "ambient-core-0.1.0",
+          sourceKind: this.options.sourceKind, pipelineVersion: "ambient-bridge.1.1.0",
           processorFingerprint, deviceClass: this.options.deviceClass,
-          clockUncertaintyMs: this.options.clockUncertaintyMs, rawMediaRetained: false },
+          ...captureReadiness, rawMediaRetained: false },
         windows,
         metrics: outcomes.map(o => ({ metricCode: o.code, modality: o.modality, unit: o.unit,
           context: o.identity.context, algorithmVersion: o.identity.algorithmVersion,

@@ -74,6 +74,29 @@ describe("concrete ambient-core bridge", () => {
     capture.advance(EPOCH + 1_200_000); await capture.finish(EPOCH + 1_201_000);
     expect(observations).toHaveLength(2); expect(observations[1].startedAt).toBe(new Date(EPOCH + 1_200_000).toISOString());
   });
+  it("snapshots readiness across a calibration boundary while never reducing clock uncertainty", async () => {
+    const observations: DurableObservationV1[] = [];
+    const capture = new RotatingAmbientEncounter({ ...options(), onObservation: observation => { observations.push(observation); } });
+    capture.setCalibration({ noiseDurationMs: 2_000 });
+    capture.setCaptureReadiness({ clockUncertaintyMs: 12, clockSource: { sourceId: "test-clock", kind: "synthetic" },
+      audioNoiseCalibration: { method: "host-supplied", algorithmVersion: "test-noise@1", qualification: "engineering-only" } });
+    capture.flushBoundary(EPOCH + 1); // No evidence: do not manufacture an initial record.
+    for (let t = 0; t < 40_000; t += 10) capture.append(accepted(t));
+    capture.flushBoundary(EPOCH + 40_000);
+    capture.setCalibration({ noiseDurationMs: 0 });
+    capture.setCaptureReadiness({ clockUncertaintyMs: 27, audioNoiseCalibration: null });
+    capture.setCaptureReadiness({ clockUncertaintyMs: 2 });
+    const final = await capture.finish(EPOCH + 70_000);
+    expect(observations).toHaveLength(2);
+    const first = observations.find(observation => observation.observationId === "test-observation")!;
+    expect(first.capture.clockUncertaintyMs).toBe(12);
+    expect(first.capture.audioNoiseCalibration?.method).toBe("host-supplied");
+    expect(first.metrics.find(metric => metric.metricCode === "ambient.voice.f0.median")?.status).toBe("measured");
+    expect(final.startedAt).toBe(first.endedAt);
+    expect(final.capture.clockUncertaintyMs).toBe(27);
+    expect(final.capture.audioNoiseCalibration).toBeUndefined();
+    expect(final.metrics.every(metric => metric.status === "withheld")).toBe(true);
+  });
   it("surfaces a failed persistence callback without exposing primitive frames", async () => {
     let failures = 0;
     const capture = new RotatingAmbientEncounter({ ...options(), onObservation: () => { throw new Error("offline"); }, onFailure: () => { failures++; } });
