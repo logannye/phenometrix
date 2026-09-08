@@ -82,6 +82,11 @@ export const DurableObservationV1Schema = z.object({
     sourceKind: z.enum(["patient-local-pre-codec", "platform-patient-track", "research-upload", "synthetic"]),
     pipelineVersion: z.string().min(1), processorFingerprint: Digest,
     deviceClass: z.string().min(1), clockUncertaintyMs: NonNegative,
+    clockSource: z.object({ sourceId: Id, kind: z.enum(["synthetic", "monitored-utc"]) }).strict().optional(),
+    audioNoiseCalibration: z.object({
+      method: z.enum(["host-supplied", "passive-screened"]),
+      algorithmVersion: z.string().min(1), qualification: z.literal("engineering-only")
+    }).strict().optional(),
     rawMediaRetained: z.literal(false)
   }).strict(),
   windows: z.array(z.object({

@@ -47,6 +47,21 @@ describe("consented encounter workflow",()=>{
     await expect(service.write(principal,episodeId,"sessions",{data:observation},"voice-forgery")).rejects.toMatchObject({code:"modality-not-consented"});
   });
 
+  it("rejects synthetic clock claims on live observations before persisting or queueing",async()=>{
+    const fixture=await syntheticFixture(now),repository=new MemoryRepository();
+    const service=new EncounterService(repository,{mode:"live",now:()=>now,allowedProtocolDigests:[fixture.episode.protocol.contentSha256]});
+    const livePrincipal={...principal,dataClass:"consented-research" as const};
+    await service.createEpisode(livePrincipal,{...fixture.episode,dataClass:"consented-research"});
+    await service.write(livePrincipal,episodeId,"consents",{data:fixture.consent},"consent");
+    await service.write(livePrincipal,episodeId,"bindings",{data:{...fixture.sessions[0]!.binding,verificationMethod:"clinic-enrollment"}},"binding");
+    const observation=fixture.sessions[0]!.observation;
+    const captured={...observation,capture:{...observation.capture,sourceKind:"patient-local-pre-codec",clockSource:{sourceId:"synthetic-local-clock",kind:"synthetic"},clockUncertaintyMs:0}};
+    const revision=(await repository.getState(principal.tenantId,episodeId))!.episode.revision;
+    await expect(service.write(livePrincipal,episodeId,"sessions",{data:captured},"live-clock")).rejects.toMatchObject({status:403,code:"clock-source-mode-mismatch"});
+    expect((await repository.getState(principal.tenantId,episodeId))!.episode.revision).toBe(revision);
+    expect((await service.write(livePrincipal,episodeId,"sessions",{data:{...captured,capture:{...captured.capture,clockSource:{sourceId:"qualified-monitor",kind:"monitored-utc"}}}},"live-clock")).record.kind).toBe("session");
+  });
+
   it("rejects orphan, duplicate-ID and chronologically invalid corrections before queueing",async()=>{
     const {service,fixture,repository}=await setup();
     await expect(service.write(principal,episodeId,"clinical-events",{data:{...fixture.treatment,treatmentId:"new",revisionId:"new-revision",supersedesRevisionId:"missing"}},"orphan")).rejects.toMatchObject({code:"correction-parent-missing"});

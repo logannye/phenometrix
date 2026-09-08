@@ -190,3 +190,4 @@ export type {
   ConditionEvidenceCardV1
 } from "./condition-evidence-card.js";
 export * from "./treatment-response.js";
+export * from "./encounter-readiness.js";

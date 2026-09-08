@@ -60,16 +60,29 @@ clinical narrative is involved.
 The encounter bridge rotates at most five-minute derived windows throughout a
 longer visit. It rebases each window's analysis clock while retaining acquisition
 timestamps, disposes transient primitives, and does not invent measurements in
-gaps. Automatic facial calibration uses available qualified frames; voice
-requires a valid measured noise calibration or abstains. Capture source and
+gaps. Automatic facial calibration uses available qualified frames. Voice uses
+a host noise reference or versioned passive screening of sufficiently long,
+stable acoustic intervals; missing conditions withhold voice readiness. Both
+noise-reference methods have explicit engineering-only provenance. Continuity
+loss closes prior evidence before recalibration, and pre-calibration frames
+cannot be qualified retroactively. Capture source and
 processor versions are compatibility inputs. Device settings cannot establish
 hardware identity or acquisition validity by themselves.
 
-The host can supply a measured, expiring UTC clock calibration. Without one,
-capture records explicitly unqualified clock uncertainty and the HFS trajectory
-gate excludes those observations. A local browser clock is not silently treated
-as accurate treatment timing. Expired calibration or detected clock disruption
-stops analysis.
+The integrated host entry point obtains three scoped authenticated clock probes
+before capture and renews automatically before expiration. A separate trusted
+clock monitor must attest the server's UTC error; its wall clock alone is
+insufficient. The client conservatively combines round-trip time, source error,
+timestamp resolution and a bounded drift allowance. Capture keeps one monotonic
+timestamp mapping and accumulates uncertainty across renewals. Missing initial
+qualification records an explicit uncertainty sentinel; a new offset cannot be
+adopted halfway through a visit. Expiry, source changes or clock discontinuity
+stop analysis. Synthetic clock evidence cannot qualify live acquisition.
+
+Delivery waits briefly when needed to respect the service's knowledge-time
+boundary. A transient upload retries the identical revision with bounded delay
+and cancellation; exhausted delivery propagates to stop the measurement branch.
+Final delivery remains cancellable by withdrawal after the encounter ends.
 
 ## Durable contracts and storage
 

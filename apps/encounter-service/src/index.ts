@@ -14,3 +14,5 @@ export { ServiceError } from "./errors.js";
 export type * from "./types.js";
 export {fetchFhirPatientContext,synchronizeFhirPatientContext} from "./fhir-sync.js";
 export type {FhirReadSource} from "./fhir-sync.js";
+export { createClockSourceProvider,ClockAttestationSchema } from "./clock-source.js";
+export type { EncounterClockSource,EncounterClockSourceProvider } from "./clock-source.js";

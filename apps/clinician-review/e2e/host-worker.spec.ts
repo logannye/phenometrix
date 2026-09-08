@@ -2,6 +2,9 @@ import { test, expect } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 
 test("a real browser worker summarizes derived signals without requesting devices and aborts on withdrawal", async ({ page }) => {
+  // Dynamic cross-package fixture imports can trigger Vite dependency reloads.
+  // The production worker has no HMR channel; keep the test context stable too.
+  await page.routeWebSocket(/.*/, socket => socket.close());
   await page.goto("/");
   const root = fileURLToPath(new URL("../../", import.meta.url));
   const result = await page.evaluate(async base => {

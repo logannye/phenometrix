@@ -42,6 +42,7 @@ authorize the port-4173/4175 applications automatically.
 | `POST /v1/episodes` | `{id, scope, dataClass, protocol, specification, fhirPatientReference?}`; protocol and specification must be sealed versioned contracts |
 | `GET /v1/episodes/:id` | Episode metadata, current input revision and source counts |
 | `GET /v1/episodes/:id/capture-context/:encounterId` | Exact scoped current grant, verified encounter binding and measurement protocol |
+| `GET /v1/episodes/:id/capture-context/:encounterId/clock` | Authenticated `EncounterClockSampleV1` receive/send timestamps and nullable UTC-error attestation; `Cache-Control: no-store` |
 | `POST /v1/episodes/:id/consents` | `{data: DerivedDataConsentV1, expectedRevision?, supersedesRecordId?}` |
 | `POST /v1/episodes/:id/bindings` | Same envelope containing `ParticipantBindingV1` |
 | `POST /v1/episodes/:id/sessions` | Same envelope containing `DurableObservationV1` |
@@ -147,6 +148,50 @@ offset must not be reused across dates with different daylight-saving offsets;
 such deployments should supply full source date-times or use unknown timing.
 The separate `fhir-sync` connector supports bounded configured-source reads;
 real EHR credentials, scopes, patient matching and provisioning remain external.
+
+`synchronizeFhirPatientContext` fetches the bundle once, then retries only
+`stale-revision` conflicts (three attempts by default, configurable from one to
+five). Each attempt rechecks participant/study permissions and the exact EHR
+patient/source binding, retaining the same event identity and source provenance.
+Provide `resolvePrincipal` from the host's trusted session/membership resolver to
+revalidate authorization before the fetch and each import; denied authorization
+and source-reconciliation errors are never retried. The connector does not
+substitute capture consent for separate clinical-record authorization. The
+fetch deadline includes source token retrieval, pagination and streamed bodies.
+After retry exhaustion, the host's durable event handler must retain the event
+for later processing; this helper does not create a scheduler or EHR webhook.
+
+## Clock quality
+
+The clock probe requires the same signed `capture:write` session, current grant
+and verified encounter binding as capture-context. Authentication and capture
+authority are rechecked after the clock-source callback. Source lookups are
+bounded to 250 ms by default (at most 2 seconds); missing, expired, malformed or
+unavailable source evidence produces `source: null`. Server receive/send times
+are sampled at request-handler boundaries from `Date.now`; they alone do not
+establish UTC accuracy. The HTTP `now` injection is for controlled test or
+deployment clocks, and cannot be supplied by a request.
+
+The synthetic launcher explicitly labels its clock `synthetic` and gives it a
+30-second validity interval. Live deployment can set
+`PHENOMETRIX_CLOCK_ATTESTATION_PATH` to a private, deployment-owned JSON file:
+
+```json
+{
+  "sourceId": "clinic-utc-monitor",
+  "validatedAtMs": 1788897600000,
+  "expiresAtMs": 1788897630000,
+  "maximumUtcErrorMs": 10
+}
+```
+
+These example values are illustrative, not an accuracy assertion. A trusted OS
+clock synchronization monitor must measure a conservative UTC-error bound and
+atomically replace this file; do not create it from `Date.now` alone. Every
+request reloads and validates the attestation, whose total lifetime must not
+exceed 60 seconds. Only a currently valid attestation yields `monitored-utc`.
+OS synchronization, monitor provisioning, file access controls, and the claimed
+error bound remain deployment responsibilities. No patient action is added.
 
 ## Verification
 

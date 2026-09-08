@@ -9,6 +9,7 @@ import { SYNTHETIC_EPISODE_ID,SYNTHETIC_PRINCIPAL,seedSyntheticEpisode } from ".
 import { runOneJob } from "./worker.js";
 import { loadFhirSources } from "./fhir-config.js";
 import { createHfsTreatmentResponseProtocol } from "@phenometrix/condition-profiles";
+import { createClockSourceProvider } from "./clock-source.js";
 
 const config=loadServiceConfig();
 const pool=new Pool({connectionString:config.databaseUrl,max:10});
@@ -17,6 +18,7 @@ const repository=new PostgresRepository(pool);
 const service=new EncounterService(repository,{mode:config.mode,fhirSources:await loadFhirSources(process.env.FHIR_SOURCE_CONFIG_PATH),allowedProtocolDigests:[(await createHfsTreatmentResponseProtocol()).contentSha256]});
 if(config.mode==="synthetic")await seedSyntheticEpisode(service);
 const server=createEncounterHttpServer({service,authenticate:createAuthenticator(config),allowedOrigins:config.allowedOrigins,
+  clockSource:createClockSourceProvider({mode:config.mode,attestationPath:process.env.PHENOMETRIX_CLOCK_ATTESTATION_PATH}),
   ...(config.mode==="synthetic"?{developmentSession:async()=>({dataClass:"synthetic",episodeId:SYNTHETIC_EPISODE_ID,token:await signDevelopmentSession(SYNTHETIC_PRINCIPAL,config.developmentSecret!,config.issuer,config.audience)})}:{})});
 let working=false;
 const timer=setInterval(async()=>{

@@ -156,6 +156,7 @@ export class EncounterService {
       invariant(binding?.status==="verified" && binding.verificationMethod!=="unverified" && binding.encounterId===observation.encounterId && !binding.revokedAt && Date.parse(binding.recordedAt)<=Date.parse(observation.startedAt),403,"binding-required","A verified current participant-to-encounter binding is required.");
       invariant(this.options.mode!=="synthetic" || observation.capture.sourceKind==="synthetic",403,"synthetic-only","Development mode rejects non-synthetic observations.");
       invariant(this.options.mode!=="live" || observation.capture.sourceKind!=="synthetic",403,"live-source-required","Live mode rejects synthetic observations.");
+      invariant(observation.capture.clockSource?.kind!=="synthetic" || observation.capture.sourceKind==="synthetic",403,"clock-source-mode-mismatch","A synthetic clock cannot qualify a non-synthetic observation.");
       const protocol=TreatmentResponseProtocolV1Schema.parse(state.episode.metadata.protocol);
       invariant(protocol.metrics.every(metric=>!/(prompt|task|exercise)/i.test(metric.context)) && observation.metrics.every(metric=>!/(prompt|task|exercise)/i.test(metric.context)),422,"ambient-only","This pilot accepts natural observation only.");
       const current=effectiveRecords(state.records).find(record=>record.kind==="session" && record.logicalId===observation.observationId);
