@@ -3,7 +3,8 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const run = resolve(root, process.argv[2] ?? "../../research/voice-prosody/runs/delayed-mlp-export");
+const hybrid = process.argv.includes("--hybrid");
+const run = resolve(root, process.argv.slice(2).find(arg => arg !== "--hybrid") ?? "../../research/voice-prosody/runs/delayed-mlp-export");
 const destination = resolve(root, "public/.local/voice-mlp");
 const digest = bytes => createHash("sha256").update(bytes).digest("hex");
 const manifestBytes = await readFile(resolve(run, "manifest.json"));
@@ -12,6 +13,7 @@ if (manifest.config.kind !== "framewise-mlp" || manifest.config.feature_version 
     manifest.training_metadata?.measurement_delay_ms !== 20 || manifest.status !== "complete") {
   throw new Error("Expected frozen trained v2 20ms MLP export; this script does not qualify it.");
 }
+if (hybrid && manifest.training_metadata.weights_sha256 !== "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d") throw new Error("Hybrid requires frozen original weights.");
 await mkdir(destination, { recursive: true });
 const writePinned = async (name, bytes) => {
   await writeFile(resolve(destination, name), bytes);
@@ -28,6 +30,7 @@ const module = await writePinned("ort-wasm-simd-threaded.mjs", await readFile(re
 const config = { schemaVersion: "phenometrix.research-voice-model-config.v1",
   qualification: "unqualified-functional-fixture", manifestUrl: pinnedManifest.url, manifestSha256: pinnedManifest.sha256,
   modelUrl: model.url, modelSha256: model.sha256, wasmUrl: wasm.url, wasmSha256: wasm.sha256,
-  moduleUrl: module.url, moduleSha256: module.sha256 };
-await writeFile(resolve(destination, "config.json"), `${JSON.stringify(config, null, 2)}\n`);
+  moduleUrl: module.url, moduleSha256: module.sha256,
+  ...(hybrid ? { estimator: "phenometrix.mlp-voicing-yin-pitch.v1" } : {}) };
+await writeFile(resolve(destination, hybrid ? "hybrid-config.json" : "config.json"), `${JSON.stringify(config, null, 2)}\n`);
 console.log(JSON.stringify({ run, destination, config }));

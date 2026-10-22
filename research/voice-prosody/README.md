@@ -1,14 +1,18 @@
 # Causal voice estimation research
 
-**Final decision: no learned estimator is qualified for production.** The small
-models improve natural-development scores, but they fail fixed known-truth pitch
-checks. The single synthetic-augmentation follow-up improves transfer and still
-fails its frozen acceptance gates. Classical DSP remains the default. No further
-model fitting, threshold tuning, candidate revision, or promotion is part of this
-experiment. A subsequent no-fit component replacement repairs the fixed pitch
-failures and passes its declared offline checks; see [HYBRID_RESULTS.md](HYBRID_RESULTS.md).
-It remains an unqualified research candidate, and its natural error is slightly
-worse than its own MLP despite improving on classical baselines.
+**Production remains DSP.** The original learned candidate selectors and the
+single synthetic-augmentation follow-up retain their failed known-truth gates.
+The subsequent no-fit original-MLP-voicing/raw-YIN hybrid passes its declared
+synthetic checks and now the frozen natural quality component on four previously
+reserved speakers: joint error 9.6747%, versus DSP 11.8482%. Its own candidate
+MLP remains better on natural speech at 9.1158%, so the pitch repair has a
+measurable tradeoff. A separately versioned browser numerical repair passes the
+unchanged bounded parity checks. The complete local runtime series and 30 min
+hybrid soak also pass: complete-block p99 6.1 ms, zero 20 ms cadence misses and
+maximum certified software render age 54.4 ms in the soak.
+See [HYBRID_VALIDATION_RESULTS.md](HYBRID_VALIDATION_RESULTS.md) for the current
+stage and [HYBRID_RESULTS.md](HYBRID_RESULTS.md) for the earlier reused-development
+follow-up. Neither stage establishes calibrated correctness or clinical use.
 
 Read [RESULTS.md](RESULTS.md) for the final comparison, [PROTOCOL.md](PROTOCOL.md)
 for the declared experiment, and [NOTEBOOK.md](NOTEBOOK.md) for decisions and
@@ -50,8 +54,10 @@ probability is never presented as calibrated pitch-correctness probability.
 
 ## Acquisition and original failed endpoint screen
 
-Inventory reads public metadata. Acoustic test content remains sealed. The first
-24-record training pilot precedes the larger acquisition:
+Inventory reads public metadata. Acoustic test content remained sealed during
+this historical experiment; the separately frozen validation stage below later
+accesses its declared reserved subset. The first 24-record training pilot precedes
+the larger acquisition:
 
 ```sh
 .venv/bin/python -m phenometrix_prosody.data inventory
@@ -205,11 +211,122 @@ runners freeze their respective complete input-only predictions before loading
 analytic or corpus references. The natural runner can separate these phases with
 `--phase predict` and `--phase score`; references are needed only for scoring.
 The independent synthetic audit reconstructs counts and signed delays from frozen
-predictions without rerunning inference. All fresh synthetic cases and all 16
-natural speaker/condition cells appear in the
-[public summary](../../benchmarks/voice-prosody/hybrid-summary.json). Reused natural
-development is exploratory; the sealed test remains closed. Neither raw voicing
+predictions without rerunning inference. All fresh synthetic case results remain in the ignored metrics artifact. Compact
+synthetic aggregates, source identities and all 16 natural speaker/condition cells
+appear in the [public summary](../../benchmarks/voice-prosody/hybrid-summary.json). Reused natural
+development is exploratory; the sealed test remained closed during that stage. Neither raw voicing
 probability nor passing synthetic cases establish calibrated correctness.
+
+## Independent reserved-speaker and browser validation
+
+The [fixed validation plan](HYBRID_VALIDATION_PLAN.md) admits only the original
+hybrid and the exact first 40 metadata-ordered prompts for each of F05/M05/F06/M06.
+This is 160 sources and 640 dependent condition versions, with no new fitting,
+threshold selection or secondary-model switch. The pre-access audit checks prompt
+separation and historical acquisition metadata. Actual source, model, configuration,
+inventory and protocol bytes are frozen before MIC-only acquisition. Every
+prediction is completed and hashed before REF acquisition or reference audit.
+Generic historical training/development runners still reject the sealed split.
+
+The commands below reproduce the phase order in a **fresh reproduction workspace
+with the recorded trained artifacts and an unacquired reserved split**. The local
+recorded folders already exist; the pre-access audit must refuse to relabel them
+as unseen. Do not delete evidence or rerun fitting to satisfy that guard. Commands
+are shown from `research/voice-prosody` unless a directory change is explicit:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.sealed_metadata_audit --output runs/sealed-preaccess-metadata-audit-v1.json
+.venv/bin/python -m phenometrix_prosody.hybrid_validation freeze --output runs/hybrid-validation-freeze-v1 --preaccess-audit runs/sealed-preaccess-metadata-audit-v1.json
+.venv/bin/python -m phenometrix_prosody.hybrid_validation acquire-mic --freeze runs/hybrid-validation-freeze-v1/freeze.json --output runs/hybrid-validation-v1
+cd ../..
+mkdir -p .local
+cp research/voice-prosody/run_frozen_hybrid_stage.py .local/run-hybrid-natural-stage.py
+research/voice-prosody/.venv/bin/python .local/run-hybrid-natural-stage.py predict
+cd research/voice-prosody
+.venv/bin/python -m phenometrix_prosody.hybrid_parity --output runs/hybrid-browser-parity-v2
+.venv/bin/python -m phenometrix_prosody.hybrid_reserved_parity --freeze runs/hybrid-validation-freeze-v1/freeze.json --output runs/hybrid-reserved-browser-parity-v1
+```
+
+The published phase wrapper is an exact copy of the recorded wrapper. It uses
+fixed phase paths, records command start/end, exit status and log hashes, and
+refuses to overwrite execution evidence. The parity helpers never open corpus
+references. They use 14 analytic sources, one full source per development speaker,
+and one preselected full source per reserved speaker under all four conditions.
+They enforce a 20 s source bound, verify PCM hashes and check all frames, including
+unvoiced raw-YIN estimates. They do not select windows by label or model outcome.
+
+Prepare the original frozen ONNX assets with the explicit hybrid option, then
+run the current browser parity implementation against the unchanged fixtures:
+
+```sh
+cd ../..
+node apps/capture-web/scripts/prepare-voice-mlp-research.mjs --hybrid ../../research/voice-prosody/runs/delayed-mlp-export
+cd apps/capture-web
+VOICE_RESEARCH_MODEL_CONFIG="$PWD/public/.local/voice-mlp/hybrid-config.json" \
+VOICE_HYBRID_PARITY_MANIFEST="$PWD/../../research/voice-prosody/runs/hybrid-browser-parity-v2/manifest.json" \
+VOICE_RESEARCH_OUTPUT_DIR="$PWD/../../research/voice-prosody/runs/hybrid-browser-reproduction-development" \
+pnpm exec playwright test --config playwright.research.config.ts --grep 'frozen hybrid' --workers=1
+VOICE_RESEARCH_MODEL_CONFIG="$PWD/public/.local/voice-mlp/hybrid-config.json" \
+VOICE_HYBRID_PARITY_MANIFEST="$PWD/../../research/voice-prosody/runs/hybrid-reserved-browser-parity-v1/manifest.json" \
+VOICE_RESEARCH_OUTPUT_DIR="$PWD/../../research/voice-prosody/runs/hybrid-browser-reproduction-reserved" \
+pnpm exec playwright test --config playwright.research.config.ts --grep 'bounded PCM hook' --workers=1
+cd ../..
+```
+
+The first mixed-precision browser implementation failed one reserved-input raw-Hz
+comparison. The [single numerical-repair plan](YIN_NUMERICAL_REPAIR_PLAN.md) and
+failed evidence are preserved. Consistent float64 internal arithmetic passes
+4,420 analytic/development and 10,812 reserved-input frames under the original
+tolerance; the repaired reserved check is a regression after a diagnosed input
+failure, not an untouched implementation holdout. Python natural predictions,
+model weights and scorer targets remain unchanged. No tie epsilon, unvoiced
+exemption or tolerance change was used.
+
+Only after complete prediction freeze and the declared browser check, launch
+REF acquisition and scoring serially from the repository root:
+
+```sh
+research/voice-prosody/.venv/bin/python .local/run-hybrid-natural-stage.py acquire-ref
+research/voice-prosody/.venv/bin/python .local/run-hybrid-natural-stage.py score
+cd research/voice-prosody
+.venv/bin/python -m phenometrix_prosody.audit_hybrid_validation \
+  --run runs/hybrid-validation-v1 --freeze runs/hybrid-validation-freeze-v1/freeze.json \
+  --data data/ptdb-tug --execution runs/hybrid-validation-execution-v1 \
+  --freeze-sha256 c5c4288cc04c0d7fb46154977627158336e2b1a5b8b496f8700c7a96dd25c67d \
+  --allow-sealed-reference-audit --output runs/hybrid-validation-v1/independent-audit.json
+```
+
+The shown hash identifies the recorded freeze. A fresh reproduction must record
+its own freeze hash **before acquisition** and supply that identity to its audit;
+it cannot inherit the historical hash merely by reusing filenames. The independent
+audit reconstructs 3,200 recording/method count comparisons and verifies exact
+macros, pair effects and paired-prompt bootstrap intervals. Intervals condition on
+four speakers and two pairs, not a participant population. Full count/stratum
+results and limits are in [HYBRID_VALIDATION_RESULTS.md](HYBRID_VALIDATION_RESULTS.md)
+and the [public summary](../../benchmarks/voice-prosody/hybrid-validation-summary.json).
+
+The sequential runtime driver freezes measured source/configuration identities,
+runs DSP/hybrid/hybrid/DSP for 60 s each and a 30 min hybrid soak, and preserves
+failures. It does not run training or hosted computation. From this directory:
+
+```sh
+.venv/bin/python run_hybrid_browser.py --output runs/hybrid-runtime-reproduction \
+  --config ../../apps/capture-web/public/.local/voice-mlp/hybrid-config.json
+```
+
+Do not run other compute workloads during that series. After completion, run
+`phenometrix_prosody.audit_browser` and `phenometrix_prosody.audit_clock` on each
+run, and `phenometrix_prosody.audit_hybrid_browser` on each hybrid run with the
+same pinned configuration hash. The public summary requires matching raw/result
+identities and all applicable audits. All five recorded runs and their applicable audits passed. The 30 min hybrid
+soak has one block above 10 ms (maximum 10.5 ms), zero 20 ms cadence misses,
+eight completed frames withheld from delivery and 859 unavailable legacy
+cross-clock frame timings. The report preserves these details and the limits
+of the same-clock software freshness certificate. Inner replay artifacts still declare
+`timingBenchmark: false` and `runPurpose: "sustained-functional-soak"`; the outer
+sequence supplies the frozen component evidence, not a controlled hardware
+benchmark. The final sample endpoint and extra boundary-bin frame remain in the
+audits rather than being truncated to 30 min.
 
 ## Export and browser engineering checks
 
@@ -235,9 +352,11 @@ The preserved DSP numerical identity is `voice-analysis-1.1`. Transport/worker v
 adds exact sample endpoints, separate clock origins and a bounded credit queue.
 Legacy `tMs` remains window start. Inconsistent clocks retain raw evidence and
 make derived latency unavailable; negative times are not clamped into success.
-No calibration, sealed-test accuracy or clinical claim follows from this run.
+These historical export/replay checks alone establish no calibration, reserved-speech
+accuracy or clinical claim. The separately frozen validation stage above has its
+own natural and browser evidence.
 
-## Sequential runtime reproduction
+## Historical candidate-MLP runtime reproduction
 
 After preparing both research asset sets above, run each replay in a fresh output
 folder. From `apps/capture-web`, the counterbalanced order is DSP, trained MLP,

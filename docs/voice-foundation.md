@@ -342,6 +342,40 @@ and overload at 30000. Run sequential DSP, MLP, MLP, DSP in four fresh evidence
 directories. This changes only the research entry configuration. Source and
 artifact digests must remain unchanged through all runs.
 
+## Research-only hybrid execution
+
+The explicitly selected `phenometrix.mlp-voicing-yin-pitch.v1` mode retains the
+original trained MLP for voicing and supplies pitch from
+`phenometrix.raw-yin-librosa011-semantics.float64.ts.v2`. Configuration bytes, original
+checkpoint, exported graph, export manifest and local runtime assets are pinned.
+The default/legacy candidate-MLP research mode stays distinct; neither mode
+changes production DSP signal frames or their identity.
+
+`research-voice-yin.ts` ports librosa 0.11.0 raw YIN semantics for exactly 1,920
+float32 samples at 48 kHz: linear autocorrelation, cumulative mean normalized
+difference, first threshold trough or global minimum, and bounded parabolic
+refinement. A fixed reusable scratch set bounds its storage. Each prepared frame
+owns scalar YIN evidence; subsequent preparation or reset cannot overwrite it.
+The hybrid returns unvoiced below raw MLP probability 0.5, otherwise finite raw
+YIN pitch in inclusive 50–700 Hz, or unavailable. The candidate head is diagnostic
+only. No additional RMS, correlation or continuity gate is introduced.
+
+The frame target remains support end minus 960 samples, with earliest input
+availability at support end. This is 20 ms of future support relative to the
+reported target. YIN service, model inference and complete admitted-block service
+remain separate metrics. Both delivered and host-withheld research predictions
+retain raw YIN, configuration/model/estimator identity and null correctness
+probability for independent auditing.
+
+The bounded parity worker uses the same hook on pinned local PCM windows. It
+checks natural recordings on the exact offline provider phase, including feature
+history and reset. It is arithmetic evidence, not natural audio passing through
+the AudioWorklet and not a reference-accuracy test. The real worklet path instead
+uses known synthetic sources, explicit stalls and a sustained local replay.
+See the [frozen validation plan](../research/voice-prosody/HYBRID_VALIDATION_PLAN.md)
+and [validation report](../research/voice-prosody/HYBRID_VALIDATION_RESULTS.md)
+for independent natural results, numerical tolerances and runtime evidence.
+
 ## Forbidden outputs
 
 PCM, waveforms, spectral arrays, pitch cycles, cepstra, MFCCs, formant tracks,

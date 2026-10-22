@@ -11,9 +11,13 @@ const outputPath = (name: string, fallback: string) => process.env.VOICE_RESEARC
 
 test("real AudioWorklet/worker replay bounds overload and recovers segments", async ({ page }, testInfo) => {
   const method = process.env.VOICE_RESEARCH_METHOD ?? "dsp";
-  if (method !== "dsp" && method !== "trained-mlp") throw new Error("Invalid research method.");
-  const modelConfig = method === "trained-mlp"
-    ? JSON.parse(readFileSync(resolve("public/.local/voice-mlp/config.json"), "utf8")) as VoiceResearchModelConfig : undefined;
+  if (method !== "dsp" && method !== "trained-mlp" && method !== "hybrid") throw new Error("Invalid research method.");
+  if (method === "hybrid" && !process.env.VOICE_RESEARCH_MODEL_CONFIG) throw new Error("Hybrid requires an explicit pinned config path.");
+  const configText = method === "dsp" ? undefined : readFileSync(resolve(process.env.VOICE_RESEARCH_MODEL_CONFIG ?? "public/.local/voice-mlp/config.json"), "utf8");
+  const modelConfig = configText === undefined ? undefined : JSON.parse(configText) as VoiceResearchModelConfig;
+  const modelConfigDocument = configText === undefined ? undefined : { text: configText, sha256: createHash("sha256").update(configText).digest("hex") };
+  if (method === "hybrid" && modelConfig?.estimator !== "phenometrix.mlp-voicing-yin-pitch.v1") throw new Error("Hybrid config estimator mismatch.");
+  if (method === "trained-mlp" && modelConfig?.estimator === "phenometrix.mlp-voicing-yin-pitch.v1") throw new Error("Candidate fixture cannot select hybrid.");
   const clockDiagnostics = process.env.VOICE_RESEARCH_CLOCK_DIAGNOSTICS === "1";
   const durationMs = Number(process.env.VOICE_RESEARCH_DURATION_MS ?? 3_500);
   const overloadAtMs = Number(process.env.VOICE_RESEARCH_OVERLOAD_AT_MS ?? 1_200);
@@ -47,10 +51,20 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
   await page.goto("/research-voice.html");
   await page.waitForFunction(() => typeof window.runVoiceResearchReplay === "function");
   const result = await page.evaluate(options => window.runVoiceResearchReplay({ ...options, streamRawTelemetry: true,
-    retainedFrameLimit: 120, retainedBlockLimit: 80 }), { durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, clockDiagnostics }) as ReplayResult;
+    retainedFrameLimit: 120, retainedBlockLimit: 80 }), { durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, modelConfigDocument, clockDiagnostics }) as ReplayResult;
   let validationStatus = "failed";
   try {
     expect(result.status, JSON.stringify(result.errors)).toBe("complete");
+    if (method === "hybrid") {
+      expect(result.researchModel).toMatchObject({ estimatorContract: "phenometrix.mlp-voicing-yin-pitch.v1",
+        configurationSha256: modelConfigDocument!.sha256, modelManifestSha256: modelConfig!.manifestSha256,
+        modelSha256: modelConfig!.modelSha256 });
+      expect(result.summary.researchFrameCount).toBe(result.summary.frameCount);
+      expect(Number(result.summary.researchVoicedFrameCount)).toBeGreaterThan(100);
+      expect(result.summary.researchCorrectKnownPitchFrameCount).toBe(result.summary.researchVoicedFrameCount);
+    } else if (method === "dsp") {
+      expect(result.researchModel).toBeNull(); expect(result.summary.researchFrameCount).toBe(0);
+    }
     expect(result.workerStopAcknowledged).toBe(true);
     expect(result.transportStop.status).toBe("complete");
     expect(result.pacedSourceDurationMs).toBeGreaterThanOrEqual(durationMs - 10);
@@ -118,7 +132,7 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
   } finally {
     const evidence = { ...result, validationStatus,
       runPurpose: durationMs >= 30 * 60 * 1_000 ? "sustained-functional-soak" : "functional-regression",
-      replayConfiguration: { method, durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, clockDiagnostics },
+      replayConfiguration: { method, durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, configurationSha256: modelConfigDocument?.sha256 ?? null, clockDiagnostics },
       timingBenchmark: false,
       timingLimitation: "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
       rawArtifact: { file: "browser-raw.ndjson", sha256: createHash("sha256").update(readFileSync(rawPath)).digest("hex"),

@@ -205,8 +205,12 @@ must cover the latter.
 
 A separate local `research-voice.html` entry point uses synthetic AudioBufferSource
 replay through the production worklet/worker, optional exported-model parity
-checks, and an explicitly unqualified trained-MLP worker entry. Production
-capture remains DSP-only. The optional research hook reuses shared v2 features
+checks, and explicitly selected candidate-MLP or MLP-voicing/YIN-pitch research
+modes. Production capture remains DSP-only. The hybrid pins the original
+checkpoint and configuration bytes, computes raw YIN for each exact prepared
+window, and combines it with frozen MLP voicing without a candidate-selection
+or extra confidence gate. Every research result, including host-withheld results,
+retains configuration/model/estimator identities. The optional research hook reuses shared v2 features
 and the original DSP baseline, then serializes single-thread pinned ONNX/WASM
 inference with one active plus three queued PCM requests and the same four
 result credits. Model probabilities remain separate from heuristic confidence;
@@ -215,7 +219,10 @@ and main-arrival timing include model completion, while inference-only timing
 is separate. The route requests no microphone, does not connect a learned
 estimator to production measurements, and streams bounded raw timing batches
 to a local test sink. It is an engineering research harness within Ambient Capture, not another
-product capability or a retained patient-media path.
+product capability or a retained patient-media path. A separate bounded PCM
+fixture worker calls the same hook for natural-speech arithmetic parity on the
+provider frame grid; those checks are distinct from actual worklet streaming
+and from reference-scored independent natural accuracy.
 
 ## Legacy local demo retained
 

@@ -1,7 +1,8 @@
+import { RawYin48k, combineMlpVoicingAndRawYin, HYBRID_ESTIMATOR_CONTRACT, ORIGINAL_MLP_WEIGHTS_SHA256 } from "./research-voice-yin.js";
 import * as ort from "onnxruntime-web/wasm";
 import { extractVoicePitchFeaturesV2, VOICE_PITCH_FEATURE_NAMES_V2 } from "./voice-pitch-features-v2.js";
 import type { VoicePitchFeatureHistoryV1 } from "./voice-pitch-features.js";
-import type { VoiceResearchHook, VoiceResearchModelConfig, VoiceResearchPrediction } from "./voice-research-hook.js";
+import type { VoiceResearchHook, VoiceResearchModelConfig, VoiceResearchPrediction, VoiceResearchIdentity } from "./voice-research-hook.js";
 
 const sha256 = async (bytes: ArrayBuffer) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
   value => value.toString(16).padStart(2, "0")).join("");
@@ -21,9 +22,14 @@ function output(tensor: ort.Tensor | undefined, count: number): Float32Array {
   return tensor.data;
 }
 
-export async function createResearchVoiceMlp(config: VoiceResearchModelConfig): Promise<VoiceResearchHook> {
+export async function createResearchVoiceMlp(config: VoiceResearchModelConfig, configurationSha256: string | null = null): Promise<VoiceResearchHook> {
   if (config.schemaVersion !== "phenometrix.research-voice-model-config.v1" ||
       config.qualification !== "unqualified-functional-fixture") throw new Error("Research-only model configuration required.");
+  if (config.estimator !== undefined && config.estimator !== "phenometrix.candidate-selecting-mlp.v1" && config.estimator !== HYBRID_ESTIMATOR_CONTRACT) {
+    throw new Error("Unknown research estimator contract.");
+  }
+  const hybrid = config.estimator === HYBRID_ESTIMATOR_CONTRACT;
+  if (hybrid && !configurationSha256?.match(/^[a-f0-9]{64}$/)) throw new Error("Hybrid requires a verified original configuration document.");
   const manifest = JSON.parse(new TextDecoder().decode(await pinnedBytes(config.manifestUrl, config.manifestSha256)));
   if (manifest.status !== "complete" || manifest.training_performed !== true || manifest.scaling_fitted !== true ||
       manifest.config.kind !== "framewise-mlp" || manifest.config.feature_version !== "v2" ||
@@ -33,6 +39,13 @@ export async function createResearchVoiceMlp(config: VoiceResearchModelConfig): 
       JSON.stringify(manifest.feature_names) !== JSON.stringify(VOICE_PITCH_FEATURE_NAMES_V2)) {
     throw new Error("Pinned export does not match the trained 57-feature/6-candidate/20ms MLP contract.");
   }
+  if (hybrid && manifest.training_metadata.weights_sha256 !== ORIGINAL_MLP_WEIGHTS_SHA256) {
+    throw new Error("Hybrid requires the frozen original MLP checkpoint.");
+  }
+  const provenance: VoiceResearchIdentity = { configurationSha256, modelManifestSha256: config.manifestSha256,
+    checkpointSha256: manifest.training_metadata.weights_sha256, modelSha256: config.modelSha256,
+    estimatorContract: hybrid ? HYBRID_ESTIMATOR_CONTRACT : "phenometrix.candidate-selecting-mlp.v1" };
+  if (!/^[a-f0-9]{64}$/.test(provenance.checkpointSha256)) throw new Error("Missing checkpoint identity.");
   const [model, wasm, moduleBytes] = await Promise.all([
     pinnedBytes(config.modelUrl, config.modelSha256), pinnedBytes(config.wasmUrl, config.wasmSha256),
     pinnedBytes(config.moduleUrl, config.moduleSha256)
@@ -48,17 +61,22 @@ export async function createResearchVoiceMlp(config: VoiceResearchModelConfig): 
   let session: ort.InferenceSession;
   try { session = await ort.InferenceSession.create(model, { executionProviders: ["wasm"], graphOptimizationLevel: "all" }); }
   finally { URL.revokeObjectURL(moduleUrl); URL.revokeObjectURL(wasmUrl); }
+  const yin = hybrid ? new RawYin48k() : null;
   let history: VoicePitchFeatureHistoryV1 | null = null;
   let state = new Float32Array(32);
   let generation = 0;
   let disposed = false;
   let inFlight: Promise<unknown> | null = null;
   return {
+    provenance,
     prepare(samples, sampleRateHz) {
       if (disposed || sampleRateHz !== 48_000) throw new Error("Research MLP requires active 48kHz PCM.");
       const features = extractVoicePitchFeaturesV2(samples, sampleRateHz, history);
       history = features.nextHistory;
-      return features;
+      if (!yin) return features;
+      const began = performance.now();
+      const rawYin = yin.process(samples);
+      return { ...features, rawYin: { ...rawYin, serviceMs: performance.now() - began } };
     },
     async predict(features, timing) {
       if (disposed || inFlight) throw new Error("Research inference must be active and serial.");
@@ -84,14 +102,18 @@ export async function createResearchVoiceMlp(config: VoiceResearchModelConfig): 
         const weights = Array.from(logits, (logit, i) => mask[i] ? Math.exp(logit - maximum) : 0);
         const denominator = weights.reduce((total, weight) => total + weight, 0);
         const candidateProbabilities = weights.map(weight => denominator ? weight / denominator : 0);
-        const predictionState = probability < .5 ? "unvoiced" : selected === null ? "unavailable" : "voiced";
-        const candidateIndex = predictionState === "voiced" ? selected : null;
+        if (hybrid && !features.rawYin) throw new Error("Missing prepared raw YIN evidence.");
+        const combined = hybrid ? combineMlpVoicingAndRawYin(probability, features.rawYin!.rawF0Hz) : null;
+        const predictionState = combined?.state ?? (probability < .5 ? "unvoiced" : selected === null ? "unavailable" : "voiced");
+        const candidateIndex = !hybrid && predictionState === "voiced" ? selected : null;
         return { schemaVersion: "phenometrix.research-voice-prediction.v1", qualification: "unqualified-functional-fixture",
-          modelSha256: config.modelSha256, featureSchema: "phenometrix.voice-pitch-features.v2", measurementDelayMs: 20,
+          ...provenance,
+          candidateHeadRole: hybrid ? "diagnostic-only-unused-by-hybrid" : "pitch-selection",
+          ...(hybrid ? { rawYin: features.rawYin } : {}), featureSchema: "phenometrix.voice-pitch-features.v2", measurementDelayMs: 20,
           referenceSample: timing.supportEndSampleExclusive - timing.sampleRateHz * .02,
           supportStartSample: timing.supportStartSample, supportEndSampleExclusive: timing.supportEndSampleExclusive,
           lastRequiredInputSample: timing.lastRequiredInputSample, state: predictionState,
-          f0Hz: candidateIndex === null ? null : features.candidates[candidateIndex].hz,
+          f0Hz: combined ? combined.f0Hz : candidateIndex === null ? null : features.candidates[candidateIndex].hz,
           candidateIndex, voicingLogit: voicing, voicingProbability: probability,
           candidateLogits: Array.from(logits), candidateProbabilities, correctnessProbability: null,
           probabilitySemantics: "uncalibrated-model-probabilities-not-correctness", inferenceServiceMs: performance.now() - started,
@@ -103,11 +125,11 @@ export async function createResearchVoiceMlp(config: VoiceResearchModelConfig): 
         if (tensors) Object.values(tensors).forEach(tensor => tensor.dispose());
       }
     },
-    reset() { generation += 1; history = null; state = new Float32Array(32); },
+    reset() { generation += 1; history = null; state = new Float32Array(32); yin?.clear(); },
     async dispose() {
       disposed = true; generation += 1; history = null;
       try { await inFlight; } catch { /* The worker reports inference failure separately. */ }
-      state.fill(0);
+      state.fill(0); yin?.clear();
       await session.release();
     }
   };

@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import { configureVoiceResearchHook } from "./voice-worker.js";
 import { createResearchVoiceMlp } from "./research-voice-mlp.js";
+import { verifyResearchConfig } from "./research-voice-config.js";
 let configured = false;
 self.addEventListener("message", async (event: MessageEvent) => {
   if (event.data?.type === "configure-research-model") {
@@ -8,9 +9,11 @@ self.addEventListener("message", async (event: MessageEvent) => {
     configured = true;
     try {
       const began = performance.now();
-      configureVoiceResearchHook(await createResearchVoiceMlp(event.data.config));
+      const verified = await verifyResearchConfig(event.data.config, event.data.configDocument);
+      const hook = await createResearchVoiceMlp(verified.config, verified.configurationSha256);
+      configureVoiceResearchHook(hook);
       self.postMessage({ type: "research-model-ready", loadMs: performance.now() - began,
-        qualification: "unqualified-functional-fixture", modelSha256: event.data.config.modelSha256 });
+        qualification: "unqualified-functional-fixture", ...hook.provenance });
     } catch (error) { self.postMessage({ type: "research-model-error", reason: String(error) }); }
   } else if (event.data?.type === "research-stall") {
     const duration = event.data.durationMs;

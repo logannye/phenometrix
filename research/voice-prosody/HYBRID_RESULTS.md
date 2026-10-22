@@ -71,9 +71,9 @@ false voiced outputs on all 844 eligible aperiodic frames, with zero in each of
 the four cases. They pass the frozen requirements of at least 90% equal-case
 success, at least 80% in every voiced case, and at most 5% false voicing in every
 unvoiced case. The original hybrid's worst case is `hybrid-fresh-012`, a low-amplitude 331.7–557.9 Hz
-glide with 13 false unvoiced outputs among 211 scored frames. All cases, classical
-baselines and candidate-oracle coverage are retained in the
-[public summary](../../benchmarks/voice-prosody/hybrid-summary.json).
+glide with 13 false unvoiced outputs among 211 scored frames. Full case, classical-baseline and candidate-oracle metrics remain in the ignored
+`runs/hybrid-synthetic-v1/metrics.json` artifact. Compact aggregates and source
+identities are in the [public summary](../../benchmarks/voice-prosody/hybrid-summary.json).
 
 Both hybrids reach 100% success on each original stationary 100, 200 and 300 Hz
 case, and on the postchange portions of each original 100, 200 and 300 Hz
@@ -157,8 +157,8 @@ comparisons exactly against prior frozen outputs. Neither audit refits a model.
 | Natural baseline identity audit | `db66b6678b3f2dd70d3766b4b081b573483c8f27e603a848485c076f2cfaf5ae` |
 
 Raw corpus audio, reference trajectories, feature caches, weights and frame-level
-predictions remain ignored. The public summary contains aggregate metrics,
-synthetic case definitions and identities. Reproduction commands are in the
+predictions remain ignored. The public summary contains aggregate metrics and source identities; complete
+synthetic definitions and case outcomes remain in the ignored frozen artifacts. Reproduction commands are in the
 [research README](README.md#no-fit-subharmonic-diagnosis-and-hybrid-follow-up).
 
 The original hybrid is retained as an offline research candidate under the frozen

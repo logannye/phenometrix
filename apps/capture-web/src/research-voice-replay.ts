@@ -1,6 +1,6 @@
 import { VoiceRenderLeaseIssuer, VOICE_RENDER_LEASE_RENEWAL_MS } from "./voice-render-freshness.js";
 import { VoiceClockProbeTracker, type VoiceClockObservation } from "./voice-clock-probe.js";
-import type { VoiceResearchModelConfig } from "./voice-research-hook.js";
+import type { VoiceResearchModelConfig, VoiceResearchConfigDocument, VoiceResearchIdentity } from "./voice-research-hook.js";
 import { VoiceResultBatchReceiver } from "./voice-result-transport.js";
 import { captureVoiceClockMapping, type VoiceFrameTiming } from "./voice-stream-timing.js";
 import { VOICE_WORKER_MESSAGE_VERSION, isCurrentVoiceTransportDiagnostics, requestedAudioCaptureSettings,
@@ -17,6 +17,8 @@ export interface ReplayOptions {
   clockDiagnostics?: boolean;
   /** Research route only; the production capture entry never supplies a model. */
   modelConfig?: VoiceResearchModelConfig;
+  modelConfigDocument?: VoiceResearchConfigDocument;
+  syntheticTone?: "200hz" | "300hz-harmonic";
   overloadAtMs?: number;
   overloadDurationMs?: number;
   mainStallAtMs?: number;
@@ -35,7 +37,7 @@ export interface ReplayResult {
   setupDurationMs: number;
   teardownDurationMs: number;
   sampleRateHz: number;
-  researchModel: { qualification: "unqualified-functional-fixture"; modelSha256: string; loadMs: number } | null;
+  researchModel: (VoiceResearchIdentity & { qualification: "unqualified-functional-fixture"; loadMs: number }) | null;
   browser: string;
   frames: Array<Record<string, unknown>>;
   errors: string[];
@@ -62,6 +64,8 @@ const boundedLimit = (value: number | undefined, fallback: number) => {
 
 /** Real-time synthetic replay, never microphone capture or a hardware-input latency test. */
 export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promise<ReplayResult> {
+  if (options.syntheticTone !== undefined && options.syntheticTone !== "200hz" && options.syntheticTone !== "300hz-harmonic") throw new Error("Unknown synthetic tone.");
+  const knownPitchHz = options.syntheticTone === "300hz-harmonic" ? 300 : 200;
   const durationMs = options.durationMs ?? 4_000;
   if (!Number.isFinite(durationMs) || durationMs < 1_000 || durationMs > 31 * 60 * 1_000) throw new Error("Invalid replay duration.");
   if (options.mainStallAtMs !== undefined && (!Number.isFinite(options.mainStallAtMs) || options.mainStallAtMs < 0 ||
@@ -93,12 +97,15 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
   const statistics = { frameService: [] as number[], blockService: [] as number[],
     processedBlockService: [] as number[], staleBlockService: [] as number[], freshnessWithheldBlockService: [] as number[],
     renderAgeUpperBound: [] as number[],
-    arrival: [] as number[], receipt: [] as number[], modelInference: [] as number[], modelReady: [] as number[], modelArrival: [] as number[], targetReady: [] as number[] };
+    arrival: [] as number[], receipt: [] as number[], yinService: [] as number[], modelInference: [] as number[], modelReady: [] as number[], modelArrival: [] as number[], targetReady: [] as number[] };
   const segments: string[] = [];
   let previousSegment = "";
   let segmentCount = 0;
   let frameCount = 0;
   let researchFrameCount = 0;
+  let discardedResearchFrameCount = 0;
+  let researchVoicedFrameCount = 0;
+  let researchCorrectKnownPitchFrameCount = 0;
   let blockCount = 0;
   let invalidTimingCount = 0;
   let certifiedFrameCount = 0;
@@ -232,7 +239,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         ...(valid ? {} : { unavailableReason: "inconsistent-clock-mapping" as const }),
         mainResultArrivalMs: arrivalMs, rawSampleAvailabilityToMainResultMs: elapsed,
         sampleAvailabilityToMainResultMs: valid ? elapsed : null };
-      const item = { ...message.frame, timing, renderLease: message.renderLease ?? null,
+      const item = { ...message.frame, captureEpoch: message.captureEpoch, timing, renderLease: message.renderLease ?? null,
         ...(message.research ? { research: message.research } : {}) };
       if (timing.renderFreshness?.status === "certified") {
         certifiedFrameCount += 1;
@@ -240,6 +247,11 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       } else fail("delivered-frame-without-render-freshness-certificate");
       if (message.research) {
         researchFrameCount += 1;
+        if (message.research.rawYin) addStatistic(statistics.yinService, message.research.rawYin.serviceMs ?? null);
+        if (message.research.state === "voiced") {
+          researchVoicedFrameCount += 1;
+          researchCorrectKnownPitchFrameCount += Number(message.research.f0Hz !== null && Math.abs(message.research.f0Hz - knownPitchHz) <= 2);
+        }
         addStatistic(statistics.modelInference, message.research.inferenceServiceMs);
         addStatistic(statistics.modelReady, message.research.elapsedFromFrameStartMs ?? null);
         addStatistic(statistics.modelArrival, message.research.sampleAvailabilityToModelReadyMs ?? null);
@@ -258,7 +270,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       }
       if (message.frame.periodic && message.frame.f0Hz !== null) {
         periodicFrameCount += 1;
-        const error = Math.abs(message.frame.f0Hz - 200);
+        const error = Math.abs(message.frame.f0Hz - knownPitchHz);
         maximumKnownPitchErrorHz = Math.max(maximumKnownPitchErrorHz, error);
         correctKnownPitchFrameCount += Number(error <= 2);
       }
@@ -283,7 +295,9 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       discardedResultFrameCount += 1;
       staleResultFrameCount += Number(discarded.discardReason === "result-age-exceeded" || discarded.discardReason === "expired-lease");
       hostWithheldReasons[discarded.discardReason] = (hostWithheldReasons[discarded.discardReason] ?? 0) + 1;
-      emitTelemetry("frame", { ...discarded.frame, timing: discarded.timing, renderLease: discarded.renderLease ?? null,
+      discardedResearchFrameCount += Number(!!discarded.research);
+      emitTelemetry("frame", { ...discarded.frame, captureEpoch: discarded.captureEpoch,
+        ...(discarded.research ? { research: discarded.research } : {}), timing: discarded.timing, renderLease: discarded.renderLease ?? null,
         deliveryDisposition: "discarded", discardReason: discarded.discardReason });
     }
     for (const message of received.messages) handleResponse(message);
@@ -303,10 +317,12 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
           if (event.data?.type !== "research-model-ready" && event.data?.type !== "research-model-error") return;
           clearTimeout(timer); worker.removeEventListener("message", listener);
           if (event.data.type === "research-model-error") reject(new Error(event.data.reason));
-          else resolve({ qualification: event.data.qualification, modelSha256: event.data.modelSha256, loadMs: event.data.loadMs });
+          else resolve({ qualification: event.data.qualification, modelSha256: event.data.modelSha256, loadMs: event.data.loadMs,
+            configurationSha256: event.data.configurationSha256, modelManifestSha256: event.data.modelManifestSha256,
+            checkpointSha256: event.data.checkpointSha256, estimatorContract: event.data.estimatorContract });
         };
         worker.addEventListener("message", listener);
-        worker.postMessage({ type: "configure-research-model", config: options.modelConfig });
+        worker.postMessage({ type: "configure-research-model", config: options.modelConfig, configDocument: options.modelConfigDocument });
       });
     }
     await context.audioWorklet.addModule("/voice-capture-worklet.js");
@@ -360,8 +376,9 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     if (context.state !== "running") throw new Error(`Audio context not running:${context.state}`);
     const buffer = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
     const samples = buffer.getChannelData(0);
-    for (let i = 0; i < samples.length; i += 1) samples[i] = .12 * Math.sin(2 * Math.PI * 200 * i / context.sampleRate)
-      + .03 * Math.sin(2 * Math.PI * 400 * i / context.sampleRate);
+    for (let i = 0; i < samples.length; i += 1) samples[i] = options.syntheticTone === "300hz-harmonic"
+      ? .075 * (Math.sin(2 * Math.PI * 300 * i / context.sampleRate) + .5 * Math.sin(2 * Math.PI * 600 * i / context.sampleRate) + .25 * Math.sin(2 * Math.PI * 900 * i / context.sampleRate))
+      : .12 * Math.sin(2 * Math.PI * 200 * i / context.sampleRate) + .03 * Math.sin(2 * Math.PI * 400 * i / context.sampleRate);
     source = context.createBufferSource();
     source.buffer = buffer; source.loop = true; source.connect(node);
     sourceStartedAtMs = performance.now();
@@ -418,11 +435,11 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       clockProbes: clockProbeCount <= 64 ? clockProbes : [...clockProbes.slice(clockProbeCount % 64), ...clockProbes.slice(0, clockProbeCount % 64)],
       clockDiagnostics: { enabled: !!options.clockDiagnostics, intervalMs: 1000, maximumPending: 1, retainedLimit: 64,
         fixedMapping: options.clockDiagnostics ? fixedClockMapping : null },
-      summary: { frameCount, blockCount, researchFrameCount, clockProbeCount, clockProbeObservedCount, modelInferenceServiceMs: quantiles(statistics.modelInference),
+      summary: { frameCount, blockCount, researchFrameCount, discardedResearchFrameCount, researchVoicedFrameCount, researchCorrectKnownPitchFrameCount, knownPitchHz, knownPitchDiagnosticToleranceHz: 2, rawYinServiceMs: quantiles(statistics.yinService), clockProbeCount, clockProbeObservedCount, modelInferenceServiceMs: quantiles(statistics.modelInference),
         modelElapsedFromFrameStartMs: quantiles(statistics.modelReady),
         sampleAvailabilityToModelReadyMs: quantiles(statistics.modelArrival),
         targetReferenceToModelReadyMs: quantiles(statistics.targetReady),
-        frameServiceScope: options.modelConfig ? "shared-feature-and-baseline-preparation-excludes-inference" : "baseline-dsp",
+        frameServiceScope: options.modelConfig ? "shared-feature-baseline-and-optional-yin-preparation-excludes-inference" : "baseline-dsp",
         completeBlockServiceScope: "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post", retainedFrameLimit: frameLimit, retainedBlockLimit: blockLimit,
         numericStatisticsCapacityPerMetric: statisticsCapacity, frameServiceMs: frameService,
         completeBlockServiceMs: quantiles(statistics.blockService),
@@ -469,10 +486,26 @@ export async function runVoiceModelExportParity(): Promise<Record<string, unknow
     worker.postMessage({ type: "run-export-parity" });
   }); } finally { worker.terminate(); }
 }
+/** Separate bounded arithmetic fixture; does not claim natural-audio worklet timing. */
+export async function runVoiceHybridPcmParity(options: { config: VoiceResearchModelConfig;
+  configDocument: VoiceResearchConfigDocument; pcmBytes: number[]; pcmSha256: string; windowEndSamples: number[] }): Promise<Record<string, unknown>> {
+  if (options.pcmBytes.length > 960000 * 4) throw new Error("Oversized parity PCM.");
+  const worker = new Worker(new URL("./research-voice-hybrid-parity-worker.ts", import.meta.url), { type: "module" });
+  const pcm = Uint8Array.from(options.pcmBytes).buffer;
+  try { return await new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("Hybrid arithmetic parity timed out.")), 60_000);
+    worker.onmessage = event => { clearTimeout(timer); resolve(event.data); };
+    worker.onerror = event => { clearTimeout(timer); reject(new Error(event.message)); };
+    worker.postMessage({ config: options.config, configDocument: options.configDocument, pcm, pcmSha256: options.pcmSha256,
+      windowEndSamples: options.windowEndSamples }, [pcm]);
+  }); } finally { worker.terminate(); }
+}
 declare global { interface Window {
   runVoiceResearchReplay: typeof runVoiceResearchReplay;
   runVoiceModelExportParity: typeof runVoiceModelExportParity;
+  runVoiceHybridPcmParity: typeof runVoiceHybridPcmParity;
   recordVoiceResearchBatch?: (batch: ReplayTelemetryBatch) => Promise<void>;
 } }
+window.runVoiceHybridPcmParity = runVoiceHybridPcmParity;
 window.runVoiceModelExportParity = runVoiceModelExportParity;
 window.runVoiceResearchReplay = runVoiceResearchReplay;

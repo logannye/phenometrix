@@ -27,8 +27,8 @@ The earlier 30-minute replay's mapped arrival rise from about 39 to 82 ms is
 preserved in the [original streaming report](research/voice-prosody/STREAMING_RESULTS.md).
 An independently probed ten-minute follow-up did not reproduce that rise, so its
 physical cause remains unresolved. The [timing follow-up](research/voice-prosody/TIMING_FOLLOWUP.md)
-records the diagnosis, same-clock contract, and sustained confirmation. The new
-30-minute replay delivered **179,927 certified frames** with a maximum recorded
+records the diagnosis, same-clock contract, and sustained confirmation. That
+30-minute DSP replay delivered **179,927 certified frames** with a maximum recorded
 age bound of **53.8 ms**, complete-block p99 **4.3 ms**, maximum **8.7 ms**, and
 recovery from both worker and main-thread stalls. All **271,713 raw records**
 passed independent reconstruction.
@@ -76,17 +76,52 @@ when both pass. These are research results, with weak transformed-speech strata
 still visible. [HYBRID_RESULTS.md](research/voice-prosody/HYBRID_RESULTS.md) records
 the tradeoffs, gates, and independent reconstruction of all case counts.
 
-The hybrid has no qualified browser runtime, calibrated correctness probability,
-or independent natural-speech holdout result. It has not been promoted to the
-product.
+A frozen independent-speaker follow-up now tests that same hybrid on **160
+recordings from four reserved speakers**, with four fixed conditions (640
+recording/condition combinations). All predictions were frozen before reference
+acquisition. The independently reconstructed, equal-speaker/equal-condition
+joint errors are:
 
-Trained exports and an explicitly unqualified ONNX browser research path support
-reproduction. Raw voicing probabilities and candidate scores are **not calibrated
-probabilities of a correct F0 measurement**. Calibration, multi-seed confirmation,
-and sealed-test evaluation remain unperformed. The successful hybrid follow-up
-does not retroactively pass the original failed-model gates. Sealed-test
-acoustic data remain untouched. Research scripts, public aggregate evidence,
-failed decisions, and reproduction commands are in
+| Reserved natural-speech method | Joint voicing/F0 error ↓ |
+| --- | ---: |
+| DSP | 11.85% |
+| Gated YIN | 11.36% |
+| Candidate continuity | 11.25% |
+| Original candidate MLP | **9.12%** |
+| Original MLP voicing + raw YIN | **9.67%** |
+
+The hybrid passes the declared classical-comparator gate, improving over DSP
+by **2.17 percentage points**, while losing **0.56 points** to its own MLP.
+The DSP advantage is 1.73 and 2.62 points in the two matched speaker pairs.
+The conditional prompt-bootstrap interval is 1.99–2.36 points; it conditions on
+these four speakers and is not a population interval. This is unseen speech
+within PTDB-TUG, not an external corpus or manually verified pitch truth.
+
+The research browser hybrid matches the frozen Python comparison on **4,420
+development and 10,812 reserved-input frames**, with zero final-state mismatches.
+An initial comparison failed on one nearly tied raw-YIN minimum. A separately
+declared change to consistent double-precision internal arithmetic passed the
+same unchanged tolerances; the original failure remains recorded. Actual
+AudioWorklet replay also passes the 300 Hz regression. Exact-window arithmetic
+parity is separate from natural accuracy and complete-stream performance. See
+[HYBRID_VALIDATION_RESULTS.md](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md)
+for all strata, provenance, browser results and limitations.
+
+The source-frozen **30-minute hybrid browser replay** delivered **179,923
+certified frames**, with complete-block p99 **6.1 ms**, maximum **10.5 ms**,
+and a maximum recorded software age bound of **54.4 ms**. Both injected stalls
+recovered in fresh segments. The four one-minute comparisons gave DSP p99
+3.8–4.0 ms and hybrid p99 4.9–5.1 ms. These measure the complete shared research
+path on this machine; physical microphone latency and whole-browser heap growth
+remain unmeasured.
+
+**Production still uses DSP.** Raw voicing probabilities and candidate scores
+are **not calibrated probabilities of a correct F0 measurement**. Calibration,
+multi-seed confirmation, broader external validation and product promotion remain
+unperformed. The follow-up does not retroactively pass earlier failed-model
+gates. The reserved evaluation is now consumed and cannot be reused as fresh
+holdout evidence. Research scripts, public aggregate evidence, failed decisions,
+and reproduction commands are in
 [research/voice-prosody](research/voice-prosody/README.md). Raw audio, feature
 caches, weights, and large run outputs are excluded from Git.
 
@@ -191,16 +226,16 @@ disconnected from capture. The [research README](research/voice-prosody/README.m
 separates synthetic smoke, public-corpus experiments, and actual-browser replay.
 Browser fixtures and synthetic replay do not establish real-microphone accuracy.
 
-The [follow-up validation record](benchmarks/voice-prosody/followup-local-validation.json)
-binds the changed sources to **726 unit tests**, **114 research Python tests**,
-**18 product browser checks** and **five research browser checks**, plus TypeScript,
-structure and release builds. A test-only virtual-clock race in the connected
-encounter fixture was diagnosed and repaired; production UTC checks were unchanged.
-Both capture release builds exclude local research assets and preserve all ten
-normal public assets byte for byte. The
-[earlier validation record](benchmarks/voice-prosody/local-validation.json)
-retains historical sidecar and PostgreSQL evidence; those unchanged subsystems
-were not rerun for this follow-up.
+The current [hybrid validation record](benchmarks/voice-prosody/hybrid-local-validation.json)
+binds exact sources and local check logs. Repository validation passed **734
+unit tests across 73 files**, **157 research Python tests**, **18 product browser
+checks** and **five existing research browser checks**, plus hybrid parity, TypeScript,
+structure and release builds. Both capture release builds exclude research assets
+and preserve all ten normal public assets byte for byte. The
+[previous follow-up record](benchmarks/voice-prosody/followup-local-validation.json)
+and [earlier validation record](benchmarks/voice-prosody/local-validation.json)
+retain historical evidence, including sidecar and PostgreSQL checks; those
+unchanged subsystems were not rerun for this stage.
 
 ## Repository map
 

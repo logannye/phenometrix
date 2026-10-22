@@ -34,8 +34,7 @@ import {
 } from "./voice-stream-timing.js";
 
 import { BoundedVoiceAsyncPump } from "./voice-async-pump.js";
-import type { VoiceResearchHook } from "./voice-research-hook.js";
-import type { VoicePitchFeaturesV2 } from "./voice-pitch-features-v2.js";
+import type { VoiceResearchHook, VoiceResearchPreparedFrame } from "./voice-research-hook.js";
 
 const worker = self as DedicatedWorkerGlobalScope;
 let researchHook: VoiceResearchHook | null = null;
@@ -49,7 +48,7 @@ let researchQueueDroppedSampleCount = 0;
 let activeResearchCancel: (() => void) | null = null;
 interface ResearchPcmRequest { event: MessageEvent<unknown>; sourcePort: MessagePort; receivedAtLocalMs: number; recycled: boolean }
 let pendingResearchFrames: Array<{ record: Extract<VoiceWorkerResponse, { type: "signal-frame" }>;
-  features: VoicePitchFeaturesV2; startedAt: number }> | null = null;
+  features: VoiceResearchPreparedFrame; startedAt: number }> | null = null;
 
 /** Only the separate research worker imports and calls this before initialization. */
 export function configureVoiceResearchHook(hook: VoiceResearchHook): void {
