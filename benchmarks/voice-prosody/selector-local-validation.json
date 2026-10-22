@@ -1,0 +1,125 @@
+{
+  "schema": "phenometrix-selector-local-validation.v1",
+  "status": "passed-with-retained-warnings",
+  "recorded_at": "2026-10-22T22:11:43.371547+00:00",
+  "base_commit": "be1b7551d1a61b1ca7a7afec86a71b63965c599d",
+  "branch": "codex/causal-voice-estimation",
+  "identity_note": "Validation covers the source bytes bound below, on top of base_commit. The enclosing Git commit binds this receipt. This is validation success, not a model advancement-gate pass.",
+  "execution": {
+    "location": "local",
+    "fitting_device": "mps",
+    "audit_device": "cpu",
+    "remote_compute": false,
+    "new_installations": false,
+    "native_builds": false
+  },
+  "platform": {
+    "chip": "Apple M4 Max",
+    "unified_memory_bytes": 137438953472,
+    "architecture": "arm64",
+    "macos": "26.2",
+    "python": "3.11.15",
+    "torch": "2.9.1",
+    "numpy": "2.2.6",
+    "node": "v24.3.0"
+  },
+  "checks": {
+    "research_tests": {
+      "command": ".venv/bin/python -m pytest -q",
+      "cwd": "research/voice-prosody",
+      "status": "passed",
+      "passed": 193,
+      "warnings": 3,
+      "exit_code": 0,
+      "evidence": "Observed successful execution in this task; the tool transcript was not duplicated into a separate log file.",
+      "retained_warning_test": "tests/test_selector_headroom.py::test_batched_forward_matches_single_frames_and_has_no_future_dependence",
+      "retained_warning_location": "phenometrix_prosody/model.py:142",
+      "retained_warning_messages": [
+        "divide by zero encountered in matmul",
+        "overflow encountered in matmul",
+        "invalid value encountered in matmul"
+      ],
+      "interpretation": "Finite-output and batch/single-frame assertions pass. Full training Torch parity below supports frozen outputs; warning cause remains undetermined."
+    },
+    "repository_structure": {
+      "command": "npm run check",
+      "cwd": ".",
+      "status": "passed",
+      "exit_code": 0,
+      "evidence": "Observed successful execution in this task; checks structure, static assets and protocol/condition digests. No product build or browser rerun."
+    },
+    "tracked_diff_whitespace": {
+      "command": "git diff --check",
+      "status": "passed",
+      "exit_code": 0
+    },
+    "frozen_fit_sources": {
+      "status": "unchanged",
+      "verified_files": 10
+    },
+    "independent_output_audit": {
+      "path": "benchmarks/voice-prosody/selector-factorial-audit.json",
+      "sha256": "64341eb84e606517010d43d54629980ef35167557a41f8b8f33457d39ced2bc0",
+      "bytes": 4747
+    },
+    "full_training_torch_parity": {
+      "path": "benchmarks/voice-prosody/selector-torch-parity.json",
+      "sha256": "e8c78290ba13f7e306cc72462baeda7f07658dea9d95e3ddc49a07fe0313581a",
+      "bytes": 2325
+    }
+  },
+  "evidence": {
+    "headroom": {
+      "path": "benchmarks/voice-prosody/selector-headroom.json",
+      "sha256": "a9060050e4d7fac9b7ee255d7d1daa36827b82365f25d96a4fae93a2ab8a6b21",
+      "bytes": 789417
+    },
+    "factorial_summary": {
+      "path": "benchmarks/voice-prosody/selector-step1-summary.json",
+      "sha256": "2b13abedc7aab6ac215a52dd402b435d9da9498f33684795b3c572ac2a5432f5",
+      "bytes": 644609
+    },
+    "run_manifest": {
+      "path": "research/voice-prosody/runs/selector-factorial-v1/manifest.json",
+      "sha256": "df56e53be7399807f068616961ba9eac6ff1d6ce7dd76d6614166d79bbd664f5",
+      "bytes": 400215
+    },
+    "checkpoint_freeze": {
+      "path": "research/voice-prosody/runs/selector-factorial-v1/checkpoint-freeze.json",
+      "sha256": "6362fcc7ef2422cbb2e3c96950f3cabf11afe1061d94b579784a6efd0ad504bf",
+      "bytes": 381326
+    },
+    "prediction_freeze": {
+      "path": "research/voice-prosody/runs/selector-factorial-v1/prediction-freeze.json",
+      "sha256": "3d8b54af8f96669d5ce567060a1308a187d3c6cf24172e1ea06c0a2eadd4c271",
+      "bytes": 384860
+    }
+  },
+  "limits": [
+    "The predesignated shared/acceptable-set candidate fails its natural improvement gate; production remains DSP.",
+    "Development and synthetic fixtures are reused; no new reserved/test evaluation, calibration or clinical validation.",
+    "Saved-output score reconstruction does not independently infer every new checkpoint or establish an operating-system access log.",
+    "Full training parity checks stored emitted indices, states and frequencies; ungated indices on unvoiced frames were not retained.",
+    "Earlier product/browser/sidecar validation is historical; earlier browser timings do not qualify the new selector models.",
+    "Raw audio, reference arrays, features, checkpoints and per-frame predictions remain local and ignored."
+  ],
+  "source_and_public_evidence_sha256": {
+    "README.md": "fb56a64591a81d73ba0f7254a02840ff5dba938485bbc9fc9a150e92a0565df4",
+    "benchmarks/voice-prosody/selector-factorial-audit.json": "64341eb84e606517010d43d54629980ef35167557a41f8b8f33457d39ced2bc0",
+    "benchmarks/voice-prosody/selector-headroom.json": "a9060050e4d7fac9b7ee255d7d1daa36827b82365f25d96a4fae93a2ab8a6b21",
+    "benchmarks/voice-prosody/selector-step1-summary.json": "2b13abedc7aab6ac215a52dd402b435d9da9498f33684795b3c572ac2a5432f5",
+    "benchmarks/voice-prosody/selector-torch-parity.json": "e8c78290ba13f7e306cc72462baeda7f07658dea9d95e3ddc49a07fe0313581a",
+    "benchmarks/voice-prosody/source-snapshots/selector-full-torch-parity-v1.py": "6a2df331fd9345e419f00c91136177094a3a27f19899d02a080dc89396f3a4c6",
+    "docs/architecture.md": "644225e1999b76e0a7edf9f7e57644269dc88bf96f9edb99323bcf467d9b6dad",
+    "research/voice-prosody/README.md": "d36a8af5eae8c6c5a69b42dbf1dce4d0bcc5a2ffcdb3c0793170c165494c1d16",
+    "research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md": "c8807259374f286092268aae71b1387007c1b8478a8d30182be7f03e93c9c297",
+    "research/voice-prosody/SELECTOR_RESULTS.md": "a88369d5ae701203bb0fbbf11de2a3300b12eddedcda3a65c6d8a8f3b785a65f",
+    "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+    "research/voice-prosody/phenometrix_prosody/selector_experiment.py": "c7690766c09f936adad72c0160eb02384f18dd6de2d2505dd4c2e120efe09b44",
+    "research/voice-prosody/phenometrix_prosody/selector_headroom.py": "0cb7722cfee1fdadd046952c67eccf92fababa2dd978d9351e779b159d6edf94",
+    "research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+    "research/voice-prosody/tests/test_selector_experiment.py": "f92e2c9b30bf9de52fd92c29be2447384b0ad6d544dfa4346fe60f513675b0a4",
+    "research/voice-prosody/tests/test_selector_headroom.py": "9689bbe4685fa875810c5033bf84905db16c897de6e11b4f6888118a72777509",
+    "research/voice-prosody/tests/test_selector_model.py": "bfdc3b344b51c5f2ef0e956051f1c0503168a72574ba1845864f8726e03b8902"
+  }
+}

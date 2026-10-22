@@ -117,13 +117,42 @@ remain unmeasured.
 
 **Production still uses DSP.** Raw voicing probabilities and candidate scores
 are **not calibrated probabilities of a correct F0 measurement**. Calibration,
-multi-seed confirmation, broader external validation and product promotion remain
-unperformed. The follow-up does not retroactively pass earlier failed-model
-gates. The reserved evaluation is now consumed and cannot be reused as fresh
-holdout evidence. Research scripts, public aggregate evidence, failed decisions,
+broader external validation and product promotion remain unperformed. The new
+three-seed selector experiment below is a separate exploratory comparison. The
+follow-up does not retroactively pass earlier failed-model gates. The reserved
+evaluation is now consumed and cannot be reused as fresh holdout evidence. Research scripts, public aggregate evidence, failed decisions,
 and reproduction commands are in
 [research/voice-prosody](research/voice-prosody/README.md). Raw audio, feature
 caches, weights, and large run outputs are excluded from Git.
+
+## Candidate learning experiment: step 1
+
+A new local, three-seed factorial experiment tests candidate representation and
+training loss while keeping the original voicing decisions fixed. Its development
+oracle showed 1.3144 percentage points of recoverable error using the existing
+six candidates; adding raw YIN would add only 0.0396 points of headroom.
+
+| Pitch-only selector | Mean development joint error | Stationary 300 Hz success, all three seeds |
+| --- | ---: | ---: |
+| Fixed slots, nearest target | 8.3486% | 0% |
+| Fixed slots, acceptable-set target | 8.2691% | 0% |
+| Shared candidates, nearest target | 8.4584% | 100% |
+| Shared candidates, acceptable-set target | 8.4825% | 100% |
+
+Both shared representations repair the stationary failure. The predesignated
+shared/acceptable-set model improves over the original MLP's 8.6349% and hybrid's
+8.9224%, but its 0.1524-point MLP gain misses the predeclared 0.5-point requirement.
+One of its seeds also fails all 95 post-change frames when the 300 Hz fixture's
+harmonic balance changes. Acceptable-set loss helps the slot model but does not
+improve the shared model. **The combined candidate remains a research no-go.**
+
+All twelve fits used local MPS and completed in 39.40 seconds. These are reused
+development and analytic regression results, not fresh confirmation. Grouping,
+scaling and shared scoring form one representation intervention; their individual
+effects are not isolated. No temporal model, calibration, new browser validation
+or production promotion was performed. See the [plan](research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md),
+[full results](research/voice-prosody/SELECTOR_RESULTS.md), and
+[aggregate evidence](benchmarks/voice-prosody/selector-step1-summary.json).
 
 ## Implemented encounter path
 
@@ -226,16 +255,23 @@ disconnected from capture. The [research README](research/voice-prosody/README.m
 separates synthetic smoke, public-corpus experiments, and actual-browser replay.
 Browser fixtures and synthetic replay do not establish real-microphone accuracy.
 
-The current [hybrid validation record](benchmarks/voice-prosody/hybrid-local-validation.json)
-binds exact sources and local check logs. Repository validation passed **734
+The [step-1 validation record](benchmarks/voice-prosody/selector-local-validation.json)
+binds the new research sources: **193 Python tests** and `npm run check` pass.
+An independent scorer reconstructs 86,360 comparisons with zero differences,
+and Torch CPU agrees with all 676,384 frozen training-frame outputs. Three NumPy
+warnings remain documented; output parity does not diagnose their cause.
+
+The preceding [hybrid validation record](benchmarks/voice-prosody/hybrid-local-validation.json)
+binds exact sources and local check logs at `be1b7551`. That stage passed **734
 unit tests across 73 files**, **157 research Python tests**, **18 product browser
 checks** and **five existing research browser checks**, plus hybrid parity, TypeScript,
 structure and release builds. Both capture release builds exclude research assets
 and preserve all ten normal public assets byte for byte. The
 [previous follow-up record](benchmarks/voice-prosody/followup-local-validation.json)
 and [earlier validation record](benchmarks/voice-prosody/local-validation.json)
-retain historical evidence, including sidecar and PostgreSQL checks; those
-unchanged subsystems were not rerun for this stage.
+retain historical evidence, including sidecar and PostgreSQL checks. Product,
+browser and sidecar checks were not rerun for the research-only step-1 changes;
+earlier browser results do not qualify the new selectors.
 
 ## Repository map
 

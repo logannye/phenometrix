@@ -24,6 +24,41 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Candidate representation and loss: step 1
+
+The [bounded factorial study](SELECTOR_RESULTS.md) is now complete. Six-candidate
+headroom is 1.3144 points on reused development. Shared scoring/grouping repairs
+the stationary 300 Hz regression in every seed, but the predesignated combined
+model's 8.4825% mean joint error improves only 0.1524 points over the original MLP,
+below the fixed 0.5-point requirement. A channel-change failure in one seed also
+remains. No arm is promoted or substituted after observing outcomes.
+
+The [plan](SELECTOR_EXPERIMENT_PLAN.md) fixes four arms, three seeds, natural-only
+training, frozen original voicing and exact support/target semantics. All fitting
+ran locally on MPS. The commands below reproduce this completed diagnostic and
+refuse to overwrite prior evidence. They do not authorize another adaptive search.
+
+```sh
+.venv/bin/python -m phenometrix_prosody.selector_headroom --output runs/selector-headroom-v1 --public-output ../../benchmarks/voice-prosody/selector-headroom.json
+.venv/bin/python -m phenometrix_prosody.selector_experiment grouping --output runs/selector-grouping-v2
+.venv/bin/python -m phenometrix_prosody.selector_experiment prerequisites --headroom ../../benchmarks/voice-prosody/selector-headroom.json --grouping runs/selector-grouping-v2/grouping.json --output runs/selector-prerequisites-v1
+.venv/bin/python -m phenometrix_prosody.selector_experiment run --prerequisites runs/selector-prerequisites-v1/prerequisites.json --output runs/selector-factorial-v1
+.venv/bin/python -m phenometrix_prosody.audit_selector_experiment --run runs/selector-factorial-v1 --prerequisites runs/selector-prerequisites-v1/prerequisites.json --grouping-failure runs/selector-grouping-v1/failure.json --output ../../benchmarks/voice-prosody/selector-factorial-audit.json
+```
+
+The public [headroom](../../benchmarks/voice-prosody/selector-headroom.json) and
+[factorial summary](../../benchmarks/voice-prosody/selector-step1-summary.json)
+contain counts, gates, every seed and input/source identities. Raw predictions,
+reference arrays, training caches and weights remain ignored. The rejected first
+grouping attempt was repeated against stable sources before any fit; its failure
+record is retained; the audit command binds that historical local record. Development
+and old synthetic fixtures remain consumed. The [independent score audit](../../benchmarks/voice-prosody/selector-factorial-audit.json)
+reconstructs 86,360 numeric comparisons exactly. The [Torch parity receipt](../../benchmarks/voice-prosody/selector-torch-parity.json)
+checks every frozen training prediction; its [runnable source](../../benchmarks/voice-prosody/source-snapshots/selector-full-torch-parity-v1.py)
+requires the existing local caches and a fresh receipt output path. Full test
+counts, retained numerical warnings and checked identities appear in the
+[local validation record](../../benchmarks/voice-prosody/selector-local-validation.json).
+
 ## Environment and artifact handling
 
 Use the locked Python 3.11 environment and prebuilt wheels; `--no-build` refuses source builds. The recorded fits use

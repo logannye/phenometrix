@@ -1,0 +1,99 @@
+{
+  "schema": "phenometrix-selector-factorial-independent-audit.v1",
+  "status": "passed",
+  "audited_at": "2026-10-22T22:07:59.217459+00:00",
+  "run_path": "research/voice-prosody/runs/selector-factorial-v1",
+  "run_manifest_sha256": "df56e53be7399807f068616961ba9eac6ff1d6ce7dd76d6614166d79bbd664f5",
+  "metrics_sha256": "b65476a46d644d736dc2bb758aebf30b9cae2186be24664ac51ce983713c0c43",
+  "prediction_freeze_sha256": "3d8b54af8f96669d5ce567060a1308a187d3c6cf24172e1ea06c0a2eadd4c271",
+  "checkpoint_freeze_sha256": "6362fcc7ef2422cbb2e3c96950f3cabf11afe1061d94b579784a6efd0ad504bf",
+  "audit_source_sha256": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+  "object_scorer_sha256": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+  "bound_artifacts": 2025,
+  "numeric_comparisons": 86360,
+  "max_numeric_difference": 0.0,
+  "fit_count": 12,
+  "epochs_each": 12,
+  "fit_counts_recomputed": true,
+  "schedule": {
+    "scheduled_rows": 132181,
+    "grouped_uncovered_rows": 107
+  },
+  "natural": {
+    "methods": 14,
+    "cells_per_method": 16,
+    "condition_recordings": 320,
+    "acquired_rows_per_method": 255532,
+    "frozen_voicing_rows_checked_per_method": 255532,
+    "eligible_valid_frames_per_method": 253292
+  },
+  "synthetic": {
+    "scenarios": 14,
+    "methods_per_scenario": 12,
+    "stationary_success": {
+      "constant-100": {
+        "fixed-slots__nearest__seed20261022": 1.0,
+        "fixed-slots__acceptable-set__seed20261022": 1.0,
+        "shared-candidates__nearest__seed20261022": 1.0,
+        "shared-candidates__acceptable-set__seed20261022": 1.0,
+        "fixed-slots__nearest__seed20261023": 1.0,
+        "fixed-slots__acceptable-set__seed20261023": 1.0,
+        "shared-candidates__nearest__seed20261023": 1.0,
+        "shared-candidates__acceptable-set__seed20261023": 1.0,
+        "fixed-slots__nearest__seed20261024": 1.0,
+        "fixed-slots__acceptable-set__seed20261024": 1.0,
+        "shared-candidates__nearest__seed20261024": 1.0,
+        "shared-candidates__acceptable-set__seed20261024": 1.0
+      },
+      "constant-200": {
+        "fixed-slots__nearest__seed20261022": 1.0,
+        "fixed-slots__acceptable-set__seed20261022": 1.0,
+        "shared-candidates__nearest__seed20261022": 1.0,
+        "shared-candidates__acceptable-set__seed20261022": 1.0,
+        "fixed-slots__nearest__seed20261023": 1.0,
+        "fixed-slots__acceptable-set__seed20261023": 1.0,
+        "shared-candidates__nearest__seed20261023": 1.0,
+        "shared-candidates__acceptable-set__seed20261023": 1.0,
+        "fixed-slots__nearest__seed20261024": 1.0,
+        "fixed-slots__acceptable-set__seed20261024": 1.0,
+        "shared-candidates__nearest__seed20261024": 1.0,
+        "shared-candidates__acceptable-set__seed20261024": 1.0
+      },
+      "constant-300": {
+        "fixed-slots__nearest__seed20261022": 0.0,
+        "fixed-slots__acceptable-set__seed20261022": 0.0,
+        "shared-candidates__nearest__seed20261022": 1.0,
+        "shared-candidates__acceptable-set__seed20261022": 1.0,
+        "fixed-slots__nearest__seed20261023": 0.0,
+        "fixed-slots__acceptable-set__seed20261023": 0.0,
+        "shared-candidates__nearest__seed20261023": 1.0,
+        "shared-candidates__acceptable-set__seed20261023": 1.0,
+        "fixed-slots__nearest__seed20261024": 0.0,
+        "fixed-slots__acceptable-set__seed20261024": 0.0,
+        "shared-candidates__nearest__seed20261024": 1.0,
+        "shared-candidates__acceptable-set__seed20261024": 1.0
+      }
+    },
+    "stationary_candidate_pass_by_seed": {
+      "shared-candidates__acceptable-set__seed20261022": true,
+      "shared-candidates__acceptable-set__seed20261023": true,
+      "shared-candidates__acceptable-set__seed20261024": true
+    },
+    "stationary_candidate_pass": true
+  },
+  "natural_checks": {
+    "mean_improves_both_by_half_point": false,
+    "each_seed_improves_original_mlp": true,
+    "no_condition_worsens_over_one_point": true,
+    "voiced_success_not_lower": true
+  },
+  "natural_gate_pass": false,
+  "promising_for_next_study": false,
+  "chronology_evidence": "Source inspection, declared timestamps and freeze manifests; not an OS access log.",
+  "earlier_preflight": {
+    "failure_record_sha256": "03ed3c502e589e5ff12cd3669f1f598d6f956b250f9dccd09a25a77031f2b728",
+    "record_path": "research/voice-prosody/runs/selector-grouping-v1/failure.json",
+    "scope": "Assistant-recorded grouping-v1 source-mismatch rejection; no fitting artifacts in that directory. Original rejection was not independently reconstructed."
+  },
+  "scope": "Saved output scoring and byte/tensor identity; no refit, no independent checkpoint inference reproduction, no reserved/test content, no promotion claim."
+}

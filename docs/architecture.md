@@ -264,3 +264,16 @@ versioned timing report.
 No analytical or clinical validation, clinically meaningful change threshold,
 scale equivalence, dose recommendation, emergency screening, or automated
 clinical action is implemented. See [validation.md](validation.md).
+
+## Offline candidate-selector research boundary
+
+The step-1 selector study is confined to `research/voice-prosody`. Its versioned
+contract and gates are declared in [SELECTOR_EXPERIMENT_PLAN.md](../research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md).
+`selector_headroom` validates frozen train/development evidence; `selector_model`
+implements pitch-only slot and shared-candidate scorers; `selector_experiment`
+separates prerequisite audits, local MPS fitting, prediction freeze and scoring.
+Frozen original MLP voicing is external and identical across all new arms.
+Grouped outputs are original candidate frequencies with preserved source/member
+provenance; their losses use actual emitted frequencies. These offline checkpoints
+are not browser assets or production estimators. The failed advancement gate is
+recorded in [SELECTOR_RESULTS.md](../research/voice-prosody/SELECTOR_RESULTS.md).
