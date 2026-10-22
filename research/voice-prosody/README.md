@@ -24,6 +24,38 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Harmonic-balance training augmentation
+
+The [fixed plan](AUGMENTATION_EXPERIMENT_PLAN.md) compares natural-only training,
+stationary synthetic augmentation and predesignated harmonic-balance augmentation
+across three seeds. The model, natural-only scaling, original voicing, timing,
+natural minibatches and 396 optimizer updates stay fixed. Each augmented update
+adds 0.25 times a 512-row synthetic loss. Ninety-six paired cases per arm cover
+24 frequencies, two phases and two gains; exact 337.1 and 354.5 Hz evaluation
+cases are excluded from training. All old gates remain required, with twelve
+new frequency/phase cases generated only after every checkpoint freezes.
+
+From this directory, with the existing pinned environment and prerequisite
+artifacts present, a new authorized reproduction uses a NEW ignored output path:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.augmentation_experiment --output runs/harmonic-augmentation-reproduction-v1
+```
+
+The runner refuses overwrites and binds source, input, schedule, target,
+checkpoint and prediction identities. It does not install dependencies or use
+remote computation. The [results](AUGMENTATION_RESULTS.md),
+[aggregate evidence](../../benchmarks/voice-prosody/augmentation-summary.json)
+and [local validation receipt](../../benchmarks/voice-prosody/augmentation-local-validation.json)
+record the measured outcome and independent audits. Both augmentation arms repair
+337.1/354.5 Hz at 112/112 post-change targets in both phases and every seed, but
+the candidate remains a no-go: its natural gain over original MLP is too small,
+and fresh 517.3/641.9 Hz cases have no correct post-change candidates. The local
+suite passes 371 research tests and `npm run check`; three historical NumPy
+warnings remain documented. Synthetic-family performance
+and consumed natural development remain distinct from external speech and
+browser qualification.
+
 ## Subharmonic-ranking objective follow-up
 
 The [nine-fit objective study](SUBHARMONIC_RESULTS.md) partially repairs the

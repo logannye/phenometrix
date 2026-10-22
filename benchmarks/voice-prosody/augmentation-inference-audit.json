@@ -1,0 +1,4646 @@
+{
+  "schema": "phenometrix-augmentation-checkpoint-inference-audit.v1",
+  "status": "complete",
+  "started_at": "2026-10-22T23:28:44.680738+00:00",
+  "device": "cpu",
+  "torch": "2.9.1",
+  "numpy": "2.2.6",
+  "fitting_performed": false,
+  "reference_files_or_analytic_target_arrays_read": false,
+  "truth_used_for_comparison": false,
+  "challenge_spec_or_metrics_content_opened": false,
+  "reserved_content_read": false,
+  "new_gpu_work": false,
+  "waveform_generation_performed": false,
+  "synthetic_training_inputs_or_targets_read": false,
+  "inference_implementation": "explicit Torch equations from audit_harmonic_inference; no runner infer or HarmonicSelector.forward",
+  "preprocessing_scope": "source-bound shared grouping reused, with independent original-member validation",
+  "comparisons": {
+    "development": {
+      "balance-aug__seed20261022": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "balance-aug__seed20261023": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "balance-aug__seed20261024": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "natural-only__seed20261022": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "natural-only__seed20261023": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "natural-only__seed20261024": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 255532,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 59791,
+        "saved_unavailable_frames": 208
+      }
+    },
+    "regression/constant-100": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/constant-200": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/constant-300": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-down-100": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-down-200": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 155,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-down-50": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-up-100": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-up-200": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/glide-up-50": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/observation-change-100": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/observation-change-200": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/observation-change-300": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/step-100-200": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "regression/step-200-100": {
+      "balance-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 156,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 156,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f0-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f0-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f1-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f1-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f2-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f2-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f3-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f3-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f4-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f4-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f5-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_challenge/harmonic-balance-f5-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f0-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f0-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f1-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f1-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f2-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f2-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f3-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f3-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f4-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f4-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f5-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "consumed_subharmonic/subharmonic-balance-f5-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f0-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f0-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f1-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f1-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f2-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f2-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f3-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f3-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f4-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f4-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f5-p0": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    },
+    "challenge/augmentation-balance-f5-p1": {
+      "balance-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "balance-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "natural-only__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261022": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261023": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      },
+      "stationary-aug__seed20261024": {
+        "frames": 196,
+        "state_mismatches": 0,
+        "hz_mismatches": 0,
+        "frozen_voice_gate_mismatches": 0,
+        "nonmember_emissions": 0,
+        "saved_voiced_frames": 196,
+        "saved_unavailable_frames": 0
+      }
+    }
+  },
+  "original_voicing_checks": {
+    "development": {
+      "frames": 255532,
+      "recomputed_sha256_float64": "44efcdb05616bbd0c57f2d44b1f59974613da8873a38f6bb500726dd778eb4f9",
+      "frozen_sha256_float64": "ac7b8afa6da175fb7522c46d1f5a3d4f745d0e4a8d91b9f188f3b215ff0c10b2",
+      "max_absolute_difference": 2.43436102165262e-07,
+      "gate_mismatches": 0
+    },
+    "regression/constant-100": {
+      "frames": 156,
+      "recomputed_sha256_float64": "decc8593217fda3f08512292deb3dc78afd80de009072e72993c5c356791f42a",
+      "frozen_sha256_float64": "b8b519b1324704657e86cec6a05585e5236c4f09bf5b209e6cc41130f0f4cc9f",
+      "max_absolute_difference": 3.497955580744616e-08,
+      "gate_mismatches": 0
+    },
+    "regression/constant-200": {
+      "frames": 156,
+      "recomputed_sha256_float64": "14a1110182bbbd154c6a61d7251f0151ddf23781345af0716084088844091180",
+      "frozen_sha256_float64": "0153d9dd6354bb0b50f1ec715fc6a0561f51b558ba33e9ba3b4517561e2c50b4",
+      "max_absolute_difference": 1.7223393378174023e-08,
+      "gate_mismatches": 0
+    },
+    "regression/constant-300": {
+      "frames": 156,
+      "recomputed_sha256_float64": "21262cdf4d39d3d34322e235692bd27fa7fdc5c8dbf416fe527d814ed3b6129c",
+      "frozen_sha256_float64": "7bfabd37db07bc8e6efbc1bff832d000f3b9cb07113cc04819f9b2b106597e34",
+      "max_absolute_difference": 1.1102230246251565e-16,
+      "gate_mismatches": 0
+    },
+    "regression/glide-down-100": {
+      "frames": 156,
+      "recomputed_sha256_float64": "0d31e48637d01a7afd8d887f9c976819b6f51f65b94dfb19272078d3bb020e3d",
+      "frozen_sha256_float64": "20ded2d99496eb3f90943cac775ac68ff5bb352a0a1d37a31c741d28368fdfe1",
+      "max_absolute_difference": 6.013885200939484e-08,
+      "gate_mismatches": 0
+    },
+    "regression/glide-down-200": {
+      "frames": 156,
+      "recomputed_sha256_float64": "9411dda92eff40ebfacbf8652febc3f209783e082c637c349c20ef5dbc0de3dc",
+      "frozen_sha256_float64": "c64069250d8c96271130ea98ff6289661266b947ae8fb57d77fbaf8479436567",
+      "max_absolute_difference": 8.162621512042278e-08,
+      "gate_mismatches": 0
+    },
+    "regression/glide-down-50": {
+      "frames": 156,
+      "recomputed_sha256_float64": "c07b675aef74d39650d1dc1b806f7f024afaaaef81761d16e2d7d1a8e736f8d9",
+      "frozen_sha256_float64": "6be64e9ab291888b0c241b9595c153004aad016f0935cd99766dbe275cfee019",
+      "max_absolute_difference": 9.047282922836075e-08,
+      "gate_mismatches": 0
+    },
+    "regression/glide-up-100": {
+      "frames": 156,
+      "recomputed_sha256_float64": "8d801e06720972a843b1c427efcad551098d5381044577eb9a7055737c13a7ce",
+      "frozen_sha256_float64": "863b779ce5000f554352c38c574e2cb23e5e530f514ece58bab42e7c1f40c860",
+      "max_absolute_difference": 7.69085032326089e-08,
+      "gate_mismatches": 0
+    },
+    "regression/glide-up-200": {
+      "frames": 156,
+      "recomputed_sha256_float64": "993a5f91c266227d21c0cbeb6272d9fb6c607b03d6395a37a6dbf49cdfce86c7",
+      "frozen_sha256_float64": "9cd6480b0dbbf5afb2ab593a1842792cb3505765bb2a2db503b2e646f033cd34",
+      "max_absolute_difference": 9.287058821971783e-08,
+      "gate_mismatches": 0
+    },
+    "regression/glide-up-50": {
+      "frames": 156,
+      "recomputed_sha256_float64": "51263b683579cff88e0b734f3369ff4444fc6c0eafbee13520c7fd288f04c472",
+      "frozen_sha256_float64": "c533ab3dbfdc0bd885ddd87454f06e8d2bc070eacbd409ce00073fc16f78562f",
+      "max_absolute_difference": 8.340922441618659e-08,
+      "gate_mismatches": 0
+    },
+    "regression/observation-change-100": {
+      "frames": 156,
+      "recomputed_sha256_float64": "002a64da9df6f0e2460aad78ecda32023e50662295fbbab3fefdc6a20b74b36c",
+      "frozen_sha256_float64": "2d84b2b024a689c0e88c4642955c1cc2a168834cb8d1b094c1040640ac9315da",
+      "max_absolute_difference": 3.497955580744616e-08,
+      "gate_mismatches": 0
+    },
+    "regression/observation-change-200": {
+      "frames": 156,
+      "recomputed_sha256_float64": "c2ae5d5ac3a144cbaabddc1ad0b7492620210a0345130daa601759adfd264fab",
+      "frozen_sha256_float64": "4e8eb79240e8bf1573b24dca858097f2a3ce4a07234c458afc98349a74b4ac74",
+      "max_absolute_difference": 2.2503651386784895e-08,
+      "gate_mismatches": 0
+    },
+    "regression/observation-change-300": {
+      "frames": 156,
+      "recomputed_sha256_float64": "0b773f9b318439fd01d664671ff84d9ded5aa06f9f6703be2ab0c7145583ddf9",
+      "frozen_sha256_float64": "f09771c732d7f7779aaf0657c64502ff79f437562c4d75c99c33fcf702000045",
+      "max_absolute_difference": 3.4952595706627676e-08,
+      "gate_mismatches": 0
+    },
+    "regression/step-100-200": {
+      "frames": 156,
+      "recomputed_sha256_float64": "001261f39316be09f0e6f95afa78572dba6cdbb008f7d9547267d8f07dfc4237",
+      "frozen_sha256_float64": "2cb74395020c05ddd4ad23186a41dd20d7010f67e0e7e25953787604649ab287",
+      "max_absolute_difference": 3.497955580744616e-08,
+      "gate_mismatches": 0
+    },
+    "regression/step-200-100": {
+      "frames": 156,
+      "recomputed_sha256_float64": "b431065c41c169f055fe35601635a54b124935f954d09be2c05162ad0f02ace6",
+      "frozen_sha256_float64": "7bc2004e21e871ac864110904907cf850d4427b02eca1041501d21fead80a176",
+      "max_absolute_difference": 4.5163456752206343e-08,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f0-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "93cba05b49d06efb4cf3016cbaf41daaf3192e7c2450ac6bfa5070ce585125d8",
+      "frozen_sha256_float64": "93cba05b49d06efb4cf3016cbaf41daaf3192e7c2450ac6bfa5070ce585125d8",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f0-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "5c0b7d90fcb4d14633410b8a78434512044cd41ef94f298d60a7f656387863dd",
+      "frozen_sha256_float64": "5c0b7d90fcb4d14633410b8a78434512044cd41ef94f298d60a7f656387863dd",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f1-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "ccf7fc494fe8b7942427d13027ca8c84c46ed7961b6f2db3e9d2f1ebcc0b3a83",
+      "frozen_sha256_float64": "ccf7fc494fe8b7942427d13027ca8c84c46ed7961b6f2db3e9d2f1ebcc0b3a83",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f1-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "54012e67fe4a2512f8eb4af4c61816f95c85aa74b7dc656c6395af733626fd72",
+      "frozen_sha256_float64": "54012e67fe4a2512f8eb4af4c61816f95c85aa74b7dc656c6395af733626fd72",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f2-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "70fc7c3df3865bf09c9e6bb26b8390c0c3a19afe8b49b2999a4f88bee9b9505a",
+      "frozen_sha256_float64": "70fc7c3df3865bf09c9e6bb26b8390c0c3a19afe8b49b2999a4f88bee9b9505a",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f2-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "bd5c70efb06ad829ec4edcf6d0de238269f9f863d16c781e0411ec0211b5157f",
+      "frozen_sha256_float64": "bd5c70efb06ad829ec4edcf6d0de238269f9f863d16c781e0411ec0211b5157f",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f3-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "b51490b2cbf5bd78c22b7cc716a63ae7d751d0c6bc21bbeb3f6140349880d5b3",
+      "frozen_sha256_float64": "b51490b2cbf5bd78c22b7cc716a63ae7d751d0c6bc21bbeb3f6140349880d5b3",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f3-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "e1b285b36b57646ebdfd656df63b6778e4cdcb6468a29473deaf36f8f67a15cd",
+      "frozen_sha256_float64": "e1b285b36b57646ebdfd656df63b6778e4cdcb6468a29473deaf36f8f67a15cd",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f4-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "f2559ef4ef1a343747e9cb283e0eb76a834a791c08fc3689cca008473631c2ca",
+      "frozen_sha256_float64": "f2559ef4ef1a343747e9cb283e0eb76a834a791c08fc3689cca008473631c2ca",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f4-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "0b32a4e3e1c3b4f0c6c05de6c0530b50c7d754259b06933381da20afba2f6551",
+      "frozen_sha256_float64": "0b32a4e3e1c3b4f0c6c05de6c0530b50c7d754259b06933381da20afba2f6551",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f5-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "d0fbc7028d270d6b12da8d4f2015c17b7eddcb1b6792bc928bd3d938191a7994",
+      "frozen_sha256_float64": "d0fbc7028d270d6b12da8d4f2015c17b7eddcb1b6792bc928bd3d938191a7994",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_challenge/harmonic-balance-f5-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "2ca492840ae91ffd6e4fbbcced4b19d8750b79b1c7715498e85e15ed8cf0b69e",
+      "frozen_sha256_float64": "2ca492840ae91ffd6e4fbbcced4b19d8750b79b1c7715498e85e15ed8cf0b69e",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f0-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "6020aa8231dfd330b28aa949a74c3c504abdf34e07259718a390d0f15cf4610b",
+      "frozen_sha256_float64": "6020aa8231dfd330b28aa949a74c3c504abdf34e07259718a390d0f15cf4610b",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f0-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "7e908df8c4b0b1e87a873368b4a82205cd68877c89ea75681c6c6cdca528994c",
+      "frozen_sha256_float64": "7e908df8c4b0b1e87a873368b4a82205cd68877c89ea75681c6c6cdca528994c",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f1-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "f3c3bdb59f99e99a02854037229526d61784d925f6cf8823b6293538d35a534d",
+      "frozen_sha256_float64": "f3c3bdb59f99e99a02854037229526d61784d925f6cf8823b6293538d35a534d",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f1-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "3d898fcea61a5d90d69c0130d8777341ef348c2a1f2b8131748a08caf883e992",
+      "frozen_sha256_float64": "3d898fcea61a5d90d69c0130d8777341ef348c2a1f2b8131748a08caf883e992",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f2-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "ac91a7ec74807929f3f8bf8a1201cc7946841c317368cf936e2ad6ff00ca073a",
+      "frozen_sha256_float64": "ac91a7ec74807929f3f8bf8a1201cc7946841c317368cf936e2ad6ff00ca073a",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f2-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "6a7999456fa70600845190cc21a9b08dacbf4b09d817640ef92bfc8b21697005",
+      "frozen_sha256_float64": "6a7999456fa70600845190cc21a9b08dacbf4b09d817640ef92bfc8b21697005",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f3-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "3d8e975072a6da5abcc1b866c184d14c35a05a266243ce74b9a8dffa3234d246",
+      "frozen_sha256_float64": "3d8e975072a6da5abcc1b866c184d14c35a05a266243ce74b9a8dffa3234d246",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f3-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "04a454876e2850d7445b01bf48ff234467455e4b9d2ed1df2c9a2e43f0525789",
+      "frozen_sha256_float64": "04a454876e2850d7445b01bf48ff234467455e4b9d2ed1df2c9a2e43f0525789",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f4-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "2c3842ff41232221aafcaa1eacdb72b77244a0fa430222a012364eba986ee2d1",
+      "frozen_sha256_float64": "2c3842ff41232221aafcaa1eacdb72b77244a0fa430222a012364eba986ee2d1",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f4-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "f0e2195291036b22ea9f2e26204471c44efa7522cfc83a232362e6c646e67b8b",
+      "frozen_sha256_float64": "f0e2195291036b22ea9f2e26204471c44efa7522cfc83a232362e6c646e67b8b",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f5-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "8a57639b7a42c6afe6b394568a0e1b4cd9a3c6847914eb8256f8448105bcb72c",
+      "frozen_sha256_float64": "8a57639b7a42c6afe6b394568a0e1b4cd9a3c6847914eb8256f8448105bcb72c",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "consumed_subharmonic/subharmonic-balance-f5-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "d2ed71aa3850b0dc6679257680b902eda23f8d70ad43fd4d962da67367bc454e",
+      "frozen_sha256_float64": "d2ed71aa3850b0dc6679257680b902eda23f8d70ad43fd4d962da67367bc454e",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f0-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "bb0acb990122afe25603249224c3b0f3749a75f53021b5513dfb9fbb9e7fcbd2",
+      "frozen_sha256_float64": "bb0acb990122afe25603249224c3b0f3749a75f53021b5513dfb9fbb9e7fcbd2",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f0-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "53020d2dc6f97366e867d532f77401395ae6d5b9d0dd574f530483dc0d85e927",
+      "frozen_sha256_float64": "53020d2dc6f97366e867d532f77401395ae6d5b9d0dd574f530483dc0d85e927",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f1-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "f9aba8a3b382324707d359f373de032679694dfb83ab20bcc28264794631d935",
+      "frozen_sha256_float64": "f9aba8a3b382324707d359f373de032679694dfb83ab20bcc28264794631d935",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f1-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "24dadd8824bd43b9d4012fd837daca45ef0d4e3a9d4a37a01128a1e47d3f8794",
+      "frozen_sha256_float64": "24dadd8824bd43b9d4012fd837daca45ef0d4e3a9d4a37a01128a1e47d3f8794",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f2-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "7de5a0e50f1bf496b8fde5427817d676be4748c8868980b9705d2dfbf75babbe",
+      "frozen_sha256_float64": "7de5a0e50f1bf496b8fde5427817d676be4748c8868980b9705d2dfbf75babbe",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f2-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "399ef566a15cc52c58b5609a425107c05e28960fdbcf4404443790329a53b46b",
+      "frozen_sha256_float64": "399ef566a15cc52c58b5609a425107c05e28960fdbcf4404443790329a53b46b",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f3-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "bf7307ec9a2a43a459d58698877226099d20d72f31cbd916a6d1a243febab22f",
+      "frozen_sha256_float64": "bf7307ec9a2a43a459d58698877226099d20d72f31cbd916a6d1a243febab22f",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f3-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "561708055d0cd8d6d30399d24fcf0fd166d1e72bcb0867bddca4aeaece347061",
+      "frozen_sha256_float64": "561708055d0cd8d6d30399d24fcf0fd166d1e72bcb0867bddca4aeaece347061",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f4-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "0a1ea4d7dbc69082a1a824ff282a8906ffdf7a2041f1debe64af6b22332fc83e",
+      "frozen_sha256_float64": "0a1ea4d7dbc69082a1a824ff282a8906ffdf7a2041f1debe64af6b22332fc83e",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f4-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "2d38adc514f076ae24b753f1f98368752e81c4de2f869fb8b135f2c5e7a2e129",
+      "frozen_sha256_float64": "2d38adc514f076ae24b753f1f98368752e81c4de2f869fb8b135f2c5e7a2e129",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f5-p0": {
+      "frames": 196,
+      "recomputed_sha256_float64": "334c5cea6a812df8efa95f20185d0ee11b2fbe081c5ac5192ad97be359d1b6ce",
+      "frozen_sha256_float64": "334c5cea6a812df8efa95f20185d0ee11b2fbe081c5ac5192ad97be359d1b6ce",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    },
+    "challenge/augmentation-balance-f5-p1": {
+      "frames": 196,
+      "recomputed_sha256_float64": "3311d41204b9bc982c8e63a5f2ec3c1e495ecd369d711a58e369ea3b176a355a",
+      "frozen_sha256_float64": "3311d41204b9bc982c8e63a5f2ec3c1e495ecd369d711a58e369ea3b176a355a",
+      "max_absolute_difference": 0.0,
+      "gate_mismatches": 0
+    }
+  },
+  "initialization_checks": {
+    "balance-aug__seed20261022": "a07155d59ce3c3fc86410df37349d5f34846cec89b5f008e8c4cf8af000944aa",
+    "balance-aug__seed20261023": "db26bb34517a4db6ea56cd5a78ae58d9fce13ad33d809675c2f13ce8de356198",
+    "balance-aug__seed20261024": "765bd43e9ddc8232647a5214f3d12611b0140ef56a5dd601fc03ad3f84f236c9",
+    "natural-only__seed20261022": "a07155d59ce3c3fc86410df37349d5f34846cec89b5f008e8c4cf8af000944aa",
+    "natural-only__seed20261023": "db26bb34517a4db6ea56cd5a78ae58d9fce13ad33d809675c2f13ce8de356198",
+    "natural-only__seed20261024": "765bd43e9ddc8232647a5214f3d12611b0140ef56a5dd601fc03ad3f84f236c9",
+    "stationary-aug__seed20261022": "a07155d59ce3c3fc86410df37349d5f34846cec89b5f008e8c4cf8af000944aa",
+    "stationary-aug__seed20261023": "db26bb34517a4db6ea56cd5a78ae58d9fce13ad33d809675c2f13ce8de356198",
+    "stationary-aug__seed20261024": "765bd43e9ddc8232647a5214f3d12611b0140ef56a5dd601fc03ad3f84f236c9"
+  },
+  "identities": {
+    "manifest_sha256": "d5513b83672f14a711f23a36e5258d348ac9b01a062c5945faaeaf5730d69426",
+    "source_freeze_sha256": "bae35ff5e241aea6b813459f5e5279230d4b6e416a518412c03afdc1b5d02915",
+    "checkpoint_freeze_sha256": "abedb813f84323c0df3cbc29f597287345405bd00a8153a9163cd0caed284942",
+    "prediction_freeze_sha256": "83097642ae265e9a5a21321bc0dc2cdaa977fe0862c30fe5db550d809314dc5e"
+  },
+  "totals": {
+    "frames": 2382948,
+    "state_mismatches": 0,
+    "hz_mismatches": 0,
+    "frozen_voice_gate_mismatches": 0,
+    "nonmember_emissions": 0
+  },
+  "model_count": 9,
+  "analytic_case_count": 50,
+  "development_frames_per_model": 255532,
+  "input_bytes_stable": true,
+  "pass_result": true,
+  "completed_at": "2026-10-22T23:29:01.614702+00:00",
+  "elapsed_seconds": 16.933950959239155,
+  "input_file_count": 872,
+  "input_ledger_sha256": "35aeb2748eea8b8633ecf1aff0fcc0e201b7908d00890d271e8815b8a0f12614",
+  "audit_source_sha256": "78b4157e6cf3aa00bf3ff1cd5e36b7657a9f8f0d365bcb112828ab6da42acdb0"
+}

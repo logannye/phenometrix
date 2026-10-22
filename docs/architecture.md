@@ -300,3 +300,15 @@ preserving the old challenge as required regression. Separate arithmetic,
 checkpoint-replay and region-coverage auditors verify the artifacts. This remains
 offline research: the partial 337.1 Hz repair and new 354.5 Hz failure do not pass
 advancement gates. See [SUBHARMONIC_RESULTS.md](../research/voice-prosody/SUBHARMONIC_RESULTS.md).
+
+The `augmentation_cases` component defines paired stationary and harmonic-balance
+TRAIN signals plus a separate prospective evaluation grid. TRAIN generation
+requires the source/specification freeze; evaluation generation requires all nine
+final checkpoints. The `augmentation_experiment` runner retains the existing
+selector, natural-only scaling and natural optimizer schedule, adding a fixed
+synthetic loss inside the same update for the two augmentation arms. Target and
+sampling artifacts preserve uncovered rows and paired exposure. Independent
+score, inference and coverage auditors reconstruct the saved evidence. This
+boundary remains offline research; the experiment cannot change browser capture
+or promote a model. See the [augmentation plan](../research/voice-prosody/AUGMENTATION_EXPERIMENT_PLAN.md)
+and [results](../research/voice-prosody/AUGMENTATION_RESULTS.md).
