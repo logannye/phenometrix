@@ -1,0 +1,2551 @@
+{
+  "schema": "phenometrix-public-streaming-summary-v1",
+  "created_at": "2026-10-22T17:47:03.858072+00:00",
+  "disposition": "Bounded synthetic replay and arithmetic checks passed. No learned model promotion, physical latency qualification or clinical qualification.",
+  "series_id": "runtime-series-20261022T170802Z",
+  "original_series_manifest_sha256": "3b1ec6d7003d7ecbdb7fcf44554d680bf59dcec7877f27ac429315f24f8518bd",
+  "base_commit": "7e10705a562688f8582ec99c94495f9ba0b645ad",
+  "source_sha256": {
+    "apps/capture-web/e2e/voice-research.spec.ts": "e44b092a4ef00c6936681bdcc6a863ca1fb7e8e231f803c3368c9f5f9de15380",
+    "apps/capture-web/package.json": "15f462e10edb1c36afc1c2bc2c1a1369335c94a283546da13d9c42d60f8772c7",
+    "apps/capture-web/playwright.research.config.ts": "5f666309175506f7e73da2303589f6ed8364b305524c21d2dd6fc4e5a7945df3",
+    "apps/capture-web/public/asset-manifest.json": "ea7facbd5df2175b8de2763c829f3bf7080fe23cc173f35283f8a21f7dc8b1d7",
+    "apps/capture-web/public/voice-capture-worklet.js": "808437b861c1a8645a6d6948551277044f21d484ae3b0249ee7a70b690aed2d4",
+    "apps/capture-web/scripts/prepare-voice-mlp-research.mjs": "41f101624aca8687c4bea6dc9780508b33809ca2c8f79280d1969906e610d2a9",
+    "apps/capture-web/scripts/verify-voice-mlp-stream.py": "3b62f39564aefdebf3665b954d25305e529050cb90d3ca9ad757504843a427e3",
+    "apps/capture-web/src/live-voice-visualizer.test.ts": "64059f7b9b538164d42ef33eddbf76966c2e074d3d985817a5a55bd4210bf1d4",
+    "apps/capture-web/src/live-voice-visualizer.ts": "260e46558924a508dc71c66f44d5b4edd132f6f7bc17f17d224088bf4645774e",
+    "apps/capture-web/src/research-voice-mlp.ts": "e571aa268ae7cf9b586f40107abe247231ed6036137ee2959c5db5baaaf7f474",
+    "apps/capture-web/src/research-voice-model-worker.ts": "96099627ee177fd691f65f775c719da5a3c079cf12f12591d699647e0bd23c5a",
+    "apps/capture-web/src/research-voice-replay.ts": "0ca242573e463ce3d13f7cfebcca0e012115b206031a55dced47a697bdc6d930",
+    "apps/capture-web/src/research-voice-stall-worker.ts": "2626b3839bb0ccce330bda139fdbb3eb4519c0b1225165f4d5fb9b5eae4f9fc7",
+    "apps/capture-web/src/research-voice-trained-worker.ts": "41edf77e7464b92b72cc964f1298b266dcf9a7a1628961a9ac24466695c710a3",
+    "apps/capture-web/src/voice-async-pump.ts": "6e506bb75cd381442a437d8e58c5bea98bf528f12d864599c6d8f177b11bb450",
+    "apps/capture-web/src/voice-capture.test.ts": "334405aa97aa2fdc7f5fd63384d571ad7fcada0ab9055b523cac025d9e45b5d6",
+    "apps/capture-web/src/voice-capture.ts": "77ea17f385779c133f273406018552f709febf8e8195d1fdf45884786c191769",
+    "apps/capture-web/src/voice-dsp.test.ts": "76962b12f7c2b17163c677498651c7dfbb092d8bc281d481f4b12595036bf629",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/voice-pitch-features-v2.test.ts": "2a56279ddca8f9a0062c41e5cdeeb3d001a994e46973ff73ee13bb10cf2f2869",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "apps/capture-web/src/voice-pitch-features.test.ts": "67b588e7ab050d933ec5e4eb44beb08378302c4fe667ae6e90f09e8b7c535032",
+    "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+    "apps/capture-web/src/voice-replay.test.ts": "93f7f0287b6bbf234e9933df3042677df9791da1eaa1754829a650c11225a1db",
+    "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+    "apps/capture-web/src/voice-research-hook.ts": "e265447dcdd0b51704223a3f44c882487b1bdb60fa31e7ff70543bce81538c8a",
+    "apps/capture-web/src/voice-result-transport.test.ts": "41689909feb0a59d87d77690114729ecc21179a37486568b2b8db2a5aab50a49",
+    "apps/capture-web/src/voice-result-transport.ts": "5a447f927160e2a10488d385546a0d4e567a3aa46bb8a94ed43f41798621059e",
+    "apps/capture-web/src/voice-stream-timing.test.ts": "376e7df81f92a5fd0fc777c87eeae3169e5b6e2ff3c9f8e79e423d4684dedf70",
+    "apps/capture-web/src/voice-stream-timing.ts": "0aedb82106b7ae6a90aae119559878d8f424471a41f3e541f42d41ffbaf9a9b8",
+    "apps/capture-web/src/voice-support-diagnostic.test.ts": "a9c172b91367cbf0d715a14151490e6fca5052e59c7652825216f8a701fb5ec1",
+    "apps/capture-web/src/voice-worker-protocol.test.ts": "52f2012e724edd7aae89a7b795f6225c885b9d817b1346e62156577feeeccad4",
+    "apps/capture-web/src/voice-worker-protocol.ts": "96c8ce4daebd0259757b6f2566cd9f30a85af5719dee9b78332ad5852540e85c",
+    "apps/capture-web/src/voice-worker.test.ts": "65fea85cc255ef77cfa0f2ee101f7f9a781c4680e5483f059c73f51d8b19cd5b",
+    "apps/capture-web/src/voice-worker.ts": "bbe65456ae3e637de850498f7097a0840b52c970a80b5b108d832828dd59b7fe",
+    "apps/capture-web/src/voice-worklet.test.ts": "26fb52ebeb424f01aa1173cb3ae99589e54a6c263aca1e79f34773d80b31100a",
+    "apps/capture-web/vite.research.config.ts": "96ed1be3f6fa59f44d59261212fc0339f459f094b1644f25f9d0d2f60b5bbcb0",
+    "packages/contracts/src/observation.ts": "0b27662dd5da2ae1a0feb53a4d61f1c2d72329a67479d9a99fbe823788a205dc",
+    "pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d"
+  },
+  "source_identity_verification": {
+    "all_current_sources_match_recorded_hashes": true,
+    "functional_v6_sources_identical_to_series": true,
+    "all_recorded_run_and_v6_artifact_hashes_verified": true
+  },
+  "hardware": {
+    "chip": "Apple M4 Max",
+    "cpu_cores": 16,
+    "gpu_cores": 40,
+    "unified_memory_bytes": 137438953472
+  },
+  "execution": {
+    "compute_location": "local",
+    "one_agent_measured_process_at_a_time": true,
+    "concurrent_agent_training_or_tests": false,
+    "ordinary_desktop_background_load": "not controlled",
+    "power_or_thermal_state": "not controlled",
+    "browser": "local Chrome headless via Playwright; exact user agent retained per run",
+    "audio_input": "generated 200Hz harmonic waveform; no microphone",
+    "onnxruntime_web": "1.23.2",
+    "wasm_threads": 1,
+    "proxy": false,
+    "source_fixture_buffer_note": "The fixture loops a two-second mono float32 AudioBuffer. At 48 kHz this is 96,000 samples, or 384,000 PCM payload bytes, independent of the scheduled run duration. Browser object/allocation overhead was not measured.",
+    "browser_heap_growth_measured": false
+  },
+  "timing_benchmark_flags": {
+    "all_original_test_artifacts": false,
+    "original_flags_preserved": true,
+    "scope": "Sequential same-machine descriptive measurements. Ordinary desktop background load and power/thermal conditions were uncontrolled; not an exclusive-hardware or physical-input latency benchmark."
+  },
+  "metadata_correction": {
+    "schema": "phenometrix-runtime-metadata-correction-v1",
+    "created_at": "2026-10-22T17:47:02.164153+00:00",
+    "original_manifest_file": "manifest.json",
+    "original_manifest_sha256": "3b1ec6d7003d7ecbdb7fcf44554d680bf59dcec7877f27ac429315f24f8518bd",
+    "original_artifacts_preserved": true,
+    "field": "execution.source_fixture_buffer_note",
+    "original_value": "Full scheduled synthetic audio buffer scales with replay duration; separate from bounded streaming queues",
+    "corrected_value": "The fixture loops a two-second mono float32 AudioBuffer. At 48 kHz this is 96,000 samples, or 384,000 PCM payload bytes, independent of the scheduled run duration. Browser object/allocation overhead was not measured.",
+    "source_evidence": {
+      "path": "apps/capture-web/src/research-voice-replay.ts",
+      "sha256": "0ca242573e463ce3d13f7cfebcca0e012115b206031a55dced47a697bdc6d930",
+      "lines": [
+        295,
+        296,
+        297,
+        298,
+        299,
+        300
+      ],
+      "create_buffer_expression": "context.createBuffer(1, context.sampleRate * 2, context.sampleRate)",
+      "loop_expression": "source.buffer = buffer; source.loop = true; source.connect(node);"
+    },
+    "corrected_fixture": {
+      "duration_seconds": 2,
+      "channels": 1,
+      "sample_rate_hz": 48000,
+      "dtype": "float32",
+      "sample_count": 96000,
+      "pcm_payload_bytes": 384000,
+      "loop": true,
+      "fundamental_hz": 200,
+      "second_harmonic_hz": 400,
+      "amplitudes": [
+        0.12,
+        0.03
+      ],
+      "physical_microphone": false
+    },
+    "effect": "Metadata correction only. No source, timing, prediction, test artifact or original manifest was changed."
+  },
+  "metadata_correction_sha256": "989fb441844465d07b8ccd8b45750482d9add35ff675ea7e0b02301588ca1a27",
+  "model_config": {
+    "schemaVersion": "phenometrix.research-voice-model-config.v1",
+    "qualification": "unqualified-functional-fixture",
+    "manifestUrl": "/.local/voice-mlp/manifest.json",
+    "manifestSha256": "1a438ebf5454b46deff703bd7aaddcd26f33b0c43b2dd5de6689e3fa485e4769",
+    "modelUrl": "/.local/voice-mlp/model.onnx",
+    "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+    "wasmUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.wasm",
+    "wasmSha256": "45eaee27761ad883742a8d4b8fce1538d60ce43b51adf1726fafccc59b8c1a15",
+    "moduleUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.mjs",
+    "moduleSha256": "90a557d15c02bac4504d95b67f431d8594635ed2a0a62a7f2cd83d090ff91d3e"
+  },
+  "model_training_identity": {
+    "training_manifest_sha256": "73533700a756e295876a3145017b3d263c6af0b73d962ec2bf9b7cdd9ac2d61f",
+    "weights_sha256": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+    "feature_run_manifest_sha256": "35e92d701dcd52891c256fa99b9567c5db4d80e14f4ef71858822b470edf5a87",
+    "measurement_delay_ms": 20,
+    "kind": "framewise-mlp",
+    "seed": 20261022
+  },
+  "model_scope": "Original trained MLP, not augmented MLP. Research-only sibling prediction; original DSP frame and observation contract unchanged. MLP quality gates failed.",
+  "measurement_definitions": {
+    "frameServiceMs": "Elapsed feature and baseline preparation, excluding ORT inference in the MLP path.",
+    "completeBlockServiceMs": "Elapsed admitted handleBlock execution including optional ORT completion, PCM recycle and data-envelope post; excludes pre-handler queue waiting and completion-envelope post.",
+    "sampleAvailabilityToMainResultMs": "Main completion-envelope arrival minus required-input boundary mapped using one fixed audio/performance anchor; not measured physical microphone latency.",
+    "blockEndToWorkerReceiptMs": "Worker receive callback time minus fixed-anchor mapped block end; research receipt is before async-pump admission.",
+    "modelInferenceServiceMs": "Elapsed ONNX model prediction per frame, distinct from complete preparation/transport.",
+    "modelTarget": "Support end minus 20 ms; earliest sample availability is 20 ms after the research target.",
+    "quantiles": "Nearest rank, no interpolation; each original summary includes n and null for unavailable metrics.",
+    "validTiming": "Internal consistency only; not calibrated audio-clock accuracy. Unknown audio clock precision remains null."
+  },
+  "runs": [
+    {
+      "id": "01-dsp",
+      "execution": {
+        "name": "01-dsp",
+        "method": "dsp",
+        "started_at": "2026-10-22T17:08:02.779413+00:00",
+        "command": [
+          "caffeinate",
+          "-i",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "--config",
+          "playwright.research.config.ts",
+          "--grep",
+          "real AudioWorklet/worker replay",
+          "--workers=1",
+          "--reporter=json"
+        ],
+        "finished_at": "2026-10-22T17:09:04.775292+00:00",
+        "exit_code": 0,
+        "source_stable": true,
+        "artifacts": {
+          "playwright-report.json": "34ac0f818e44a82717632db24c9f056677e54474c444c6a56349b43aa044399f",
+          "browser-raw.ndjson": "3055da06e98dee1dde9013494a528f25faf6ac9059edbe4fb8be52d8361a07d6",
+          "browser-replay.json": "80902e0f3e7ce0b27a44607f71a9e14237ea75c559d9f1e2da89020df572f96d"
+        }
+      },
+      "evidence": {
+        "status": "complete",
+        "evidence": "paced-synthetic-browser-replay",
+        "durationMs": 60052.800000190735,
+        "requestedSourceDurationMs": 60000,
+        "pacedSourceDurationMs": 60001.40000009537,
+        "setupDurationMs": 30.59999990463257,
+        "teardownDurationMs": 20.800000190734863,
+        "sampleRateHz": 48000,
+        "researchModel": null,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "errors": [],
+        "diagnostics": {
+          "receivedBlockCount": 2985,
+          "processedFrameCount": 5964,
+          "lostBlockCount": 14,
+          "lostBlockFraction": 0.004668222740913638,
+          "maximumBlockGapMs": 199.99999999999636,
+          "p95FeatureLatencyMs": 43.16666666667152,
+          "timestampRegressionCount": 0,
+          "ringBufferCapacitySamples": 96000,
+          "invalidClockMappingCount": 0,
+          "droppedTransportBlockCount": 10,
+          "droppedTransportSampleCount": 9600,
+          "maximumInFlightBlocks": 4,
+          "inFlightResultBatchCount": 0,
+          "maximumInFlightResultBatches": 4,
+          "resultBackpressureBlockCount": 0,
+          "resultBackpressureSampleCount": 0,
+          "resultBackpressureEpisodeCount": 0,
+          "hostDiscardedFrameCount": 0,
+          "hostStaleFrameCount": 0,
+          "oversizedPcmBlockCount": 0,
+          "staleTransportBlockCount": 4,
+          "staleTransportSampleCount": 3840,
+          "latencyStatisticSampleCount": 500
+        },
+        "transportStop": {
+          "status": "complete",
+          "diagnostics": {
+            "schemaVersion": "phenometric.voice-worklet-message.v2",
+            "type": "transport-diagnostics",
+            "captureEpoch": 1,
+            "final": true,
+            "sequence": 2999,
+            "sampleClockEndExclusive": 2879488,
+            "droppedBlockCount": 10,
+            "droppedSampleCount": 10048,
+            "discardedPartialSampleCount": 448,
+            "inFlightBlockCountAtDispose": 0,
+            "maximumInFlightBlocks": 4
+          }
+        },
+        "workerStopAcknowledged": true,
+        "maximumServiceMs": 5.900000095367432,
+        "summary": {
+          "frameCount": 5964,
+          "blockCount": 2989,
+          "researchFrameCount": 0,
+          "modelInferenceServiceMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "frameServiceScope": "baseline-dsp",
+          "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+          "retainedFrameLimit": 120,
+          "retainedBlockLimit": 80,
+          "numericStatisticsCapacityPerMetric": 200000,
+          "frameServiceMs": {
+            "n": 5964,
+            "p50": 0.6999998092651367,
+            "p95": 1.5,
+            "p99": 2.299999713897705,
+            "maximum": 5.900000095367432
+          },
+          "completeBlockServiceMs": {
+            "n": 2989,
+            "p50": 1.5,
+            "p95": 3.3000001907348633,
+            "p99": 4.300000190734863,
+            "maximum": 6.799999713897705
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2985,
+            "p50": 1.5,
+            "p95": 3.3000001907348633,
+            "p99": 4.300000190734863,
+            "maximum": 6.799999713897705
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2981,
+            "stale-dropped:0": 4
+          },
+          "frameServiceBudgetMs": 5,
+          "frameServiceBudgetExceedances": 1,
+          "frameCadenceMs": 10,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetMs": 10,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockCadenceMs": 20,
+          "completeBlockDeadlineMisses": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5964,
+            "p50": 33.66666666666697,
+            "p95": 42.56666676203531,
+            "p99": 44.06666676203895,
+            "maximum": 46.86666695277381
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5964,
+            "p50": 26.866666952766536,
+            "p95": 30.366666952770174,
+            "p99": 32.06666676203167,
+            "maximum": 33.06666676203167
+          },
+          "segments": [
+            "audio-1-1",
+            "audio-1-6"
+          ],
+          "segmentCount": 2,
+          "periodicFrameCount": 5964,
+          "correctKnownPitchFrameCount": 5964,
+          "maximumKnownPitchErrorHz": 0,
+          "rawTelemetry": {
+            "enabled": true,
+            "status": "complete",
+            "batchCount": 90,
+            "streamedRecordCount": 8953,
+            "maximumPendingRecords": 100,
+            "pendingRecordLimit": 200,
+            "maximumBatchRecords": 100
+          },
+          "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+        },
+        "validationStatus": "passed",
+        "runPurpose": "functional-regression",
+        "replayConfiguration": {
+          "method": "dsp",
+          "durationMs": 60000,
+          "overloadAtMs": 30000,
+          "overloadDurationMs": 300
+        },
+        "timingBenchmark": false,
+        "timingLimitation": "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
+        "rawArtifact": {
+          "file": "browser-raw.ndjson",
+          "sha256": "3055da06e98dee1dde9013494a528f25faf6ac9059edbe4fb8be52d8361a07d6",
+          "batchCount": 90,
+          "recordCount": 8953
+        }
+      },
+      "independent_audit": {
+        "schema": "phenometrix-browser-independent-audit-v1",
+        "status": "passed",
+        "mismatches": {},
+        "result_sha256": "80902e0f3e7ce0b27a44607f71a9e14237ea75c559d9f1e2da89020df572f96d",
+        "raw_sha256": "3055da06e98dee1dde9013494a528f25faf6ac9059edbe4fb8be52d8361a07d6",
+        "audit_source_sha256": "f6817ce043691032cb62b68f51f3dd191497510fe3ba5dfb8868d7c4d87f8cad",
+        "raw_records": 8953,
+        "recomputed_summary": {
+          "completeBlockServiceMs": {
+            "n": 2989,
+            "p50": 1.5,
+            "p95": 3.3000001907348633,
+            "p99": 4.300000190734863,
+            "maximum": 6.799999713897705
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2985,
+            "p50": 1.5,
+            "p95": 3.3000001907348633,
+            "p99": 4.300000190734863,
+            "maximum": 6.799999713897705
+          },
+          "frameServiceMs": {
+            "n": 5964,
+            "p50": 0.6999998092651367,
+            "p95": 1.5,
+            "p99": 2.299999713897705,
+            "maximum": 5.900000095367432
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5964,
+            "p50": 33.66666666666697,
+            "p95": 42.56666676203531,
+            "p99": 44.06666676203895,
+            "maximum": 46.86666695277381
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5964,
+            "p50": 26.866666952766536,
+            "p95": 30.366666952770174,
+            "p99": 32.06666676203167,
+            "maximum": 33.06666676203167
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "frameCount": 5964,
+          "blockCount": 2989,
+          "researchFrameCount": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "periodicFrameCount": 5964,
+          "correctKnownPitchFrameCount": 5964,
+          "frameServiceBudgetExceedances": 1,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockDeadlineMisses": 0,
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2981,
+            "stale-dropped:0": 4
+          },
+          "segmentCount": 2,
+          "maximumKnownPitchErrorHz": 0.0
+        },
+        "complete_block_service_by_five_minute_source_window": {
+          "0": {
+            "n": 2989,
+            "p50": 1.5,
+            "p95": 3.3000001907348633,
+            "p99": 4.300000190734863,
+            "maximum": 6.799999713897705
+          }
+        },
+        "limitation": "Synthetic paced replay; no physical microphone latency or clinical accuracy claim."
+      },
+      "independent_audit_sha256": "efb1042f6bd788044ab7f0a9e07bec98b8ff90ce12848dc003ec21f0b47c90e6"
+    },
+    {
+      "id": "02-mlp",
+      "execution": {
+        "name": "02-mlp",
+        "method": "trained-mlp",
+        "started_at": "2026-10-22T17:09:04.782445+00:00",
+        "command": [
+          "caffeinate",
+          "-i",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "--config",
+          "playwright.research.config.ts",
+          "--grep",
+          "real AudioWorklet/worker replay",
+          "--workers=1",
+          "--reporter=json"
+        ],
+        "finished_at": "2026-10-22T17:10:07.036147+00:00",
+        "exit_code": 0,
+        "source_stable": true,
+        "artifacts": {
+          "playwright-report.json": "90a2588c1d5a9e69d43a9fbe56ea13ed98de810703465c1e2b10865cdec38a2b",
+          "browser-raw.ndjson": "003d46facacd52704fac824714e317e3872b546064bdee763fe313d741d22978",
+          "browser-replay.json": "f028e6510d8193150d9dc53f5e4d74420c99a7576579456840ffe310ccd1e4d9"
+        }
+      },
+      "evidence": {
+        "status": "complete",
+        "evidence": "paced-synthetic-browser-replay",
+        "durationMs": 60333.7000002861,
+        "requestedSourceDurationMs": 60000,
+        "pacedSourceDurationMs": 60002.699999809265,
+        "setupDurationMs": 303.30000019073486,
+        "teardownDurationMs": 27.700000286102295,
+        "sampleRateHz": 48000,
+        "researchModel": {
+          "qualification": "unqualified-functional-fixture",
+          "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+          "loadMs": 220.10000038146973
+        },
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "errors": [],
+        "diagnostics": {
+          "receivedBlockCount": 2984,
+          "processedFrameCount": 5962,
+          "lostBlockCount": 15,
+          "lostBlockFraction": 0.005001667222407469,
+          "maximumBlockGapMs": 220,
+          "p95FeatureLatencyMs": 25.23333342870319,
+          "timestampRegressionCount": 0,
+          "ringBufferCapacitySamples": 96000,
+          "invalidClockMappingCount": 0,
+          "droppedTransportBlockCount": 11,
+          "droppedTransportSampleCount": 10560,
+          "maximumInFlightBlocks": 4,
+          "researchCancelledBlockCount": 0,
+          "researchCancelledFrameCount": 0,
+          "researchQueueDroppedBlockCount": 0,
+          "researchQueueDroppedSampleCount": 0,
+          "researchMaximumQueuedBlocks": 0,
+          "inFlightResultBatchCount": 0,
+          "maximumInFlightResultBatches": 4,
+          "resultBackpressureBlockCount": 0,
+          "resultBackpressureSampleCount": 0,
+          "resultBackpressureEpisodeCount": 0,
+          "hostDiscardedFrameCount": 0,
+          "hostStaleFrameCount": 0,
+          "oversizedPcmBlockCount": 0,
+          "staleTransportBlockCount": 4,
+          "staleTransportSampleCount": 3840,
+          "latencyStatisticSampleCount": 500
+        },
+        "transportStop": {
+          "status": "complete",
+          "diagnostics": {
+            "schemaVersion": "phenometric.voice-worklet-message.v2",
+            "type": "transport-diagnostics",
+            "captureEpoch": 1,
+            "final": true,
+            "sequence": 2999,
+            "sampleClockEndExclusive": 2879616,
+            "droppedBlockCount": 11,
+            "droppedSampleCount": 11136,
+            "discardedPartialSampleCount": 576,
+            "inFlightBlockCountAtDispose": 0,
+            "maximumInFlightBlocks": 4
+          }
+        },
+        "workerStopAcknowledged": true,
+        "maximumServiceMs": 5.300000190734863,
+        "summary": {
+          "frameCount": 5962,
+          "blockCount": 2988,
+          "researchFrameCount": 5962,
+          "modelInferenceServiceMs": {
+            "n": 5962,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000028610229492,
+            "p99": 0.40000009536743164,
+            "maximum": 3.5999999046325684
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 5962,
+            "p50": 1.6999998092651367,
+            "p95": 4.300000190734863,
+            "p99": 5.199999809265137,
+            "maximum": 9.099999904632568
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 5962,
+            "p50": 20.833333810172917,
+            "p95": 29.33333381016928,
+            "p99": 31.33333381016928,
+            "maximum": 33.433333714803666
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 5962,
+            "p50": 40.83333381017292,
+            "p95": 49.33333381016928,
+            "p99": 51.33333381016928,
+            "maximum": 53.433333714803666
+          },
+          "frameServiceScope": "shared-feature-and-baseline-preparation-excludes-inference",
+          "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+          "retainedFrameLimit": 120,
+          "retainedBlockLimit": 80,
+          "numericStatisticsCapacityPerMetric": 200000,
+          "frameServiceMs": {
+            "n": 5962,
+            "p50": 1.1999998092651367,
+            "p95": 2.200000286102295,
+            "p99": 2.9000000953674316,
+            "maximum": 5.300000190734863
+          },
+          "completeBlockServiceMs": {
+            "n": 2988,
+            "p50": 2.5999999046325684,
+            "p95": 5,
+            "p99": 5.800000190734863,
+            "maximum": 9.199999809265137
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2984,
+            "p50": 2.5999999046325684,
+            "p95": 5,
+            "p99": 5.800000190734863,
+            "maximum": 9.199999809265137
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2980,
+            "stale-dropped:0": 4
+          },
+          "frameServiceBudgetMs": 5,
+          "frameServiceBudgetExceedances": 4,
+          "frameCadenceMs": 10,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetMs": 10,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockCadenceMs": 20,
+          "completeBlockDeadlineMisses": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5962,
+            "p50": 21.133333524063346,
+            "p95": 29.533333619436235,
+            "p99": 31.633333524068803,
+            "maximum": 34.1333335240688
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5962,
+            "p50": 12.933333714805485,
+            "p95": 17.033333619434416,
+            "p99": 17.23333342870137,
+            "maximum": 18.933333714801847
+          },
+          "segments": [
+            "audio-1-1",
+            "audio-1-6"
+          ],
+          "segmentCount": 2,
+          "periodicFrameCount": 5962,
+          "correctKnownPitchFrameCount": 5962,
+          "maximumKnownPitchErrorHz": 0,
+          "rawTelemetry": {
+            "enabled": true,
+            "status": "complete",
+            "batchCount": 90,
+            "streamedRecordCount": 8950,
+            "maximumPendingRecords": 100,
+            "pendingRecordLimit": 200,
+            "maximumBatchRecords": 100
+          },
+          "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+        },
+        "validationStatus": "passed",
+        "runPurpose": "functional-regression",
+        "replayConfiguration": {
+          "method": "trained-mlp",
+          "durationMs": 60000,
+          "overloadAtMs": 30000,
+          "overloadDurationMs": 300,
+          "modelConfig": {
+            "schemaVersion": "phenometrix.research-voice-model-config.v1",
+            "qualification": "unqualified-functional-fixture",
+            "manifestUrl": "/.local/voice-mlp/manifest.json",
+            "manifestSha256": "1a438ebf5454b46deff703bd7aaddcd26f33b0c43b2dd5de6689e3fa485e4769",
+            "modelUrl": "/.local/voice-mlp/model.onnx",
+            "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+            "wasmUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.wasm",
+            "wasmSha256": "45eaee27761ad883742a8d4b8fce1538d60ce43b51adf1726fafccc59b8c1a15",
+            "moduleUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.mjs",
+            "moduleSha256": "90a557d15c02bac4504d95b67f431d8594635ed2a0a62a7f2cd83d090ff91d3e"
+          }
+        },
+        "timingBenchmark": false,
+        "timingLimitation": "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
+        "rawArtifact": {
+          "file": "browser-raw.ndjson",
+          "sha256": "003d46facacd52704fac824714e317e3872b546064bdee763fe313d741d22978",
+          "batchCount": 90,
+          "recordCount": 8950
+        }
+      },
+      "independent_audit": {
+        "schema": "phenometrix-browser-independent-audit-v1",
+        "status": "passed",
+        "mismatches": {},
+        "result_sha256": "f028e6510d8193150d9dc53f5e4d74420c99a7576579456840ffe310ccd1e4d9",
+        "raw_sha256": "003d46facacd52704fac824714e317e3872b546064bdee763fe313d741d22978",
+        "audit_source_sha256": "f6817ce043691032cb62b68f51f3dd191497510fe3ba5dfb8868d7c4d87f8cad",
+        "raw_records": 8950,
+        "recomputed_summary": {
+          "completeBlockServiceMs": {
+            "n": 2988,
+            "p50": 2.5999999046325684,
+            "p95": 5,
+            "p99": 5.800000190734863,
+            "maximum": 9.199999809265137
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2984,
+            "p50": 2.5999999046325684,
+            "p95": 5,
+            "p99": 5.800000190734863,
+            "maximum": 9.199999809265137
+          },
+          "frameServiceMs": {
+            "n": 5962,
+            "p50": 1.1999998092651367,
+            "p95": 2.200000286102295,
+            "p99": 2.9000000953674316,
+            "maximum": 5.300000190734863
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5962,
+            "p50": 21.133333524063346,
+            "p95": 29.533333619436235,
+            "p99": 31.633333524068803,
+            "maximum": 34.1333335240688
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5962,
+            "p50": 12.933333714805485,
+            "p95": 17.033333619434416,
+            "p99": 17.23333342870137,
+            "maximum": 18.933333714801847
+          },
+          "modelInferenceServiceMs": {
+            "n": 5962,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000028610229492,
+            "p99": 0.40000009536743164,
+            "maximum": 3.5999999046325684
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 5962,
+            "p50": 1.6999998092651367,
+            "p95": 4.300000190734863,
+            "p99": 5.199999809265137,
+            "maximum": 9.099999904632568
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 5962,
+            "p50": 20.833333810172917,
+            "p95": 29.33333381016928,
+            "p99": 31.33333381016928,
+            "maximum": 33.433333714803666
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 5962,
+            "p50": 40.83333381017292,
+            "p95": 49.33333381016928,
+            "p99": 51.33333381016928,
+            "maximum": 53.433333714803666
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "frameCount": 5962,
+          "blockCount": 2988,
+          "researchFrameCount": 5962,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "periodicFrameCount": 5962,
+          "correctKnownPitchFrameCount": 5962,
+          "frameServiceBudgetExceedances": 4,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockDeadlineMisses": 0,
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2980,
+            "stale-dropped:0": 4
+          },
+          "segmentCount": 2,
+          "maximumKnownPitchErrorHz": 0.0
+        },
+        "complete_block_service_by_five_minute_source_window": {
+          "0": {
+            "n": 2988,
+            "p50": 2.5999999046325684,
+            "p95": 5,
+            "p99": 5.800000190734863,
+            "maximum": 9.199999809265137
+          }
+        },
+        "limitation": "Synthetic paced replay; no physical microphone latency or clinical accuracy claim."
+      },
+      "independent_audit_sha256": "0cd99faecd6cbbffa9be228da7357e40b8150b4855abbbce4b076f4a36736d8f"
+    },
+    {
+      "id": "03-mlp",
+      "execution": {
+        "name": "03-mlp",
+        "method": "trained-mlp",
+        "started_at": "2026-10-22T17:10:07.047175+00:00",
+        "command": [
+          "caffeinate",
+          "-i",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "--config",
+          "playwright.research.config.ts",
+          "--grep",
+          "real AudioWorklet/worker replay",
+          "--workers=1",
+          "--reporter=json"
+        ],
+        "finished_at": "2026-10-22T17:11:09.298550+00:00",
+        "exit_code": 0,
+        "source_stable": true,
+        "artifacts": {
+          "playwright-report.json": "b5b905a9f54c5aa8ebfb20fedc344e520083cc75bdff87dd230875b4d4e3fff0",
+          "browser-raw.ndjson": "962f19b4ac03d0a4fc776135298615e9485a005f45138bbcd668aa75e50e0864",
+          "browser-replay.json": "0ec926e90bcdbd34109063f96a9dfe6fcf12ec78d47c9cb83f40e88210d68130"
+        }
+      },
+      "evidence": {
+        "status": "complete",
+        "evidence": "paced-synthetic-browser-replay",
+        "durationMs": 60326.199999809265,
+        "requestedSourceDurationMs": 60000,
+        "pacedSourceDurationMs": 60001.199999809265,
+        "setupDurationMs": 297.40000009536743,
+        "teardownDurationMs": 27.59999990463257,
+        "sampleRateHz": 48000,
+        "researchModel": {
+          "qualification": "unqualified-functional-fixture",
+          "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+          "loadMs": 215.5
+        },
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "errors": [],
+        "diagnostics": {
+          "receivedBlockCount": 2984,
+          "processedFrameCount": 5962,
+          "lostBlockCount": 15,
+          "lostBlockFraction": 0.005001667222407469,
+          "maximumBlockGapMs": 220,
+          "p95FeatureLatencyMs": 28.333528836570622,
+          "timestampRegressionCount": 0,
+          "ringBufferCapacitySamples": 96000,
+          "invalidClockMappingCount": 0,
+          "droppedTransportBlockCount": 11,
+          "droppedTransportSampleCount": 11968,
+          "maximumInFlightBlocks": 4,
+          "researchCancelledBlockCount": 0,
+          "researchCancelledFrameCount": 0,
+          "researchQueueDroppedBlockCount": 0,
+          "researchQueueDroppedSampleCount": 0,
+          "researchMaximumQueuedBlocks": 0,
+          "inFlightResultBatchCount": 0,
+          "maximumInFlightResultBatches": 4,
+          "resultBackpressureBlockCount": 0,
+          "resultBackpressureSampleCount": 0,
+          "resultBackpressureEpisodeCount": 0,
+          "hostDiscardedFrameCount": 0,
+          "hostStaleFrameCount": 0,
+          "oversizedPcmBlockCount": 0,
+          "staleTransportBlockCount": 4,
+          "staleTransportSampleCount": 3840,
+          "latencyStatisticSampleCount": 500
+        },
+        "transportStop": {
+          "status": "complete",
+          "diagnostics": {
+            "schemaVersion": "phenometric.voice-worklet-message.v2",
+            "type": "transport-diagnostics",
+            "captureEpoch": 1,
+            "final": true,
+            "sequence": 2999,
+            "sampleClockEndExclusive": 2880768,
+            "droppedBlockCount": 11,
+            "droppedSampleCount": 12288,
+            "discardedPartialSampleCount": 320,
+            "inFlightBlockCountAtDispose": 0,
+            "maximumInFlightBlocks": 4
+          }
+        },
+        "workerStopAcknowledged": true,
+        "maximumServiceMs": 6.400000095367432,
+        "summary": {
+          "frameCount": 5962,
+          "blockCount": 2988,
+          "researchFrameCount": 5962,
+          "modelInferenceServiceMs": {
+            "n": 5962,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000028610229492,
+            "p99": 0.5,
+            "maximum": 3.799999713897705
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 5962,
+            "p50": 1.799999713897705,
+            "p95": 4.400000095367432,
+            "p99": 5.299999713897705,
+            "maximum": 9.5
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 5962,
+            "p50": 24.233528455099076,
+            "p95": 32.63352855046469,
+            "p99": 34.733528455100895,
+            "maximum": 37.833528836566984
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 5962,
+            "p50": 44.233528455099076,
+            "p95": 52.63352855046469,
+            "p99": 54.733528455100895,
+            "maximum": 57.833528836566984
+          },
+          "frameServiceScope": "shared-feature-and-baseline-preparation-excludes-inference",
+          "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+          "retainedFrameLimit": 120,
+          "retainedBlockLimit": 80,
+          "numericStatisticsCapacityPerMetric": 200000,
+          "frameServiceMs": {
+            "n": 5962,
+            "p50": 1.3000001907348633,
+            "p95": 2.3000001907348633,
+            "p99": 2.9000000953674316,
+            "maximum": 6.400000095367432
+          },
+          "completeBlockServiceMs": {
+            "n": 2988,
+            "p50": 2.8000001907348633,
+            "p95": 5.099999904632568,
+            "p99": 6.099999904632568,
+            "maximum": 9.699999809265137
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2984,
+            "p50": 2.8000001907348633,
+            "p95": 5.099999904632568,
+            "p99": 6.099999904632568,
+            "maximum": 9.699999809265137
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.10000038146972656,
+            "p99": 0.10000038146972656,
+            "maximum": 0.10000038146972656
+          },
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2980,
+            "stale-dropped:0": 4
+          },
+          "frameServiceBudgetMs": 5,
+          "frameServiceBudgetExceedances": 2,
+          "frameCadenceMs": 10,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetMs": 10,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockCadenceMs": 20,
+          "completeBlockDeadlineMisses": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 30,
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5932,
+            "p50": 24.43333323796105,
+            "p95": 32.83333333333212,
+            "p99": 35.03333314259726,
+            "maximum": 38.133333047229826
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5962,
+            "p50": 16.13352855046105,
+            "p95": 20.03352864583576,
+            "p99": 20.333528836567893,
+            "maximum": 23.03352864583303
+          },
+          "segments": [
+            "audio-1-1",
+            "audio-1-6"
+          ],
+          "segmentCount": 2,
+          "periodicFrameCount": 5962,
+          "correctKnownPitchFrameCount": 5962,
+          "maximumKnownPitchErrorHz": 0,
+          "rawTelemetry": {
+            "enabled": true,
+            "status": "complete",
+            "batchCount": 90,
+            "streamedRecordCount": 8950,
+            "maximumPendingRecords": 100,
+            "pendingRecordLimit": 200,
+            "maximumBatchRecords": 100
+          },
+          "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+        },
+        "validationStatus": "passed",
+        "runPurpose": "functional-regression",
+        "replayConfiguration": {
+          "method": "trained-mlp",
+          "durationMs": 60000,
+          "overloadAtMs": 30000,
+          "overloadDurationMs": 300,
+          "modelConfig": {
+            "schemaVersion": "phenometrix.research-voice-model-config.v1",
+            "qualification": "unqualified-functional-fixture",
+            "manifestUrl": "/.local/voice-mlp/manifest.json",
+            "manifestSha256": "1a438ebf5454b46deff703bd7aaddcd26f33b0c43b2dd5de6689e3fa485e4769",
+            "modelUrl": "/.local/voice-mlp/model.onnx",
+            "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+            "wasmUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.wasm",
+            "wasmSha256": "45eaee27761ad883742a8d4b8fce1538d60ce43b51adf1726fafccc59b8c1a15",
+            "moduleUrl": "/.local/voice-mlp/ort-wasm-simd-threaded.mjs",
+            "moduleSha256": "90a557d15c02bac4504d95b67f431d8594635ed2a0a62a7f2cd83d090ff91d3e"
+          }
+        },
+        "timingBenchmark": false,
+        "timingLimitation": "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
+        "rawArtifact": {
+          "file": "browser-raw.ndjson",
+          "sha256": "962f19b4ac03d0a4fc776135298615e9485a005f45138bbcd668aa75e50e0864",
+          "batchCount": 90,
+          "recordCount": 8950
+        }
+      },
+      "independent_audit": {
+        "schema": "phenometrix-browser-independent-audit-v1",
+        "status": "passed",
+        "mismatches": {},
+        "result_sha256": "0ec926e90bcdbd34109063f96a9dfe6fcf12ec78d47c9cb83f40e88210d68130",
+        "raw_sha256": "962f19b4ac03d0a4fc776135298615e9485a005f45138bbcd668aa75e50e0864",
+        "audit_source_sha256": "f6817ce043691032cb62b68f51f3dd191497510fe3ba5dfb8868d7c4d87f8cad",
+        "raw_records": 8950,
+        "recomputed_summary": {
+          "completeBlockServiceMs": {
+            "n": 2988,
+            "p50": 2.8000001907348633,
+            "p95": 5.099999904632568,
+            "p99": 6.099999904632568,
+            "maximum": 9.699999809265137
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2984,
+            "p50": 2.8000001907348633,
+            "p95": 5.099999904632568,
+            "p99": 6.099999904632568,
+            "maximum": 9.699999809265137
+          },
+          "frameServiceMs": {
+            "n": 5962,
+            "p50": 1.3000001907348633,
+            "p95": 2.3000001907348633,
+            "p99": 2.9000000953674316,
+            "maximum": 6.400000095367432
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5932,
+            "p50": 24.43333323796105,
+            "p95": 32.83333333333212,
+            "p99": 35.03333314259726,
+            "maximum": 38.133333047229826
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5962,
+            "p50": 16.13352855046105,
+            "p95": 20.03352864583576,
+            "p99": 20.333528836567893,
+            "maximum": 23.03352864583303
+          },
+          "modelInferenceServiceMs": {
+            "n": 5962,
+            "p50": 0.09999990463256836,
+            "p95": 0.20000028610229492,
+            "p99": 0.5,
+            "maximum": 3.799999713897705
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 5962,
+            "p50": 1.799999713897705,
+            "p95": 4.400000095367432,
+            "p99": 5.299999713897705,
+            "maximum": 9.5
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 5962,
+            "p50": 24.233528455099076,
+            "p95": 32.63352855046469,
+            "p99": 34.733528455100895,
+            "maximum": 37.833528836566984
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 5962,
+            "p50": 44.233528455099076,
+            "p95": 52.63352855046469,
+            "p99": 54.733528455100895,
+            "maximum": 57.833528836566984
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.10000038146972656,
+            "p99": 0.10000038146972656,
+            "maximum": 0.10000038146972656
+          },
+          "frameCount": 5962,
+          "blockCount": 2988,
+          "researchFrameCount": 5962,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 30,
+          "periodicFrameCount": 5962,
+          "correctKnownPitchFrameCount": 5962,
+          "frameServiceBudgetExceedances": 2,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockDeadlineMisses": 0,
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2980,
+            "stale-dropped:0": 4
+          },
+          "segmentCount": 2,
+          "maximumKnownPitchErrorHz": 0.0
+        },
+        "complete_block_service_by_five_minute_source_window": {
+          "0": {
+            "n": 2988,
+            "p50": 2.8000001907348633,
+            "p95": 5.099999904632568,
+            "p99": 6.099999904632568,
+            "maximum": 9.699999809265137
+          }
+        },
+        "limitation": "Synthetic paced replay; no physical microphone latency or clinical accuracy claim."
+      },
+      "independent_audit_sha256": "8255d11864a2c40ebc20a7fd4f99f32dc24540988e0d18d5fb40e48d9d15b812"
+    },
+    {
+      "id": "04-dsp",
+      "execution": {
+        "name": "04-dsp",
+        "method": "dsp",
+        "started_at": "2026-10-22T17:11:09.309137+00:00",
+        "command": [
+          "caffeinate",
+          "-i",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "--config",
+          "playwright.research.config.ts",
+          "--grep",
+          "real AudioWorklet/worker replay",
+          "--workers=1",
+          "--reporter=json"
+        ],
+        "finished_at": "2026-10-22T17:12:11.252805+00:00",
+        "exit_code": 0,
+        "source_stable": true,
+        "artifacts": {
+          "playwright-report.json": "351226618c6ee0cc23b8d4016c025043409cae276261c207aa03a56c2df8ebef",
+          "browser-raw.ndjson": "0be0e5892efa29b245b9c1fd0e4c5347e1c58866b530bb42cb91106c4aacd8cc",
+          "browser-replay.json": "1778071d7b8270aea8959944132eb3362c3cae66d7b65beefa0ac66b3c00547d"
+        }
+      },
+      "evidence": {
+        "status": "complete",
+        "evidence": "paced-synthetic-browser-replay",
+        "durationMs": 60049.40000009537,
+        "requestedSourceDurationMs": 60000,
+        "pacedSourceDurationMs": 60001.5,
+        "setupDurationMs": 30.800000190734863,
+        "teardownDurationMs": 17.09999990463257,
+        "sampleRateHz": 48000,
+        "researchModel": null,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "errors": [],
+        "diagnostics": {
+          "receivedBlockCount": 2986,
+          "processedFrameCount": 5966,
+          "lostBlockCount": 14,
+          "lostBlockFraction": 0.004666666666666667,
+          "maximumBlockGapMs": 199.99999999999636,
+          "p95FeatureLatencyMs": 34.766617457069515,
+          "timestampRegressionCount": 0,
+          "ringBufferCapacitySamples": 96000,
+          "invalidClockMappingCount": 0,
+          "droppedTransportBlockCount": 10,
+          "droppedTransportSampleCount": 9600,
+          "maximumInFlightBlocks": 4,
+          "inFlightResultBatchCount": 1,
+          "maximumInFlightResultBatches": 4,
+          "resultBackpressureBlockCount": 0,
+          "resultBackpressureSampleCount": 0,
+          "resultBackpressureEpisodeCount": 0,
+          "hostDiscardedFrameCount": 0,
+          "hostStaleFrameCount": 0,
+          "oversizedPcmBlockCount": 0,
+          "staleTransportBlockCount": 4,
+          "staleTransportSampleCount": 3840,
+          "latencyStatisticSampleCount": 500
+        },
+        "transportStop": {
+          "status": "complete",
+          "diagnostics": {
+            "schemaVersion": "phenometric.voice-worklet-message.v2",
+            "type": "transport-diagnostics",
+            "captureEpoch": 1,
+            "final": true,
+            "sequence": 3000,
+            "sampleClockEndExclusive": 2880000,
+            "droppedBlockCount": 10,
+            "droppedSampleCount": 9600,
+            "discardedPartialSampleCount": 0,
+            "inFlightBlockCountAtDispose": 0,
+            "maximumInFlightBlocks": 4
+          }
+        },
+        "workerStopAcknowledged": true,
+        "maximumServiceMs": 4.600000381469727,
+        "summary": {
+          "frameCount": 5966,
+          "blockCount": 2990,
+          "researchFrameCount": 0,
+          "modelInferenceServiceMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "frameServiceScope": "baseline-dsp",
+          "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+          "retainedFrameLimit": 120,
+          "retainedBlockLimit": 80,
+          "numericStatisticsCapacityPerMetric": 200000,
+          "frameServiceMs": {
+            "n": 5966,
+            "p50": 0.9000000953674316,
+            "p95": 1.8000001907348633,
+            "p99": 2.200000286102295,
+            "maximum": 4.600000381469727
+          },
+          "completeBlockServiceMs": {
+            "n": 2990,
+            "p50": 2.1999998092651367,
+            "p95": 3.6999998092651367,
+            "p99": 4.400000095367432,
+            "maximum": 7.200000286102295
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2986,
+            "p50": 2.1999998092651367,
+            "p95": 3.6999998092651367,
+            "p99": 4.400000095367432,
+            "maximum": 7.200000286102295
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0,
+            "maximum": 0
+          },
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2982,
+            "stale-dropped:0": 4
+          },
+          "frameServiceBudgetMs": 5,
+          "frameServiceBudgetExceedances": 0,
+          "frameCadenceMs": 10,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetMs": 10,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockCadenceMs": 20,
+          "completeBlockDeadlineMisses": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5966,
+            "p50": 30.366666475929378,
+            "p95": 39.16666666666788,
+            "p99": 40.56666676203531,
+            "maximum": 42.96666685740183
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5966,
+            "p50": 23.166617552438765,
+            "p95": 27.166617552440584,
+            "p99": 27.36661783854288,
+            "maximum": 29.166617552439675
+          },
+          "segments": [
+            "audio-1-1",
+            "audio-1-6"
+          ],
+          "segmentCount": 2,
+          "periodicFrameCount": 5966,
+          "correctKnownPitchFrameCount": 5966,
+          "maximumKnownPitchErrorHz": 0,
+          "rawTelemetry": {
+            "enabled": true,
+            "status": "complete",
+            "batchCount": 90,
+            "streamedRecordCount": 8956,
+            "maximumPendingRecords": 100,
+            "pendingRecordLimit": 200,
+            "maximumBatchRecords": 100
+          },
+          "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+        },
+        "validationStatus": "passed",
+        "runPurpose": "functional-regression",
+        "replayConfiguration": {
+          "method": "dsp",
+          "durationMs": 60000,
+          "overloadAtMs": 30000,
+          "overloadDurationMs": 300
+        },
+        "timingBenchmark": false,
+        "timingLimitation": "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
+        "rawArtifact": {
+          "file": "browser-raw.ndjson",
+          "sha256": "0be0e5892efa29b245b9c1fd0e4c5347e1c58866b530bb42cb91106c4aacd8cc",
+          "batchCount": 90,
+          "recordCount": 8956
+        }
+      },
+      "independent_audit": {
+        "schema": "phenometrix-browser-independent-audit-v1",
+        "status": "passed",
+        "mismatches": {},
+        "result_sha256": "1778071d7b8270aea8959944132eb3362c3cae66d7b65beefa0ac66b3c00547d",
+        "raw_sha256": "0be0e5892efa29b245b9c1fd0e4c5347e1c58866b530bb42cb91106c4aacd8cc",
+        "audit_source_sha256": "f6817ce043691032cb62b68f51f3dd191497510fe3ba5dfb8868d7c4d87f8cad",
+        "raw_records": 8956,
+        "recomputed_summary": {
+          "completeBlockServiceMs": {
+            "n": 2990,
+            "p50": 2.1999998092651367,
+            "p95": 3.6999998092651367,
+            "p99": 4.400000095367432,
+            "maximum": 7.200000286102295
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 2986,
+            "p50": 2.1999998092651367,
+            "p95": 3.6999998092651367,
+            "p99": 4.400000095367432,
+            "maximum": 7.200000286102295
+          },
+          "frameServiceMs": {
+            "n": 5966,
+            "p50": 0.9000000953674316,
+            "p95": 1.8000001907348633,
+            "p99": 2.200000286102295,
+            "maximum": 4.600000381469727
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 5966,
+            "p50": 30.366666475929378,
+            "p95": 39.16666666666788,
+            "p99": 40.56666676203531,
+            "maximum": 42.96666685740183
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 5966,
+            "p50": 23.166617552438765,
+            "p95": 27.166617552440584,
+            "p99": 27.36661783854288,
+            "maximum": 29.166617552439675
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0,
+            "maximum": 0
+          },
+          "frameCount": 5966,
+          "blockCount": 2990,
+          "researchFrameCount": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "periodicFrameCount": 5966,
+          "correctKnownPitchFrameCount": 5966,
+          "frameServiceBudgetExceedances": 0,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockDeadlineMisses": 0,
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 2982,
+            "stale-dropped:0": 4
+          },
+          "segmentCount": 2,
+          "maximumKnownPitchErrorHz": 0.0
+        },
+        "complete_block_service_by_five_minute_source_window": {
+          "0": {
+            "n": 2990,
+            "p50": 2.1999998092651367,
+            "p95": 3.6999998092651367,
+            "p99": 4.400000095367432,
+            "maximum": 7.200000286102295
+          }
+        },
+        "limitation": "Synthetic paced replay; no physical microphone latency or clinical accuracy claim."
+      },
+      "independent_audit_sha256": "bf15233821aeb4cdbd63e63ca981fd667af02a039163f6e013b07ba9b291a354"
+    },
+    {
+      "id": "05-dsp-soak",
+      "execution": {
+        "name": "05-dsp-soak",
+        "method": "dsp",
+        "started_at": "2026-10-22T17:12:11.260103+00:00",
+        "command": [
+          "caffeinate",
+          "-i",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "--config",
+          "playwright.research.config.ts",
+          "--grep",
+          "real AudioWorklet/worker replay",
+          "--workers=1",
+          "--reporter=json"
+        ],
+        "finished_at": "2026-10-22T17:42:13.387784+00:00",
+        "exit_code": 0,
+        "source_stable": true,
+        "artifacts": {
+          "playwright-report.json": "9363a6b6a6edd036348093fc0fd91bc64bdf2a0fc376c8a025c07c105fb0e14e",
+          "browser-raw.ndjson": "1c4f437284d7c2c0d5ff23f43be387511b9847940dd2eece670e8bef47feb564",
+          "browser-replay.json": "a575244487218d7b867ce709d1c58b0b3430d630b81350a72b7f34dc8a5b8f51"
+        }
+      },
+      "evidence": {
+        "status": "complete",
+        "evidence": "paced-synthetic-browser-replay",
+        "durationMs": 1800046.4000000954,
+        "requestedSourceDurationMs": 1800000,
+        "pacedSourceDurationMs": 1800000.8000001907,
+        "setupDurationMs": 31.09999990463257,
+        "teardownDurationMs": 14.5,
+        "sampleRateHz": 48000,
+        "researchModel": null,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+        "errors": [],
+        "diagnostics": {
+          "receivedBlockCount": 89982,
+          "processedFrameCount": 179958,
+          "lostBlockCount": 15,
+          "lostBlockFraction": 0.0001666722224074136,
+          "maximumBlockGapMs": 220,
+          "p95FeatureLatencyMs": 91.16666666674428,
+          "timestampRegressionCount": 0,
+          "ringBufferCapacitySamples": 96000,
+          "invalidClockMappingCount": 0,
+          "droppedTransportBlockCount": 11,
+          "droppedTransportSampleCount": 10560,
+          "maximumInFlightBlocks": 4,
+          "inFlightResultBatchCount": 0,
+          "maximumInFlightResultBatches": 4,
+          "resultBackpressureBlockCount": 0,
+          "resultBackpressureSampleCount": 0,
+          "resultBackpressureEpisodeCount": 0,
+          "hostDiscardedFrameCount": 0,
+          "hostStaleFrameCount": 0,
+          "oversizedPcmBlockCount": 0,
+          "staleTransportBlockCount": 4,
+          "staleTransportSampleCount": 3840,
+          "latencyStatisticSampleCount": 500
+        },
+        "transportStop": {
+          "status": "complete",
+          "diagnostics": {
+            "schemaVersion": "phenometric.voice-worklet-message.v2",
+            "type": "transport-diagnostics",
+            "captureEpoch": 1,
+            "final": true,
+            "sequence": 89997,
+            "sampleClockEndExclusive": 86397440,
+            "droppedBlockCount": 11,
+            "droppedSampleCount": 10880,
+            "discardedPartialSampleCount": 320,
+            "inFlightBlockCountAtDispose": 0,
+            "maximumInFlightBlocks": 4
+          }
+        },
+        "workerStopAcknowledged": true,
+        "maximumServiceMs": 7,
+        "summary": {
+          "frameCount": 179958,
+          "blockCount": 89986,
+          "researchFrameCount": 0,
+          "modelInferenceServiceMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "modelElapsedFromFrameStartMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "sampleAvailabilityToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "targetReferenceToModelReadyMs": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "maximum": null
+          },
+          "frameServiceScope": "baseline-dsp",
+          "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+          "retainedFrameLimit": 120,
+          "retainedBlockLimit": 80,
+          "numericStatisticsCapacityPerMetric": 200000,
+          "frameServiceMs": {
+            "n": 179958,
+            "p50": 0.9000000953674316,
+            "p95": 1.8000001907348633,
+            "p99": 2.1000003814697266,
+            "maximum": 7
+          },
+          "completeBlockServiceMs": {
+            "n": 89986,
+            "p50": 2.0999999046325684,
+            "p95": 3.5999999046325684,
+            "p99": 4.299999713897705,
+            "maximum": 8.299999713897705
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 89982,
+            "p50": 2.0999999046325684,
+            "p95": 3.5999999046325684,
+            "p99": 4.299999713897705,
+            "maximum": 8.299999713897705
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 89978,
+            "stale-dropped:0": 4
+          },
+          "frameServiceBudgetMs": 5,
+          "frameServiceBudgetExceedances": 9,
+          "frameCadenceMs": 10,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetMs": 10,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockCadenceMs": 20,
+          "completeBlockDeadlineMisses": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "sampleAvailabilityToMainResultMs": {
+            "n": 179958,
+            "p50": 66.36666695273016,
+            "p95": 86.66666666651145,
+            "p99": 91.16666666674428,
+            "maximum": 95.66666666674428
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 179958,
+            "p50": 59.36666695284657,
+            "p95": 76.56666676187888,
+            "p99": 79.66666666651145,
+            "maximum": 81.66666666674428
+          },
+          "segments": [
+            "audio-1-1",
+            "audio-1-6"
+          ],
+          "segmentCount": 2,
+          "periodicFrameCount": 179958,
+          "correctKnownPitchFrameCount": 179958,
+          "maximumKnownPitchErrorHz": 0,
+          "rawTelemetry": {
+            "enabled": true,
+            "status": "complete",
+            "batchCount": 2700,
+            "streamedRecordCount": 269944,
+            "maximumPendingRecords": 100,
+            "pendingRecordLimit": 200,
+            "maximumBatchRecords": 100
+          },
+          "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+        },
+        "validationStatus": "passed",
+        "runPurpose": "sustained-functional-soak",
+        "replayConfiguration": {
+          "method": "dsp",
+          "durationMs": 1800000,
+          "overloadAtMs": 900000,
+          "overloadDurationMs": 300
+        },
+        "timingBenchmark": false,
+        "timingLimitation": "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
+        "rawArtifact": {
+          "file": "browser-raw.ndjson",
+          "sha256": "1c4f437284d7c2c0d5ff23f43be387511b9847940dd2eece670e8bef47feb564",
+          "batchCount": 2700,
+          "recordCount": 269944
+        }
+      },
+      "independent_audit": {
+        "schema": "phenometrix-browser-independent-audit-v1",
+        "status": "passed",
+        "mismatches": {},
+        "result_sha256": "a575244487218d7b867ce709d1c58b0b3430d630b81350a72b7f34dc8a5b8f51",
+        "raw_sha256": "1c4f437284d7c2c0d5ff23f43be387511b9847940dd2eece670e8bef47feb564",
+        "audit_source_sha256": "f6817ce043691032cb62b68f51f3dd191497510fe3ba5dfb8868d7c4d87f8cad",
+        "raw_records": 269944,
+        "recomputed_summary": {
+          "completeBlockServiceMs": {
+            "n": 89986,
+            "p50": 2.0999999046325684,
+            "p95": 3.5999999046325684,
+            "p99": 4.299999713897705,
+            "maximum": 8.299999713897705
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 89982,
+            "p50": 2.0999999046325684,
+            "p95": 3.5999999046325684,
+            "p99": 4.299999713897705,
+            "maximum": 8.299999713897705
+          },
+          "frameServiceMs": {
+            "n": 179958,
+            "p50": 0.9000000953674316,
+            "p95": 1.8000001907348633,
+            "p99": 2.1000003814697266,
+            "maximum": 7
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 179958,
+            "p50": 66.36666695273016,
+            "p95": 86.66666666651145,
+            "p99": 91.16666666674428,
+            "maximum": 95.66666666674428
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 179958,
+            "p50": 59.36666695284657,
+            "p95": 76.56666676187888,
+            "p99": 79.66666666651145,
+            "maximum": 81.66666666674428
+          },
+          "staleBlockServiceMs": {
+            "n": 4,
+            "p50": 0,
+            "p95": 0.09999990463256836,
+            "p99": 0.09999990463256836,
+            "maximum": 0.09999990463256836
+          },
+          "frameCount": 179958,
+          "blockCount": 89986,
+          "researchFrameCount": 0,
+          "discardedResultFrameCount": 0,
+          "staleResultFrameCount": 0,
+          "invalidFrameTimingCount": 0,
+          "periodicFrameCount": 179958,
+          "correctKnownPitchFrameCount": 179958,
+          "frameServiceBudgetExceedances": 9,
+          "frameCadenceDeadlineMisses": 0,
+          "completeBlockServiceBudgetExceedances": 0,
+          "completeBlockDeadlineMisses": 0,
+          "blockFrameCounts": {
+            "processed:0": 2,
+            "processed:1": 2,
+            "processed:2": 89978,
+            "stale-dropped:0": 4
+          },
+          "segmentCount": 2,
+          "maximumKnownPitchErrorHz": 0.0
+        },
+        "complete_block_service_by_five_minute_source_window": {
+          "0": {
+            "n": 15000,
+            "p50": 1.9000000953674316,
+            "p95": 3,
+            "p99": 3.799999713897705,
+            "maximum": 5.900000095367432
+          },
+          "1": {
+            "n": 15000,
+            "p50": 2,
+            "p95": 3.3999996185302734,
+            "p99": 4.199999809265137,
+            "maximum": 7.5
+          },
+          "2": {
+            "n": 15000,
+            "p50": 2.1999998092651367,
+            "p95": 3.5999999046325684,
+            "p99": 4.300000190734863,
+            "maximum": 8.299999713897705
+          },
+          "3": {
+            "n": 14989,
+            "p50": 2.1999998092651367,
+            "p95": 3.700000286102295,
+            "p99": 4.199999809265137,
+            "maximum": 6.200000286102295
+          },
+          "4": {
+            "n": 15000,
+            "p50": 2.299999713897705,
+            "p95": 3.8000001907348633,
+            "p99": 4.5,
+            "maximum": 6.300000190734863
+          },
+          "5": {
+            "n": 14997,
+            "p50": 2.1999998092651367,
+            "p95": 3.799999713897705,
+            "p99": 4.599999904632568,
+            "maximum": 8
+          }
+        },
+        "limitation": "Synthetic paced replay; no physical microphone latency or clinical accuracy claim."
+      },
+      "independent_audit_sha256": "cad7144ef5444a6cdb7d91bf9b0c11c900a8778603d838a55a2d2a8efce2bae8"
+    }
+  ],
+  "soak_trend": {
+    "schema": "phenometrix-runtime-offline-trend-v1",
+    "status": "complete",
+    "raw_sha256": "1c4f437284d7c2c0d5ff23f43be387511b9847940dd2eece670e8bef47feb564",
+    "result_sha256": "a575244487218d7b867ce709d1c58b0b3430d630b81350a72b7f34dc8a5b8f51",
+    "analysis_script_sha256": "1304456060732941e9197051d54b485add4f5dc3cde7aab917b2078a4382754d",
+    "method": {
+      "window_seconds": 300,
+      "origin_first_block_support_start_sample": 0,
+      "block_assignment": "floor((block.supportStartSample - origin) / sampleRate / 300)",
+      "frame_assignment": "floor((frame.timing.supportEndSampleExclusive - origin) / sampleRate / 300)",
+      "quantiles": "nearest rank: sorted[ceil(n*q)-1]; no interpolation",
+      "receipt_weighting": "One value per delivered frame, as in the browser summary; a block receipt can contribute twice.",
+      "eligibility": "Arrival and receipt include non-null values only; raw worker-to-main differences are retained separately without clamping.",
+      "raw_difference_scope": "workerReadyToMainArrivalRawMs is after legacy DSP frame preparation; workerReceiptToMainArrivalRawMs includes admitted processing and downstream delivery. Neither subtracts the audio anchor."
+    },
+    "clock_mapping_ids": [
+      1
+    ],
+    "invalid_arrival_timing_counts": {},
+    "windows": [
+      {
+        "start_minute": 0,
+        "end_minute": 5,
+        "distributions_ms": {
+          "completeBlockServiceMs": {
+            "n": 15000,
+            "p50": 1.9000000953674316,
+            "p95": 3,
+            "p99": 3.799999713897705,
+            "maximum": 5.900000095367432
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 15000,
+            "p50": 1.9000000953674316,
+            "p95": 3,
+            "p99": 3.799999713897705,
+            "maximum": 5.900000095367432
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 29996,
+            "p50": 38.96666685742093,
+            "p95": 48.66666666668607,
+            "p99": 49.66666666667152,
+            "maximum": 51.56666676199529
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 29996,
+            "p50": 33.366666952788364,
+            "p95": 37.266667048155796,
+            "p99": 37.76666704812669,
+            "maximum": 39.0666667620535
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 29996,
+            "p50": 0.40000009536743164,
+            "p95": 1.4000000953674316,
+            "p99": 1.8000001907348633,
+            "maximum": 4.900000095367432
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 29996,
+            "p50": 2.0,
+            "p95": 3.0999999046325684,
+            "p99": 3.9000000953674316,
+            "maximum": 5.900000095367432
+          }
+        }
+      },
+      {
+        "start_minute": 5,
+        "end_minute": 10,
+        "distributions_ms": {
+          "sampleAvailabilityToMainResultMs": {
+            "n": 30000,
+            "p50": 49.366666952788364,
+            "p95": 59.56666676199529,
+            "p99": 60.66666666668607,
+            "maximum": 65.7666670481558
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 30000,
+            "p50": 44.5666667620535,
+            "p95": 47.366666952788364,
+            "p99": 47.966666857362725,
+            "maximum": 51.0666667620535
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 30000,
+            "p50": 0.40000009536743164,
+            "p95": 1.5999999046325684,
+            "p99": 2.0999999046325684,
+            "maximum": 5.399999618530273
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 30000,
+            "p50": 2.0999999046325684,
+            "p95": 3.4000000953674316,
+            "p99": 4.200000286102295,
+            "maximum": 7.600000381469727
+          },
+          "completeBlockServiceMs": {
+            "n": 15000,
+            "p50": 2,
+            "p95": 3.3999996185302734,
+            "p99": 4.199999809265137,
+            "maximum": 7.5
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 15000,
+            "p50": 2,
+            "p95": 3.3999996185302734,
+            "p99": 4.199999809265137,
+            "maximum": 7.5
+          }
+        }
+      },
+      {
+        "start_minute": 10,
+        "end_minute": 15,
+        "distributions_ms": {
+          "sampleAvailabilityToMainResultMs": {
+            "n": 29997,
+            "p50": 59.26666704809759,
+            "p95": 70.5666667619953,
+            "p99": 74.26666704809759,
+            "maximum": 78.766667048214
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 29997,
+            "p50": 52.86666695273016,
+            "p95": 59.06666676199529,
+            "p99": 62.966666857362725,
+            "maximum": 64.66666666662786
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 29997,
+            "p50": 0.40000009536743164,
+            "p95": 1.6999998092651367,
+            "p99": 2.1999998092651367,
+            "maximum": 6.199999809265137
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 29997,
+            "p50": 2.299999713897705,
+            "p95": 3.6999998092651367,
+            "p99": 4.399999618530273,
+            "maximum": 8.299999713897705
+          },
+          "completeBlockServiceMs": {
+            "n": 15000,
+            "p50": 2.1999998092651367,
+            "p95": 3.5999999046325684,
+            "p99": 4.300000190734863,
+            "maximum": 8.299999713897705
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 14998,
+            "p50": 2.1999998092651367,
+            "p95": 3.5999999046325684,
+            "p99": 4.300000190734863,
+            "maximum": 8.299999713897705
+          }
+        }
+      },
+      {
+        "start_minute": 15,
+        "end_minute": 20,
+        "distributions_ms": {
+          "completeBlockServiceMs": {
+            "n": 14989,
+            "p50": 2.1999998092651367,
+            "p95": 3.700000286102295,
+            "p99": 4.199999809265137,
+            "maximum": 6.200000286102295
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 14987,
+            "p50": 2.1999998092651367,
+            "p95": 3.700000286102295,
+            "p99": 4.199999809265137,
+            "maximum": 6.200000286102295
+          },
+          "sampleAvailabilityToMainResultMs": {
+            "n": 29970,
+            "p50": 71.66666666674428,
+            "p95": 81.16666666674428,
+            "p99": 82.5666667619953,
+            "maximum": 85.26666704798117
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 29970,
+            "p50": 65.16666666674428,
+            "p95": 69.26666704798117,
+            "p99": 69.766667048214,
+            "maximum": 71.16666666674428
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 29970,
+            "p50": 0.40000009536743164,
+            "p95": 1.6999998092651367,
+            "p99": 2.1000003814697266,
+            "maximum": 4.099999904632568
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 29970,
+            "p50": 2.200000286102295,
+            "p95": 3.8000001907348633,
+            "p99": 4.200000286102295,
+            "maximum": 6.300000190734863
+          }
+        }
+      },
+      {
+        "start_minute": 20,
+        "end_minute": 25,
+        "distributions_ms": {
+          "sampleAvailabilityToMainResultMs": {
+            "n": 30000,
+            "p50": 77.266667048214,
+            "p95": 86.66666666651145,
+            "p99": 88.16666666651145,
+            "maximum": 90.56666676187888
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 30000,
+            "p50": 70.66666666674428,
+            "p95": 74.66666666651145,
+            "p99": 75.06666676211171,
+            "maximum": 76.96666685747914
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 30000,
+            "p50": 0.40000009536743164,
+            "p95": 1.700000286102295,
+            "p99": 2.200000286102295,
+            "maximum": 4.400000095367432
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 30000,
+            "p50": 2.3999996185302734,
+            "p95": 3.9000000953674316,
+            "p99": 4.599999904632568,
+            "maximum": 6.400000095367432
+          },
+          "completeBlockServiceMs": {
+            "n": 15000,
+            "p50": 2.299999713897705,
+            "p95": 3.8000001907348633,
+            "p99": 4.5,
+            "maximum": 6.300000190734863
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 15000,
+            "p50": 2.299999713897705,
+            "p95": 3.8000001907348633,
+            "p99": 4.5,
+            "maximum": 6.300000190734863
+          }
+        }
+      },
+      {
+        "start_minute": 25,
+        "end_minute": 30,
+        "distributions_ms": {
+          "sampleAvailabilityToMainResultMs": {
+            "n": 29995,
+            "p50": 81.96666685724631,
+            "p95": 91.56666676187888,
+            "p99": 93.06666676211171,
+            "maximum": 95.66666666674428
+          },
+          "blockEndToWorkerReceiptMs": {
+            "n": 29995,
+            "p50": 74.36666695284657,
+            "p95": 79.766667048214,
+            "p99": 80.36666695284657,
+            "maximum": 81.66666666674428
+          },
+          "workerReadyToMainArrivalRawMs": {
+            "n": 29995,
+            "p50": 0.40000009536743164,
+            "p95": 1.700000286102295,
+            "p99": 2.299999713897705,
+            "maximum": 6.0
+          },
+          "workerReceiptToMainArrivalRawMs": {
+            "n": 29995,
+            "p50": 2.299999713897705,
+            "p95": 3.8000001907348633,
+            "p99": 4.699999809265137,
+            "maximum": 8.199999809265137
+          },
+          "completeBlockServiceMs": {
+            "n": 14997,
+            "p50": 2.1999998092651367,
+            "p95": 3.799999713897705,
+            "p99": 4.599999904632568,
+            "maximum": 8
+          },
+          "completeProcessedBlockServiceMs": {
+            "n": 14997,
+            "p50": 2.1999998092651367,
+            "p95": 3.799999713897705,
+            "p99": 4.599999904632568,
+            "maximum": 8
+          }
+        }
+      }
+    ],
+    "end_clock_comparison": {
+      "paced_wall_duration_ms": 1800000.8000001907,
+      "final_sample_clock_end_exclusive": 86397440,
+      "sample_clock_duration_ms": 1799946.6666666667,
+      "wall_minus_sample_clock_ms": 54.133333523990586,
+      "limitation": "Different start/stop boundaries, phase and clock rate can contribute. This difference is not a fitted correction or proof of drift."
+    },
+    "interpretation": "Reported arrival and pre-worker-receipt intervals increase while block service and receipt-to-main durations remain much smaller. The single static audio/performance mapping cannot identify clock-rate/phase error versus upstream scheduling or transport delay. No extrapolation or stable end-to-end latency claim."
+  },
+  "soak_trend_audit_sha256": "ca7517b530dde8db612d0406b64cb2fabe8dd7a83cee756d33a1f3e8bb07cdbd",
+  "functional_v6": {
+    "id": "browser-check-v6-trained-stream-final",
+    "manifest_sha256": "423e181918c37a7afbcf36d2d63a4932b2ec5b95b392c47c9760a05ed5271028",
+    "artifact_sha256": {
+      "browser-blocked-main.json": "91c6e37dc4d1b7b08780f095831ec60c8d6727ec10a1541cfef54d3d01baf68d",
+      "browser-export-parity.json": "1838d9ce366b0f8dd09bcad5b231690f1b5cc4d79ba239d2ea8afc3e19777a48",
+      "browser-raw.ndjson": "21e1d76ccc65d87b425f98b13e6ed9c6f7d9ef0a4e489501539041c2c7ac6e52",
+      "browser-replay.json": "9ecf2779137e580ed15cc43408074d110ef5a238d40536aa24b9343c67231298",
+      "browser-trained-mlp-numpy-parity.json": "5247e01885aab5b41cb0002feaa4807b60e3e27b6280067412e1da9a6ac378eb",
+      "browser-trained-mlp.json": "fb0b5b1aab76e6ce5a97dd7877c668ebf2a42e876b4f8ae979f9f7b6b0d6b14e",
+      "playwright-report.json": "a4b1e01aaf7af51eeab8891006234fc2902081593c07b14edd12a469f29d6230"
+    },
+    "focused_tests": {
+      "files": 6,
+      "passed": 51
+    },
+    "browser_test_stats": {
+      "startTime": "2026-10-22T17:04:10.253Z",
+      "duration": 11927.362,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "timingBenchmark": false,
+    "blocked_main": {
+      "status": "complete",
+      "evidence": "paced-synthetic-browser-replay",
+      "durationMs": 2219.9000000953674,
+      "requestedSourceDurationMs": 2200,
+      "pacedSourceDurationMs": 2201.5,
+      "setupDurationMs": 17.600000381469727,
+      "teardownDurationMs": 0.7999997138977051,
+      "sampleRateHz": 48000,
+      "researchModel": null,
+      "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+      "errors": [],
+      "diagnostics": {
+        "receivedBlockCount": 95,
+        "processedFrameCount": 184,
+        "lostBlockCount": 14,
+        "lostBlockFraction": 0.12844036697247707,
+        "maximumBlockGapMs": 2.2737367544323206e-13,
+        "p95FeatureLatencyMs": 41.83338244756061,
+        "timestampRegressionCount": 0,
+        "ringBufferCapacitySamples": 96000,
+        "invalidClockMappingCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 384,
+        "maximumInFlightBlocks": 1,
+        "inFlightResultBatchCount": 1,
+        "maximumInFlightResultBatches": 4,
+        "resultBackpressureBlockCount": 14,
+        "resultBackpressureSampleCount": 13440,
+        "resultBackpressureEpisodeCount": 1,
+        "lastResultBackpressureSpan": {
+          "supportStartSample": 31104,
+          "supportEndSampleExclusive": 44544,
+          "sampleRateHz": 48000,
+          "droppedBlockCount": 14,
+          "droppedSampleCount": 13440
+        },
+        "hostDiscardedFrameCount": 8,
+        "hostStaleFrameCount": 8,
+        "oversizedPcmBlockCount": 0,
+        "staleTransportBlockCount": 0,
+        "staleTransportSampleCount": 0,
+        "latencyStatisticSampleCount": 184
+      },
+      "transportStop": {
+        "status": "complete",
+        "diagnostics": {
+          "schemaVersion": "phenometric.voice-worklet-message.v2",
+          "type": "transport-diagnostics",
+          "captureEpoch": 1,
+          "final": true,
+          "sequence": 109,
+          "sampleClockEndExclusive": 105216,
+          "droppedBlockCount": 0,
+          "droppedSampleCount": 576,
+          "discardedPartialSampleCount": 192,
+          "inFlightBlockCountAtDispose": 0,
+          "maximumInFlightBlocks": 4
+        }
+      },
+      "workerStopAcknowledged": true,
+      "maximumServiceMs": 4.099999904632568,
+      "summary": {
+        "frameCount": 176,
+        "blockCount": 95,
+        "researchFrameCount": 0,
+        "modelInferenceServiceMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "modelElapsedFromFrameStartMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "sampleAvailabilityToModelReadyMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "targetReferenceToModelReadyMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "frameServiceScope": "baseline-dsp",
+        "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+        "retainedFrameLimit": 80,
+        "retainedBlockLimit": 50,
+        "numericStatisticsCapacityPerMetric": 200000,
+        "frameServiceMs": {
+          "n": 176,
+          "p50": 0.5,
+          "p95": 1.3999996185302734,
+          "p99": 3.0999999046325684,
+          "maximum": 4.099999904632568
+        },
+        "completeBlockServiceMs": {
+          "n": 95,
+          "p50": 1.0999999046325684,
+          "p95": 2.8000001907348633,
+          "p99": 5.199999809265137,
+          "maximum": 5.199999809265137
+        },
+        "completeProcessedBlockServiceMs": {
+          "n": 95,
+          "p50": 1.0999999046325684,
+          "p95": 2.8000001907348633,
+          "p99": 5.199999809265137,
+          "maximum": 5.199999809265137
+        },
+        "staleBlockServiceMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "blockFrameCounts": {
+          "processed:0": 2,
+          "processed:1": 2,
+          "processed:2": 91
+        },
+        "frameServiceBudgetMs": 5,
+        "frameServiceBudgetExceedances": 0,
+        "frameCadenceMs": 10,
+        "frameCadenceDeadlineMisses": 0,
+        "completeBlockServiceBudgetMs": 10,
+        "completeBlockServiceBudgetExceedances": 0,
+        "completeBlockCadenceMs": 20,
+        "completeBlockDeadlineMisses": 0,
+        "discardedResultFrameCount": 8,
+        "staleResultFrameCount": 8,
+        "invalidFrameTimingCount": 16,
+        "sampleAvailabilityToMainResultMs": {
+          "n": 160,
+          "p50": 37.833333333333485,
+          "p95": 42.83333333333303,
+          "p99": 44.13333304723096,
+          "maximum": 44.233332951863304
+        },
+        "blockEndToWorkerReceiptMs": {
+          "n": 176,
+          "p50": 29.633382161458258,
+          "p95": 31.233382066090826,
+          "p99": 31.33338244756078,
+          "maximum": 31.33338244756078
+        },
+        "segments": [
+          "audio-1-1",
+          "audio-1-15"
+        ],
+        "segmentCount": 2,
+        "periodicFrameCount": 176,
+        "correctKnownPitchFrameCount": 176,
+        "maximumKnownPitchErrorHz": 0,
+        "rawTelemetry": {
+          "enabled": false,
+          "status": "complete",
+          "batchCount": 0,
+          "streamedRecordCount": 0,
+          "maximumPendingRecords": 0,
+          "pendingRecordLimit": 200,
+          "maximumBatchRecords": 100
+        },
+        "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+      },
+      "runPurpose": "functional-regression",
+      "timingBenchmark": false
+    },
+    "trained_stream": {
+      "status": "complete",
+      "evidence": "paced-synthetic-browser-replay",
+      "durationMs": 2470.699999809265,
+      "requestedSourceDurationMs": 2200,
+      "pacedSourceDurationMs": 2202,
+      "setupDurationMs": 268.19999980926514,
+      "teardownDurationMs": 0.5,
+      "sampleRateHz": 48000,
+      "researchModel": {
+        "qualification": "unqualified-functional-fixture",
+        "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+        "loadMs": 215.80000019073486
+      },
+      "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+      "errors": [],
+      "diagnostics": {
+        "receivedBlockCount": 109,
+        "processedFrameCount": 215,
+        "lostBlockCount": 0,
+        "lostBlockFraction": 0,
+        "maximumBlockGapMs": 9.094947017729282e-13,
+        "p95FeatureLatencyMs": 23.033284982045416,
+        "timestampRegressionCount": 0,
+        "ringBufferCapacitySamples": 96000,
+        "invalidClockMappingCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 1152,
+        "maximumInFlightBlocks": 1,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "researchMaximumQueuedBlocks": 0,
+        "inFlightResultBatchCount": 0,
+        "maximumInFlightResultBatches": 1,
+        "resultBackpressureBlockCount": 0,
+        "resultBackpressureSampleCount": 0,
+        "resultBackpressureEpisodeCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "hostStaleFrameCount": 0,
+        "oversizedPcmBlockCount": 0,
+        "staleTransportBlockCount": 0,
+        "staleTransportSampleCount": 0,
+        "latencyStatisticSampleCount": 215
+      },
+      "transportStop": {
+        "status": "complete",
+        "diagnostics": {
+          "schemaVersion": "phenometric.voice-worklet-message.v2",
+          "type": "transport-diagnostics",
+          "captureEpoch": 1,
+          "final": true,
+          "sequence": 109,
+          "sampleClockEndExclusive": 106496,
+          "droppedBlockCount": 0,
+          "droppedSampleCount": 1856,
+          "discardedPartialSampleCount": 704,
+          "inFlightBlockCountAtDispose": 0,
+          "maximumInFlightBlocks": 4
+        }
+      },
+      "workerStopAcknowledged": true,
+      "maximumServiceMs": 5.5,
+      "summary": {
+        "frameCount": 215,
+        "blockCount": 109,
+        "researchFrameCount": 215,
+        "modelInferenceServiceMs": {
+          "n": 215,
+          "p50": 0.09999990463256836,
+          "p95": 0.20000028610229492,
+          "p99": 0.2999997138977051,
+          "maximum": 3.8000001907348633
+        },
+        "modelElapsedFromFrameStartMs": {
+          "n": 215,
+          "p50": 1.1000003814697266,
+          "p95": 1.9000000953674316,
+          "p99": 2.4000000953674316,
+          "maximum": 9.599999904632568
+        },
+        "sampleAvailabilityToModelReadyMs": {
+          "n": 215,
+          "p50": 18.033284982045473,
+          "p95": 23.63328488667821,
+          "p99": 24.233284791310325,
+          "maximum": 24.433285077412904
+        },
+        "targetReferenceToModelReadyMs": {
+          "n": 215,
+          "p50": 38.03328498204547,
+          "p95": 43.63328488667821,
+          "p99": 44.233284791310325,
+          "maximum": 44.433285077412904
+        },
+        "frameServiceScope": "shared-feature-and-baseline-preparation-excludes-inference",
+        "completeBlockServiceScope": "complete-admitted-block-including-optional-model-completion-and-data-post-excludes-completion-post",
+        "retainedFrameLimit": 300,
+        "retainedBlockLimit": 150,
+        "numericStatisticsCapacityPerMetric": 200000,
+        "frameServiceMs": {
+          "n": 215,
+          "p50": 0.5999999046325684,
+          "p95": 1,
+          "p99": 1.1000003814697266,
+          "maximum": 5.5
+        },
+        "completeBlockServiceMs": {
+          "n": 109,
+          "p50": 1.4000000953674316,
+          "p95": 2.200000286102295,
+          "p99": 2.700000286102295,
+          "maximum": 9.700000286102295
+        },
+        "completeProcessedBlockServiceMs": {
+          "n": 109,
+          "p50": 1.4000000953674316,
+          "p95": 2.200000286102295,
+          "p99": 2.700000286102295,
+          "maximum": 9.700000286102295
+        },
+        "staleBlockServiceMs": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "maximum": null
+        },
+        "blockFrameCounts": {
+          "processed:0": 1,
+          "processed:1": 1,
+          "processed:2": 107
+        },
+        "frameServiceBudgetMs": 5,
+        "frameServiceBudgetExceedances": 1,
+        "frameCadenceMs": 10,
+        "frameCadenceDeadlineMisses": 0,
+        "completeBlockServiceBudgetMs": 10,
+        "completeBlockServiceBudgetExceedances": 0,
+        "completeBlockCadenceMs": 20,
+        "completeBlockDeadlineMisses": 0,
+        "discardedResultFrameCount": 0,
+        "staleResultFrameCount": 0,
+        "invalidFrameTimingCount": 0,
+        "sampleAvailabilityToMainResultMs": {
+          "n": 215,
+          "p50": 18.133333524068178,
+          "p95": 23.833333333333258,
+          "p99": 24.433333714802757,
+          "maximum": 24.733333428700462
+        },
+        "blockEndToWorkerReceiptMs": {
+          "n": 215,
+          "p50": 10.933285077412847,
+          "p95": 12.433285077412847,
+          "p99": 12.433285077413075,
+          "maximum": 12.433285077413075
+        },
+        "segments": [
+          "audio-1-1"
+        ],
+        "segmentCount": 1,
+        "periodicFrameCount": 215,
+        "correctKnownPitchFrameCount": 215,
+        "maximumKnownPitchErrorHz": 0,
+        "rawTelemetry": {
+          "enabled": false,
+          "status": "complete",
+          "batchCount": 0,
+          "streamedRecordCount": 0,
+          "maximumPendingRecords": 0,
+          "pendingRecordLimit": 200,
+          "maximumBatchRecords": 100
+        },
+        "note": "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim."
+      },
+      "runPurpose": "functional-parity",
+      "timingBenchmark": false
+    },
+    "trained_numpy_parity": {
+      "status": "complete",
+      "steps": 215,
+      "maximumAbsoluteError": 4.76837158203125e-07,
+      "absoluteTolerance": 1e-06,
+      "relativeTolerance": 1e-05,
+      "decisionMismatches": 0,
+      "manifestSha256": "1a438ebf5454b46deff703bd7aaddcd26f33b0c43b2dd5de6689e3fa485e4769",
+      "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+      "qualification": "unqualified-functional-fixture",
+      "featureCount": 57,
+      "evidenceBoundary": "Independent NumPy equations on actual browser feature inputs; separate worker regression checks shared features and unchanged DSP frames."
+    },
+    "random_recurrent_export_parity": {
+      "status": "complete",
+      "evidence": "random-weight-browser-export-spike",
+      "modelSha256": "bb0d63b73ca9f893610b9cea798cba0d68dc40cafcc31f2734afd9b24ff3d229",
+      "fixtureSha256": "b1e62ad5310397ee643ffecad78bb2ea92a24284857dedf6d626d57eddce5dc7",
+      "featureSchema": "phenometrix.voice-pitch-features.v1",
+      "trainingPerformed": false,
+      "runtime": "onnxruntime-web@1.23.2",
+      "executionProvider": "wasm",
+      "threads": 1,
+      "loadMs": 124.60000038146973,
+      "outputContract": {
+        "dtype": "float32",
+        "voicingLogitShape": [
+          1,
+          1
+        ],
+        "candidateLogitShape": [
+          1,
+          3
+        ],
+        "stateShape": [
+          1,
+          32
+        ]
+      },
+      "steps": 24,
+      "maximumAbsoluteError": 1.4901161193847656e-07,
+      "decisionMismatches": 0,
+      "allMaskedSteps": 3,
+      "limitation": "Synthetic parity inputs establish arithmetic equivalence only; no learned accuracy or full-pipeline timing claim."
+    }
+  },
+  "limits": [
+    "No physical microphone or display latency measurement.",
+    "No heap-growth measurement or qualification beyond the observed 30-minute run.",
+    "The growing mapped arrival time remains unresolved; no clock-drift correction or queue-growth conclusion is asserted.",
+    "Only a repeated synthetic 200 Hz harmonic signal was used; no new speech or sealed-test data.",
+    "No F0 correctness calibration, seed confirmation, live microphone demonstration or voice duration/coverage aggregate qualification.",
+    "The original and augmented learned models remain unqualified by the separate scientific results.",
+    "Stop acknowledgements establish terminal snapshots, not proof that every in-flight result reached analysis."
+  ]
+}

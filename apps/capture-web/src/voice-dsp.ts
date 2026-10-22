@@ -411,3 +411,102 @@ export function analyzeVoiceWindow(
     bandEnergies: currentBands
   };
 }
+
+/** Research-only access to the three unchanged legacy pitch hypotheses. */
+export interface VoicePitchEvidenceV1 {
+  schemaVersion: "phenometrix.voice-pitch-evidence.v1";
+  sourceSampleRateHz: number;
+  pitchSampleRateHz: 8000;
+  preprocessing: "legacy-window-dc-remove-decimate-65-zero-pad.v1";
+  autocorrelation: Readonly<PitchCandidate>;
+  amdf: Readonly<PitchCandidate>;
+  zeroCrossing: Readonly<PitchCandidate>;
+}
+
+/**
+ * Additive research adapter. It deliberately repeats the baseline's preparation
+ * rather than changing analyzeVoiceWindow or its floating-point operation order.
+ * It is not connected to production capture. The decimator is window-local,
+ * centered and zero-padded; it is not a continuous resampler.
+ */
+export function inspectVoicePitchEvidenceV1(
+  samples: Float32Array,
+  sampleRate: number
+): VoicePitchEvidenceV1 {
+  if (!Number.isFinite(sampleRate) || sampleRate < 8_000 || samples.length === 0) {
+    throw new Error("Pitch evidence requires a nonempty window at >= 8000 Hz.");
+  }
+  let mean = 0;
+  for (const sample of samples) {
+    if (!Number.isFinite(sample)) throw new Error("PCM must contain finite samples.");
+    mean += sample;
+  }
+  mean /= Math.max(1, samples.length);
+  const centered = new Float32Array(samples.length);
+  for (let index = 0; index < samples.length; index += 1) {
+    centered[index] = samples[index] - mean;
+  }
+  const pitchInput = decimate(centered, sampleRate, 8_000);
+  return {
+    schemaVersion: "phenometrix.voice-pitch-evidence.v1",
+    sourceSampleRateHz: sampleRate,
+    pitchSampleRateHz: 8000,
+    preprocessing: "legacy-window-dc-remove-decimate-65-zero-pad.v1",
+    autocorrelation: autocorrelationPitch(pitchInput, 8_000),
+    amdf: amdfPitch(pitchInput, 8_000),
+    zeroCrossing: zeroCrossingPitch(pitchInput, 8_000)
+  };
+}
+
+export interface RefinedVoiceLagCandidateV2 {
+  hz: number;
+  confidence: number;
+  lagSamples: number;
+}
+
+/** Fixed research revision: retain endpoint-local and full-support lag evidence. */
+export function inspectRefinedVoiceLagEvidenceV2(
+  samples: Float32Array,
+  sampleRate: number
+): { full40: readonly RefinedVoiceLagCandidateV2[]; suffix20: readonly RefinedVoiceLagCandidateV2[] } {
+  if (!Number.isFinite(sampleRate) || sampleRate < 8000 || samples.length !== sampleRate * 0.04) {
+    throw new Error("Refined lag evidence requires the declared complete 40 ms support.");
+  }
+  let mean = 0;
+  for (const sample of samples) {
+    if (!Number.isFinite(sample)) throw new Error("PCM must be finite.");
+    mean += sample;
+  }
+  mean /= samples.length;
+  const centered = Float32Array.from(samples, sample => sample - mean);
+  const input = decimate(centered, sampleRate, 8000);
+  function peaks(window: Float32Array, minimumHz: number, count: number) {
+    const minimumLag = Math.ceil(8000 / 700);
+    const maximumLag = Math.min(window.length - 2, Math.floor(8000 / minimumHz));
+    const curve = new Float64Array(maximumLag + 2);
+    for (let lag = minimumLag - 1; lag <= maximumLag + 1; lag += 1) {
+      let cross = 0;
+      let left = 0;
+      let right = 0;
+      for (let i = 0; i < window.length - lag; i += 1) {
+        cross += window[i] * window[i + lag];
+        left += window[i] * window[i];
+        right += window[i + lag] * window[i + lag];
+      }
+      curve[lag] = cross / Math.max(1e-12, Math.sqrt(left * right));
+    }
+    const result: RefinedVoiceLagCandidateV2[] = [];
+    for (let lag = minimumLag; lag <= maximumLag; lag += 1) {
+      if (curve[lag] < 0.35 || curve[lag] < curve[lag - 1] || curve[lag] < curve[lag + 1]) continue;
+      const curvature = curve[lag - 1] - 2 * curve[lag] + curve[lag + 1];
+      const delta = curvature >= -1e-12 ? 0 : Math.max(-0.5, Math.min(0.5,
+        0.5 * (curve[lag - 1] - curve[lag + 1]) / curvature));
+      const refinedLag = lag + delta;
+      const hz = 8000 / refinedLag;
+      if (hz < minimumHz || hz > 700) continue;
+      result.push({ hz, lagSamples: refinedLag, confidence: Math.min(1, Math.max(0, curve[lag])) });
+    }
+    return result.sort((a, b) => b.confidence - a.confidence || a.lagSamples - b.lagSamples).slice(0, count);
+  }
+  return { full40: peaks(input, 50, 1), suffix20: peaks(input.subarray(input.length - 160), 100, 2) };
+}

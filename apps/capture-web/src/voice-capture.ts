@@ -1,21 +1,27 @@
+import { VoiceResultBatchReceiver } from "./voice-result-transport.js";
 import type {
   AudioCaptureSettings,
   AudioPipelineProvenance,
   AudioStreamDiagnostics,
   VoiceTaskContext
 } from "@phenometrix/contracts";
+import { captureVoiceClockMapping, type VoiceFrameTiming, type VoiceBlockTiming } from "./voice-stream-timing.js";
 import type { VoiceSignalFrameV1 } from "@phenometrix/ambient-core";
 import {
   isCurrentVoiceWorkerResponse,
+  isCurrentVoiceTransportDiagnostics,
+  type VoiceTransportStopResult,
   VOICE_WORKER_MESSAGE_VERSION,
   type VoiceWorkerRequest,
   type VoiceWorkerResponse
 } from "./voice-worker-protocol.js";
 
 export interface VoiceCaptureCallbacks {
-  onFrame(frame: VoiceSignalFrameV1, processingLatencyMs: number): void;
+  onFrame(frame: VoiceSignalFrameV1, processingLatencyMs: number | null, timing?: VoiceFrameTiming): void;
   onReady(provenance: AudioPipelineProvenance): void;
   onDiagnostics(diagnostics: AudioStreamDiagnostics): void;
+  onBlockTiming?(timing: VoiceBlockTiming): void;
+  onTransportStopped?(result: VoiceTransportStopResult): void;
   onFailure(reason: string): void;
 }
 
@@ -69,10 +75,17 @@ export async function startVoiceCapturePipeline(
   let channel: MessageChannel | null = null;
   let captureEpoch = options.captureEpoch;
   let stopped = false;
+  let clockMappingId = 0;
+  let removeClockListener: (() => void) | null = null;
   let disposedResolver: (() => void) | null = null;
+  let transportDisposedResolver: (() => void) | null = null;
+  let transportDisposed = false;
   let stopPromise: Promise<void> | null = null;
 
   const releaseResources = (): void => {
+    removeClockListener?.();
+    removeClockListener = null;
+    if (worklet) worklet.port.onmessage = null;
     for (const node of [source, worklet, mutedOutput]) {
       try {
         node?.disconnect();
@@ -93,6 +106,7 @@ export async function startVoiceCapturePipeline(
       // Construction failure can leave a non-operational worker handle.
     }
     disposedResolver = null;
+    transportDisposedResolver = null;
   };
 
   try {
@@ -126,6 +140,14 @@ export async function startVoiceCapturePipeline(
       }
     );
     const activeWorklet = worklet;
+    activeWorklet.port.onmessage = (event: MessageEvent<unknown>) => {
+      if (!stopped || transportDisposed || !isCurrentVoiceTransportDiagnostics(event.data, captureEpoch)) return;
+      transportDisposed = true;
+      const resolve = transportDisposedResolver;
+      transportDisposedResolver = null;
+      resolve?.();
+      options.callbacks.onTransportStopped?.({ status: "complete", diagnostics: event.data });
+    };
     mutedOutput = options.audioContext.createGain();
     const activeMutedOutput = mutedOutput;
     activeMutedOutput.gain.value = 0;
@@ -136,33 +158,45 @@ export async function startVoiceCapturePipeline(
     channel = new MessageChannel();
     const activeChannel = channel;
 
-    activeWorker.addEventListener(
-      "message",
-      (event: MessageEvent<VoiceWorkerResponse>) => {
-        if (!isCurrentVoiceWorkerResponse(event.data, captureEpoch)) {
-          return;
-        }
-        if (event.data.type === "disposed") {
-          options.callbacks.onDiagnostics(event.data.diagnostics);
-          disposedResolver?.();
-          disposedResolver = null;
-          return;
-        }
-        if (stopped) return;
-        if (event.data.type === "ready") {
-          options.callbacks.onReady(event.data.provenance);
-        } else if (event.data.type === "signal-frame") {
-          options.callbacks.onFrame(
-            event.data.frame,
-            event.data.processingLatencyMs
-          );
-        } else if (event.data.type === "diagnostics") {
-          options.callbacks.onDiagnostics(event.data.diagnostics);
-        } else if (event.data.type === "error") {
-          options.callbacks.onFailure(event.data.reason);
-        }
+    const resultReceiver = new VoiceResultBatchReceiver(message => activeWorker.postMessage(message));
+    const handleWorkerResponse = (data: VoiceWorkerResponse): void => {
+      if (!isCurrentVoiceWorkerResponse(data, captureEpoch)) {
+        return;
       }
-    );
+      if (data.type === "disposed") {
+        const resolve = disposedResolver;
+        disposedResolver = null;
+        resolve?.();
+        options.callbacks.onDiagnostics(data.diagnostics);
+        return;
+      }
+      if (stopped) return;
+      if (data.type === "ready") {
+        options.callbacks.onReady(data.provenance);
+      } else if (data.type === "signal-frame") {
+        const mainResultArrivalMs = data.timing.mainResultArrivalMs ?? performance.now();
+        const sampleAvailabilityToMainResultMs = mainResultArrivalMs - data.timing.sampleAvailabilityMs;
+        const valid = data.timing.status === "valid" && Number.isFinite(sampleAvailabilityToMainResultMs) &&
+          sampleAvailabilityToMainResultMs >= 0 && mainResultArrivalMs >= data.timing.workerReadyAtMs;
+        options.callbacks.onFrame(data.frame, valid ? data.processingLatencyMs : null, {
+          ...data.timing, mainResultArrivalMs,
+          status: valid ? "valid" : "unavailable",
+          ...(valid ? {} : { unavailableReason: "inconsistent-clock-mapping" as const }),
+          sampleAvailabilityToMainResultMs: valid ? sampleAvailabilityToMainResultMs : null,
+          rawSampleAvailabilityToMainResultMs: sampleAvailabilityToMainResultMs
+        });
+      } else if (data.type === "block-timing") {
+        options.callbacks.onBlockTiming?.(data.timing);
+      } else if (data.type === "diagnostics") {
+        options.callbacks.onDiagnostics(data.diagnostics);
+      } else if (data.type === "error") {
+        options.callbacks.onFailure(data.reason);
+      }
+    };
+    activeWorker.addEventListener("message", (event: MessageEvent<VoiceWorkerResponse>) => {
+      const received = resultReceiver.receive(event.data, captureEpoch, performance.now(), clockMappingId);
+      for (const message of received.messages) handleWorkerResponse(message);
+    });
     activeWorker.addEventListener("error", () => {
       if (!stopped) {
         options.callbacks.onFailure("voice-worker-unavailable");
@@ -178,23 +212,35 @@ export async function startVoiceCapturePipeline(
       { type: "attach-port", port: activeChannel.port1 },
       [activeChannel.port1]
     );
+    const initialClockMapping = options.audioContext.state === "running"
+      ? captureVoiceClockMapping(options.audioContext, performance, clockMappingId) : null;
     activeWorklet.port.postMessage({
-      type: "capture-epoch",
-      captureEpoch
+      type: "capture-epoch", captureEpoch, clockMappingId
     });
     activeWorker.postMessage(
       request({
         type: "initialize",
         captureEpoch,
         port: activeChannel.port2,
-        sessionOriginPerformanceMs: performance.now(),
-        audioContextOriginSeconds: options.audioContext.currentTime,
+        clockMapping: initialClockMapping,
+        audioContextSampleRateHz: options.audioContext.sampleRate,
         captureSettings: options.captureSettings,
         taskContext: options.taskContext,
         ...(options.noiseFloorRms === undefined ? {} : { noiseFloorRms: options.noiseFloorRms })
       }),
       [activeChannel.port2]
     );
+
+    const updateClockMapping = (): void => {
+      if (stopped) return;
+      clockMappingId += 1;
+      const clockMapping = options.audioContext.state === "running"
+        ? captureVoiceClockMapping(options.audioContext, performance, clockMappingId) : null;
+      activeWorklet.port.postMessage({ type: "clock-mapping", clockMappingId });
+      activeWorker.postMessage(request({ type: "clock-mapping", captureEpoch, clockMapping }));
+    };
+    options.audioContext.addEventListener("statechange", updateClockMapping);
+    removeClockListener = () => options.audioContext.removeEventListener("statechange", updateClockMapping);
 
     return {
       get captureEpoch() {
@@ -221,12 +267,12 @@ export async function startVoiceCapturePipeline(
         if (noiseFloorRms !== undefined && (!Number.isFinite(noiseFloorRms)
           || noiseFloorRms < 0.0001 || noiseFloorRms > 1)) throw new Error("invalid-noise-floor");
         captureEpoch = nextEpoch;
-        activeWorklet.port.postMessage({
-          type: "capture-epoch",
-          captureEpoch
-        });
+        clockMappingId += 1;
+        const clockMapping = options.audioContext.state === "running"
+          ? captureVoiceClockMapping(options.audioContext, performance, clockMappingId) : null;
+        activeWorklet.port.postMessage({ type: "capture-epoch", captureEpoch, clockMappingId });
         activeWorker.postMessage(
-          request({ type: "reset", captureEpoch, taskContext,
+          request({ type: "reset", captureEpoch, taskContext, clockMapping,
             ...(noiseFloorRms === undefined ? {} : { noiseFloorRms }) })
         );
       },
@@ -234,31 +280,46 @@ export async function startVoiceCapturePipeline(
         if (stopPromise) return stopPromise;
         stopped = true;
         stopPromise = (async () => {
-          const acknowledgement = new Promise<void>((resolve) => {
-            disposedResolver = resolve;
-          });
-          try {
-            activeWorklet.port.postMessage({ type: "dispose" });
-          } catch {
-            // A failed worklet can already have released its message port.
-          }
-          try {
-            activeWorker.postMessage(
-              request({ type: "dispose", captureEpoch })
-            );
-          } catch {
-            disposedResolver?.();
-            disposedResolver = null;
-          }
           let timeout: ReturnType<typeof setTimeout> | undefined;
-          await Promise.race([
-            acknowledgement,
-            new Promise<void>((resolve) => {
-              timeout = setTimeout(resolve, 500);
-            })
-          ]);
-          if (timeout !== undefined) clearTimeout(timeout);
-          releaseResources();
+          try {
+            const workerAcknowledgement = new Promise<void>((resolve) => { disposedResolver = resolve; });
+            const transportAcknowledgement = new Promise<void>((resolve) => {
+              if (transportDisposed) resolve();
+              else transportDisposedResolver = resolve;
+            });
+            const transportUnavailable = (reason: "worklet-stop-timeout" | "worklet-dispose-failed"): void => {
+              if (transportDisposed) return;
+              transportDisposed = true;
+              const resolve = transportDisposedResolver;
+              transportDisposedResolver = null;
+              resolve?.();
+              options.callbacks.onTransportStopped?.({ status: "unavailable", captureEpoch, reason });
+            };
+            try {
+              activeWorklet.port.postMessage({ type: "dispose" });
+            } catch {
+              // A failed worklet can already have released its message port.
+              transportUnavailable("worklet-dispose-failed");
+            }
+            try {
+              activeWorker.postMessage(
+                request({ type: "dispose", captureEpoch })
+              );
+            } catch {
+              disposedResolver?.();
+              disposedResolver = null;
+            }
+            await Promise.race([
+              Promise.all([workerAcknowledgement, transportAcknowledgement]),
+              new Promise<void>((resolve) => {
+                timeout = setTimeout(resolve, 500);
+              })
+            ]);
+            transportUnavailable("worklet-stop-timeout");
+          } finally {
+            if (timeout !== undefined) clearTimeout(timeout);
+            releaseResources();
+          }
         })();
         return stopPromise;
       }

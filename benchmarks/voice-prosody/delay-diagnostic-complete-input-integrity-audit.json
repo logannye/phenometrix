@@ -1,0 +1,540 @@
+{
+  "schema": "phenometrix-fixed-delay-additional-input-audit-v1",
+  "created_at": "2026-10-22T16:37:07.376887+00:00",
+  "status": "pass_saved_input_artifact_identity",
+  "audited_result_sha256": "626be4a159b2c2ccdc8d0e2a0e772e9e60e4179be4c240a4e1df209a1e61e01f",
+  "original_audit_sha256": "32f40d5caa40d75429ae37dcf916b22621220b243504d79b590043a0ccc0fb81",
+  "scope": "all four bound run manifests, all original/revised feature+prediction hashes, both comparator prediction hashes, source microphone identity/sample-count/order, comparator exact support. No reference values were opened; old result left untouched.",
+  "qualification": "Original centered run predates the explicit end-anchored option. Its exact adapter was reconstructed by removing that later option, then accepted only after SHA-256 matched the pre-existing run manifest. The recovered byte-identical source is retained separately; no input prediction or original result changed.",
+  "runs": [
+    {
+      "run": "train-pilot",
+      "input_manifest_sha256": "eb9712218ab09a851d44c08ca05ebe0755b49687abfc7cf8abb3237332b7d243",
+      "records": 24,
+      "prediction_files_verified": 24,
+      "feature_files_verified": 24,
+      "declared_adapter_sha256": null,
+      "current_adapter_matches_declared": null,
+      "files": [
+        {
+          "recording_id": "F02_si645",
+          "prediction_sha256": "c66ac31097a68543be2a0e42cc9e52fa7255bb56be4a95e2562b67817ded8a42",
+          "feature_sha256": "864b9b44e0e607d3d3eadc20b40b5fd4d8cb127404995f4d3071814deaba8ab9"
+        },
+        {
+          "recording_id": "F02_si822",
+          "prediction_sha256": "3b7ebf6f78732a3462745d57b31fa36884954761e2e565dd4a6edcd4d4a56d68",
+          "feature_sha256": "0625a7944913cc5b0a75662d7a234de586820e7fc0317786c1d5196ca97f2820"
+        },
+        {
+          "recording_id": "F04_si1079",
+          "prediction_sha256": "ef86259aef7f1c30ac5002283646c271c16fdfe9685ef101f96d28fa2c7529c4",
+          "feature_sha256": "4be821e9d8b2244d86d0493ff0187ba6c8393ebb62b92842a412caf2c879ca8c"
+        },
+        {
+          "recording_id": "F04_si1146",
+          "prediction_sha256": "745b21110d16cbce8f1833a00aeea223d612410237cff1255ea60e2ef168a94f",
+          "feature_sha256": "46d7631254484a76fb7b2473e59c35cb142c616d1accf1fb316bc4153c5a42d0"
+        },
+        {
+          "recording_id": "F07_si1753",
+          "prediction_sha256": "340e9ac83c3d0b5e2d17def57b0a41bf5075f7bae467176e17af809b6c1458ce",
+          "feature_sha256": "50a62dcf9fe3125d10422d6c13d5ecce21b1c89d6b41779bb47a442b2162bfaf"
+        },
+        {
+          "recording_id": "F07_sx316",
+          "prediction_sha256": "b53dae1f74d3dd4582d4ff921774f0ee500abd0f5a32646bb0a6e957164ed406",
+          "feature_sha256": "3e624dadba452790cbde86084636648887b31debee08f71306b483b3fad4269c"
+        },
+        {
+          "recording_id": "F08_si1776",
+          "prediction_sha256": "01ced45471efd55dff29dfe6bdce2e4c4cb7329f6d21d740da0adf90c345223a",
+          "feature_sha256": "764c0cac923888c68b8676ae36bf1966939256e199fa67b15904e7db4de36ecd"
+        },
+        {
+          "recording_id": "F08_si1812",
+          "prediction_sha256": "1510dfb4e000cf440e6802ff175001705b368c27fa1c1020fd7c52f635f5c82f",
+          "feature_sha256": "52b64295694f6a286d092af4ae2241b1831acd8891886eb4926c7819536106d7"
+        },
+        {
+          "recording_id": "F09_si2003",
+          "prediction_sha256": "317c3bc6647d720dd19bd138a6cab4d502974019fc2d2734b6b8efc11ddaeb51",
+          "feature_sha256": "d665dcacf0bf55568cc31f4148babea0a36769e5cda6ed7b00418c8a791bed41"
+        },
+        {
+          "recording_id": "F09_si2040",
+          "prediction_sha256": "2283f33305c1be4573d4d1af5af3ac694931826367501e029e264dc8f06d87bc",
+          "feature_sha256": "5d0ed40324badba5e9da348f26ed729e363adaf9a8731ed542539329ad395c4a"
+        },
+        {
+          "recording_id": "F10_si2256",
+          "prediction_sha256": "a755af1f5f9ebd144d6d9115c3e186b899a720b45842e9256753b1f51830cea4",
+          "feature_sha256": "0466e466050306a3c147a24962281025809c608ae128b57096b7ce15a0d385b3"
+        },
+        {
+          "recording_id": "F10_sx423",
+          "prediction_sha256": "5800e6a727bf84c587900a61391e366b5fa8f7da7c54c548a230a99fb040af9e",
+          "feature_sha256": "13da97acdab5c3a9679514ca0399e3ec7c7f5394a9e00cdb2aae47571dad3961"
+        },
+        {
+          "recording_id": "M02_si645",
+          "prediction_sha256": "4f9fc0f317bc15931b4ddfbc3295a22c8b12e977ee85b7751c788000f415a25f",
+          "feature_sha256": "068ae242c287fed75a28170470f83fad006104c2efc855d09e2377bdd625ca0c"
+        },
+        {
+          "recording_id": "M02_si822",
+          "prediction_sha256": "05463665be3f5c786dbb105d06a8b32e0dc84141c3c66d760fa35d15b35c4d1d",
+          "feature_sha256": "d7af0627c2393dc0c6c6548924b654434d4d0f368c1f080b1edec8e266d9fd39"
+        },
+        {
+          "recording_id": "M04_si1079",
+          "prediction_sha256": "e7ced9a4a69c8e0c1b0c25100da61888feb407716a469f88758f3e9d8ca7f0fd",
+          "feature_sha256": "0012ab876782f89a61688222d58233de17a79c67d7d6d335f163e832b0458701"
+        },
+        {
+          "recording_id": "M04_si1146",
+          "prediction_sha256": "5b295ca8d9e0ae9bbfb854852a66beca70572339285a028f3e972db4f5cea411",
+          "feature_sha256": "a12e042fcbcad02465d41a8714e513bd96735d8edd67690f52f302d875fcdd5d"
+        },
+        {
+          "recording_id": "M07_si1753",
+          "prediction_sha256": "ea19f9f5f56c2a80bbd71ccd8434764bd5584942903104a33982ca5ab5e9503c",
+          "feature_sha256": "6f6829f9fca327a32a3a1f2cc2b1be87f3e3bc298b347246c131b2b5a1a29394"
+        },
+        {
+          "recording_id": "M07_sx316",
+          "prediction_sha256": "2ef7cd3986d4eb8450d99f92cb006d0c025c24a3d4d1b1f0e0d194c98853804f",
+          "feature_sha256": "d153889fed93d2d0dd064e64ac5c7cf63f95d26302e118296522db464d87c0e3"
+        },
+        {
+          "recording_id": "M08_si1776",
+          "prediction_sha256": "f6bac68d44cb7884ba448d92d4d6ca756b71173ecd7aeca5d2f94eba6a3b8ca0",
+          "feature_sha256": "287d70b4aa0755a43e8044bb2e8c595d7ce5d7d535c0e85d3f8f82f708474e39"
+        },
+        {
+          "recording_id": "M08_si1812",
+          "prediction_sha256": "a7f21fae3052d8c622446dcbfeb812ab92b620bac50a668421bf47d367ed542d",
+          "feature_sha256": "9cddcd7a032664413a77475a7e38015f2fdc594af9f31a9d837bb807aefdbe3e"
+        },
+        {
+          "recording_id": "M09_si2003",
+          "prediction_sha256": "a205ab4e12ec0db6483f9f18ddaf93665f021d3c77d6e7a58550f4339d15f021",
+          "feature_sha256": "7fbb4f198a532ed3d55bda5df01950c77fd1c66ee7c590032cf494ace4632be0"
+        },
+        {
+          "recording_id": "M09_si2040",
+          "prediction_sha256": "000b9acc5fbdbab4041d659a0c8404428382e470f51520f7b6ebcc5b488ae02d",
+          "feature_sha256": "9e40bc7a7d47ea473d2eb77816cd1fa7f36d6ce5acccd1f0eb8c00343fe9598b"
+        },
+        {
+          "recording_id": "M10_si2256",
+          "prediction_sha256": "95277b6ae49ed8ba94a9bc29c71007c2e1e7645bc512ea730d29e9688e233be4",
+          "feature_sha256": "29dcf3390c5b8646505882d193a6a55d13e17b18471744b0342720415559bcba"
+        },
+        {
+          "recording_id": "M10_sx423",
+          "prediction_sha256": "f9cf7dfbaff7d948afdd4324118ce5c287f790409987547bbc7b80bc9a10fb1b",
+          "feature_sha256": "fa9069584915aa8ab18ddedc9fe0d17a29275a45b9232be81ab90492d6eeba73"
+        }
+      ]
+    },
+    {
+      "run": "train-pilot-v2",
+      "input_manifest_sha256": "c376acef8dde674d0da618e9734f245734331e5c7f362d3aea038855ec2a10c8",
+      "records": 24,
+      "prediction_files_verified": 24,
+      "feature_files_verified": 24,
+      "declared_adapter_sha256": null,
+      "current_adapter_matches_declared": null,
+      "files": [
+        {
+          "recording_id": "F02_si645",
+          "prediction_sha256": "797c498a4a66ced2ad3df742a4ca0820e3924b0f2fed0fb8fcb814c3796eda3e",
+          "feature_sha256": "a12f5eff11811d7f32d5466e048bb8f88c031efbb2ddd87ced7eca9a360e5b0c"
+        },
+        {
+          "recording_id": "F02_si822",
+          "prediction_sha256": "4ecb4acd205fd503c9bf71631eecb53623948f7ab215262d1429bd3812eec3db",
+          "feature_sha256": "20de9dbf376951ea9b6194c2959a81b90384dd3ae3b681ebe3b7388affd5e06f"
+        },
+        {
+          "recording_id": "F04_si1079",
+          "prediction_sha256": "333fc39dc7873dd002a538c721a7dcf54910040a8f71311818c27540fe30ea23",
+          "feature_sha256": "db8ab9af8602aae18929cb1e21c3c0d525041a1d0caa4f7d1575d731c2515bb3"
+        },
+        {
+          "recording_id": "F04_si1146",
+          "prediction_sha256": "175d1cd1a42dbe74c17f9387967bd437b3385daab24fb4214b073cedde35ac21",
+          "feature_sha256": "795de5ac3fe9fc26d9e231ccdf062a5e4281e93348cd27289f4a3f0b3d309e95"
+        },
+        {
+          "recording_id": "F07_si1753",
+          "prediction_sha256": "924730d9deadac1188eb959f1173cf925c340e6d6edb61fcea8196e91792987c",
+          "feature_sha256": "94c7a8b2500a08908c8bf5e59ba3de669a1c4c20ad3a8d061c77f7cdd3486fc7"
+        },
+        {
+          "recording_id": "F07_sx316",
+          "prediction_sha256": "4e3680ce716d97e48918ddafe3d233b1aeab9aa261df7aaf3a71a9ba02c52209",
+          "feature_sha256": "e009b1a4fa50de220453940802bfb92ebcd63d3f50130d3d3a35cbf17a2e713f"
+        },
+        {
+          "recording_id": "F08_si1776",
+          "prediction_sha256": "4272947451bccb2754bc0cd2991a48edc3b521c0306f0fede74a4e8235004445",
+          "feature_sha256": "8cd966fd56014a684d114fa5c9ae1c773da6af0fef1d79d883106f278bc4746e"
+        },
+        {
+          "recording_id": "F08_si1812",
+          "prediction_sha256": "333bdd935f59238944d0eda7703f08451c37f5cb0ea0976df61365f2d4b2dfd9",
+          "feature_sha256": "ccbfeceace0de7b604ee63302e9b7c6a041c84ae750c6605727eba28cf5a90a4"
+        },
+        {
+          "recording_id": "F09_si2003",
+          "prediction_sha256": "854ec14322bcd670162f28fcda333ef7863ef1762318d57bbdb3ec4b5da121e0",
+          "feature_sha256": "ec04013a74073ef4e0899d2a05d65b028ca9549c1bae9a4fc2677724ca45d8d7"
+        },
+        {
+          "recording_id": "F09_si2040",
+          "prediction_sha256": "97aa489da5d0c6ec4e02ee98180c6a89d8681c4bddcc04ff56c414d47994eb97",
+          "feature_sha256": "4a1f40c0b0aa25d7f77c1d64938deb7a44c42272a8279e51856fac99bf4b9b6e"
+        },
+        {
+          "recording_id": "F10_si2256",
+          "prediction_sha256": "3d7272214aaa41647f4a6e82e2a7ae477b07ce134ffa45a439845933659c80a8",
+          "feature_sha256": "531a001a59c3f63ff64088438889ce99fdafab88d60ca16a3596c39c999302fd"
+        },
+        {
+          "recording_id": "F10_sx423",
+          "prediction_sha256": "70becdf6feab8d372c22b4d95657f6bdaf22eeea6e903bec03fe61e5ed4cf029",
+          "feature_sha256": "8be0825c8b8e2f11c6f10d48b6405d6562b7258237c5ee7f17bfee604d465cc2"
+        },
+        {
+          "recording_id": "M02_si645",
+          "prediction_sha256": "65c6f1ea26b3e5e96d275f32549c8adf54975a4ced43d93152aadedfee6c2b4a",
+          "feature_sha256": "49db88fe34fc086a631a8926712a8fee99eb9e6ca9544b0a605c793b3a047dc5"
+        },
+        {
+          "recording_id": "M02_si822",
+          "prediction_sha256": "0707a7f6577a1e8d99fd7b92743b3f176ae9e399508e5ef65464f75ea48945dc",
+          "feature_sha256": "7c250fa2340f863a166fe49ded38803063622b02d5383ab49c0387bee704f17c"
+        },
+        {
+          "recording_id": "M04_si1079",
+          "prediction_sha256": "5db3c62bb848d92edd099ddb96569152b52321a17252386b8e3e14003a91c1ad",
+          "feature_sha256": "ed7b055ffea04f474390e16cfb347c752620f061843fa1563e173e3584ef6d45"
+        },
+        {
+          "recording_id": "M04_si1146",
+          "prediction_sha256": "a2bbdf5f34d179122fa8ee7d6a9b3eb0a31683267c3c9e9742d51afd76befc4c",
+          "feature_sha256": "597dff331c0122d1b5cf29f8ae4fcd045e212e61adc314edfda4e5392b8d27ad"
+        },
+        {
+          "recording_id": "M07_si1753",
+          "prediction_sha256": "7dc1c232868b5cfd7cf5e801cab9233fbfcc5b593805a02bed0353a5f8947dae",
+          "feature_sha256": "02ff7cb9acee5ccc83cdca48e54d9b91cee49c6edd57e0940b511bed9fcd4573"
+        },
+        {
+          "recording_id": "M07_sx316",
+          "prediction_sha256": "83f3fe982cb50f2185f43d08d7e542222b9f656b8c69e5fbb4e3bbab32efb0f7",
+          "feature_sha256": "a2b5a43744d494e9afac7ea87c732c36be7ccc1216ec14a54acdb6aa49c51c2c"
+        },
+        {
+          "recording_id": "M08_si1776",
+          "prediction_sha256": "3c7814351a4abc9dda023ac46e4dcd8dc6adbc59c78f1916fb825a16ff3ea8fe",
+          "feature_sha256": "6e8368259831af972bcde73e3699b838f9b38eaa1e35a2b0577baab0486d35c5"
+        },
+        {
+          "recording_id": "M08_si1812",
+          "prediction_sha256": "da8d3c17c6175be9c602bf7b3cc094115bf52672bb6a676bc1e3cf096c3c29e5",
+          "feature_sha256": "bec976c04d71151412c7260126213d1bf249862a66421fb21a1fa572e0d8ca6a"
+        },
+        {
+          "recording_id": "M09_si2003",
+          "prediction_sha256": "52bd57a27523e2c0b6900f6a5bf4f0674e0e9d7726fe83f942fd8abaf8281ca4",
+          "feature_sha256": "cc2053c2c77aa4e69362c082aa1de1dac5e82b2c70c667eb28971edc9301498f"
+        },
+        {
+          "recording_id": "M09_si2040",
+          "prediction_sha256": "297d223fcf7313325dbd1e22d8f4d6753c7f3e10353fa376cae3824f9512ee3d",
+          "feature_sha256": "fd49f6a46c1baa0db5e04c91e1730965b5486faf74325bcf7e4ebd2d6b770f34"
+        },
+        {
+          "recording_id": "M10_si2256",
+          "prediction_sha256": "3146978623fd1212c318ae95f0d06d388e14aaf67793c8378b1bb4f79a7a2cf1",
+          "feature_sha256": "2c69ccdfbd8298b1c8df15f67c0c1286b8bc24972281a77c5ee817a1920d42b5"
+        },
+        {
+          "recording_id": "M10_sx423",
+          "prediction_sha256": "4eee34c8514765a0252a1bc46143daf739f5ceefbcd00cc8e18846a553cd792c",
+          "feature_sha256": "958f0902f9e6e92f4815106425d7911a0ef4d91823b003f3251059681ddf412b"
+        }
+      ]
+    },
+    {
+      "run": "comparator-pilot",
+      "input_manifest_sha256": "9c13c513367436527c6464239dc1590cd76f5ac23a44d6e75bc0ce6928f7e4c1",
+      "records": 24,
+      "prediction_files_verified": 24,
+      "feature_files_verified": 0,
+      "declared_adapter_sha256": "3252701555c198371231feb57039349678dc2cfa25cf10c8f0bb3919931d3b46",
+      "current_adapter_matches_declared": false,
+      "files": [
+        {
+          "recording_id": "F02_si645",
+          "prediction_sha256": "eb5a66b62dc42088476905f490bafc313e1b724b0140ea79225c13c57e9e798a",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F02_si822",
+          "prediction_sha256": "5abd23c98111590ffc6baebc7890b339685498b0442bef0de02ccf04f65fc60e",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F04_si1079",
+          "prediction_sha256": "fcfbda28e7360407fa48523892146b43e1245e2eeb00036c5301e9c795555097",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F04_si1146",
+          "prediction_sha256": "8090f54b6d19668c973cff8b996dac914736d6d3e6eecc67a86d526dc0dcf196",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F07_si1753",
+          "prediction_sha256": "153247f8ec0b6cf80baffa8e749ebcc3c565f6dad147880d4258a673f9dc07f5",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F07_sx316",
+          "prediction_sha256": "098dbb3b72b4ee355edbba857c7f1b12b00120e931f26f09e3db67836fa712e2",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F08_si1776",
+          "prediction_sha256": "5471805a0229819d4251af53cce209f39d4790e6a5a1813a23e1af93b6a97e26",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F08_si1812",
+          "prediction_sha256": "e3eee34faf21ed7c9b93328a1f169a736615a62a97be13d7ba6dcfd47153006d",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F09_si2003",
+          "prediction_sha256": "056c2d7faacdc89d2e3f2febf1e8e8a659729077749b2dd95a82b8dee8116421",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F09_si2040",
+          "prediction_sha256": "58ff9d2a76e9f8f609c998abae68ac974706e2a1006a90d496670c2ba9d61e36",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F10_si2256",
+          "prediction_sha256": "6c7e1d3ca0ed681ea2d8ce73e62b629da0b89e7864a3202cf144ed0b2c2f9463",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "F10_sx423",
+          "prediction_sha256": "9914b6abff9912f5797b67a8623d1f0ba7fe244bcf6774700edbf6915e23d840",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M02_si645",
+          "prediction_sha256": "0ac51eaa5e85bb62ce57317f44628b4cc8d69a2823fdb47a3ad79d74b798f922",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M02_si822",
+          "prediction_sha256": "62d9ff4219802195e83a15e5a440debce839bd777ce50b55f8f564a4a3a2e3b3",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M04_si1079",
+          "prediction_sha256": "f21237696cd8e5c2f645eace32ae5580289f3f0d00b81b8f7031201462ad35ff",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M04_si1146",
+          "prediction_sha256": "68bf08b74c24898ebe6ad55df59c205a44bd427827685c3d7d1e3292fb0b0984",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M07_si1753",
+          "prediction_sha256": "c2e7a79859423d3d20a276190359bf0840efc4d050d9176250b629ddef8a863e",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M07_sx316",
+          "prediction_sha256": "b40d032a8094492b6b4cacb2487346d549704f124baf7f0d9600182ba8284147",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M08_si1776",
+          "prediction_sha256": "b741881b2f0f8126954f7390d405cc30b34d2763f13e1dcfea4c238378cd8859",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M08_si1812",
+          "prediction_sha256": "22891658dde9a8c7b354f88d56252b424fdbaa1009b6bea60746e7b31b1fa7f2",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M09_si2003",
+          "prediction_sha256": "86c64575592d98503d12e19a1cc02ed9dd30f6cb78f82a970b00d5350a2ba0c6",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M09_si2040",
+          "prediction_sha256": "c04f48b862c87f535715ed472728fd372d295ba8cdad46f9e5fa0e2c040eba95",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M10_si2256",
+          "prediction_sha256": "24ae7a0b551d527d9a41b79f2202439b40cb2fdf2232b687806490e06fb84b4c",
+          "exact_support_verified": "centered"
+        },
+        {
+          "recording_id": "M10_sx423",
+          "prediction_sha256": "50d160bbb7446a10e2c616329be723d44e1f778904bd1e8abb4e3d7f328d5fef",
+          "exact_support_verified": "centered"
+        }
+      ]
+    },
+    {
+      "run": "comparator-end-anchored-pilot",
+      "input_manifest_sha256": "534a4b6bc08143009274c96357a1a94c82af5df4a3e070ca19cf5d4013c5953f",
+      "records": 24,
+      "prediction_files_verified": 24,
+      "feature_files_verified": 0,
+      "declared_adapter_sha256": "e113f1118029e47c851cc0629b07aa800b294cf1c6fff784629c3ceaf0731564",
+      "current_adapter_matches_declared": true,
+      "files": [
+        {
+          "recording_id": "F02_si645",
+          "prediction_sha256": "d8a022af17f067f9bbceb6a0dee1d8ee81a22efcd0155314a1da3efd585b7f8d",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F02_si822",
+          "prediction_sha256": "875b0295c4e97de94a9eb507afb777856bba5ed9eb9b71092fb651b250f5ee47",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F04_si1079",
+          "prediction_sha256": "0d01a2ae108b0aec10022abe7683dff287872362ee02910d61af4c86a738c6d5",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F04_si1146",
+          "prediction_sha256": "e66c9e0fe80e407a2fe0ba30fe083dd81027d5df3b2d06488694afa8608ab909",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F07_si1753",
+          "prediction_sha256": "fe6e35b9546c01b832c1a901e3466ae568349019b86c4695e6b134c243a1532b",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F07_sx316",
+          "prediction_sha256": "dc27fc10e85ba93320ac335bee4d4c550aed50b9cd0c846b1a72e85ec2a4ecda",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F08_si1776",
+          "prediction_sha256": "bb4e0c15cd03349eb5567503cf3364446b33bdeed5ebdd6806f2bf53030c47d5",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F08_si1812",
+          "prediction_sha256": "c509500c15e6b66b41f8d5d9d36a3baec7382eb8695fa0e44e07819cdc66109b",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F09_si2003",
+          "prediction_sha256": "bdf0797bb4ddcd8916b97f900155993186b486cc4754c60decc5c89b2429af53",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F09_si2040",
+          "prediction_sha256": "3a1feca684f02978fd170172ba00dda360a184c85a7ae6b3b9c4e83c77b54962",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F10_si2256",
+          "prediction_sha256": "a5d817f99f603eb63a03961f2e2f98ea4d24c27d60bdbbb14324dc13e3e709ab",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "F10_sx423",
+          "prediction_sha256": "a03ae3eaed08967f523f5f23c8212ded8a31f98abff2a7f9607c5bb2d15cb74a",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M02_si645",
+          "prediction_sha256": "17329be7919037e30bbc0412c149c3393a8449548cee31812ea71d48f2ee1da8",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M02_si822",
+          "prediction_sha256": "0ac52897e57b487390eb7e01e8aff6b49e5d7faf4771a0d3b4cbeb66299de5ea",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M04_si1079",
+          "prediction_sha256": "52a0eabff87c0a3119266e013b634dc21f1a02dee0f70e9c0a331502d3dff686",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M04_si1146",
+          "prediction_sha256": "0da5f289fa0262d5d212515e66678c9d8c2e1aedde972dabed2aedaeb9bf023a",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M07_si1753",
+          "prediction_sha256": "373d2d88e0ebf2e14a5e980d70da42a78bf3ea95f615c62fc1f222de492ad2da",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M07_sx316",
+          "prediction_sha256": "22e9fb4688abc960568ea71ad9f605d0f934bb6820dec710f493fc176b5acf88",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M08_si1776",
+          "prediction_sha256": "24d4db4cf6d1c39161610e4816a01b7bb16f4db9f3ce109931b27ec4b31e9b23",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M08_si1812",
+          "prediction_sha256": "433260286bcd312095cfa1e92901817ebf8ba8cbc525aea470fb088a08fd36f3",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M09_si2003",
+          "prediction_sha256": "16bff7e743e631930e509af7faf1dae56fb5687b832293cc68c47b2d1108805f",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M09_si2040",
+          "prediction_sha256": "f8c191acf8890744e72e1bcc605685dbcf58d1b6707c0830ca947c236c36e038",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M10_si2256",
+          "prediction_sha256": "5c02c4330e029d3d31b8f8e9a0fa3e1b31b506388a74b78ca6b5e0e3c438e078",
+          "exact_support_verified": "end_anchored"
+        },
+        {
+          "recording_id": "M10_sx423",
+          "prediction_sha256": "5a5e3b1a6efbdded62d618bc3090b247ed684420d4e0c34ca93e714a9675e565",
+          "exact_support_verified": "end_anchored"
+        }
+      ]
+    }
+  ],
+  "recovered_original_centered_adapter": {
+    "path": "benchmarks/voice-prosody/source-snapshots/comparator-centered-3252701555.py",
+    "sha256": "3252701555c198371231feb57039349678dc2cfa25cf10c8f0bb3919931d3b46",
+    "matches_preexisting_centered_run_manifest": true
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "phenometrix-delayed-model-selection-clarification-v1",
+  "declared_at": "2026-10-22T16:36:37.084181+00:00",
+  "timing": "After both fixed train fits completed; before any real development model score",
+  "original_endpoint_gate": "failed; preserved; no retrospective pass",
+  "measurement_delay_ms": 20,
+  "architecture_search": false,
+  "candidate_revision": false,
+  "calibration_or_threshold_selection": false,
+  "gru": {
+    "comparators": [
+      "dsp",
+      "yin",
+      "continuity",
+      "mlp"
+    ],
+    "minimum_absolute_joint_error_reduction_each": 0.01,
+    "maximum_voiced_success_loss_against_best_comparator": 0.02,
+    "maximum_clean_joint_error_excess_against_best_comparator": 0.01
+  },
+  "mlp": {
+    "comparators": [
+      "dsp",
+      "yin",
+      "continuity"
+    ],
+    "minimum_absolute_joint_error_reduction_each": 0.01,
+    "maximum_voiced_success_loss_against_best_comparator": 0.02,
+    "maximum_clean_joint_error_excess_against_best_comparator": 0.01
+  },
+  "aggregation": "pool recordings within speaker-condition; equal weight all speaker-condition cells",
+  "transition": {
+    "scenario_count": 8,
+    "step_count": 2,
+    "glide_count": 6,
+    "all_scenario_delays_must_be_defined": true,
+    "maximum_extra_combined_median_target_delay_vs_delayed_dsp_ms": 10,
+    "maximum_extra_step_only_median_target_delay_vs_delayed_dsp_ms": 10,
+    "maximum_extra_glide_only_median_target_delay_vs_delayed_dsp_ms": 10,
+    "step_metric": "first of3 consecutive outputs within50c of finalF0, acquisition e>=physicalstep; targetlag=e-20ms-step, availabilitydelay=e-step; no negative clamp",
+    "glide_metric": "median signed(analyticF0(t)-estimate)/slope on full-ramp-support frames; no negative clamp"
+  },
+  "selection": "GRU only if every gate passes; otherwise MLP only if its independent gates pass; otherwise minimum-joint-error classical comparator with limitations; no automatic production integration",
+  "remaining_requirements": [
+    "transition checks",
+    "complete worker service runtime and explicit drop/coverage gate",
+    "subsequent confirmation and calibration gates before sealed-test claims"
+  ],
+  "fixed_checkpoints": {
+    "gru": {
+      "manifest_sha256": "2295022102e3affae516ecef9ae004512579b6b6598abd297ac39fe4272c34f0",
+      "weights_sha256": "c7412797c3360a6234dd468f22d5b03694e2ea996dd1a06269e0f42d231dd614"
+    },
+    "mlp": {
+      "manifest_sha256": "73533700a756e295876a3145017b3d263c6af0b73d962ec2bf9b7cdd9ac2d61f",
+      "weights_sha256": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d"
+    }
+  }
+}

@@ -46,11 +46,37 @@ external integration work.
 
 ## Media and measurement boundary
 
-The existing audio worklet transfers 20 ms PCM blocks to a worker with a bounded
-ring. Face inference uses MediaPipe inside a worker. Native bitmaps, landmarks,
+The audio worklet transfers nominal 20 ms PCM blocks through a four-credit
+buffer pool to a worker with a two-second ring. Matched worker/worklet v2
+messages carry exact support endpoints, capture epoch, clock-mapping identity,
+and drop counters; compact acoustic frames remain v1 and DSP remains 1.1.
+Face inference uses MediaPipe inside a worker. Native bitmaps, landmarks,
 transformation matrices, and raw PCM do not enter durable observations.
 Blendshapes are disabled. Only compact signal/geometry and quality primitives
 reach the deterministic extractor.
+
+Voice timing explicitly maps AudioContext and worker clocks to the main
+performance-clock coordinate. Legacy window-start times remain unchanged;
+additional timing records declare support end, required samples, service time,
+and result arrival. Unknown clock accuracy and inconsistent durations remain
+unavailable. These local mappings are separate from authenticated UTC clock
+qualification below. Acquisition metadata and rendered PCM rate are distinct.
+
+Voice transport drops new blocks when credits are exhausted and provisionally
+drops blocks more than 100 ms old at worker admission under a consistent audio
+clock mapping. Missing input and dropped samples remain gaps. Discontinuities
+reset all feature history and start new segments. Stop waits briefly for a final
+worklet loss snapshot and worker acknowledgement; timeout is explicit, and the
+snapshot retains outstanding credits and terminal partial-sample loss. The
+worker-to-main path separately admits at most four acknowledged result batches,
+with bounded frame/diagnostic data and a timing-completion envelope. Result
+backpressure drops input and resets history; the host acknowledges before
+callbacks, counts stale-result discards, and requires a fresh segment after
+loss. Its 100 ms support-end age check applies only to consistent mapped clocks
+at receipt. Unknown timing, hardware delay, downstream application storage,
+and total browser heap remain distinct limitations. See the
+[voice foundation](voice-foundation.md) for exact timing, reset, and teardown
+semantics.
 
 The generic ambient registry contains 7 voice and 20 facial metrics. Extractors
 screen qualified voice segments and facial bins, returning measured or withheld
@@ -166,6 +192,20 @@ or institutional research approval is supplied. Access denial and physical
 deletion are distinct operations; deployment retention workers and backup policy
 must cover the latter.
 
+A separate local `research-voice.html` entry point uses synthetic AudioBufferSource
+replay through the production worklet/worker, optional exported-model parity
+checks, and an explicitly unqualified trained-MLP worker entry. Production
+capture remains DSP-only. The optional research hook reuses shared v2 features
+and the original DSP baseline, then serializes single-thread pinned ONNX/WASM
+inference with one active plus three queued PCM requests and the same four
+result credits. Model probabilities remain separate from heuristic confidence;
+reset/disposal invalidates both late predictions and late errors. Full-block
+and main-arrival timing include model completion, while inference-only timing
+is separate. The route requests no microphone, does not connect a learned
+estimator to production measurements, and streams bounded raw timing batches
+to a local test sink. It is an engineering research harness within Ambient Capture, not another
+product capability or a retained patient-media path.
+
 ## Legacy local demo retained
 
 `pnpm dev` serves the original static browser demo. A participant asserts an
@@ -190,8 +230,14 @@ The optional WavLM service is disconnected and disabled by default.
 
 Static asset checks establish delivery self-consistency. A trusted manifest and
 binding checked bytes to executed assets still require deployment integrity work.
-Real-device timing, host-track identity, browser lifecycle, platform quality,
-and measurement repeatability require acceptance and validation beyond mocks.
+A short actual-browser synthetic voice replay has functional evidence for
+sample support, bounded PCM and result credits, worker/main overload drops,
+segment recovery, terminal accounting, and a known periodic tone. It does not establish sustained timing,
+hardware-input delay, total pipeline memory bounds, or natural-speech accuracy.
+Real-device timing, host-track identity, broader browser lifecycle behavior,
+platform quality, and measurement repeatability still require acceptance and
+validation. The voice foundation records the evidence identity and prepared
+30-minute soak command; it makes no completed sustained-run claim.
 
 No analytical or clinical validation, clinically meaningful change threshold,
 scale equivalence, dose recommendation, emergency screening, or automated

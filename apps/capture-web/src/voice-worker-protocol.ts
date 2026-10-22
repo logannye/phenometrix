@@ -1,3 +1,4 @@
+import type { VoiceResearchPrediction } from "./voice-research-hook.js";
 import type {
   AudioCaptureSettings,
   AudioPipelineProvenance,
@@ -5,14 +6,22 @@ import type {
   BrowserAudioProcessingState,
   VoiceTaskContext
 } from "@phenometrix/contracts";
+import type { VoiceClockMapping, VoiceFrameTiming, VoiceBlockTiming } from "./voice-stream-timing.js";
+import { VOICE_TIMING_CONTRACT_VERSION } from "./voice-stream-timing.js";
 import type { VoiceSignalFrameV1 } from "@phenometrix/ambient-core";
 
+export const VOICE_MAXIMUM_BLOCK_AGE_MS = 100;
+export const VOICE_MAXIMUM_RESULT_AGE_MS = 100;
+export const VOICE_MAXIMUM_RESULT_BATCHES = 4;
+export const VOICE_MAXIMUM_RESULT_RECORDS = 5; // At most four frames and one diagnostic; timing arrives in the completion envelope.
+export const VOICE_MAXIMUM_PCM_BLOCK_MS = 40;
+
 export const VOICE_WORKER_MESSAGE_VERSION =
-  "phenometric.voice-worker-message.v1" as const;
+  "phenometric.voice-worker-message.v2" as const;
 export const VOICE_SIGNAL_FRAME_VERSION =
   "phenometric.voice-signal-frame.v1" as const;
 export const VOICE_WORKLET_MESSAGE_VERSION =
-  "phenometric.voice-worklet-message.v1" as const;
+  "phenometric.voice-worklet-message.v2" as const;
 /*
  * 1.1: the pitch path decimates through an anti-aliased filter instead of a
  * boxcar average, band energies come from one windowed FFT instead of a
@@ -32,15 +41,30 @@ export const VOICE_DSP_PROCESSOR_REF =
 export type VoiceWorkerRequest =
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
+      type: "result-ack";
+      captureEpoch: number;
+      batchId: number;
+      discardedFrameCount: number;
+      staleFrameCount: number;
+    }
+  | {
+      schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
       type: "initialize";
       captureEpoch: number;
       port: MessagePort;
-      sessionOriginPerformanceMs: number;
-      audioContextOriginSeconds: number;
+      /** Null while the audio context is not running. */
+      clockMapping: VoiceClockMapping | null;
+      audioContextSampleRateHz: number;
       captureSettings: AudioCaptureSettings;
       taskContext: VoiceTaskContext;
       /** Applied atomically before this epoch can process PCM. */
       noiseFloorRms?: number;
+    }
+  | {
+      schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
+      type: "clock-mapping";
+      captureEpoch: number;
+      clockMapping: VoiceClockMapping | null;
     }
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
@@ -58,6 +82,8 @@ export type VoiceWorkerRequest =
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
       type: "reset";
       captureEpoch: number;
+      /** Null keeps a reset during suspension invalid until a running-context anchor arrives. */
+      clockMapping: VoiceClockMapping | null;
       taskContext: VoiceTaskContext;
       /** Applied in the same worker turn as the epoch change. */
       noiseFloorRms?: number;
@@ -72,6 +98,22 @@ export type VoiceWorkerRequest =
 export type VoiceWorkerResponse =
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
+      type: "result-batch";
+      captureEpoch: number;
+      batchId: number;
+      clockMappingId: number;
+      records: VoiceWorkerBatchRecord[];
+    }
+  | {
+      schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
+      type: "result-batch-complete";
+      captureEpoch: number;
+      batchId: number;
+      clockMappingId: number;
+      timing: VoiceBlockTiming;
+    }
+  | {
+      schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
       type: "ready";
       captureEpoch: number;
       provenance: AudioPipelineProvenance;
@@ -81,7 +123,16 @@ export type VoiceWorkerResponse =
       type: "signal-frame";
       captureEpoch: number;
       frame: VoiceSignalFrameV1;
-      processingLatencyMs: number;
+      /** Audio timeline support-end to worker-ready, excluding hardware acquisition. */
+      processingLatencyMs: number | null;
+      timing: VoiceFrameTiming;
+      research?: VoiceResearchPrediction;
+    }
+  | {
+      schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
+      type: "block-timing";
+      captureEpoch: number;
+      timing: VoiceBlockTiming;
     }
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
@@ -103,16 +154,53 @@ export type VoiceWorkerResponse =
     }
   ;
 
+export type VoiceWorkerBatchRecord = Extract<VoiceWorkerResponse, { type: "signal-frame" | "diagnostics" }>;
+
 export interface VoiceWorkletPcmBlock {
   schemaVersion: typeof VOICE_WORKLET_MESSAGE_VERSION;
   type: "pcm-block";
   captureEpoch: number;
   sequence: number;
   absoluteSampleIndex: number;
+  /** Legacy render-quantum timestamp; never used as the block endpoint. */
   acquisitionAudioTimeSeconds: number;
+  endAudioFrameExclusive: number;
+  clockMappingId: number;
+  transportId: number;
+  droppedBlockCount: number;
+  droppedSampleCount: number;
+  inFlightBlockCount: number;
   sampleRateHz: number;
   channelCount: 1;
   buffer: ArrayBuffer;
+}
+
+export interface VoiceWorkletTransportDiagnostics {
+  schemaVersion: typeof VOICE_WORKLET_MESSAGE_VERSION;
+  type: "transport-diagnostics";
+  captureEpoch: number;
+  final: true;
+  sequence: number;
+  sampleClockEndExclusive: number;
+  droppedBlockCount: number;
+  droppedSampleCount: number;
+  discardedPartialSampleCount: number;
+  inFlightBlockCountAtDispose: number;
+  maximumInFlightBlocks: 4;
+}
+
+export type VoiceTransportStopResult =
+  | { status: "complete"; diagnostics: VoiceWorkletTransportDiagnostics }
+  | { status: "unavailable"; captureEpoch: number; reason: "worklet-stop-timeout" | "worklet-dispose-failed" };
+
+export function isCurrentVoiceTransportDiagnostics(value: unknown, captureEpoch: number): value is VoiceWorkletTransportDiagnostics {
+  if (!value || typeof value !== "object") return false;
+  const item = value as VoiceWorkletTransportDiagnostics;
+  return item.schemaVersion === VOICE_WORKLET_MESSAGE_VERSION && item.type === "transport-diagnostics" &&
+    item.captureEpoch === captureEpoch && item.final === true && item.maximumInFlightBlocks === 4 &&
+    [item.sequence, item.sampleClockEndExclusive, item.droppedBlockCount, item.droppedSampleCount,
+      item.discardedPartialSampleCount, item.inFlightBlockCountAtDispose].every(number =>
+        Number.isSafeInteger(number) && number >= 0) && item.inFlightBlockCountAtDispose <= 4;
 }
 
 export function isCurrentVoiceWorkerResponse(
@@ -140,7 +228,16 @@ export function audioPipelineProvenance(): AudioPipelineProvenance {
     analysisWindowMs: 40,
     analysisHopMs: 10,
     ringBufferSeconds: 2,
-    algorithmVersion: VOICE_DSP_ALGORITHM_VERSION
+    algorithmVersion: VOICE_DSP_ALGORITHM_VERSION,
+    timingContractVersion: VOICE_TIMING_CONTRACT_VERSION,
+    transportMaxInFlightBlocks: 4,
+    transportMaxBlockAgeMs: VOICE_MAXIMUM_BLOCK_AGE_MS,
+    resultMaxInFlightBatches: VOICE_MAXIMUM_RESULT_BATCHES,
+    resultMaxRecordsPerBatch: VOICE_MAXIMUM_RESULT_RECORDS + 1,
+    resultMaxAgeMs: VOICE_MAXIMUM_RESULT_AGE_MS,
+    resultDropPolicy: "drop-input-at-result-cap;discard-stale-at-main;reset-on-result-loss",
+    transportDropPolicy: "drop-new-at-cap;drop-stale-at-worker;reset-on-gap",
+    latencyStatisticWindowFrames: 500
   };
 }
 

@@ -227,7 +227,7 @@ export async function installAmbientBrowserFixture(
       } as unknown as AudioNode;
     }
 
-    class AudioContextMock {
+    class AudioContextMock extends EventTarget {
       readonly sampleRate = 48_000;
       readonly currentTime = 0;
       readonly destination = audioNode();
@@ -281,7 +281,7 @@ export async function installAmbientBrowserFixture(
       value: AudioWorkletNodeMock
     });
 
-    const workerVersion = "phenometric.voice-worker-message.v1";
+    const workerVersion = "phenometric.voice-worker-message.v2";
     const diagnostics = {
       receivedBlockCount: 0,
       droppedBlockCount: 0,
@@ -307,6 +307,14 @@ export async function installAmbientBrowserFixture(
       }
 
       private emit(data: unknown): void {
+        // This fixture supplies lifecycle observations, not measured browser timings.
+        if (typeof data === "object" && data !== null && "type" in data && data.type === "signal-frame") {
+          data = { ...data, timing: {
+            schemaVersion: "phenometric.voice-stream-timing.v1", status: "unavailable",
+            unavailableReason: "inconsistent-clock-mapping", sampleAvailabilityMs: 0,
+            workerReadyAtMs: 0, coordinate: "main-performance-ms"
+          } };
+        }
         const event = new MessageEvent("message", { data });
         this.dispatchEvent(event);
         this.onmessage?.(event);
@@ -437,7 +445,7 @@ export async function installAmbientBrowserFixture(
               provenance: {
                 processorRef: "browser-voice-dsp@1.1",
                 runtime: "audio-worklet-voice-worker",
-                workletSchemaVersion: "phenometric.voice-worklet-message.v1",
+                workletSchemaVersion: "phenometric.voice-worklet-message.v2",
                 workerSchemaVersion: workerVersion,
                 signalFrameSchemaVersion: "phenometric.voice-signal-frame.v1",
                 analysisWindowMs: 40,

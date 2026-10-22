@@ -1,0 +1,228 @@
+# Causal voice estimation research
+
+**Final decision: no learned estimator is qualified for production.** The small
+models improve natural-development scores, but they fail fixed known-truth pitch
+checks. The single synthetic-augmentation follow-up improves transfer and still
+fails its frozen acceptance gates. Classical DSP remains the default. No further
+model fitting, threshold tuning, candidate revision, or promotion is part of this
+experiment.
+
+Read [RESULTS.md](RESULTS.md) for the final comparison, [PROTOCOL.md](PROTOCOL.md)
+for the declared experiment, and [NOTEBOOK.md](NOTEBOOK.md) for decisions and
+failure records. [DATA_AUDIT.md](DATA_AUDIT.md), [ALIGNMENT_AUDIT.md](ALIGNMENT_AUDIT.md),
+[SUPPORT_DIAGNOSTIC.md](SUPPORT_DIAGNOSTIC.md), and
+[COMPARATOR_AUDIT.md](COMPARATOR_AUDIT.md) describe the reference and timing limits.
+This public-corpus research path is separate from encounter media and the optional
+WavLM service. Software, measurement, and clinical validation are distinct.
+
+## Environment and artifact handling
+
+Use the locked Python 3.11 environment and prebuilt wheels; `--no-build` refuses source builds. The recorded fits use
+local PyTorch MPS; `train` refuses to silently fall back to another device. The
+browser uses the repository's pinned pnpm dependencies. No Rust build is needed
+for these research commands.
+
+From the repository root:
+
+```sh
+uv sync --project research/voice-prosody --locked --no-build
+cd research/voice-prosody
+.venv/bin/python -m pytest -q -p no:cacheprovider tests
+```
+
+Unless stated otherwise, subsequent commands run from `research/voice-prosody`.
+They document the recorded workflow, not an instruction to repeat fitting after
+the final no-go. Outputs require fresh directories and refuse to overwrite runs.
+Preserve existing evidence; use a fresh workspace or new output names for a new
+reproduction. Run manifests record input, source, dependency, checkpoint and
+output identities. MPS reruns are not promised to produce byte-identical weights.
+
+Corpus audio, reference trajectories, generated caches, checkpoints and run
+artifacts remain in ignored local folders. Dataset ODbL/DbCL notices are independent
+of this repository's MIT license. Raw prediction JSON is losslessly compressed
+with deterministic gzip; `evaluate.read_predictions(path)` reads it. Raw voicing
+probability is never presented as calibrated pitch-correctness probability.
+
+## Acquisition and original failed endpoint screen
+
+Inventory reads public metadata. Acoustic test content remains sealed. The first
+24-record training pilot precedes the larger acquisition:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.data inventory
+.venv/bin/python -m phenometrix_prosody.data acquire --split train --per-speaker 2 --roles mic,ref
+.venv/bin/python -m phenometrix_prosody.pilot --data-root data/ptdb-tug --feature-version v1 --output runs/train-pilot
+.venv/bin/python -m phenometrix_prosody.pilot --data-root data/ptdb-tug --feature-version v2 --selection-manifest runs/train-pilot/manifest.json --output runs/train-pilot-v2
+.venv/bin/python -m phenometrix_prosody.natural_error_stratification --pilot runs/train-pilot-v2 --data-root data/ptdb-tug
+```
+
+The selection manifest freezes the original 24 microphone/reference identities;
+a later acquisition must not silently expand this diagnostic. V1 candidate
+coverage was 52.46%; the single authorized K6 revision reached 64.57%, below the
+75% prerequisite. These endpoint failures remain failures.
+
+The original analytic source-support experiment uses eleven fixed signals:
+
+```sh
+(cd ../../apps/capture-web && node --import tsx ../../research/voice-prosody/support_diagnostic.ts --output ../../research/voice-prosody/runs/support-diagnostic-v1)
+.venv/bin/python -m phenometrix_prosody.support_diagnostic --run runs/support-diagnostic-v1
+```
+
+The synthetic experiment establishes support-induced lag on exact known truth.
+Its midpoint/window-mean analyses do not retrospectively change endpoint scores.
+Reference-derived stratification is scorer-only and never enters a feature.
+
+## Separate declared 20 ms measurement-delay experiment
+
+A feature supported on `[t-20 ms, t+20 ms)` reports target `t` and cannot become
+available before `t+20 ms`. The feature cache retains acquisition endpoint `e`;
+training and evaluation explicitly map it to `t=e-960` at 48 kHz. This is streaming
+with 20 ms future support relative to the reported target, not zero lookahead.
+All methods use the common scoring mask `t>=64 ms` and `t+32 ms<=N`, exact nominal
+`16+10*k ms` reference grid, and explicit missing-output accounting.
+
+```sh
+.venv/bin/python -m phenometrix_prosody.data acquire --split train --per-speaker 20 --roles mic,ref --max-bytes 2147483648
+.venv/bin/python -m phenometrix_prosody.data acquire --split development --per-speaker 20 --roles mic,ref --max-bytes 2147483648
+.venv/bin/python -m phenometrix_prosody.features --data data/ptdb-tug --output runs/delayed-train-features --split train
+.venv/bin/python -m phenometrix_prosody.features --data data/ptdb-tug --output runs/delayed-development-features --split development
+.venv/bin/python -m phenometrix_prosody.train --features runs/delayed-train-features --data data/ptdb-tug --output runs/delayed-gru-seed20261022 --kind causal-gru
+.venv/bin/python -m phenometrix_prosody.train --features runs/delayed-train-features --data data/ptdb-tug --output runs/delayed-mlp-seed20261022 --kind framewise-mlp
+.venv/bin/python -m phenometrix_prosody.evaluate --features runs/delayed-development-features --training-features runs/delayed-train-features --data data/ptdb-tug --gru runs/delayed-gru-seed20261022 --mlp runs/delayed-mlp-seed20261022 --output runs/delayed-development-evaluation
+.venv/bin/python -m phenometrix_prosody.evaluate_synthetic --support-run runs/support-diagnostic-v1 --training-features runs/delayed-train-features --gru runs/delayed-gru-seed20261022 --mlp runs/delayed-mlp-seed20261022 --output runs/delayed-known-truth
+```
+
+Caches contain input-only features and baseline predictions, across clean,
+10 dB noise, first-difference and amplitude-clipping conditions. They are finished
+before references are loaded. Model scaling uses training features only. Both
+models use the fixed final epoch, explicit state/reset semantics and the same
+57-feature/K6 candidate contract. Evaluators use independent NumPy equations and
+freeze every prediction before loading scorer references.
+
+`selection-decision.json` records the pre-development selection clarification.
+The GRU missed the required one-percentage-point improvement over the MLP. The
+MLP passed the natural-development quality components but failed constant 300 Hz
+and harmonic-balance cases. A quality component is never a final keep decision.
+
+## Pretrained comparison with a different lookahead
+
+The pinned tiny CREPE comparator has centered 64 ms support and **32 ms future
+support**, compared with 20 ms for the candidate experiment. Its scores are
+reported separately and do not establish equivalent-latency performance.
+
+```sh
+.venv/bin/python -m phenometrix_prosody.comparator_cache --features runs/delayed-development-features --data data/ptdb-tug --output runs/delayed-development-comparator --device mps
+.venv/bin/python -m phenometrix_prosody.score_comparator --features runs/delayed-development-features --predictions runs/delayed-development-comparator --data data/ptdb-tug --output runs/delayed-development-comparator-scores
+```
+
+For the earlier 24-record diagnostic, the recorded centered and endpoint-anchored
+comparisons and descriptive delay analysis are reproducible with:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.comparator_pilot --data data/ptdb-tug --selection runs/train-pilot/manifest.json --output runs/comparator-pilot --anchor centered
+.venv/bin/python -m phenometrix_prosody.comparator_pilot --data data/ptdb-tug --selection runs/train-pilot/manifest.json --output runs/comparator-end-anchored-pilot --anchor end_anchored
+.venv/bin/python -m phenometrix_prosody.delay_diagnostic --data data/ptdb-tug --original runs/train-pilot --revised runs/train-pilot-v2 --centered runs/comparator-pilot --end-anchored runs/comparator-end-anchored-pilot --output runs/delay-diagnostic
+```
+
+## Single synthetic-augmentation follow-up
+
+Both train and challenge parameter plans were frozen before generation. The
+curriculum has 128 distinct 2.5-second training sequences: stationary harmonics,
+steps, glides, harmonic-balance changes and aperiodic noise. Training repeats each
+sequence four times to set its weight, not to invent independent observations.
+The 32-case challenge uses separate seeds, complete parameters, trajectories,
+stationary frequencies and harmonic mixtures. A continuous training glide can
+cross a challenge frequency; disjointness concerns full source configurations.
+
+The new decision requires every original stationary and postchange observation
+case to reach 95% success, challenge equal-scenario voiced success of at least
+90%, every voiced case at least 80%, and false-positive rate no greater than 5%
+in **each** unvoiced case as well as pooled. Natural-development and transition
+requirements remain in force. Challenge generation checks the completed augmented
+checkpoint and its frozen training-curriculum identity.
+
+```sh
+.venv/bin/python -m phenometrix_prosody.synthetic_curriculum freeze --output runs/synthetic-curriculum-plan
+.venv/bin/python -m phenometrix_prosody.synthetic_curriculum generate --plan runs/synthetic-curriculum-plan --split train --output runs/synthetic-train-curriculum
+.venv/bin/python -m phenometrix_prosody.train --features runs/delayed-train-features --data data/ptdb-tug --output runs/delayed-augmented-mlp-seed20261022 --kind framewise-mlp --synthetic-curriculum runs/synthetic-train-curriculum
+.venv/bin/python -m phenometrix_prosody.evaluate --features runs/delayed-development-features --training-features runs/delayed-train-features --data data/ptdb-tug --gru runs/delayed-gru-seed20261022 --mlp runs/delayed-augmented-mlp-seed20261022 --output runs/delayed-augmented-development-evaluation
+.venv/bin/python -m phenometrix_prosody.evaluate_synthetic --support-run runs/support-diagnostic-v1 --training-features runs/delayed-train-features --gru runs/delayed-gru-seed20261022 --mlp runs/delayed-augmented-mlp-seed20261022 --output runs/delayed-augmented-known-truth
+.venv/bin/python -m phenometrix_prosody.synthetic_curriculum generate --plan runs/synthetic-curriculum-plan --split challenge --output runs/synthetic-challenge-curriculum --checkpoint-manifest runs/delayed-augmented-mlp-seed20261022/manifest.json
+.venv/bin/python -m phenometrix_prosody.evaluate_curriculum --curriculum runs/synthetic-challenge-curriculum --training-features runs/delayed-train-features --augmented runs/delayed-augmented-mlp-seed20261022 --original runs/delayed-mlp-seed20261022 --output runs/delayed-augmented-challenge
+```
+
+Before the last command, preserve the recorded pre-score
+`runs/synthetic-curriculum-plan/challenge-evaluation-decision.json`, which declares
+the per-case false-positive gate. Its source is shown in the notebook. A fresh
+reproduction must create that declaration before scoring, not copy a later result.
+The challenge scorer reconstructs classical baselines from frozen parameters,
+verifies PCM digests and bit-identical cached features, then freezes all five
+methods before reading analytic references. No synthetic record is represented
+as a PTDB participant or recording.
+
+The augmented MLP improved challenge voiced success from 72.95% to 88.07% and
+fixed the original 300 Hz harmonic-balance case. It still failed the plain 300 Hz
+tone and four challenge cases. The fixed causal YIN comparator reached 99.82%
+on this synthetic challenge, while showing weaker natural-development joint
+error than the learned models. Neither result alone establishes deployment or
+clinical validity. The accepted stopping rule is **no learned promotion**.
+
+## Export and browser engineering checks
+
+These commands establish arithmetic and interface compatibility, not accuracy:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.export --spike --feature-version v2 --output runs/spike-v2 --check-mps
+.venv/bin/python -m phenometrix_prosody.export --checkpoint runs/delayed-gru-seed20261022 --output runs/delayed-gru-export
+.venv/bin/python -m phenometrix_prosody.export --checkpoint runs/delayed-mlp-seed20261022 --output runs/delayed-mlp-export
+cd ../..
+node apps/capture-web/scripts/prepare-voice-research.mjs ../../research/voice-prosody/runs/spike-v2
+node apps/capture-web/scripts/prepare-voice-mlp-research.mjs ../../research/voice-prosody/runs/delayed-mlp-export
+pnpm --filter @phenometrix/capture-web exec playwright test --config playwright.research.config.ts
+```
+
+The research page uses a synthetic AudioBufferSource, real worklet/worker transport
+and controlled overload; it does not request a microphone. Trained hooks remain
+explicit research opt-ins. Graph parity alone is distinct from full-stream parity
+or a complete-worker service percentile. Report production replay validation
+separately from these offline Python scores.
+
+The preserved DSP numerical identity is `voice-analysis-1.1`. Transport/worker v2
+adds exact sample endpoints, separate clock origins and a bounded credit queue.
+Legacy `tMs` remains window start. Inconsistent clocks retain raw evidence and
+make derived latency unavailable; negative times are not clamped into success.
+No calibration, sealed-test accuracy or clinical claim follows from this run.
+
+## Sequential runtime reproduction
+
+After preparing both research asset sets above, run each replay in a fresh output
+folder. From `apps/capture-web`, the counterbalanced order is DSP, trained MLP,
+trained MLP, DSP, sequentially. Use the same command with the appropriate method:
+
+```sh
+export VOICE_RESEARCH_OUTPUT_DIR="$(mktemp -d "$PWD/../../research/voice-prosody/runs/browser-runtime-XXXXXX")"
+VOICE_RESEARCH_METHOD=dsp VOICE_RESEARCH_DURATION_MS=60000 \
+VOICE_RESEARCH_OVERLOAD_AT_MS=30000 VOICE_RESEARCH_OVERLOAD_DURATION_MS=300 \
+pnpm exec playwright test --config playwright.research.config.ts \
+  --grep 'real AudioWorklet/worker replay' --workers=1 --reporter=json \
+  > "$VOICE_RESEARCH_OUTPUT_DIR/playwright-report.json"
+```
+
+For the sustained DSP replay, choose a fresh output folder and set duration to
+`1800000` and overload time to `900000`, keeping the 300 ms stall. The fixture is
+a repeated known signal, not additional speech data. Do not run fits, other tests,
+or simultaneous replay methods during a measured sequence. Record the source,
+artifact, runtime, machine and background-load limits as the final report does.
+
+From the repository root, independently audit any completed raw replay:
+
+```sh
+PYTHONPATH=research/voice-prosody research/voice-prosody/.venv/bin/python \
+  -m phenometrix_prosody.audit_browser --run /absolute/path/to/completed-run \
+  --output /absolute/path/to/completed-run/independent-audit.json
+```
+
+Production builds exclude `public/.local` research assets. After building both
+capture outputs, verify that exclusion and byte identity of every normal public
+asset with `node apps/capture-web/scripts/verify-production-public-assets.mjs`.
+The final measurements and their limits are in [STREAMING_RESULTS.md](STREAMING_RESULTS.md).
