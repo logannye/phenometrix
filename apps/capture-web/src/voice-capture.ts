@@ -1,3 +1,4 @@
+import { VoiceRenderLeaseIssuer, VOICE_RENDER_LEASE_RENEWAL_MS } from "./voice-render-freshness.js";
 import { VoiceResultBatchReceiver } from "./voice-result-transport.js";
 import type {
   AudioCaptureSettings,
@@ -81,8 +82,16 @@ export async function startVoiceCapturePipeline(
   let transportDisposedResolver: (() => void) | null = null;
   let transportDisposed = false;
   let stopPromise: Promise<void> | null = null;
+  const leaseIssuer = new VoiceRenderLeaseIssuer(performance);
+  let leaseTimer: ReturnType<typeof setInterval> | undefined;
+  const stopLeases = (): void => {
+    if (leaseTimer !== undefined) clearInterval(leaseTimer);
+    leaseTimer = undefined;
+    leaseIssuer.stop();
+  };
 
   const releaseResources = (): void => {
+    stopLeases();
     removeClockListener?.();
     removeClockListener = null;
     if (worklet) worklet.port.onmessage = null;
@@ -141,6 +150,7 @@ export async function startVoiceCapturePipeline(
     );
     const activeWorklet = worklet;
     activeWorklet.port.onmessage = (event: MessageEvent<unknown>) => {
+      if (leaseIssuer.acknowledge(event.data)) return;
       if (!stopped || transportDisposed || !isCurrentVoiceTransportDiagnostics(event.data, captureEpoch)) return;
       transportDisposed = true;
       const resolve = transportDisposedResolver;
@@ -158,7 +168,8 @@ export async function startVoiceCapturePipeline(
     channel = new MessageChannel();
     const activeChannel = channel;
 
-    const resultReceiver = new VoiceResultBatchReceiver(message => activeWorker.postMessage(message));
+    const resultReceiver = new VoiceResultBatchReceiver(message => activeWorker.postMessage(message),
+      { policy: "required-render-lease-v1", issuer: leaseIssuer, mainTimeOriginMs: performance.timeOrigin });
     const handleWorkerResponse = (data: VoiceWorkerResponse): void => {
       if (!isCurrentVoiceWorkerResponse(data, captureEpoch)) {
         return;
@@ -194,7 +205,9 @@ export async function startVoiceCapturePipeline(
       }
     };
     activeWorker.addEventListener("message", (event: MessageEvent<VoiceWorkerResponse>) => {
-      const received = resultReceiver.receive(event.data, captureEpoch, performance.now(), clockMappingId);
+      let received: ReturnType<VoiceResultBatchReceiver["receive"]>;
+      try { received = resultReceiver.receive(event.data, captureEpoch, performance.now(), clockMappingId); }
+      catch { if (!stopped) options.callbacks.onFailure("invalid-voice-result-transport"); return; }
       for (const message of received.messages) handleWorkerResponse(message);
     });
     activeWorker.addEventListener("error", () => {
@@ -220,6 +233,7 @@ export async function startVoiceCapturePipeline(
     activeWorker.postMessage(
       request({
         type: "initialize",
+        freshnessPolicy: "required-render-lease-v1",
         captureEpoch,
         port: activeChannel.port2,
         clockMapping: initialClockMapping,
@@ -231,9 +245,18 @@ export async function startVoiceCapturePipeline(
       [activeChannel.port2]
     );
 
+    const renewLease = (): void => {
+      if (stopped || options.audioContext.state !== "running") return;
+      const lease = leaseIssuer.issue(captureEpoch, clockMappingId);
+      if (lease) activeWorklet.port.postMessage(lease);
+    };
+    renewLease();
+    leaseTimer = setInterval(renewLease, VOICE_RENDER_LEASE_RENEWAL_MS);
+
     const updateClockMapping = (): void => {
       if (stopped) return;
       clockMappingId += 1;
+      leaseIssuer.invalidate();
       const clockMapping = options.audioContext.state === "running"
         ? captureVoiceClockMapping(options.audioContext, performance, clockMappingId) : null;
       activeWorklet.port.postMessage({ type: "clock-mapping", clockMappingId });
@@ -268,6 +291,7 @@ export async function startVoiceCapturePipeline(
           || noiseFloorRms < 0.0001 || noiseFloorRms > 1)) throw new Error("invalid-noise-floor");
         captureEpoch = nextEpoch;
         clockMappingId += 1;
+        leaseIssuer.invalidate();
         const clockMapping = options.audioContext.state === "running"
           ? captureVoiceClockMapping(options.audioContext, performance, clockMappingId) : null;
         activeWorklet.port.postMessage({ type: "capture-epoch", captureEpoch, clockMappingId });
@@ -279,6 +303,7 @@ export async function startVoiceCapturePipeline(
       stop() {
         if (stopPromise) return stopPromise;
         stopped = true;
+        stopLeases();
         stopPromise = (async () => {
           let timeout: ReturnType<typeof setTimeout> | undefined;
           try {

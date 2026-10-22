@@ -5,13 +5,18 @@ models improve natural-development scores, but they fail fixed known-truth pitch
 checks. The single synthetic-augmentation follow-up improves transfer and still
 fails its frozen acceptance gates. Classical DSP remains the default. No further
 model fitting, threshold tuning, candidate revision, or promotion is part of this
-experiment.
+experiment. A subsequent no-fit component replacement repairs the fixed pitch
+failures and passes its declared offline checks; see [HYBRID_RESULTS.md](HYBRID_RESULTS.md).
+It remains an unqualified research candidate, and its natural error is slightly
+worse than its own MLP despite improving on classical baselines.
 
 Read [RESULTS.md](RESULTS.md) for the final comparison, [PROTOCOL.md](PROTOCOL.md)
 for the declared experiment, and [NOTEBOOK.md](NOTEBOOK.md) for decisions and
 failure records. [DATA_AUDIT.md](DATA_AUDIT.md), [ALIGNMENT_AUDIT.md](ALIGNMENT_AUDIT.md),
 [SUPPORT_DIAGNOSTIC.md](SUPPORT_DIAGNOSTIC.md), and
 [COMPARATOR_AUDIT.md](COMPARATOR_AUDIT.md) describe the reference and timing limits.
+The [timing follow-up](TIMING_FOLLOWUP.md) documents the independently probed
+clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
@@ -161,11 +166,50 @@ methods before reading analytic references. No synthetic record is represented
 as a PTDB participant or recording.
 
 The augmented MLP improved challenge voiced success from 72.95% to 88.07% and
-fixed the original 300 Hz harmonic-balance case. It still failed the plain 300 Hz
-tone and four challenge cases. The fixed causal YIN comparator reached 99.82%
+fixed the original 300 Hz harmonic-balance case. It still failed the stationary 300 Hz
+three-harmonic case and four challenge cases. The fixed causal YIN comparator reached 99.82%
 on this synthetic challenge, while showing weaker natural-development joint
 error than the learned models. Neither result alone establishes deployment or
 clinical validity. The accepted stopping rule is **no learned promotion**.
+
+## No-fit subharmonic diagnosis and hybrid follow-up
+
+The original failures remain recorded. The bounded [diagnostic](SUBHARMONIC_SWEEP.md)
+uses frozen checkpoints, a physical frequency sweep and declared counterfactuals.
+The separately frozen [hybrid plan](HYBRID_FOLLOWUP_PLAN.md) combines each existing
+MLP voicing head with raw YIN pitch, with original primary and augmented secondary.
+It changes neither weights nor v2 features. Both variants pass the declared fresh
+synthetic, transition and reused natural-development quality components, while
+both worsen natural error relative to their own candidate MLP. The predeclared
+preference retains the original as an offline research candidate; the production
+path stays DSP. Read [HYBRID_RESULTS.md](HYBRID_RESULTS.md) for all tradeoffs and
+remaining qualification limits.
+
+These commands require the exact existing model, feature and evaluation artifacts
+from the preceding experiments. They do not run training. Freeze the complete
+plan before either new evaluation. Use fresh output folders; the recorded names
+below already exist and must not be overwritten:
+
+```sh
+.venv/bin/python -m pytest -q -p no:cacheprovider tests/test_alias_diagnostic.py tests/test_hybrid_followup.py tests/test_hybrid_natural.py
+.venv/bin/python -m phenometrix_prosody.alias_diagnostic --output runs/subharmonic-diagnostic-v1
+.venv/bin/python -m phenometrix_prosody.hybrid_followup freeze --output runs/hybrid-followup-plan-v1
+.venv/bin/python -m phenometrix_prosody.hybrid_followup synthetic --plan runs/hybrid-followup-plan-v1 --output runs/hybrid-synthetic-v1
+.venv/bin/python -m phenometrix_prosody.hybrid_natural --plan runs/hybrid-followup-plan-v1 --features runs/delayed-development-features --original-evaluation runs/delayed-development-evaluation --augmented-evaluation runs/delayed-augmented-development-evaluation --data data/ptdb-tug --output runs/hybrid-natural-v1
+.venv/bin/python -m phenometrix_prosody.audit_hybrid_synthetic --run runs/hybrid-synthetic-v1 --plan runs/hybrid-followup-plan-v1 --output runs/hybrid-synthetic-v1/independent-audit.json
+```
+
+`read_frozen_plan` verifies the 19 source bindings, checkpoint weights/manifests,
+natural-cache identities and exact synthetic definitions. Synthetic and natural
+runners freeze their respective complete input-only predictions before loading
+analytic or corpus references. The natural runner can separate these phases with
+`--phase predict` and `--phase score`; references are needed only for scoring.
+The independent synthetic audit reconstructs counts and signed delays from frozen
+predictions without rerunning inference. All fresh synthetic cases and all 16
+natural speaker/condition cells appear in the
+[public summary](../../benchmarks/voice-prosody/hybrid-summary.json). Reused natural
+development is exploratory; the sealed test remains closed. Neither raw voicing
+probability nor passing synthetic cases establish calibrated correctness.
 
 ## Export and browser engineering checks
 

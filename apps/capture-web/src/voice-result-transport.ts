@@ -1,3 +1,4 @@
+import { type VoiceRenderLeaseFailure, type VoiceRenderLeaseIssuer } from "./voice-render-freshness.js";
 import { VOICE_MAXIMUM_RESULT_AGE_MS, VOICE_MAXIMUM_RESULT_BATCHES, VOICE_MAXIMUM_RESULT_RECORDS,
   VOICE_WORKER_MESSAGE_VERSION, type VoiceWorkerRequest, type VoiceWorkerResponse } from "./voice-worker-protocol.js";
 
@@ -8,11 +9,13 @@ export class VoiceResultBatchReceiver {
   private epoch: number | null = null;
   private rejectedSegment: string | null = null;
 
-  constructor(private readonly acknowledge: (request: VoiceWorkerRequest) => void) {}
+  constructor(private readonly acknowledge: (request: VoiceWorkerRequest) => void,
+    private readonly freshness: { policy: "unqualified-legacy-fixture" } |
+      { policy: "required-render-lease-v1"; issuer: VoiceRenderLeaseIssuer; mainTimeOriginMs: number }) {}
 
   receive(message: VoiceWorkerResponse, currentEpoch: number, arrivalMs: number, currentClockMappingId?: number): {
     messages: VoiceWorkerResponse[];
-    discardedFrames: Array<Extract<VoiceWorkerResponse, { type: "signal-frame" }> & { discardReason: "result-age-exceeded" | "prior-result-loss" | "retired-clock-mapping" }>;
+    discardedFrames: Array<Extract<VoiceWorkerResponse, { type: "signal-frame" }> & { discardReason: "result-age-exceeded" | "prior-result-loss" | VoiceRenderLeaseFailure }>;
   } {
     if (this.epoch !== currentEpoch) { this.epoch = currentEpoch; this.rejectedSegment = null; }
     const empty = { messages: [] as VoiceWorkerResponse[], discardedFrames: [] as ReturnType<VoiceResultBatchReceiver["receive"]>["discardedFrames"] };
@@ -27,7 +30,12 @@ export class VoiceResultBatchReceiver {
       this.pending.set(message.batchId, message);
       return empty;
     }
-    if (message.type !== "result-batch-complete") return { ...empty, messages: [message] };
+    if (message.type !== "result-batch-complete") {
+      if (message.type === "signal-frame" && this.freshness.policy === "required-render-lease-v1") {
+        throw new Error("unbatched-voice-result-frame");
+      }
+      return { ...empty, messages: [message] };
+    }
     if (message.batchId <= this.lastCompletedBatchId) return empty;
     const batch = this.pending.get(message.batchId);
     if (!batch || batch.captureEpoch !== message.captureEpoch || batch.clockMappingId !== message.clockMappingId) throw new Error("unmatched-voice-result-completion");
@@ -45,17 +53,23 @@ export class VoiceResultBatchReceiver {
         const elapsed = arrivalMs - record.timing.sampleAvailabilityMs;
         const valid = record.timing.status === "valid" && Number.isFinite(elapsed) && elapsed >= 0 &&
           arrivalMs >= record.timing.workerReadyAtMs;
+        const renderFreshness = this.freshness.policy === "required-render-lease-v1"
+          ? this.freshness.issuer.certify(record.renderLease, arrivalMs, { captureEpoch: currentEpoch,
+            clockMappingId: currentClockMappingId ?? batch.clockMappingId, mainTimeOriginMs: this.freshness.mainTimeOriginMs })
+          : { status: "unqualified" as const, reason: "legacy-fixture-policy" as const };
         const frame = { ...record, processingLatencyMs: valid ? record.processingLatencyMs : null,
-          timing: { ...record.timing, mainResultArrivalMs: arrivalMs,
+          timing: { ...record.timing, renderFreshness, mainResultArrivalMs: arrivalMs,
             status: valid ? "valid" as const : "unavailable" as const,
             ...(valid ? {} : { unavailableReason: "inconsistent-clock-mapping" as const }),
             sampleAvailabilityToMainResultMs: valid ? elapsed : null,
             rawSampleAvailabilityToMainResultMs: elapsed } };
-        const stale = valid && elapsed > VOICE_MAXIMUM_RESULT_AGE_MS;
-        if (stale || this.rejectedSegment === record.frame.trackSegmentId) {
+        const withholdingReason = renderFreshness.status === "withheld" ? renderFreshness.reason : undefined;
+        const stale = withholdingReason === "expired-lease" ||
+          (this.freshness.policy === "unqualified-legacy-fixture" && valid && elapsed > VOICE_MAXIMUM_RESULT_AGE_MS);
+        if (withholdingReason || stale || this.rejectedSegment === record.frame.trackSegmentId) {
           this.rejectedSegment = record.frame.trackSegmentId;
           staleFrameCount += Number(stale);
-          empty.discardedFrames.push({ ...frame, discardReason: stale ? "result-age-exceeded" : "prior-result-loss" });
+          empty.discardedFrames.push({ ...frame, discardReason: withholdingReason ?? (stale ? "result-age-exceeded" : "prior-result-loss") });
         } else {
           this.rejectedSegment = null;
           empty.messages.push(frame);

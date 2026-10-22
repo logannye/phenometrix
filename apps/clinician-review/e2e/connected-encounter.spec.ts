@@ -23,7 +23,11 @@ async function advance(page: Page, durationMs: number) {
     // rather than predicting exactly when asynchronous renewal will be scheduled.
     await expect.poll(() => page.evaluate(() => window.syntheticConnectedHost.transportState()), { timeout: 5000 })
       .toEqual({ requests: 0, probes: 0, authorization: 0 });
-    expect(await page.evaluate(() => window.syntheticConnectedHost.stats.statuses), `Capture stopped at simulated ${elapsedMs}ms`).not.toContain("stopped");
+    const state = await page.evaluate(() => window.syntheticConnectedHost.stats);
+    expect(state.statuses, `Capture stopped at simulated ${elapsedMs}ms: ${JSON.stringify({
+      events: state.events, recentCalibrations: state.recentCalibrations, recentClockProbes: state.recentClockProbes,
+      recentClockFailures: state.recentClockFailures, clockProbeCyclesFailed: state.clockProbeCyclesFailed
+    })}`).not.toContain("stopped");
   }
 }
 
@@ -34,6 +38,10 @@ test("synthetic normal encounter reaches the real chart across rotations, camera
   page.on("response", response => { if (response.status() >= 400) browserErrors.push(`${response.status()} ${response.url()}`); });
   // Concurrent developer edits must not let Vite HMR reload the synthetic encounter.
   await page.routeWebSocket(/.*/, socket => socket.close());
+  await page.exposeBinding("synchronizeSyntheticServiceClock", (_source, nowMs: number) => {
+    if (!Number.isSafeInteger(nowMs)) throw new Error("Invalid synthetic clock coordinate.");
+    fixture.setNow(nowMs);
+  });
   await page.clock.install({ time: startedAtMs - 1000 });
   await page.goto("/");
   await page.clock.pauseAt(startedAtMs);

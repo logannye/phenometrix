@@ -37,7 +37,7 @@ describe("startVoiceCapturePipeline", () => {
         const event = new Event("message") as MessageEvent;
         Object.defineProperty(event, "data", {
           value: {
-            schemaVersion: "phenometric.voice-worker-message.v2",
+            schemaVersion: "phenometric.voice-worker-message.v3",
             type: "disposed",
             captureEpoch: message.captureEpoch,
             diagnostics: {
@@ -206,7 +206,7 @@ describe("startVoiceCapturePipeline", () => {
       captureSettings: {} as never, captureEpoch: 9, taskContext: "quiet-calibration",
       workletUrl: "/voice-capture-worklet.js", callbacks: callbacks()
     });
-    expect(worker.sent[0]).toMatchObject({ type: "initialize", audioContextSampleRateHz: 48_000,
+    expect(worker.sent[0]).toMatchObject({ type: "initialize", freshnessPolicy: "required-render-lease-v1", audioContextSampleRateHz: 48_000,
       clockMapping: { id: 0, mainTimeOriginMs: 100_000, mainPerformanceMs: 1_000, audioContextTimeSeconds: 5 } });
     context.state = "suspended";
     context.dispatchEvent(new Event("statechange"));

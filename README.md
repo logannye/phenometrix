@@ -16,13 +16,22 @@ AudioWorklet-to-worker PCM transport and worker-to-main result transport. Gaps,
 resets, and stale work start a new analysis segment. The default acoustic
 estimator remains the versioned DSP baseline.
 
-A locally paced 30-minute Chrome replay accepted 179,958 frames. Complete
-processed-block service time was 4.3 ms at p99 and 8.3 ms maximum, with no
-20 ms block-cadence misses and explicit recovery from an injected stall.
-Mapped audio-to-main arrival medians rose from about 39 to 82 ms across the run;
-clock mapping versus upstream scheduling remains unresolved. These results
-establish bounded software transport, not physical microphone latency. See the
-[streaming report](research/voice-prosody/STREAMING_RESULTS.md).
+Freshness now uses a short-lived lease issued and verified on the same main
+clock. The worklet snapshots it before a PCM block's first rendered sample;
+missing or expired evidence withholds output. Every delivered frame must have a
+recorded software render-age bound of at most 100 ms. Timestamp precision and
+physical microphone latency remain unknown. Fixed audio-clock projections stay
+visible as diagnostics and no longer authorize freshness.
+
+The earlier 30-minute replay's mapped arrival rise from about 39 to 82 ms is
+preserved in the [original streaming report](research/voice-prosody/STREAMING_RESULTS.md).
+An independently probed ten-minute follow-up did not reproduce that rise, so its
+physical cause remains unresolved. The [timing follow-up](research/voice-prosody/TIMING_FOLLOWUP.md)
+records the diagnosis, same-clock contract, and sustained confirmation. The new
+30-minute replay delivered **179,927 certified frames** with a maximum recorded
+age bound of **53.8 ms**, complete-block p99 **4.3 ms**, maximum **8.7 ms**, and
+recovery from both worker and main-thread stalls. All **271,713 raw records**
+passed independent reconstruction.
 
 The accompanying [research report](research/voice-prosody/RESULTS.md) evaluates
 compact trained pitch/voicing selectors against PTDB-TUG laryngograph-derived
@@ -37,6 +46,8 @@ Apple M4 Max with 128 GiB unified memory; neural fitting used PyTorch MPS.
 | Trained GRU, 20 ms delay | 7.95% | 76.38% |
 | Trained framewise MLP, 20 ms delay | 8.63% | 75.41% |
 | MLP with fixed synthetic augmentation, 20 ms delay | 8.26% | 77.03% |
+| Original MLP voicing + YIN pitch, 20 ms delay | 8.92% | 74.19% |
+| Augmented MLP voicing + YIN pitch, 20 ms delay | 8.81% | 74.68% |
 | Pretrained centered CREPE comparator, 32 ms future support | 9.56% | 66.81% |
 
 These are equal-speaker/equal-condition averages over **four development
@@ -47,19 +58,33 @@ values appear in the report. The fixed 20 ms support delay is distinct from
 processing latency and accounts for part of the improvement over the original
 zero-lookahead evaluation.
 
-**No learned estimator qualified for production.** The GRU failed its required
-one-percentage-point advantage over the original MLP. Both original models
-failed a steady 300 Hz fixture despite having suitable candidates. Augmentation
-improved a separately frozen 32-case synthetic challenge from 72.95% to 88.07%
-voiced success, but missed the 90% aggregate and 80% per-case gates and retained
-the steady-300-Hz failure. Fixed YIN achieved 99.82% on that challenge, while its
-natural-speech development error was higher than DSP. This evidence does not
-justify silently switching either estimator into the product.
+**Production still uses DSP.** The original GRU and MLP selectors failed a
+steady 300 Hz harmonic fixture despite having suitable candidates. The
+[follow-up investigation](research/voice-prosody/ALIAS_DIAGNOSIS.md) found
+period-multiple candidates, near-duplicate slots, and strong sensitivity to
+candidate ordering in the learned selection. The original frozen augmentation experiment remains a no-go.
+
+A separately declared, **no-fit hybrid** uses the frozen MLP for voicing and
+fixed YIN for pitch. It repaired all 151 scored frames of the 300 Hz fixture and
+passed the declared natural-development, transition, and fresh synthetic quality
+components. On the fresh 32-case challenge, the primary hybrid reached **99.51%**
+mean voiced success, **93.84%** in its worst voiced case, and zero false positives
+across 844 scored noise frames. Natural-development joint error was **8.92%**,
+better than DSP's 10.61%, but slightly worse than the same MLP's 8.63%.
+The augmented hybrid reached 8.81%; the frozen rule retains the original hybrid
+when both pass. These are research results, with weak transformed-speech strata
+still visible. [HYBRID_RESULTS.md](research/voice-prosody/HYBRID_RESULTS.md) records
+the tradeoffs, gates, and independent reconstruction of all case counts.
+
+The hybrid has no qualified browser runtime, calibrated correctness probability,
+or independent natural-speech holdout result. It has not been promoted to the
+product.
 
 Trained exports and an explicitly unqualified ONNX browser research path support
 reproduction. Raw voicing probabilities and candidate scores are **not calibrated
 probabilities of a correct F0 measurement**. Calibration, multi-seed confirmation,
-and sealed-test evaluation stopped at the failed acceptance gate. Sealed-test
+and sealed-test evaluation remain unperformed. The successful hybrid follow-up
+does not retroactively pass the original failed-model gates. Sealed-test
 acoustic data remain untouched. Research scripts, public aggregate evidence,
 failed decisions, and reproduction commands are in
 [research/voice-prosody](research/voice-prosody/README.md). Raw audio, feature
@@ -166,11 +191,16 @@ disconnected from capture. The [research README](research/voice-prosody/README.m
 separates synthetic smoke, public-corpus experiments, and actual-browser replay.
 Browser fixtures and synthetic replay do not establish real-microphone accuracy.
 
-The [local validation record](benchmarks/voice-prosody/local-validation.json)
-binds source hashes to 707 unit tests, 18 product browser tests, 77 research Python
-tests, four isolated sidecar tests, six PostgreSQL integration tests, and the
-focused research browser checks. Both release builds exclude local research
-assets and preserve all ten normal public assets byte for byte.
+The [follow-up validation record](benchmarks/voice-prosody/followup-local-validation.json)
+binds the changed sources to **726 unit tests**, **114 research Python tests**,
+**18 product browser checks** and **five research browser checks**, plus TypeScript,
+structure and release builds. A test-only virtual-clock race in the connected
+encounter fixture was diagnosed and repaired; production UTC checks were unchanged.
+Both capture release builds exclude local research assets and preserve all ten
+normal public assets byte for byte. The
+[earlier validation record](benchmarks/voice-prosody/local-validation.json)
+retains historical sidecar and PostgreSQL evidence; those unchanged subsystems
+were not rerun for this follow-up.
 
 ## Repository map
 

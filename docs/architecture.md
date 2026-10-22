@@ -47,7 +47,7 @@ external integration work.
 ## Media and measurement boundary
 
 The audio worklet transfers nominal 20 ms PCM blocks through a four-credit
-buffer pool to a worker with a two-second ring. Matched worker/worklet v2
+buffer pool to a worker with a two-second ring. Matched worker-v3/worklet-v2
 messages carry exact support endpoints, capture epoch, clock-mapping identity,
 and drop counters; compact acoustic frames remain v1 and DSP remains 1.1.
 Face inference uses MediaPipe inside a worker. Native bitmaps, landmarks,
@@ -55,28 +55,39 @@ transformation matrices, and raw PCM do not enter durable observations.
 Blendshapes are disabled. Only compact signal/geometry and quality primitives
 reach the deterministic extractor.
 
-Voice timing explicitly maps AudioContext and worker clocks to the main
-performance-clock coordinate. Legacy window-start times remain unchanged;
-additional timing records declare support end, required samples, service time,
-and result arrival. Unknown clock accuracy and inconsistent durations remain
-unavailable. These local mappings are separate from authenticated UTC clock
-qualification below. Acquisition metadata and rendered PCM rate are distinct.
+Voice timing v2 preserves the fixed AudioContext-to-main projection as an
+unqualified diagnostic and converts worker performance timestamps using both
+realms' time origins. Legacy window-start times remain unchanged; additional
+records declare support end, required samples, service time, and result arrival.
+Unknown accuracy and inconsistent or negative durations remain explicit. These
+local coordinates are separate from authenticated UTC clock qualification below.
+Acquisition metadata and rendered PCM rate are distinct.
 
-Voice transport drops new blocks when credits are exhausted and provisionally
-drops blocks more than 100 ms old at worker admission under a consistent audio
-clock mapping. Missing input and dropped samples remain gaps. Discontinuities
-reset all feature history and start new segments. Stop waits briefly for a final
-worklet loss snapshot and worker acknowledgement; timeout is explicit, and the
-snapshot retains outstanding credits and terminal partial-sample loss. The
-worker-to-main path separately admits at most four acknowledged result batches,
-with bounded frame/diagnostic data and a timing-completion envelope. Result
-backpressure drops input and resets history; the host acknowledges before
-callbacks, counts stale-result discards, and requires a fresh segment after
-loss. Its 100 ms support-end age check applies only to consistent mapped clocks
-at receipt. Unknown timing, hardware delay, downstream application storage,
-and total browser heap remain distinct limitations. See the
-[voice foundation](voice-foundation.md) for exact timing, reset, and teardown
-semantics.
+Production and browser research replay require a render-freshness lease. Main
+issues it for 100 ms, and the worklet snapshots it before the first sample of a
+PCM block; renewal never refreshes earlier partial support. Worker admission
+checks lease identity and expiry, and the host verifies the exact issued lease
+in its original clock before delivery. The resulting upper bound is main receipt
+minus main issue time for the last required rendered input. It does not qualify
+physical microphone time, timestamp precision, earlier window samples, or later
+application/display delay. Fixed audio projections no longer authorize age.
+The main issuer targets 25 ms renewal, permits only one outstanding control
+request, and keeps at most eight issued identities. Timeout cannot create credit.
+
+Voice transport drops new blocks when PCM credits are exhausted. Missing input,
+missing/expired leases, and dropped samples remain explicit gaps. Discontinuities
+reset all feature history and start new segments. Stop waits at most 500 ms for
+a final worklet loss snapshot and worker acknowledgement; timeout is explicit,
+and the snapshot retains outstanding credits and terminal partial-sample loss.
+Worker-to-main transport separately admits at most four acknowledged result
+batches, with bounded frame/diagnostic data and a timing-completion envelope.
+Result backpressure drops input and resets history. The host decides freshness
+and returns credit before callbacks, counts expired/withheld results, and requires
+a fresh segment after loss. All terminal paths remain independent of result
+credit. Downstream application storage and total browser heap are outside these
+queue bounds. See [voice foundation](voice-foundation.md) for exact timing,
+lease, reset, and teardown semantics, and
+[the timing follow-up](../research/voice-prosody/TIMING_FOLLOWUP.md) for evidence.
 
 The generic ambient registry contains 7 voice and 20 facial metrics. Extractors
 screen qualified voice segments and facial bins, returning measured or withheld
@@ -231,13 +242,17 @@ The optional WavLM service is disconnected and disabled by default.
 Static asset checks establish delivery self-consistency. A trusted manifest and
 binding checked bytes to executed assets still require deployment integrity work.
 A short actual-browser synthetic voice replay has functional evidence for
-sample support, bounded PCM and result credits, worker/main overload drops,
-segment recovery, terminal accounting, and a known periodic tone. It does not establish sustained timing,
-hardware-input delay, total pipeline memory bounds, or natural-speech accuracy.
+sample support, bounded PCM/result/lease credits, worker/main overload drops,
+software freshness certificates, segment recovery, terminal accounting, and a
+known periodic tone. The historical 30-minute run used the prior fixed-clock
+gate; its timing findings and the new lease confirmation are reported separately.
+Neither establishes hardware-input delay, total browser heap bounds, or
+natural-speech accuracy.
 Real-device timing, host-track identity, broader browser lifecycle behavior,
 platform quality, and measurement repeatability still require acceptance and
 validation. The voice foundation records the evidence identity and prepared
-30-minute soak command; it makes no completed sustained-run claim.
+30-minute lease-confirmation command; completion and limits belong to the
+versioned timing report.
 
 No analytical or clinical validation, clinically meaningful change threshold,
 scale equivalence, dose recommendation, emergency screening, or automated

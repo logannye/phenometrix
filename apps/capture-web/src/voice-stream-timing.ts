@@ -1,5 +1,6 @@
+import type { VoiceRenderFreshnessResult, VoiceRenderFreshnessPolicy, VoiceRenderLeaseFailure } from "./voice-render-freshness.js";
 /** Clock coordinates used by the transport; no hardware-input latency is implied. */
-export const VOICE_TIMING_CONTRACT_VERSION = "phenometric.voice-stream-timing.v1" as const;
+export const VOICE_TIMING_CONTRACT_VERSION = "phenometric.voice-stream-timing.v2" as const;
 
 export interface VoiceClockMapping {
   id: number;
@@ -14,6 +15,9 @@ export interface VoiceClockMapping {
 export interface VoiceFrameTiming {
   schemaVersion: typeof VOICE_TIMING_CONTRACT_VERSION;
   clockMappingId: number;
+  /** Fixed unit-rate projection retained only as an unqualified clock diagnostic. */
+  projectionSemantics?: "unqualified-fixed-audio-clock-projection";
+  renderFreshness?: VoiceRenderFreshnessResult | { status: "unqualified"; reason: "legacy-fixture-policy" };
   coordinate: "main-performance-ms";
   status: "valid" | "unavailable";
   unavailableReason?: "inconsistent-clock-mapping";
@@ -51,8 +55,10 @@ export interface VoiceBlockTiming {
   supportStartSample: number;
   supportEndSampleExclusive: number;
   analyzedFrameCount: number;
-  disposition: "processed" | "stale-dropped";
-  reason?: "audio-timeline-age-exceeded";
+  disposition: "processed" | "stale-dropped" | "freshness-withheld";
+  freshnessPolicy?: VoiceRenderFreshnessPolicy;
+  leaseId?: number;
+  reason?: "audio-timeline-age-exceeded" | VoiceRenderLeaseFailure;
   workerReceivedAtMs: number;
   workerCompletedAtMs: number;
   workerServiceMs: number;

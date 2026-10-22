@@ -4,6 +4,11 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
     this.dataPort = null;
     this.disposed = false;
     this.finalDiagnostics = null;
+    this.activeRenderLease = null;
+    this.blockRenderLease = null;
+    this.lastRenderLeaseId = 0;
+    this.pendingClockProbe = null;
+    this.lastClockProbeId = 0;
     this.captureEpoch = 0;
     this.clockMappingId = 0;
     this.sequence = 0;
@@ -41,7 +46,28 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
           }
         };
         this.dataPort.start();
+      } else if (message?.type === "render-freshness-lease") {
+        const lease = message.lease;
+        const valid = lease?.schemaVersion === "phenometric.voice-render-freshness.v1" &&
+          Number.isSafeInteger(lease.leaseId) && lease.leaseId > this.lastRenderLeaseId &&
+          Number.isFinite(lease.mainTimeOriginMs) && Number.isFinite(lease.issuedAtMainMs) && lease.issuedAtMainMs >= 0 &&
+          lease.expiresAtMainMs === lease.issuedAtMainMs + 100;
+        const accepted = valid && lease.captureEpoch === this.captureEpoch && lease.clockMappingId === this.clockMappingId;
+        if (valid) this.lastRenderLeaseId = lease.leaseId;
+        if (accepted) this.activeRenderLease = { ...lease };
+        if (lease && Number.isSafeInteger(lease.leaseId)) this.port.postMessage({
+          schemaVersion: "phenometric.voice-render-freshness.v1", type: "render-freshness-lease-ack",
+          leaseId: lease.leaseId, captureEpoch: lease.captureEpoch, clockMappingId: lease.clockMappingId,
+          disposition: accepted ? "accepted" : "retired" });
+      } else if (message?.schemaVersion === "phenometric.voice-clock-probe.v1" && message.type === "clock-probe") {
+        if (!this.pendingClockProbe && Number.isSafeInteger(message.probeId) && message.probeId > this.lastClockProbeId &&
+            message.captureEpoch === this.captureEpoch && message.clockMappingId === this.clockMappingId) {
+          this.pendingClockProbe = message;
+          this.lastClockProbeId = message.probeId;
+        }
       } else if (message?.type === "capture-epoch") {
+        this.activeRenderLease = null; this.blockRenderLease = null;
+        this.pendingClockProbe = null;
         this.pending.fill(0);
         this.captureEpoch = message.captureEpoch;
         this.clockMappingId = message.clockMappingId;
@@ -54,11 +80,15 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
         // Outstanding credits survive epoch changes. Late returns cannot create
         // additional buffers or cause an old block to be read in the new epoch.
       } else if (message?.type === "clock-mapping") {
+        this.activeRenderLease = null; this.blockRenderLease = null;
+        this.pendingClockProbe = null;
         this.clockMappingId = message.clockMappingId;
         this.droppedSampleCount += this.pendingLength;
         this.pending.fill(0);
         this.pendingLength = 0;
       } else if (message?.type === "dispose") {
+        this.activeRenderLease = null; this.blockRenderLease = null;
+        this.pendingClockProbe = null;
         this.droppedSampleCount += this.pendingLength;
         this.finalDiagnostics = {
           schemaVersion: "phenometric.voice-worklet-message.v2", type: "transport-diagnostics",
@@ -101,6 +131,7 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
         type: "pcm-block",
         captureEpoch: this.captureEpoch,
         clockMappingId: this.clockMappingId,
+        renderLease: this.blockRenderLease,
         sequence: this.sequence,
         absoluteSampleIndex: this.pendingStartSampleIndex,
         acquisitionAudioTimeSeconds: currentTime,
@@ -121,6 +152,13 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
 
   process(inputs, outputs) {
     if (this.disposed) return false;
+    if (this.pendingClockProbe) {
+      const probe = this.pendingClockProbe;
+      this.pendingClockProbe = null;
+      this.port.postMessage({ schemaVersion: "phenometric.voice-clock-probe.v1", type: "clock-probe-result",
+        probeId: probe.probeId, captureEpoch: probe.captureEpoch, clockMappingId: probe.clockMappingId,
+        renderStartFrame: currentFrame, sampleRateHz: sampleRate });
+    }
     const channel = inputs[0]?.[0];
     const quantumLength = outputs?.[0]?.[0]?.length ?? channel?.length ?? this.lastQuantumLength;
     this.lastQuantumLength = quantumLength;
@@ -148,7 +186,10 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
     this.expectedAudioFrame = currentFrame + channel.length;
     let sourceIndex = 0;
     while (sourceIndex < channel.length) {
-      if (this.pendingLength === 0) this.pendingStartSampleIndex = this.absoluteSampleIndex;
+      if (this.pendingLength === 0) {
+        this.pendingStartSampleIndex = this.absoluteSampleIndex;
+        this.blockRenderLease = this.activeRenderLease;
+      }
       const count = Math.min(channel.length - sourceIndex, this.blockSamples - this.pendingLength);
       this.pending.set(channel.subarray(sourceIndex, sourceIndex + count), this.pendingLength);
       this.pendingLength += count;

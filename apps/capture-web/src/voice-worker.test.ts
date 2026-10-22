@@ -1,3 +1,4 @@
+import { VOICE_RENDER_FRESHNESS_VERSION, type VoiceRenderLease, type VoiceRenderFreshnessPolicy } from "./voice-render-freshness.js";
 import { CausalVoiceReplay } from "./voice-replay.js";
 import type { VoicePitchFeatureHistoryV1 } from "./voice-pitch-features.js";
 import type { VoicePitchFeaturesV2 } from "./voice-pitch-features-v2.js";
@@ -8,7 +9,8 @@ import { requestedAudioCaptureSettings, VOICE_WORKER_MESSAGE_VERSION, VOICE_WORK
   type VoiceWorkerRequest, type VoiceWorkerResponse, type VoiceWorkletPcmBlock } from "./voice-worker-protocol.js";
 import type { VoiceClockMapping } from "./voice-stream-timing.js";
 
-async function fixture(initiallySuspended = false, autoAcknowledge = true, hook?: VoiceResearchHook) {
+async function fixture(initiallySuspended = false, autoAcknowledge = true, hook?: VoiceResearchHook,
+  freshnessPolicy: VoiceRenderFreshnessPolicy = "unqualified-legacy-fixture") {
   const responses: VoiceWorkerResponse[] = [];
   const wireResponses: VoiceWorkerResponse[] = [];
   const recycled: { transportId: number; buffer: ArrayBuffer }[] = [];
@@ -34,7 +36,7 @@ async function fixture(initiallySuspended = false, autoAcknowledge = true, hook?
   const mapping: VoiceClockMapping = { id: 0, mainTimeOriginMs: 100_000, mainPerformanceMs: 7_000,
     audioContextTimeSeconds: 5, anchorReadUncertaintyMs: 0.1, audioClockUncertaintyMs: null };
   const send = (message: VoiceWorkerRequest) => request({ data: message });
-  send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", captureEpoch: 1,
+  send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", freshnessPolicy, captureEpoch: 1,
     port, clockMapping: initiallySuspended ? null : mapping, audioContextSampleRateHz: 48_000, taskContext: "ambient-speech-turn",
     noiseFloorRms: 0.001, captureSettings: requestedAudioCaptureSettings(48_000, 1,
       { echoCancellation: false, noiseSuppression: false, autoGainControl: false }) });
@@ -58,6 +60,60 @@ async function fixture(initiallySuspended = false, autoAcknowledge = true, hook?
 
 describe("actual DSP worker with simulated transport queues", () => {
   afterEach(() => { vi.unstubAllGlobals(); vi.resetModules(); });
+
+  const renderLease = (issuedAtMainMs = 7000, overrides: Partial<VoiceRenderLease> = {}): VoiceRenderLease => ({
+    schemaVersion: VOICE_RENDER_FRESHNESS_VERSION, leaseId: 1, captureEpoch: 1, clockMappingId: 0,
+    mainTimeOriginMs: 100000, issuedAtMainMs, expiresAtMainMs: issuedAtMainMs + 100, ...overrides });
+
+  it("withholds missing leases, expires cross-origin queued PCM, and recovers without analyzing the stale backlog", async () => {
+    const f = await fixture(false, true, undefined, "required-render-lease-v1");
+    f.block();
+    expect(f.frames()).toHaveLength(0);
+    f.block({ sequence: 2, absoluteSampleIndex: 1920, endAudioFrameExclusive: 243840, renderLease: renderLease(7040) });
+    expect(f.frames()).toHaveLength(1);
+    const first = f.frames()[0];
+    const old = { ...f.block({ captureEpoch: 0 }), captureEpoch: 1, sequence: 3,
+      absoluteSampleIndex: 3840, endAudioFrameExclusive: 245760, renderLease: renderLease(7080) };
+    f.setNow(400); // Worker origin107000 +400 -> main7400, not local400 or audio120.
+    f.rawPcm({ data: old });
+    expect(f.frames()).toHaveLength(1);
+    expect(f.responses.at(-1)).toMatchObject({ type: "block-timing", timing: {
+      disposition: "freshness-withheld", reason: "expired-lease", analyzedFrameCount: 0 } });
+    f.block({ sequence: 11, absoluteSampleIndex: 18240, endAudioFrameExclusive: 260160, renderLease: renderLease(7400) });
+    expect(f.frames()).toHaveLength(2);
+    expect(f.frames()[1].frame).toMatchObject({ absoluteSampleIndex: 18240, spectralFlux: 0 });
+    expect(f.frames()[1].frame.trackSegmentId).not.toBe(first.frame.trackSegmentId);
+    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "dispose", captureEpoch: 1 });
+    expect(f.responses.at(-1)).toMatchObject({ diagnostics: { freshnessWithheldBlockCount: 2,
+      freshnessWithheldSampleCount: 3840, freshnessWithheldReasons: { "missing-lease": 1, "expired-lease": 1 } } });
+  });
+
+  it("does not gate fresh input on positive drift or negative fixed audio projections", async () => {
+    const f = await fixture(false, true, undefined, "required-render-lease-v1");
+    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "clock-mapping", captureEpoch: 1,
+      clockMapping: { ...f.mapping, mainPerformanceMs: 0 } });
+    f.block({ renderLease: renderLease() });
+    expect(f.frames()).toHaveLength(1);
+    expect(f.frames()[0].timing.rawBlockEndToWorkerReceiptMs).toBeGreaterThan(7000);
+    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "clock-mapping", captureEpoch: 1,
+      clockMapping: { ...f.mapping, id: 1, mainPerformanceMs: 9000 } });
+    f.block({ sequence: 2, absoluteSampleIndex: 1920, endAudioFrameExclusive: 243840, clockMappingId: 1,
+      renderLease: renderLease(7040, { leaseId: 2, clockMappingId: 1 }) });
+    expect(f.frames()).toHaveLength(2);
+    expect(f.frames()[1].timing).toMatchObject({ status: "unavailable", projectionSemantics: "unqualified-fixed-audio-clock-projection" });
+    expect(f.frames()[1].timing.rawSampleAvailabilityToWorkerReadyMs).toBeLessThan(0);
+  });
+
+  it("lease renewal preserves the contiguous DSP sample grid and segment", async () => {
+    const f = await fixture(false, true, undefined, "required-render-lease-v1");
+    const pcm = Float32Array.from({ length: 960 }, (_, i) => .05 * Math.sin(i * 2 * Math.PI * 150 / 48000));
+    for (let i = 0; i < 4; i += 1) f.block({ sequence: i + 1, absoluteSampleIndex: i * 960,
+      endAudioFrameExclusive: 240000 + (i + 1) * 960, buffer: pcm.slice().buffer,
+      renderLease: renderLease(7000 + i * 20, { leaseId: i + 1 }) });
+    expect(f.frames().map(frame => frame.frame.tMs)).toEqual([0, 10, 20, 30, 40]);
+    expect(new Set(f.frames().map(frame => frame.frame.trackSegmentId)).size).toBe(1);
+    expect(f.frames().map(frame => frame.renderLease!.leaseId)).toEqual([2, 3, 3, 4, 4]);
+  });
 
   it("uses an atomic reference at startup and the first PCM block of a renewed epoch", async () => {
     const f = await fixture();
@@ -250,7 +306,7 @@ describe("actual DSP worker with simulated transport queues", () => {
     const nextRecycled: unknown[] = [];
     const nextPort = { addEventListener: (_type: string, listener: typeof nextPcm) => { nextPcm = listener; },
       start() {}, close() {}, postMessage: (value: unknown) => nextRecycled.push(value) } as unknown as MessagePort;
-    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", captureEpoch: 1,
+    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", freshnessPolicy: "unqualified-legacy-fixture", captureEpoch: 1,
       port: nextPort, clockMapping: f.mapping, audioContextSampleRateHz: 48_000,
       taskContext: "ambient-speech-turn", captureSettings: requestedAudioCaptureSettings(48_000, 1,
         { echoCancellation: false, noiseSuppression: false, autoGainControl: false }) });

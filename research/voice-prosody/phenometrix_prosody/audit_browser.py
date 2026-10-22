@@ -41,6 +41,9 @@ def audit(run: Path) -> dict:
     five_minute_blocks = defaultdict(list)
     first_support = None
     maximum_pitch_error = 0.
+    freshness_failures = Counter()
+    host_discard_reasons = Counter()
+    freshness_values = []
     with raw_path.open() as stream:
         for batch_index, line in enumerate(stream, 1):
             batch = json.loads(line)
@@ -56,8 +59,14 @@ def audit(run: Path) -> dict:
                     if not math.isfinite(service) or service < 0:
                         raise ValueError('Invalid complete-block service time')
                     samples['completeBlockServiceMs'].append(service)
-                    field = ('staleBlockServiceMs' if value['disposition'] == 'stale-dropped'
-                             else 'completeProcessedBlockServiceMs')
+                    dispositions = {'stale-dropped': 'staleBlockServiceMs',
+                                    'processed': 'completeProcessedBlockServiceMs',
+                                    'freshness-withheld': 'freshnessWithheldBlockServiceMs'}
+                    if value['disposition'] not in dispositions:
+                        raise ValueError('Unknown block disposition')
+                    field = dispositions[value['disposition']]
+                    if value['disposition'] == 'freshness-withheld':
+                        counts['freshnessWithheldBlockCount'] += 1
                     samples[field].append(service)
                     frame_counts[f"{value['disposition']}:{value['analyzedFrameCount']}"] += 1
                     first_support = value['supportStartSample'] if first_support is None else first_support
@@ -65,13 +74,45 @@ def audit(run: Path) -> dict:
                     five_minute_blocks[window].append(service)
                     counts['completeBlockDeadlineMisses'] += int(service > 20)
                     counts['completeBlockServiceBudgetExceedances'] += int(field == 'completeProcessedBlockServiceMs' and service > 10)
+                elif row['kind'] == 'clock-probe':
+                    if value['schemaVersion'] != 'phenometric.voice-clock-observation.v1' or value['audioClockUncertaintyMs'] is not None:
+                        raise ValueError('Invalid clock probe contract')
+                    counts['clockProbeCount'] += 1
+                    counts['clockProbeObservedCount'] += int(value['renderObservation']['status'] == 'observed')
                 elif row['kind'] == 'frame':
                     if value.get('deliveryDisposition') == 'discarded':
+                        host_discard_reasons[value['discardReason']] += 1
+                        freshness = value.get('timing', {}).get('renderFreshness', {})
+                        if freshness.get('status') == 'withheld':
+                            freshness_failures[freshness['reason']] += 1
                         counts['discardedResultFrameCount'] += 1
-                        counts['staleResultFrameCount'] += int(value['discardReason'] == 'result-age-exceeded')
+                        counts['staleResultFrameCount'] += int(value['discardReason'] in ('result-age-exceeded','expired-lease'))
                         continue
                     counts['frameCount'] += 1
                     timing = value['timing']
+                    freshness = timing.get('renderFreshness')
+                    if 'certifiedFrameCount' in result['summary']:
+                        if not freshness or freshness.get('status') != 'certified':
+                            raise ValueError('Required freshness evidence missing on delivered frame')
+                    if freshness and freshness.get('status') == 'certified':
+                        lease = value.get('renderLease')
+                        if not lease or lease['leaseId'] != freshness['leaseId'] or lease['issuedAtMainMs'] != freshness['issuedAtMainMs']:
+                            raise ValueError('Freshness certificate differs from original block lease')
+                        elapsed = timing['mainResultArrivalMs'] - lease['issuedAtMainMs']
+                        if (lease.get('schemaVersion') != 'phenometric.voice-render-freshness.v1'
+                                or freshness.get('schemaVersion') != 'phenometric.voice-render-freshness.v1'
+                                or lease['captureEpoch'] != value['captureEpoch']
+                                or lease['clockMappingId'] != timing['clockMappingId']
+                                or lease['expiresAtMainMs'] != lease['issuedAtMainMs'] + 100
+                                or freshness['resultReceivedAtMainMs'] != timing['mainResultArrivalMs']
+                                or freshness['maximumAgeMs'] != 100 or freshness['timestampPrecisionMs'] is not None
+                                or freshness['basis'] != 'main-lease-before-block-first-input'
+                                or freshness['scope'] != 'frame-last-required-rendered-input'
+                                or not math.isfinite(elapsed) or not 0 <= elapsed <= 100
+                                or not math.isclose(elapsed, freshness['renderAgeUpperBoundMs'], abs_tol=1e-6)):
+                            raise ValueError('Invalid same-main-clock freshness certificate')
+                        counts['certifiedFrameCount'] += 1
+                        freshness_values.append(elapsed)
                     counts['invalidFrameTimingCount'] += int(timing['status'] != 'valid')
                     samples['frameServiceMs'].append(timing['workerServiceMs'])
                     counts['frameServiceBudgetExceedances'] += int(timing['workerServiceMs'] > 5)
@@ -109,8 +150,12 @@ def audit(run: Path) -> dict:
                       'staleResultFrameCount', 'invalidFrameTimingCount', 'periodicFrameCount',
                       'correctKnownPitchFrameCount', 'frameServiceBudgetExceedances',
                       'frameCadenceDeadlineMisses', 'completeBlockServiceBudgetExceedances',
-                      'completeBlockDeadlineMisses')
+                      'completeBlockDeadlineMisses', 'clockProbeCount', 'clockProbeObservedCount', 'certifiedFrameCount')
     recomputed.update({key: counts[key] for key in integer_fields})
+    if freshness_values:
+        recomputed['renderAgeUpperBoundMs'] = distribution(freshness_values)
+    if 'hostWithheldReasons' in result['summary']:
+        recomputed['hostWithheldReasons'] = dict(host_discard_reasons)
     recomputed.update(blockFrameCounts=dict(frame_counts), segmentCount=len(segments),
                       maximumKnownPitchErrorHz=maximum_pitch_error)
     mismatches = {k: {'recomputed': v, 'browser': result['summary'].get(k)}
@@ -121,6 +166,8 @@ def audit(run: Path) -> dict:
         'result_sha256': digest(result_path), 'raw_sha256': digest(raw_path),
         'audit_source_sha256': digest(Path(__file__)), 'raw_records': counts['records'],
         'recomputed_summary': recomputed,
+        'freshness_withheld_host_reasons': dict(freshness_failures),
+        'freshness_withheld_block_records': counts['freshnessWithheldBlockCount'],
         'complete_block_service_by_five_minute_source_window': {
             str(k): distribution(v) for k, v in five_minute_blocks.items()},
         'limitation': 'Synthetic paced replay; no physical microphone latency or clinical accuracy claim.'}

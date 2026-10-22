@@ -38,10 +38,11 @@ guided tasks in the active browser workflow.
 
 | Contract | Version and meaning |
 | --- | --- |
-| Worker and worklet messages | `phenometric.voice-worker-message.v2` and `phenometric.voice-worklet-message.v2`; matched internal assets must ship together. |
+| Worker and worklet messages | `phenometric.voice-worker-message.v3` and `phenometric.voice-worklet-message.v2`; matched internal assets must ship together. |
 | Compact acoustic frame | `phenometric.voice-signal-frame.v1`; legacy time semantics are preserved. |
 | Numerical DSP | `voice-analysis-1.1`, processor `browser-voice-dsp@1.1`; transport and timing changes do not establish new numerical or clinical equivalence. |
-| Timing | `phenometric.voice-stream-timing.v1`; sample support and explicit clock-coordinate mappings. |
+| Timing | `phenometric.voice-stream-timing.v2`; sample support, unqualified fixed clock projections, and separate freshness certificates. |
+| Render freshness | `phenometric.voice-render-freshness.v1`; required software render leases with a 100 ms issue-to-receipt limit. |
 
 `VoiceSignalFrameV1.tMs` is still the analysis-window start in the capture's
 sample timeline, and `absoluteSampleIndex` is its first sample. New timing
@@ -53,8 +54,11 @@ main thread's performance-clock coordinate, not microphone hardware acquisition
 time.
 
 Worklet block endpoints use `currentFrame` plus the consumed samples within the
-render quantum. A paired AudioContext/main-performance anchor maps that audio
-timeline into main-thread milliseconds. Worker timestamps are converted using
+render quantum. A paired AudioContext/main-performance anchor projects that audio
+timeline into main-thread milliseconds at a fixed unit rate. This projection is
+retained as an unqualified diagnostic, not a qualified availability timestamp or
+an admission gate. The render clock need not remain synchronized to the
+performance clock; an initial phase offset or later change is not queue delay. Worker timestamps are converted using
 both realms' `performance.timeOrigin`; direct subtraction of unrelated
 `performance.now()` values is invalid. The anchor's clock-read bracket is
 reported, while AudioContext clock uncertainty remains explicitly unknown.
@@ -77,7 +81,10 @@ a nominal 20 ms cadence; those budgets are distinct from cadence deadlines.
 Inconsistent or negative mapped durations are retained as raw values and mark
 timing unavailable. Published derived durations become null, never clamped to
 zero or replaced by service time. Otherwise valid acoustic predictions remain
-available. Worker latency p95 is a rolling statistic over at most 500 valid
+available only when their independent render-freshness lease passes. A timing
+record's `status: valid` means the projected durations are internally consistent;
+`projectionSemantics: unqualified-fixed-audio-clock-projection` still applies,
+and `renderFreshness` is the separate operational certificate. Worker latency p95 is a rolling statistic over at most 500 valid
 frames; `latencyStatisticSampleCount` distinguishes an empty statistic from a
 measured zero. These clocks do not replace the separate authenticated UTC clock
 qualification used by the encounter integration.
@@ -99,17 +106,38 @@ include missing quanta even when observed input never resumes. The sample loss c
 partial samples. There is no zero-filled substitute. A terminal partial block
 is also counted when the worklet stops.
 
-The provisional worker-admission policy drops a block whose mapped block-end
-age exceeds 100 ms before acoustic analysis. It records `stale-dropped`, reason
-`audio-timeline-age-exceeded`, and separate stale block/sample counters. This
-bounds admitted block age in the mapped audio timeline when the mapping is
-consistent. It does not bound hardware delay, later result delivery, or the
-age of every sample within a window. Unknown or inconsistent mappings cannot
-establish actual age. The policy is recorded as
-`drop-new-at-cap;drop-stale-at-worker;reset-on-gap`; it is independent of model
-speed or accuracy claims.
+The required `required-render-lease-v1` policy uses a main-thread performance
+clock for freshness. The main thread issues a lease with an epoch, mapping
+identity, time origin, unique ID, issue time, and expiry exactly 100 ms later.
+The worklet snapshots the current lease before the first sample of a new PCM
+block. Renewal cannot refresh an earlier partial block or either of its normal
+two frame endpoints. The worker checks the lease before analysis after converting
+its performance coordinate into the issuing main clock. Missing, malformed,
+retired, future, expired, or wrong-origin evidence is explicitly withheld, with
+`freshness-withheld` block disposition, a reason, and separate block/sample
+counters. Result backpressure takes precedence when result credit is exhausted;
+its separate counters retain those discarded samples.
 
-Sample gaps, stale drops, sequence/sample regressions, large timestamp gaps,
+The host verifies the exact lease against a ledger of at most eight issued
+identities and requires main result receipt minus main issue time to be between
+0 and 100 ms. This gives a conservative software-render age bound for the last
+required input; earlier samples in the 40 ms support can predate lease issue.
+It does not establish microphone acquisition time, timestamp precision, or later
+application callback/display time. Certificate precision is explicitly null.
+Fixed audio-clock projections cannot rescue an expired lease or expire a fresh
+one. Unit fixtures that preserve historical numerical behavior explicitly select
+`unqualified-legacy-fixture`; they keep the previous mapped-age policy and never
+receive a freshness certificate. Production has no implicit fallback.
+
+Lease renewal targets 25 ms and allows one outstanding main-to-worklet request.
+Expiry does not mint another credit. A matching accepted or retired ACK frees
+only that request, including an accepted ACK already posted before reset.
+Reset invalidates the issuance ledger and worklet lease; a late old ACK can
+release control credit without revalidating old support. The worklet ACK path
+is independent of PCM and result credits. Suspension prevents renewal, and
+stop cancels its timer. A resumed lane needs a newly accepted lease.
+
+Sample gaps, freshness withholding, sequence/sample regressions, large timestamp gaps,
 sample-rate changes, mapping changes, and capture resets clear the PCM ring,
 prior spectral state, nucleus score/refractory state, and next analysis index.
 Recovery emits a new segment identity, including a reset that repeats the same
@@ -141,15 +169,17 @@ discard ACK for retired support cannot reset a fresh segment. The receiver
 retains a monotonic completed-ID high-water mark to suppress duplicate delivery
 without an unbounded history of completed IDs.
 
-On receipt of the completion envelope, the host rejects a frame whose valid
-mapped support-end age exceeds 100 ms. It also rejects further frames from the
-same segment until the worker has reset after the acknowledged loss. The ACK
-contains discarded/stale frame counts and is sent before application callbacks,
-so a throwing callback cannot strand credits. Retired-epoch results are
-acknowledged without delivery. A retired clock-mapping identity is also rejected,
-including when a reset repeats the same epoch. Unknown or inconsistent clock mappings retain
-unavailable timing and cannot support an age guarantee. The age check refers
-to receipt, not a later callback, paint, display, or hardware-input endpoint.
+On receipt of the completion envelope, the host rejects missing or expired
+lease proof before any application callback and records the withholding reason.
+It also rejects further frames from the same segment until the worker resets
+after the acknowledged loss. The ACK contains discarded/expired frame counts
+and is sent before application callbacks, so a throwing callback cannot strand
+credits. Retired-epoch results are acknowledged without delivery. A retired
+clock-mapping identity is also rejected, including when reset repeats an epoch.
+The certificate uses the original main clock; unknown or inconsistent fixed
+audio-clock projections remain separately unavailable and do not suppress an
+otherwise certified acoustic frame. The certified endpoint is main receipt,
+not a later callback, paint, display, or hardware-input endpoint.
 
 PCM/result transport queues, local batch assembly, and worker histories now
 have explicit capacity bounds. This is not a measured bound on the entire
@@ -175,9 +205,22 @@ response. Late-epoch disposal or terminal messages cannot terminate or complete
 a newer epoch. The worklet returns the same snapshot on repeated dispose and
 rejects subsequent processing and buffer returns.
 
-## Functional evidence and sustained-run preparation
+## Functional evidence and sustained-run confirmation
 
-The historical, local, ignored
+The current lease path passed 70 focused tests and a local Chrome functional
+pair on 2026-10-22. The ignored
+`research/voice-prosody/runs/browser-check-v7-render-lease/` contains a 6.5-second
+synthetic run with a 300 ms worker stall and a separate 350 ms main-thread stall:
+all 571 delivered frames were certified, eight host frames and five worker
+blocks were withheld for expired leases, and known 200 Hz pitch recovered.
+A separate 2.2-second blocked-main run delivered 176 certified frames and
+withheld eight expired host frames. Both terminal acknowledgements completed.
+These short tests establish functional recovery for the exercised path, not a
+sustained performance or physical-acquisition bound. See
+[the timing follow-up](../research/voice-prosody/TIMING_FOLLOWUP.md) for the
+independent clock investigation and subsequent confirmation status.
+
+The historical worker-v2, local, ignored
 `research/voice-prosody/runs/browser-check-v4-result-identity/` evidence from
 2026-10-22 exercised an actual Chrome AudioBufferSource → production AudioWorklet
 → production worker graph with a synthetic 200 Hz tone. A 3.5013-second source
@@ -203,9 +246,11 @@ and credit-independent disposal. Concurrent compute was not controlled. This
 is synthetic functional evidence, not sustained latency, live microphone,
 natural-speech accuracy, trained-model improvement, or clinical validation.
 
-The completed 30-minute paced run with one midpoint overload is documented in
-[the streaming report](../research/voice-prosody/STREAMING_RESULTS.md), including
-the unresolved rise in mapped arrival times. To reproduce it, wait for other
+The historical worker-v2 30-minute paced run with one midpoint overload is
+documented in [the streaming report](../research/voice-prosody/STREAMING_RESULTS.md),
+including its unresolved rise in mapped arrival times. It predates the lease
+contract and does not validate the new gate. The command below prepares a new
+worker-v3 confirmation with separate worker and main stalls. Wait for other
 training, benchmark, and validation processes to finish. Record the machine,
 browser/runtime versions, power conditions,
 thread count, source hashes before/after, and test report alongside raw timing
@@ -216,8 +261,11 @@ cd apps/capture-web  # from the repository root
 export VOICE_RESEARCH_OUTPUT_DIR="$(mktemp -d "$PWD/../../research/voice-prosody/runs/browser-soak-30m-XXXXXX")"
 export VOICE_RESEARCH_METHOD=dsp
 export VOICE_RESEARCH_DURATION_MS=1800000
-export VOICE_RESEARCH_OVERLOAD_AT_MS=900000
+export VOICE_RESEARCH_OVERLOAD_AT_MS=600000
 export VOICE_RESEARCH_OVERLOAD_DURATION_MS=300
+export VOICE_RESEARCH_MAIN_STALL_AT_MS=1200000
+export VOICE_RESEARCH_MAIN_STALL_DURATION_MS=350
+export VOICE_RESEARCH_CLOCK_DIAGNOSTICS=1
 pnpm exec playwright test --config playwright.research.config.ts \
   --grep 'real AudioWorklet/worker replay' --workers=1 --reporter=json \
   > "$VOICE_RESEARCH_OUTPUT_DIR/playwright-report.json"
@@ -225,12 +273,18 @@ pnpm exec playwright test --config playwright.research.config.ts \
 
 The configured named target is headless local Chrome at 48 kHz, one Playwright
 worker, a 30-minute source interval, and a test timeout 45 seconds longer.
-The overload targets the worker; the separate short blocked-main test exercises
-result backpressure. Retained frame/block arrays are capped at 120/80; numeric distributions are
+The two distinct overloads target the worker and main thread. Independent 1 Hz
+clock probes preserve main-read brackets, render-callback causal brackets, and
+separate output-device timestamps without shifting the fixed anchor. Only one
+probe may be outstanding; the harness retains the last 64 and streams all raw
+observations. Retained frame/block arrays are capped at 120/80; numeric distributions are
 capped at 200,000 values per metric. Raw records use batches of at most 100 with
 one in-flight batch and at most 200 queued records; sink failure/backpressure
 fails the run. Require complete worker/worklet stop acknowledgements, matched
-raw counts, explicit drops, known-tone pitch, and segment recovery. The result
+raw counts, explicit drops, known-tone pitch, segment recovery, every delivered
+lease certificate within 100 ms, and every five-minute window. The prospectively
+declared performance checks require complete processed-block p99 at most 10 ms
+and no processed block above its 20 ms cadence. The result
 remains labelled a sustained functional soak rather than automatically becoming
 a controlled latency benchmark. Repeated synthetic tone is not new speech data.
 

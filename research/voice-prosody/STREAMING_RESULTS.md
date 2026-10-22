@@ -1,5 +1,10 @@
 # Browser voice streaming evidence
 
+This report preserves the original fixed-anchor runs. The later
+[independent timing follow-up](TIMING_FOLLOWUP.md) replaces the operational
+freshness gate with same-main-clock leases while retaining these historical
+measurements and their unresolved physical interpretation.
+
 The default voice estimator remains DSP. The learned MLP is an explicitly
 unqualified research fixture; runtime success cannot reverse the failed quality
 gates in [RESULTS.md](RESULTS.md). This report concerns generated-audio replay

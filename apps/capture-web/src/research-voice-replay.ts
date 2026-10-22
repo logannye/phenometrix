@@ -1,3 +1,5 @@
+import { VoiceRenderLeaseIssuer, VOICE_RENDER_LEASE_RENEWAL_MS } from "./voice-render-freshness.js";
+import { VoiceClockProbeTracker, type VoiceClockObservation } from "./voice-clock-probe.js";
 import type { VoiceResearchModelConfig } from "./voice-research-hook.js";
 import { VoiceResultBatchReceiver } from "./voice-result-transport.js";
 import { captureVoiceClockMapping, type VoiceFrameTiming } from "./voice-stream-timing.js";
@@ -7,10 +9,12 @@ import { VOICE_WORKER_MESSAGE_VERSION, isCurrentVoiceTransportDiagnostics, reque
 export interface ReplayTelemetryBatch {
   schemaVersion: "phenometric.voice-replay-telemetry.v1";
   sequence: number;
-  records: Array<{ kind: "frame" | "block-timing"; value: Record<string, unknown> }>;
+  records: Array<{ kind: "frame" | "block-timing" | "clock-probe"; value: Record<string, unknown> }>;
 }
 export interface ReplayOptions {
   durationMs?: number;
+  /** Independent 1 Hz clock diagnostics; never re-anchors or changes admission. */
+  clockDiagnostics?: boolean;
   /** Research route only; the production capture entry never supplies a model. */
   modelConfig?: VoiceResearchModelConfig;
   overloadAtMs?: number;
@@ -40,6 +44,9 @@ export interface ReplayResult {
   workerStopAcknowledged: boolean;
   blockTimings: Array<Record<string, unknown>>;
   maximumServiceMs: number | null;
+  clockProbes: VoiceClockObservation[];
+  clockDiagnostics: { enabled: boolean; intervalMs: 1000; maximumPending: 1; retainedLimit: 64;
+    fixedMapping: ReturnType<typeof captureVoiceClockMapping> | null };
   summary: Record<string, unknown>;
 }
 const quantiles = (values: number[]) => {
@@ -68,13 +75,24 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     ? new Worker(new URL("./research-voice-trained-worker.ts", import.meta.url), { type: "module" })
     : new Worker(new URL("./research-voice-stall-worker.ts", import.meta.url), { type: "module" });
   let researchModel: ReplayResult["researchModel"] = null;
+  const leaseIssuer = new VoiceRenderLeaseIssuer(performance);
+  let leaseTimer: ReturnType<typeof setInterval> | undefined;
+  let initialLeaseAcknowledged: (() => void) | undefined;
+  const stopLeases = () => { if (leaseTimer !== undefined) clearInterval(leaseTimer); leaseTimer = undefined; leaseIssuer.stop(); };
   const channel = new MessageChannel();
   const frames: Array<Record<string, unknown>> = [];
   const blockTimings: Array<Record<string, unknown>> = [];
   const errors: string[] = [];
+  const clockProbes: VoiceClockObservation[] = [];
+  let clockProbeTracker: VoiceClockProbeTracker | null = null;
+  let clockProbeCount = 0;
+  let clockProbeObservedCount = 0;
+  let clockProbeTimer: ReturnType<typeof setInterval> | undefined;
+  let fixedClockMapping: ReturnType<typeof captureVoiceClockMapping> | null = null;
   const statisticsCapacity = 200_000; // >31 min at the declared 100 Hz hop; no full-frame growth.
   const statistics = { frameService: [] as number[], blockService: [] as number[],
-    processedBlockService: [] as number[], staleBlockService: [] as number[],
+    processedBlockService: [] as number[], staleBlockService: [] as number[], freshnessWithheldBlockService: [] as number[],
+    renderAgeUpperBound: [] as number[],
     arrival: [] as number[], receipt: [] as number[], modelInference: [] as number[], modelReady: [] as number[], modelArrival: [] as number[], targetReady: [] as number[] };
   const segments: string[] = [];
   let previousSegment = "";
@@ -83,6 +101,8 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
   let researchFrameCount = 0;
   let blockCount = 0;
   let invalidTimingCount = 0;
+  let certifiedFrameCount = 0;
+  const hostWithheldReasons: Record<string, number> = {};
   let discardedResultFrameCount = 0;
   let staleResultFrameCount = 0;
   let periodicFrameCount = 0;
@@ -145,7 +165,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       fail(`telemetry-sink-failed:${String(error)}`);
     }).finally(() => { telemetryInFlight = null; pumpTelemetry(); });
   };
-  const emitTelemetry = (kind: "frame" | "block-timing", value: Record<string, unknown>) => {
+  const emitTelemetry = (kind: "frame" | "block-timing" | "clock-probe", value: Record<string, unknown>) => {
     if (!options.streamRawTelemetry || telemetryFailed) return;
     if (telemetryQueue.length >= 200) {
       telemetryFailed = true;
@@ -172,6 +192,19 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     if (timeout) clearTimeout(timeout);
   };
 
+  const recordClockProbe = (observation: VoiceClockObservation | null) => {
+    if (!observation) return;
+    clockProbeCount += 1;
+    clockProbeObservedCount += Number(observation.renderObservation.status === "observed");
+    clockProbes[(clockProbeCount - 1) % 64] = observation;
+    emitTelemetry("clock-probe", { ...observation });
+  };
+  const stopClockProbes = () => {
+    if (clockProbeTimer) clearInterval(clockProbeTimer);
+    clockProbeTimer = undefined;
+    recordClockProbe(clockProbeTracker?.expire("stopped") ?? null);
+  };
+
   const handleResponse = (message: VoiceWorkerResponse) => {
     if (message.schemaVersion !== VOICE_WORKER_MESSAGE_VERSION || message.captureEpoch !== 1) return;
     if (message.type === "ready") ready?.();
@@ -183,7 +216,8 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       blockCount += 1;
       retain(blockTimings, blockCount, blockLimit, item);
       addStatistic(statistics.blockService, message.timing.workerServiceMs);
-      addStatistic(message.timing.disposition === "stale-dropped" ? statistics.staleBlockService : statistics.processedBlockService,
+      addStatistic(message.timing.disposition === "processed" ? statistics.processedBlockService :
+        message.timing.disposition === "freshness-withheld" ? statistics.freshnessWithheldBlockService : statistics.staleBlockService,
         message.timing.workerServiceMs);
       const key = `${message.timing.disposition}:${message.timing.analyzedFrameCount}`;
       blockFrameCounts[key] = (blockFrameCounts[key] ?? 0) + 1;
@@ -198,7 +232,12 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         ...(valid ? {} : { unavailableReason: "inconsistent-clock-mapping" as const }),
         mainResultArrivalMs: arrivalMs, rawSampleAvailabilityToMainResultMs: elapsed,
         sampleAvailabilityToMainResultMs: valid ? elapsed : null };
-      const item = { ...message.frame, timing, ...(message.research ? { research: message.research } : {}) };
+      const item = { ...message.frame, timing, renderLease: message.renderLease ?? null,
+        ...(message.research ? { research: message.research } : {}) };
+      if (timing.renderFreshness?.status === "certified") {
+        certifiedFrameCount += 1;
+        addStatistic(statistics.renderAgeUpperBound, timing.renderFreshness.renderAgeUpperBoundMs);
+      } else fail("delivered-frame-without-render-freshness-certificate");
       if (message.research) {
         researchFrameCount += 1;
         addStatistic(statistics.modelInference, message.research.inferenceServiceMs);
@@ -228,18 +267,23 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
   };
   const contextStateChanged = () => {
     if (!stopping && sourceStartedAtMs > 0 && context.state !== "running") {
+      leaseIssuer.invalidate();
       worker.postMessage({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "clock-mapping",
         captureEpoch: 1, clockMapping: null });
       fail(`unexpected-audio-context-state:${context.state}`);
     }
   };
-  const resultReceiver = new VoiceResultBatchReceiver(message => worker.postMessage(message));
+  const resultReceiver = new VoiceResultBatchReceiver(message => worker.postMessage(message),
+    { policy: "required-render-lease-v1", issuer: leaseIssuer, mainTimeOriginMs: performance.timeOrigin });
   worker.addEventListener("message", (event: MessageEvent<VoiceWorkerResponse>) => {
-    const received = resultReceiver.receive(event.data, 1, performance.now(), 1);
+    let received: ReturnType<VoiceResultBatchReceiver["receive"]>;
+    try { received = resultReceiver.receive(event.data, 1, performance.now(), 1); }
+    catch { fail("invalid-voice-result-transport"); return; }
     for (const discarded of received.discardedFrames) {
       discardedResultFrameCount += 1;
-      staleResultFrameCount += Number(discarded.discardReason === "result-age-exceeded");
-      emitTelemetry("frame", { ...discarded.frame, timing: discarded.timing,
+      staleResultFrameCount += Number(discarded.discardReason === "result-age-exceeded" || discarded.discardReason === "expired-lease");
+      hostWithheldReasons[discarded.discardReason] = (hostWithheldReasons[discarded.discardReason] ?? 0) + 1;
+      emitTelemetry("frame", { ...discarded.frame, timing: discarded.timing, renderLease: discarded.renderLease ?? null,
         deliveryDisposition: "discarded", discardReason: discarded.discardReason });
     }
     for (const message of received.messages) handleResponse(message);
@@ -271,6 +315,14 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       outputChannelCount: [1] });
     node.addEventListener("processorerror", () => fail("replay-worklet-processor-error"));
     node.port.onmessage = event => {
+      if (leaseIssuer.acknowledge(event.data)) {
+        if (event.data.disposition === "accepted") initialLeaseAcknowledged?.();
+        return;
+      }
+      if (event.data?.type === "clock-probe-result") {
+        recordClockProbe(clockProbeTracker?.receive(event.data) ?? null);
+        return;
+      }
       if (!isCurrentVoiceTransportDiagnostics(event.data, 1)) return;
       transportStop = { status: "complete", diagnostics: event.data };
       transportStopAcknowledged = true;
@@ -278,12 +330,13 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     };
     node.connect(context.destination); // Output is zero: the synthetic replay is not played aloud.
     const mapping = captureVoiceClockMapping(context, performance, 1);
+    fixedClockMapping = mapping;
     const initialized = new Promise<void>((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error("Replay worker did not initialize.")), 5_000);
       ready = () => { clearTimeout(timer); resolve(); };
       initializationFailed = error => { clearTimeout(timer); reject(error); };
     });
-    worker.postMessage({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", captureEpoch: 1,
+    worker.postMessage({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "initialize", captureEpoch: 1, freshnessPolicy: "required-render-lease-v1",
       port: channel.port1, clockMapping: mapping, audioContextSampleRateHz: context.sampleRate,
       captureSettings: requestedAudioCaptureSettings(context.sampleRate, 1,
         { echoCancellation: false, noiseSuppression: false, autoGainControl: false }),
@@ -291,6 +344,19 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     node.port.postMessage({ type: "attach-port", port: channel.port2 }, [channel.port2]);
     node.port.postMessage({ type: "capture-epoch", captureEpoch: 1, clockMappingId: 1 });
     await initialized;
+    const renewLease = () => {
+      if (stopping || context.state !== "running") return;
+      const request = leaseIssuer.issue(1, 1);
+      if (request) node!.port.postMessage(request);
+    };
+    // Start the native 40 ms frame grid only after an accepted initial lease.
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => { initialLeaseAcknowledged = undefined;
+        reject(new Error("Initial render freshness lease timed out.")); }, 5_000);
+      initialLeaseAcknowledged = () => { clearTimeout(timeout); initialLeaseAcknowledged = undefined; resolve(); };
+      renewLease();
+    });
+    leaseTimer = setInterval(renewLease, VOICE_RENDER_LEASE_RENEWAL_MS);
     if (context.state !== "running") throw new Error(`Audio context not running:${context.state}`);
     const buffer = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
     const samples = buffer.getChannelData(0);
@@ -300,6 +366,16 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     source.buffer = buffer; source.loop = true; source.connect(node);
     sourceStartedAtMs = performance.now();
     source.start();
+    if (options.clockDiagnostics) {
+      clockProbeTracker = new VoiceClockProbeTracker(mapping, 1, performance);
+      const probe = () => {
+        recordClockProbe(clockProbeTracker!.expire("timeout"));
+        const request = clockProbeTracker!.begin(context, performance.now() - sourceStartedAtMs);
+        if (request) node!.port.postMessage(request);
+      };
+      probe();
+      clockProbeTimer = setInterval(probe, 1_000);
+    }
     if (options.overloadAtMs !== undefined) overloadTimer = setTimeout(() => worker.postMessage({
       type: "research-stall", durationMs: options.overloadDurationMs ?? 250 }), options.overloadAtMs);
     if (options.mainStallAtMs !== undefined) mainStallTimer = setTimeout(() => {
@@ -314,6 +390,9 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     if (pacedTimer) clearTimeout(pacedTimer);
     sourceStoppedAtMs = performance.now();
     stopping = true;
+    stopClockProbes();
+    if (leaseTimer !== undefined) clearInterval(leaseTimer);
+    leaseTimer = undefined;
     source.stop(); source.disconnect();
     const workerAcknowledgement = new Promise<void>(resolve => { workerDisposed = resolve; });
     const transportAcknowledgement = new Promise<void>(resolve => { transportDisposed = resolve; });
@@ -336,7 +415,10 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       sampleRateHz: context.sampleRate, researchModel, browser: navigator.userAgent,
       frames: chronological(frames, frameCount, frameLimit), errors, diagnostics, transportStop, workerStopAcknowledged,
       blockTimings: chronological(blockTimings, blockCount, blockLimit), maximumServiceMs: frameService.maximum,
-      summary: { frameCount, blockCount, researchFrameCount, modelInferenceServiceMs: quantiles(statistics.modelInference),
+      clockProbes: clockProbeCount <= 64 ? clockProbes : [...clockProbes.slice(clockProbeCount % 64), ...clockProbes.slice(0, clockProbeCount % 64)],
+      clockDiagnostics: { enabled: !!options.clockDiagnostics, intervalMs: 1000, maximumPending: 1, retainedLimit: 64,
+        fixedMapping: options.clockDiagnostics ? fixedClockMapping : null },
+      summary: { frameCount, blockCount, researchFrameCount, clockProbeCount, clockProbeObservedCount, modelInferenceServiceMs: quantiles(statistics.modelInference),
         modelElapsedFromFrameStartMs: quantiles(statistics.modelReady),
         sampleAvailabilityToModelReadyMs: quantiles(statistics.modelArrival),
         targetReferenceToModelReadyMs: quantiles(statistics.targetReady),
@@ -345,7 +427,12 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         numericStatisticsCapacityPerMetric: statisticsCapacity, frameServiceMs: frameService,
         completeBlockServiceMs: quantiles(statistics.blockService),
         completeProcessedBlockServiceMs: quantiles(statistics.processedBlockService),
-        staleBlockServiceMs: quantiles(statistics.staleBlockService), blockFrameCounts,
+        staleBlockServiceMs: quantiles(statistics.staleBlockService),
+        freshnessWithheldBlockServiceMs: quantiles(statistics.freshnessWithheldBlockService), blockFrameCounts,
+        freshnessPolicy: "required-render-lease-v1", certifiedFrameCount,
+        renderAgeUpperBoundMs: quantiles(statistics.renderAgeUpperBound), hostWithheldReasons,
+        freshnessLeaseControl: { ...leaseIssuer.statistics, renewalMs: VOICE_RENDER_LEASE_RENEWAL_MS,
+          maximumAgeMs: 100, pendingRequestLimit: 1, ledgerEntryLimit: 8 },
         frameServiceBudgetMs: 5, frameServiceBudgetExceedances: statistics.frameService.filter(value => value > 5).length,
         frameCadenceMs: 10, frameCadenceDeadlineMisses: statistics.frameService.filter(value => value > 10).length,
         completeBlockServiceBudgetMs: 10, completeBlockServiceBudgetExceedances: statistics.processedBlockService.filter(value => value > 10).length,
@@ -360,6 +447,8 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         note: "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim." } };
   } finally {
     stopping = true;
+    stopLeases();
+    stopClockProbes();
     if (mainStallTimer) clearTimeout(mainStallTimer);
     if (overloadTimer) clearTimeout(overloadTimer);
     if (pacedTimer) clearTimeout(pacedTimer);

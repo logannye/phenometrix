@@ -14,9 +14,19 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
   if (method !== "dsp" && method !== "trained-mlp") throw new Error("Invalid research method.");
   const modelConfig = method === "trained-mlp"
     ? JSON.parse(readFileSync(resolve("public/.local/voice-mlp/config.json"), "utf8")) as VoiceResearchModelConfig : undefined;
+  const clockDiagnostics = process.env.VOICE_RESEARCH_CLOCK_DIAGNOSTICS === "1";
   const durationMs = Number(process.env.VOICE_RESEARCH_DURATION_MS ?? 3_500);
   const overloadAtMs = Number(process.env.VOICE_RESEARCH_OVERLOAD_AT_MS ?? 1_200);
   const overloadDurationMs = Number(process.env.VOICE_RESEARCH_OVERLOAD_DURATION_MS ?? 300);
+  const mainStallAtMs = process.env.VOICE_RESEARCH_MAIN_STALL_AT_MS === undefined
+    ? undefined : Number(process.env.VOICE_RESEARCH_MAIN_STALL_AT_MS);
+  const mainStallDurationMs = mainStallAtMs === undefined ? undefined : Number(process.env.VOICE_RESEARCH_MAIN_STALL_DURATION_MS ?? 350);
+  if (mainStallAtMs !== undefined && (!Number.isFinite(mainStallAtMs) || mainStallAtMs < 0 ||
+      !Number.isFinite(mainStallDurationMs) || mainStallDurationMs! < 150 || mainStallDurationMs! > 1000 ||
+      mainStallAtMs + mainStallDurationMs! + 1000 > durationMs ||
+      Math.abs(mainStallAtMs - overloadAtMs) < Math.max(mainStallDurationMs!, overloadDurationMs) + 1000)) {
+    throw new Error("Invalid separate main-thread stall configuration.");
+  }
   if (!Number.isFinite(durationMs) || durationMs < 3_000 || durationMs > 31 * 60 * 1_000 ||
       !Number.isFinite(overloadAtMs) || overloadAtMs < 0 ||
       !Number.isFinite(overloadDurationMs) || overloadDurationMs < 150 || overloadDurationMs > 1_000 ||
@@ -37,7 +47,7 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
   await page.goto("/research-voice.html");
   await page.waitForFunction(() => typeof window.runVoiceResearchReplay === "function");
   const result = await page.evaluate(options => window.runVoiceResearchReplay({ ...options, streamRawTelemetry: true,
-    retainedFrameLimit: 120, retainedBlockLimit: 80 }), { durationMs, overloadAtMs, overloadDurationMs, modelConfig }) as ReplayResult;
+    retainedFrameLimit: 120, retainedBlockLimit: 80 }), { durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, clockDiagnostics }) as ReplayResult;
   let validationStatus = "failed";
   try {
     expect(result.status, JSON.stringify(result.errors)).toBe("complete");
@@ -51,12 +61,22 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
     expect(result.frames.length).toBeGreaterThan(100);
     expect(result.frames.length).toBeLessThanOrEqual(120);
     const diagnostic = result.diagnostics as { maximumInFlightBlocks: number; droppedTransportBlockCount: number;
-      droppedTransportSampleCount: number; lostBlockCount: number; staleTransportBlockCount: number };
+      droppedTransportSampleCount: number; lostBlockCount: number; freshnessWithheldBlockCount: number;
+      freshnessWithheldReasons: Record<string, number>; hostStaleFrameCount: number };
     expect(diagnostic.maximumInFlightBlocks).toBeLessThanOrEqual(4);
     expect(diagnostic.droppedTransportBlockCount).toBeGreaterThan(0);
     expect(diagnostic.droppedTransportSampleCount).toBeGreaterThan(0);
     expect(diagnostic.lostBlockCount).toBeGreaterThan(0);
-    expect(diagnostic.staleTransportBlockCount).toBeGreaterThan(0);
+    expect(diagnostic.freshnessWithheldBlockCount).toBeGreaterThan(0);
+    expect(diagnostic.freshnessWithheldReasons["expired-lease"]).toBeGreaterThan(0);
+    expect(result.summary.certifiedFrameCount).toBe(result.summary.frameCount);
+    expect(Number((result.summary.renderAgeUpperBoundMs as { maximum: number }).maximum)).toBeLessThanOrEqual(100);
+    expect(result.summary.freshnessLeaseControl).toMatchObject({ maximumPendingRequests: 1, pendingRequestLimit: 1, ledgerEntryLimit: 8 });
+    if (mainStallAtMs !== undefined) {
+      expect(diagnostic.hostStaleFrameCount).toBeGreaterThan(0);
+      expect((result.summary.hostWithheldReasons as Record<string, number>)["expired-lease"]).toBeGreaterThan(0);
+      expect(Number(result.summary.segmentCount)).toBeGreaterThan(2);
+    }
     expect(Number(result.summary.segmentCount)).toBeGreaterThan(1);
     expect(Number(result.summary.periodicFrameCount)).toBeGreaterThan(100);
     expect(result.summary.correctKnownPitchFrameCount).toBe(result.summary.periodicFrameCount);
@@ -65,7 +85,7 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
     expect(raw.status).toBe("complete");
     expect(raw.maximumPendingRecords).toBeLessThanOrEqual(200);
     expect(raw.streamedRecordCount).toBe(rawRecordCount);
-    expect(rawRecordCount).toBe(Number(result.summary.frameCount) + Number(result.summary.discardedResultFrameCount) + Number(result.summary.blockCount));
+    expect(rawRecordCount).toBe(Number(result.summary.frameCount) + Number(result.summary.discardedResultFrameCount) + Number(result.summary.blockCount) + Number(result.summary.clockProbeCount));
     expect(Number(result.summary.frameCount)).toBeGreaterThan(result.frames.length);
     expect(Number(result.summary.blockCount)).toBeGreaterThan(result.blockTimings.length);
     if (result.transportStop.status === "complete") {
@@ -82,11 +102,23 @@ test("real AudioWorklet/worker replay bounds overload and recovers segments", as
         expect(Number(timing.sampleAvailabilityToMainResultMs)).toBeGreaterThanOrEqual(0);
       } else expect(timing.sampleAvailabilityToMainResultMs).toBeNull();
     }
+    if (clockDiagnostics) {
+      expect(result.clockDiagnostics).toMatchObject({ enabled: true, maximumPending: 1, retainedLimit: 64 });
+      expect(Number(result.summary.clockProbeObservedCount)).toBeGreaterThanOrEqual(Math.floor(durationMs / 1000) - 1);
+      expect(result.clockProbes.length).toBeLessThanOrEqual(64);
+      for (const probe of result.clockProbes) {
+        expect(probe.audioClockUncertaintyMs).toBeNull();
+        if (probe.renderObservation.status === "observed") {
+          expect(probe.renderObservation.responseReceivedAtMs).toBeGreaterThanOrEqual(probe.renderObservation.requestSentAtMs);
+          expect(probe.renderObservation.fixedAnchorResidualUpperMs).toBeGreaterThanOrEqual(probe.renderObservation.fixedAnchorResidualLowerMs);
+        }
+      }
+    }
     validationStatus = "passed";
   } finally {
     const evidence = { ...result, validationStatus,
       runPurpose: durationMs >= 30 * 60 * 1_000 ? "sustained-functional-soak" : "functional-regression",
-      replayConfiguration: { method, durationMs, overloadAtMs, overloadDurationMs, modelConfig },
+      replayConfiguration: { method, durationMs, overloadAtMs, overloadDurationMs, mainStallAtMs, mainStallDurationMs, modelConfig, clockDiagnostics },
       timingBenchmark: false,
       timingLimitation: "Synthetic replay; exclusive hardware conditions and hardware input delay are not established by this test.",
       rawArtifact: { file: "browser-raw.ndjson", sha256: createHash("sha256").update(readFileSync(rawPath)).digest("hex"),
@@ -154,9 +186,9 @@ test("blocked main thread bounds result credits and discards stale queued frames
   expect(Number(result.summary.staleResultFrameCount)).toBeGreaterThan(0);
   expect(result.summary.correctKnownPitchFrameCount).toBe(result.summary.periodicFrameCount);
   for (const frame of result.frames) {
-    const timing = frame.timing as { status: string; sampleAvailabilityToMainResultMs: number | null };
-    if (timing.status === "valid") expect(timing.sampleAvailabilityToMainResultMs).toBeLessThanOrEqual(100);
-    else expect(timing.sampleAvailabilityToMainResultMs).toBeNull();
+    const timing = frame.timing as { renderFreshness: { status: string; renderAgeUpperBoundMs: number } };
+    expect(timing.renderFreshness.status).toBe("certified");
+    expect(timing.renderFreshness.renderAgeUpperBoundMs).toBeLessThanOrEqual(100);
   }
 });
 

@@ -150,7 +150,7 @@ exactly. All 32 challenge cases were scored and reported.
 
 The augmented MLP gained 15.116 percentage points on disjoint synthetic cases,
 fixed the original 300 Hz harmonic-balance case, and reached 100% on the original
-576 glide-interior frames. It still scored 0% on the original plain 300 Hz tone,
+576 glide-interior frames. It still scored 0% on the original stationary 300 Hz three-harmonic tone,
 and four new cases remained below the required 80% success:
 
 | Challenge source | Augmented success | Candidate oracle |

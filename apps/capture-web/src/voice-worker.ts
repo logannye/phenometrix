@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import { assessVoiceRenderLease, type VoiceRenderFreshnessPolicy, type VoiceRenderLeaseFailure } from "./voice-render-freshness.js";
 
 import type {
   AudioStreamDiagnostics,
@@ -93,6 +94,10 @@ function cancelResearchWork(): void {
 }
 
 
+let freshnessPolicy: VoiceRenderFreshnessPolicy = "required-render-lease-v1";
+let freshnessWithheldBlockCount = 0;
+let freshnessWithheldSampleCount = 0;
+let freshnessWithheldReasons: Record<string, number> = {};
 let captureEpoch = 0;
 let port: MessagePort | null = null;
 let ring: BoundedPcmRingBuffer | null = null;
@@ -159,6 +164,7 @@ function diagnostics(): AudioStreamDiagnostics {
   );
   return {
     receivedBlockCount,
+    freshnessPolicy, freshnessWithheldBlockCount, freshnessWithheldSampleCount, freshnessWithheldReasons: { ...freshnessWithheldReasons },
     processedFrameCount,
     lostBlockCount,
     lostBlockFraction:
@@ -213,6 +219,9 @@ function reset(epoch: number, nextNoiseFloorRms?: number): void {
   maximumInFlightBlocks = 0;
   staleTransportBlockCount = 0;
   staleTransportSampleCount = 0;
+  freshnessWithheldBlockCount = 0;
+  freshnessWithheldSampleCount = 0;
+  freshnessWithheldReasons = {};
   pendingResultRecords = null;
   maximumInFlightResultBatches = inFlightResults.size;
   resultBackpressureBlockCount = 0;
@@ -391,6 +400,8 @@ function analyzeAvailable(block: VoiceWorkletPcmBlock, workerReceivedAtMs: numbe
     const timing: VoiceFrameTiming = {
       schemaVersion: VOICE_TIMING_CONTRACT_VERSION,
       clockMappingId: clockMapping.id,
+      projectionSemantics: "unqualified-fixed-audio-clock-projection",
+      ...(freshnessPolicy === "unqualified-legacy-fixture" ? { renderFreshness: { status: "unqualified" as const, reason: "legacy-fixture-policy" as const } } : {}),
       coordinate: "main-performance-ms",
       status: validTiming ? "valid" : "unavailable",
       ...(validTiming ? {} : { unavailableReason: "inconsistent-clock-mapping" as const }),
@@ -414,7 +425,7 @@ function analyzeAvailable(block: VoiceWorkletPcmBlock, workerReceivedAtMs: numbe
     if (latencyValues.length > 500) latencyValues.shift();
     const record: Extract<VoiceWorkerResponse, { type: "signal-frame" }> = {
       schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "signal-frame", captureEpoch, frame,
-      processingLatencyMs: validTiming ? processingLatencyMs : null, timing
+      processingLatencyMs: validTiming ? processingLatencyMs : null, timing, renderLease: block.renderLease ?? null
     };
     post(record);
     if (prepared) pendingResearchFrames?.push({ record, features: prepared, startedAt });
@@ -468,10 +479,15 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
   const blockAgeMs = admittedAtMs - atMs;
   // A structurally valid mapping with inconsistent/negative duration cannot
   // establish age. Retain unavailable timing; never clamp it into a bound.
-  const stale = Number.isFinite(blockAgeMs) && blockAgeMs > VOICE_MAXIMUM_BLOCK_AGE_MS;
+  const leaseAssessment = assessVoiceRenderLease(block.renderLease, admittedAtMs, {
+    captureEpoch, clockMappingId: clockMapping.id, mainTimeOriginMs: clockMapping.mainTimeOriginMs });
+  const freshnessFailure = freshnessPolicy === "required-render-lease-v1" && leaseAssessment.status === "withheld"
+    ? leaseAssessment.reason : undefined;
+  const stale = freshnessPolicy === "unqualified-legacy-fixture" &&
+    Number.isFinite(blockAgeMs) && blockAgeMs > VOICE_MAXIMUM_BLOCK_AGE_MS;
   const endSampleExclusive = block.absoluteSampleIndex + samples.length;
   let resultBatchId = 0;
-  const finishBlock = (analyzedFrameCount: number, disposition: "processed" | "stale-dropped",
+  const finishBlock = (analyzedFrameCount: number, disposition: "processed" | "stale-dropped" | "freshness-withheld",
     records: VoiceWorkerBatchRecord[] = pendingResultRecords ?? []): void => {
     recycle();
     if (records === pendingResultRecords) pendingResultRecords = null;
@@ -486,7 +502,9 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
       timing: { schemaVersion: VOICE_TIMING_CONTRACT_VERSION,
         captureEpoch, trackSegmentId: `audio-${captureEpoch}-${segmentNumber}`,
         blockSequence: block.sequence, supportStartSample: block.absoluteSampleIndex,
-        supportEndSampleExclusive: endSampleExclusive, analyzedFrameCount, disposition,
+        supportEndSampleExclusive: endSampleExclusive, analyzedFrameCount, disposition, freshnessPolicy,
+        ...(block.renderLease ? { leaseId: block.renderLease.leaseId } : {}),
+        ...(disposition === "freshness-withheld" ? { reason: freshnessFailure as VoiceRenderLeaseFailure } : {}),
         ...(disposition === "stale-dropped" ? { reason: "audio-timeline-age-exceeded" as const } : {}),
         workerReceivedAtMs, workerCompletedAtMs, workerServiceMs } });
   };
@@ -515,7 +533,7 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
       ? Math.max(0, block.sequence - lastBlockSequence - 1)
       : block.sequence - 1;
   const noResultCredit = inFlightResults.size >= VOICE_MAXIMUM_RESULT_BATCHES;
-  const dropped = stale || noResultCredit;
+  const dropped = stale || !!freshnessFailure || noResultCredit;
   lostBlockCount += lostSincePrior + (dropped ? 1 : 0);
   const expectedBlockMs =
     (samples.length / block.sampleRateHz) * 1000;
@@ -577,6 +595,14 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
   maximumInFlightResultBatches = Math.max(maximumInFlightResultBatches, inFlightResults.size);
   pendingResultRecords = [];
   pendingResearchFrames = researchHook ? [] : null;
+  if (freshnessFailure) {
+    freshnessWithheldBlockCount += 1;
+    freshnessWithheldSampleCount += samples.length;
+    freshnessWithheldReasons[freshnessFailure] = (freshnessWithheldReasons[freshnessFailure] ?? 0) + 1;
+    resetFeatureState();
+    finishBlock(0, "freshness-withheld");
+    return;
+  }
   if (stale) {
     staleTransportBlockCount += 1;
     staleTransportSampleCount += samples.length;
@@ -674,6 +700,12 @@ worker.addEventListener("message", (event: MessageEvent<VoiceWorkerRequest>) => 
   if ((message.type === "initialize" || message.type === "reset") && message.noiseFloorRms !== undefined
     && (!Number.isFinite(message.noiseFloorRms) || message.noiseFloorRms < 0.0001 || message.noiseFloorRms > 1)) return;
   if (message.type === "initialize") {
+    if (message.freshnessPolicy !== "required-render-lease-v1" && message.freshnessPolicy !== "unqualified-legacy-fixture") {
+      post({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "error", captureEpoch: message.captureEpoch,
+        reason: "explicit-voice-freshness-policy-required" });
+      return;
+    }
+    freshnessPolicy = message.freshnessPolicy;
     port?.close();
     port = message.port;
     if ((message.clockMapping !== null && !validVoiceClockMapping(message.clockMapping)) ||
@@ -700,7 +732,7 @@ worker.addEventListener("message", (event: MessageEvent<VoiceWorkerRequest>) => 
       schemaVersion: VOICE_WORKER_MESSAGE_VERSION,
       type: "ready",
       captureEpoch,
-      provenance: { ...audioPipelineProvenance(), acquisitionSampleRateHz, renderedSampleRateHz: sampleRateHz }
+      provenance: { ...audioPipelineProvenance(freshnessPolicy), acquisitionSampleRateHz, renderedSampleRateHz: sampleRateHz }
     });
     return;
   }

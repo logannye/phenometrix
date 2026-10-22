@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "phenometrix.local-followup-validation.v1",
+  "recordedAt": "2026-10-22T19:51:34.377696+00:00",
+  "status": "passed",
+  "baseCommit": "da5dfe752062bfce2a0b3d5a950da217e118690b",
+  "branch": "codex/causal-voice-estimation",
+  "identityNote": "Precommit changed-source byte identities. The containing Git commit binds these sources and evidence; no self-referential commit hash.",
+  "execution": "All computation and validation local; no hosted jobs launched.",
+  "platform": {
+    "chip": "Apple M4 Max",
+    "cpuCores": 16,
+    "gpuCores": 40,
+    "unifiedMemoryGiB": 128,
+    "node": "24.3.0",
+    "pnpm": "9.12.3",
+    "chromeMajor": 155,
+    "python": "3.11.15",
+    "neuralTrainingDevice": "mps in historical fits; no new fit in followup"
+  },
+  "checks": {
+    "repository": {
+      "command": "pnpm test",
+      "status": "passed",
+      "passedUnitTests": 726,
+      "passedUnitFiles": 70,
+      "structure": "passed",
+      "typescript": "passed",
+      "productionBuilds": "passed",
+      "log": {
+        "localPath": "research/voice-prosody/runs/followup-local-validation/pnpm-test.log",
+        "sha256": "e316a32cd4866b0945b627e7c4610ef8696dfa7cda842438b51fa392a1a48dd7"
+      }
+    },
+    "researchPython": {
+      "status": "passed",
+      "passed": 114,
+      "log": {
+        "localPath": "research/voice-prosody/runs/followup-local-validation/research-pytest-post-audit.log",
+        "sha256": "d4d2893602485a9c0d159b05734a1906c24884839e44f35e64654784ee496e1c"
+      }
+    },
+    "productBrowsers": {
+      "status": "passed-after-test-fixture-repair",
+      "capturePassed": 12,
+      "clinicianPassed": 6,
+      "evidence": "Initial full command passed capture12 and5 clinician tests; unrelated synthetic UTC-clock race failed1. Repaired test-only clock bridge; complete connected scenario then passed. Other5 clinician tests and production source unchanged.",
+      "initialFullRun": {
+        "localPath": "research/voice-prosody/runs/followup-local-validation/pnpm-browser.log",
+        "sha256": "b7fa11580da3ecefed9719faaba0f5dc7d3cd997058549709d408b1d1b8f35a8"
+      },
+      "diagnosedFailure": {
+        "localPath": "research/voice-prosody/runs/followup-local-validation/clinician-clock-reproduction-details.log",
+        "sha256": "1be7206c1dd51e91e223c4acbd955c48c134e6357435083e545e7112030923d9"
+      },
+      "repairedScenario": {
+        "localPath": "research/voice-prosody/runs/followup-local-validation/clinician-clock-fixed.log",
+        "sha256": "93caf8b60db44686ef95e5109940612e873884753ff32127ed9c4bb9c903d7ce"
+      },
+      "productionUtcChecks": "unchanged",
+      "clinicianTypecheck": "passed; observed successful command exit in task tool output"
+    },
+    "researchBrowsers": {
+      "status": "passed",
+      "passed": 5,
+      "reportSha256": "23a7b490c0a6406ecf9fed2707ab2b06da2af905eb3ff96a4d7396d77373bbd0",
+      "rawAuditSha256": "5a07be7ba24e366c2e44bf86ee7d8e7f55f227696ea9c52b4cc39930d9fcc5fb",
+      "clockAuditSha256": "f00f31917bebc59106bc42dc506b753a45dd67a697bc85d424bf181cf67a75f8"
+    },
+    "productionPublicAssets": {
+      "status": "passed",
+      "outputs": [
+        "dist",
+        "dist-embedded"
+      ],
+      "verifiedPublicFiles": 10,
+      "researchAssetsExcluded": true,
+      "publicFileSha256": {
+        "asset-manifest.json": "1783d811067f68229c991bc128e986795a8dc530400b0d2968bf5a738669676f",
+        "mediapipe/vision_wasm_internal.js": "e7fd9858e8e8f221d9b96eddc11f8e077f263e0b7bbd79d3cbe882b134274f8c",
+        "mediapipe/vision_wasm_internal.wasm": "6a5c64584c2ab61c763b6e204afbdbc7ce1caf7f5216187322bca8df94f646bc",
+        "mediapipe/vision_wasm_module_internal.js": "1f1d6215324a1fe62f6742d49a3db911170987ca18ad8c1b75f1a1c82acf2b44",
+        "mediapipe/vision_wasm_module_internal.wasm": "617b8e0248dbd27e9d7ece4218004eae4cefb499196d1bb4fa0e3fef21708756",
+        "mediapipe/vision_wasm_nosimd_internal.js": "438d1fe8ff7f4d946025bc211c291543c037d8a3785ed4eee60f1f521b236296",
+        "mediapipe/vision_wasm_nosimd_internal.wasm": "8a3092d34c79d3f57e6ba8592105e8a90f6b07c27891ffecd14cca428bfd3e31",
+        "models/README.md": "a3dfb249fe267bbc354a72d1235617cffd633942a78e6e284ab7cf64f7f5be98",
+        "models/face_landmarker.task": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+        "voice-capture-worklet.js": "1f9fbce6cd30b1335c782760acab2ea68f4328453e2a63ca2a83c3df24ac01a0"
+      }
+    },
+    "timingFollowup": {
+      "status": "passed",
+      "summaryPath": "benchmarks/voice-prosody/timing-followup-summary.json",
+      "summarySha256": "d835262ee869f663742b8ad22721dc45cc5533f84e4c0d6fb840f0e0005ab2ba"
+    },
+    "hybridFollowup": {
+      "status": "offline-components-passed-production-unqualified",
+      "summaryPath": "benchmarks/voice-prosody/hybrid-summary.json",
+      "summarySha256": "b098f240a131042ead9476aa1fd766441a3e904116c7a217bfc871030483aad7"
+    },
+    "unchangedSidecarAndPostgres": {
+      "rerun": false,
+      "historicalEvidence": "benchmarks/voice-prosody/local-validation.json",
+      "note": "No source changes in these subsystems; historical4 sidecar and6 PostgreSQL checks are retained and not claimed as new runs."
+    },
+    "finalPrecommitStructure": {
+      "command": "npm run check",
+      "status": "passed",
+      "localLog": "research/voice-prosody/runs/followup-local-validation/structure-final.log",
+      "logSha256": "733a3c3a80838eed72f1ae136613af2c94c3544b64e107f45c5b0f8c29acd8a4"
+    }
+  },
+  "sourceSha256": {
+    "apps/capture-web/e2e/ambient-browser-fixture.ts": "a3964c2f5bd85dce2746de5ed3639bb732e58a0c977a4a273844546384620db7",
+    "apps/capture-web/e2e/voice-research.spec.ts": "ee19809330e6fd3d409505a077f832d475061cdebe9f85e472c9f991b52d976b",
+    "apps/capture-web/public/asset-manifest.json": "1783d811067f68229c991bc128e986795a8dc530400b0d2968bf5a738669676f",
+    "apps/capture-web/public/voice-capture-worklet.js": "1f9fbce6cd30b1335c782760acab2ea68f4328453e2a63ca2a83c3df24ac01a0",
+    "apps/capture-web/src/research-voice-replay.ts": "c723ef221080566e97370261567737f8b02210a47d3102ba202116cc52689a4a",
+    "apps/capture-web/src/voice-capture.test.ts": "7fc021f1e83609a4e1966e562d9098dd68f691feb51e1bcbb5dff30e8c11d4c3",
+    "apps/capture-web/src/voice-capture.ts": "66c649fd056bca537267fa2e2120a30abc09ce7b33d1de253735f0ac7ed58570",
+    "apps/capture-web/src/voice-clock-probe.test.ts": "99ad670913426dd566e33c83a17b572e5afd019000f8a13d7634a3d655205aa7",
+    "apps/capture-web/src/voice-clock-probe.ts": "cf2d9d9ac6bca616438103ea7605e994914ef5a05f49a8b9f82326a075bca2b8",
+    "apps/capture-web/src/voice-render-freshness.test.ts": "a1e6b1fbd64057aa2b28bb8505ae7e5adf5fa3c5775bc82094f09bd1814d8d97",
+    "apps/capture-web/src/voice-render-freshness.ts": "b433e6cd8a044ab4beab94cdd47231b233ed20cc1922b8f347566cc6a6757004",
+    "apps/capture-web/src/voice-result-transport.test.ts": "d3a24e1403b3a5187c8f61124b2bd6e1b8a6e41ad560e7e379cf313027c24b60",
+    "apps/capture-web/src/voice-result-transport.ts": "9b6adae54d198a3b57e688d789db7ff2493585a1dfeafbc6cf607f99083a8fd4",
+    "apps/capture-web/src/voice-stream-timing.ts": "1cd7962a229bad54602b81bf0c1b568febaf2cc9fa634cee8e56d4fc6d18dca4",
+    "apps/capture-web/src/voice-worker-protocol.ts": "892e1998f6d27d4d808d848656fe6630327b9a627b4212a474785f21a8ec3f57",
+    "apps/capture-web/src/voice-worker.test.ts": "2b62dfa5026d780d3b2811a20d896453b46b1cb1c5caa5744c8189d41dd582e3",
+    "apps/capture-web/src/voice-worker.ts": "81e2e0a531052ca5cf2c1e7a0d395791ac2107009ac07fa27a8e69e59137b56a",
+    "apps/capture-web/src/voice-worklet.test.ts": "221288b2462b916ecb844a667d4294d5de048f928178cd931d67aca5d26be70f",
+    "apps/clinician-review/e2e/connected-encounter.spec.ts": "7adf74f4ef1e6b5831f64c4ad5bc4ae8a326c65a2cca98674632e8228ab6ce3e",
+    "apps/clinician-review/e2e/connected-host.fixture.ts": "0874060acd3a2ad418e815e9574017625f13e50a6c6b9daf217b18192dfc0501",
+    "packages/contracts/src/observation.ts": "d7a644e0af4f4597cf06c2f1670f82736d212a4d8a73595dd4d63b744abd37c4",
+    "research/voice-prosody/alias_sweep.ts": "81d66913a35da69fb424418567c6427b9c04e17ea8d7a514476ed09f9fee6503",
+    "research/voice-prosody/hybrid_features.ts": "a792e256d17b71163fb5be8ae2bfeabb1fdcd8250e4eeae85b5c86893eea4c68",
+    "research/voice-prosody/phenometrix_prosody/alias_diagnostic.py": "719312cb6dcffa7bcfa7d0fd0f5bcf4c95a410fd0eb511820df608e915cc32fd",
+    "research/voice-prosody/phenometrix_prosody/audit_browser.py": "8babc87cf9ec0d1162113bda19a7bfa6529855609663d0c665456f455dbe105b",
+    "research/voice-prosody/phenometrix_prosody/audit_clock.py": "671fc258620c862808b84602b2b19e336a5ab8dd719966ef7366f864fc006569",
+    "research/voice-prosody/phenometrix_prosody/audit_hybrid_synthetic.py": "6a76aa1f8b158272f476b4b5e16a3b699872506751c9da870ab148a763655dcd",
+    "research/voice-prosody/phenometrix_prosody/hybrid_followup.py": "786631235ceb71d71620c17f5483ae074455f51cb89c17d610c00a7afdba7252",
+    "research/voice-prosody/phenometrix_prosody/hybrid_natural.py": "fab3e738410ffde819a941361d6c1a108b4f0452f4446176876243f350bc00bb",
+    "research/voice-prosody/tests/test_alias_diagnostic.py": "9fc9e956f3451b59eb8c327820ff6a528b92007f7410508b461ee2c399b47de0",
+    "research/voice-prosody/tests/test_audit_browser.py": "be5a5698d0ef3b7734a6b5f1e581b9841aa9448bf43432ab5c721b5a6a841d6f",
+    "research/voice-prosody/tests/test_audit_clock.py": "065d9aad90652e182008dc8b48755bd3d8c8d14dd912154d7f433cbd10eb9a19",
+    "research/voice-prosody/tests/test_hybrid_followup.py": "a23caf29bfe8c83091e14ba3b1a3c596581409bfb193cc463109bdde553a38e6",
+    "research/voice-prosody/tests/test_hybrid_natural.py": "6d9e28a36d31d584be1701bc6e12ef0b50f76861ef07a57e4067fec2fbb671a0"
+  },
+  "limits": [
+    "Software freshness is not physical acquisition latency; timer precision remains unknown.",
+    "Offline hybrid components are not calibrated correctness, independent natural test performance, or browser runtime qualification.",
+    "Public log hashes establish identity; raw local logs and audio remain ignored."
+  ]
+}

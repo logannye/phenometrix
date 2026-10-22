@@ -52,7 +52,7 @@ export interface AudioPipelineProvenance {
   processorRef: string;
   runtime: "audio-worklet-voice-worker";
   workletSchemaVersion: "phenometric.voice-worklet-message.v1" | "phenometric.voice-worklet-message.v2";
-  workerSchemaVersion: "phenometric.voice-worker-message.v1" | "phenometric.voice-worker-message.v2";
+  workerSchemaVersion: "phenometric.voice-worker-message.v1" | "phenometric.voice-worker-message.v2" | "phenometric.voice-worker-message.v3";
   signalFrameSchemaVersion: "phenometric.voice-signal-frame.v1";
   analysisWindowMs: 40;
   analysisHopMs: 10;
@@ -60,6 +60,12 @@ export interface AudioPipelineProvenance {
   algorithmVersion: string;
   /** Versioned timing semantics are independent of pitch arithmetic. */
   timingContractVersion?: string;
+  renderFreshnessContractVersion?: string;
+  renderFreshnessPolicy?: "required-render-lease-v1" | "unqualified-legacy-fixture";
+  renderFreshnessMaximumAgeMs?: number;
+  renderLeaseRenewalMs?: number;
+  renderLeaseMaximumPending?: number;
+  renderLeaseLedgerCapacity?: number;
   /** Actual input track rate; this determines acquisition quality eligibility. */
   acquisitionSampleRateHz?: number;
   /** AudioContext PCM rate after any browser resampling, before DSP decimation. */
@@ -93,6 +99,10 @@ export interface AudioStreamDiagnostics {
   maximumInFlightBlocks?: number;
   staleTransportBlockCount?: number;
   staleTransportSampleCount?: number;
+  freshnessWithheldBlockCount?: number;
+  freshnessWithheldSampleCount?: number;
+  freshnessWithheldReasons?: Record<string, number>;
+  freshnessPolicy?: "required-render-lease-v1" | "unqualified-legacy-fixture";
   inFlightResultBatchCount?: number;
   maximumInFlightResultBatches?: number;
   resultBackpressureBlockCount?: number;

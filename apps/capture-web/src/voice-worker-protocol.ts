@@ -1,3 +1,4 @@
+import { VOICE_RENDER_FRESHNESS_VERSION, type VoiceRenderFreshnessPolicy, type VoiceRenderLease } from "./voice-render-freshness.js";
 import type { VoiceResearchPrediction } from "./voice-research-hook.js";
 import type {
   AudioCaptureSettings,
@@ -17,7 +18,7 @@ export const VOICE_MAXIMUM_RESULT_RECORDS = 5; // At most four frames and one di
 export const VOICE_MAXIMUM_PCM_BLOCK_MS = 40;
 
 export const VOICE_WORKER_MESSAGE_VERSION =
-  "phenometric.voice-worker-message.v2" as const;
+  "phenometric.voice-worker-message.v3" as const;
 export const VOICE_SIGNAL_FRAME_VERSION =
   "phenometric.voice-signal-frame.v1" as const;
 export const VOICE_WORKLET_MESSAGE_VERSION =
@@ -50,6 +51,7 @@ export type VoiceWorkerRequest =
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
       type: "initialize";
+      freshnessPolicy: VoiceRenderFreshnessPolicy;
       captureEpoch: number;
       port: MessagePort;
       /** Null while the audio context is not running. */
@@ -127,6 +129,7 @@ export type VoiceWorkerResponse =
       processingLatencyMs: number | null;
       timing: VoiceFrameTiming;
       research?: VoiceResearchPrediction;
+      renderLease?: VoiceRenderLease | null;
     }
   | {
       schemaVersion: typeof VOICE_WORKER_MESSAGE_VERSION;
@@ -173,6 +176,8 @@ export interface VoiceWorkletPcmBlock {
   sampleRateHz: number;
   channelCount: 1;
   buffer: ArrayBuffer;
+  /** Lease present before this block's first observed input; never refreshed at block end. */
+  renderLease?: VoiceRenderLease | null;
 }
 
 export interface VoiceWorkletTransportDiagnostics {
@@ -218,7 +223,7 @@ export function isCurrentVoiceWorkerResponse(
   );
 }
 
-export function audioPipelineProvenance(): AudioPipelineProvenance {
+export function audioPipelineProvenance(freshnessPolicy: VoiceRenderFreshnessPolicy = "required-render-lease-v1"): AudioPipelineProvenance {
   return {
     processorRef: VOICE_DSP_PROCESSOR_REF,
     runtime: "audio-worklet-voice-worker",
@@ -231,12 +236,22 @@ export function audioPipelineProvenance(): AudioPipelineProvenance {
     algorithmVersion: VOICE_DSP_ALGORITHM_VERSION,
     timingContractVersion: VOICE_TIMING_CONTRACT_VERSION,
     transportMaxInFlightBlocks: 4,
-    transportMaxBlockAgeMs: VOICE_MAXIMUM_BLOCK_AGE_MS,
+    ...(freshnessPolicy === "unqualified-legacy-fixture" ? { transportMaxBlockAgeMs: VOICE_MAXIMUM_BLOCK_AGE_MS } : {}),
+    renderFreshnessContractVersion: VOICE_RENDER_FRESHNESS_VERSION,
+    renderFreshnessPolicy: freshnessPolicy,
+    renderFreshnessMaximumAgeMs: 100,
+    renderLeaseRenewalMs: 25,
+    renderLeaseMaximumPending: 1,
+    renderLeaseLedgerCapacity: 8,
     resultMaxInFlightBatches: VOICE_MAXIMUM_RESULT_BATCHES,
     resultMaxRecordsPerBatch: VOICE_MAXIMUM_RESULT_RECORDS + 1,
-    resultMaxAgeMs: VOICE_MAXIMUM_RESULT_AGE_MS,
-    resultDropPolicy: "drop-input-at-result-cap;discard-stale-at-main;reset-on-result-loss",
-    transportDropPolicy: "drop-new-at-cap;drop-stale-at-worker;reset-on-gap",
+    ...(freshnessPolicy === "unqualified-legacy-fixture" ? { resultMaxAgeMs: VOICE_MAXIMUM_RESULT_AGE_MS } : {}),
+    resultDropPolicy: freshnessPolicy === "required-render-lease-v1"
+      ? "drop-input-at-result-cap;require-main-render-lease;reset-on-result-loss"
+      : "unqualified-legacy-fixed-projection-age-gate;drop-input-at-result-cap;reset-on-result-loss",
+    transportDropPolicy: freshnessPolicy === "required-render-lease-v1"
+      ? "drop-new-at-cap;require-render-lease-at-worker;reset-on-gap"
+      : "unqualified-legacy-fixed-projection-age-gate;drop-new-at-cap;reset-on-gap",
     latencyStatisticWindowFrames: 500
   };
 }

@@ -1,3 +1,4 @@
+import type { VoiceRenderLease } from "./voice-render-freshness.js";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 import { describe, expect, it } from "vitest";
@@ -10,6 +11,7 @@ interface WorkletMessagePort {
 }
 interface CapturedBlock {
   schemaVersion: string; type: string; captureEpoch: number; clockMappingId: number;
+  renderLease: VoiceRenderLease | null;
   sequence: number; absoluteSampleIndex: number; endAudioFrameExclusive: number;
   acquisitionAudioTimeSeconds: number; transportId: number;
   droppedBlockCount: number; droppedSampleCount: number; inFlightBlockCount: number; buffer: ArrayBuffer;
@@ -50,6 +52,79 @@ function fixture() {
 }
 
 describe("voice capture AudioWorklet", () => {
+  it("snapshots the lease before the first block sample and never refreshes partial support", () => {
+    const f = fixture();
+    const first: VoiceRenderLease = { schemaVersion: "phenometric.voice-render-freshness.v1", leaseId: 1,
+      captureEpoch: 7, clockMappingId: 0, mainTimeOriginMs: 100000, issuedAtMainMs: 1000, expiresAtMainMs: 1100 };
+    f.render(128); // This partial block started before any lease existed.
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease: first } });
+    f.render(832);
+    expect(f.blocks[0].renderLease).toBeNull();
+    f.render(128);
+    const second = { ...first, leaseId: 2, issuedAtMainMs: 1025, expiresAtMainMs: 1125 };
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease: second } });
+    f.render(832);
+    expect(f.blocks[1].renderLease).toEqual(first); // Both potential 10 ms endpoints keep this oldest lease.
+    f.render();
+    expect(f.blocks[2].renderLease).toEqual(second);
+    expect(f.blocks.map(block => block.absoluteSampleIndex)).toEqual([0, 960, 1920]);
+    expect(f.controlMessages.map(message => message.disposition)).toEqual(["accepted", "accepted"]);
+  });
+
+  it("clears leases at mapping and epoch changes and returns retired controls without minting PCM credit", () => {
+    const f = fixture();
+    const lease = { schemaVersion: "phenometric.voice-render-freshness.v1", leaseId: 1,
+      captureEpoch: 7, clockMappingId: 0, mainTimeOriginMs: 100000, issuedAtMainMs: 1000, expiresAtMainMs: 1100 };
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease } });
+    f.render();
+    f.processor.port.onmessage?.({ data: { type: "clock-mapping", clockMappingId: 1 } });
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease: { ...lease, leaseId: 2 } } });
+    f.render();
+    expect(f.blocks[1].renderLease).toBeNull();
+    expect(f.controlMessages.at(-1)).toMatchObject({ leaseId: 2, disposition: "retired" });
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease: { ...lease, leaseId: 3, clockMappingId: 1 } } });
+    f.processor.port.onmessage?.({ data: { type: "capture-epoch", captureEpoch: 8, clockMappingId: 2 } });
+    f.render();
+    expect(f.blocks[2].renderLease).toBeNull();
+    expect(f.processor.pool.length + f.processor.inFlight.size).toBe(4);
+    f.processor.port.onmessage?.({ data: { type: "dispose" } });
+    const count = f.controlMessages.length;
+    f.processor.port.onmessage?.({ data: { type: "render-freshness-lease", lease: { ...lease, leaseId: 4 } } });
+    expect(f.controlMessages).toHaveLength(count);
+  });
+
+  it("observes the next render boundary even when a stalled worker exhausts all PCM credits", () => {
+    const f = fixture();
+    for (let i = 0; i < 4; i += 1) f.render(); // Worker has returned no buffers.
+    const frame = f.context.currentFrame;
+    f.processor.port.onmessage?.({ data: { schemaVersion: "phenometric.voice-clock-probe.v1", type: "clock-probe",
+      captureEpoch: 7, clockMappingId: 0, probeId: 1 } });
+    expect(f.controlMessages).toHaveLength(0); // Message handling itself is not the render observation.
+    f.render(128);
+    expect(f.controlMessages).toEqual([{ schemaVersion: "phenometric.voice-clock-probe.v1", type: "clock-probe-result",
+      captureEpoch: 7, clockMappingId: 0, probeId: 1, renderStartFrame: frame, sampleRateHz: 48000 }]);
+    expect(f.blocks).toHaveLength(4);
+    expect(f.processor.inFlight.size).toBe(4);
+  });
+
+  it("bounds pending probes and invalidates old mapping/epoch requests", () => {
+    const f = fixture();
+    const request = { schemaVersion: "phenometric.voice-clock-probe.v1", type: "clock-probe",
+      captureEpoch: 7, clockMappingId: 0, probeId: 1 };
+    f.processor.port.onmessage?.({ data: request });
+    f.processor.port.onmessage?.({ data: { ...request, probeId: 2 } });
+    f.render(128);
+    expect(f.controlMessages).toHaveLength(1);
+    expect(f.controlMessages[0].probeId).toBe(1);
+    f.processor.port.onmessage?.({ data: request }); // Completed duplicate.
+    f.render(128); expect(f.controlMessages).toHaveLength(1);
+    f.processor.port.onmessage?.({ data: { ...request, probeId: 2 } });
+    f.processor.port.onmessage?.({ data: { type: "clock-mapping", clockMappingId: 1 } });
+    f.render(128); expect(f.controlMessages).toHaveLength(1);
+    f.processor.port.onmessage?.({ data: { ...request, probeId: 3 } }); // Retired mapping.
+    f.render(128); expect(f.controlMessages).toHaveLength(1);
+  });
+
   it("emits exact endpoints inside irregular render quanta and reuses returned credits", () => {
     const f = fixture();
     f.render(800); f.render(300);
