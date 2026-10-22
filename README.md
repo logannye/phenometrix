@@ -186,6 +186,39 @@ additional fitting, inference or waveform generation. See the
 [aggregate evidence](benchmarks/voice-prosody/harmonic-context-summary.json), and
 [local validation](benchmarks/voice-prosody/harmonic-local-validation.json).
 
+## Subharmonic-ranking objective experiment
+
+A second bounded study keeps the 3,009-parameter relative-context model fixed
+and tests the original set loss, a margin against all wrong candidates, and a
+margin focused on harmonic aliases. Nine local GPU fits took **98.49 seconds**.
+The predesignated alias-margin arm improves the failing 337.1 Hz seed from
+0/112 to **56/112 and 58/112** correct post-change targets across the two phases,
+but still misses the unchanged 95% requirement.
+
+| Objective | Mean development joint error |
+| --- | ---: |
+| Original set loss, refitted control | 8.4492% |
+| All-negative margin | 8.4397% |
+| Harmonic-alias margin, predesignated | 8.5126% |
+
+The candidate gains only 0.1224 percentage points over original MLP and 0.4098
+over hybrid, below the required 0.5 against both. It worsens error by 0.0634 points
+versus its refitted control. A new prospective challenge exposes **0/112 correct
+at 354.5 Hz in both phases for every new and prior selector**, despite correct
+candidates and positive voiced decisions throughout. The old stationary and
+100/200/300 Hz post-change gates pass; natural and both challenge gates fail.
+**No gates were relaxed, and the loss is not promoted. Production remains DSP.**
+
+The diagnosis finds sparse high-F0 training coverage and cases where total
+acceptable probability mass exceeds a wrong candidate's mass while that wrong
+candidate still wins individually. These are hypotheses for further bounded
+work, not evidence that more training will solve the issue. All three refitted
+controls exactly reproduce the prior models and saved outputs.
+See the [plan](research/voice-prosody/SUBHARMONIC_EXPERIMENT_PLAN.md),
+[results](research/voice-prosody/SUBHARMONIC_RESULTS.md),
+[aggregate evidence](benchmarks/voice-prosody/subharmonic-objective-summary.json),
+and [local validation](benchmarks/voice-prosody/subharmonic-local-validation.json).
+
 ## Implemented encounter path
 
 ```text
@@ -287,7 +320,14 @@ disconnected from capture. The [research README](research/voice-prosody/README.m
 separates synthetic smoke, public-corpus experiments, and actual-browser replay.
 Browser fixtures and synthetic replay do not establish real-microphone accuracy.
 
-The current [harmonic-context validation](benchmarks/voice-prosody/harmonic-local-validation.json)
+The current [subharmonic validation](benchmarks/voice-prosody/subharmonic-local-validation.json)
+records **306 passing research tests**, `npm run check`, 101,599 exact independent score comparisons and
+2,361,780 checkpoint replay comparisons without output mismatches. All three
+refitted controls reproduce their prior tensors and saved predictions exactly.
+Numerical warnings remain documented; software validation does not override
+failed model gates.
+
+The preceding [harmonic-context validation](benchmarks/voice-prosody/harmonic-local-validation.json)
 records **244 passing research tests**, `npm run check`, 138,382 independent
 score comparisons and 3,120,816 saved-checkpoint replay comparisons with no
 state, frequency, voicing-gate or candidate-membership mismatches. The original

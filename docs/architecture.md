@@ -289,3 +289,14 @@ JSON error; independent score, inference and bottleneck auditors bind the
 lineage. These components remain outside browser assets and production; both
 natural advancement and prospective challenge gates failed. See
 [HARMONIC_RESULTS.md](../research/voice-prosody/HARMONIC_RESULTS.md).
+
+The subsequent `subharmonic_objective` component supplies TRAIN-only negative
+masks and auxiliary losses to the unchanged relative-context selector. Its
+symmetric harmonic relationships use actual emitted candidate frequencies and
+existing acceptable labels; neither references nor margin rules enter inference.
+`subharmonic_experiment` freezes nine checkpoints and every prediction before
+scoring; `subharmonic_challenge` adds a new source-bound generation contract while
+preserving the old challenge as required regression. Separate arithmetic,
+checkpoint-replay and region-coverage auditors verify the artifacts. This remains
+offline research: the partial 337.1 Hz repair and new 354.5 Hz failure do not pass
+advancement gates. See [SUBHARMONIC_RESULTS.md](../research/voice-prosody/SUBHARMONIC_RESULTS.md).

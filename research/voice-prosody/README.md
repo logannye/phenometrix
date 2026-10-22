@@ -24,6 +24,42 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Subharmonic-ranking objective follow-up
+
+The [nine-fit objective study](SUBHARMONIC_RESULTS.md) partially repairs the
+337.1 Hz seed-specific failure to 56/112 and 58/112 correct post-change targets,
+but both remain below 95%. Alias-margin raises development error to 8.5126%
+from the exactly reproduced control's 8.4492%. New 354.5 Hz phase cases fail
+for every new/prior selector despite full candidate coverage and voiced output.
+The designated candidate remains a no-go under the unchanged advancement criteria.
+
+The [frozen plan](SUBHARMONIC_EXPERIMENT_PLAN.md) retains architecture, natural
+training, scaling, voiced decisions, timing, targets and update count. It adds
+a symmetric TRAIN-only harmonic-negative margin without inference-time rules.
+All nine checkpoints precede new challenge generation and all predictions
+precede development scoring. The old twelve challenge cases remain required
+consumed regressions. No extra fit or outcome-based arm selection followed.
+
+With the existing caches, the recorded experiment command was:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.subharmonic_experiment --output runs/subharmonic-objective-v1
+```
+
+This run completed normally. Existing outputs are never overwritten; any
+reproduction requires a fresh ignored run path. Raw media, references, features,
+weights and natural frame predictions remain local. The source-bound
+[independent score audit](../../benchmarks/voice-prosody/subharmonic-independent-audit.json),
+[checkpoint replay](../../benchmarks/voice-prosody/subharmonic-inference-audit.json),
+[coverage/state diagnostic](../../benchmarks/voice-prosody/subharmonic-challenge-diagnostic.json),
+[refitted-control comparison](../../benchmarks/voice-prosody/subharmonic-refitted-control-audit.json),
+and [local validation](../../benchmarks/voice-prosody/subharmonic-local-validation.json)
+verify the reported outcome without changing the no-go.
+
+The final local suite passes **306 research tests** and `npm run check`; three
+historical NumPy warnings remain explicit. These checks verify software behavior
+and do not override the failed advancement gates.
+
 ## Harmonic-context follow-up
 
 The [bounded harmonic-context experiment](HARMONIC_RESULTS.md) is complete.
