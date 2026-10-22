@@ -154,6 +154,38 @@ or production promotion was performed. See the [plan](research/voice-prosody/SEL
 [full results](research/voice-prosody/SELECTOR_RESULTS.md), and
 [aggregate evidence](benchmarks/voice-prosody/selector-step1-summary.json).
 
+## Harmonic-balance follow-up
+
+A bounded local experiment adds relative-frequency context to shared candidate
+scoring, with an equal-parameter absolute-context control. Four arms and three
+fixed seeds used the same natural training data and frozen original voicing.
+The relative/acceptable-set candidate repairs the old 300 Hz harmonic-change
+failure: **95/95 post-change targets correct in every seed**, while its control
+still fails all 95 in seed 20261023.
+
+| New context / objective | Mean development joint error |
+| --- | ---: |
+| Absolute / nearest | 8.4170% |
+| Absolute / acceptable set | 8.4813% |
+| Relative / nearest | 8.3919% |
+| Relative / acceptable set (predesignated) | 8.4492% |
+
+The designated model gains 0.1858 percentage points over original MLP and 0.4733
+over hybrid; both remain below the unchanged 0.5-point requirement. Twelve new
+frequency/phase cases were generated after checkpoint freeze. Seed 20261023
+scores **0/112 correct in both 337.1 Hz post-change cases**, despite available
+correct candidates and voiced outputs. The other 34 seed/case combinations pass,
+but the per-seed/per-case challenge gate fails. **Overall advancement remains
+no-go; production remains DSP.**
+
+All twelve GPU fits took 57.07 seconds locally. A post-freeze JSON serialization
+failure was preserved and scoring recovered from the same predictions with no
+additional fitting, inference or waveform generation. See the
+[plan](research/voice-prosody/HARMONIC_EXPERIMENT_PLAN.md),
+[full results](research/voice-prosody/HARMONIC_RESULTS.md),
+[aggregate evidence](benchmarks/voice-prosody/harmonic-context-summary.json), and
+[local validation](benchmarks/voice-prosody/harmonic-local-validation.json).
+
 ## Implemented encounter path
 
 ```text
@@ -255,8 +287,15 @@ disconnected from capture. The [research README](research/voice-prosody/README.m
 separates synthetic smoke, public-corpus experiments, and actual-browser replay.
 Browser fixtures and synthetic replay do not establish real-microphone accuracy.
 
-The [step-1 validation record](benchmarks/voice-prosody/selector-local-validation.json)
-binds the new research sources: **193 Python tests** and `npm run check` pass.
+The current [harmonic-context validation](benchmarks/voice-prosody/harmonic-local-validation.json)
+records **244 passing research tests**, `npm run check`, 138,382 independent
+score comparisons and 3,120,816 saved-checkpoint replay comparisons with no
+state, frequency, voicing-gate or candidate-membership mismatches. The original
+serialization failure and three retained numerical warnings are explicit in
+that record. Audit passes verify the reported result; the advancement gates fail.
+
+The preceding [step-1 validation record](benchmarks/voice-prosody/selector-local-validation.json)
+binds the preceding research sources: **193 Python tests** and `npm run check` pass.
 An independent scorer reconstructs 86,360 comparisons with zero differences,
 and Torch CPU agrees with all 676,384 frozen training-frame outputs. Three NumPy
 warnings remain documented; output parity does not diagnose their cause.
@@ -270,7 +309,7 @@ and preserve all ten normal public assets byte for byte. The
 [previous follow-up record](benchmarks/voice-prosody/followup-local-validation.json)
 and [earlier validation record](benchmarks/voice-prosody/local-validation.json)
 retain historical evidence, including sidecar and PostgreSQL checks. Product,
-browser and sidecar checks were not rerun for the research-only step-1 changes;
+browser and sidecar checks were not rerun for the research-only selector changes;
 earlier browser results do not qualify the new selectors.
 
 ## Repository map

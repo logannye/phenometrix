@@ -10,8 +10,8 @@ measurable tradeoff. A separately versioned browser numerical repair passes the
 unchanged bounded parity checks. The complete local runtime series and 30 min
 hybrid soak also pass: complete-block p99 6.1 ms, zero 20 ms cadence misses and
 maximum certified software render age 54.4 ms in the soak.
-See [HYBRID_VALIDATION_RESULTS.md](HYBRID_VALIDATION_RESULTS.md) for the current
-stage and [HYBRID_RESULTS.md](HYBRID_RESULTS.md) for the earlier reused-development
+See [HYBRID_VALIDATION_RESULTS.md](HYBRID_VALIDATION_RESULTS.md) for the preceding
+hybrid stage and [HYBRID_RESULTS.md](HYBRID_RESULTS.md) for the earlier reused-development
 follow-up. Neither stage establishes calibrated correctness or clinical use.
 
 Read [RESULTS.md](RESULTS.md) for the final comparison, [PROTOCOL.md](PROTOCOL.md)
@@ -23,6 +23,44 @@ The [timing follow-up](TIMING_FOLLOWUP.md) documents the independently probed
 clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
+
+## Harmonic-context follow-up
+
+The [bounded harmonic-context experiment](HARMONIC_RESULTS.md) is complete.
+Relative candidate context repairs the old 300 Hz post-change failure in every
+seed, but the predesignated model's 8.4492% development error misses the unchanged
+natural gate. A prospective 12-case frequency/phase challenge exposes another
+threefold-period choice at 337.1 Hz: seed 20261023 gets 0/112 correct in both
+post-change phase cases. The candidate remains a no-go.
+
+The [plan](HARMONIC_EXPERIMENT_PLAN.md) fixes twelve local MPS fits, identical
+allocated parameter counts, natural-only training, unchanged voicing and support,
+and stricter per-seed/per-case harmonic gates. All final checkpoints precede new
+challenge generation; all predictions precede development-reference scoring.
+No new fit or scientific setting was tried after the result.
+
+The original run retains a NumPy-boolean JSON serialization failure after every
+prediction was frozen. Its sources are kept exact for provenance. The separate
+recovery command reads those predictions, applies unchanged scoring, and converts
+NumPy scalars only for JSON output. It never fits, infers or generates waveforms.
+With the existing local caches, the recorded sequence was:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.harmonic_selector_experiment --output runs/harmonic-context-v1
+# The preserved runner exits at the documented post-freeze serialization error.
+.venv/bin/python -m phenometrix_prosody.recover_harmonic_scores --run runs/harmonic-context-v1 --output runs/harmonic-context-score-recovery-v1
+```
+
+Existing run paths are never overwritten. Reproductions require fresh run paths;
+the diagnostic/evaluation data used here must not be relabeled independent.
+See [aggregate results](../../benchmarks/voice-prosody/harmonic-context-summary.json),
+[old-failure diagnosis](../../benchmarks/voice-prosody/harmonic-ranking-diagnosis.json),
+[challenge bottlenecks](../../benchmarks/voice-prosody/harmonic-challenge-diagnostic.json),
+[independent scoring](../../benchmarks/voice-prosody/harmonic-independent-audit.json),
+[checkpoint replay](../../benchmarks/voice-prosody/harmonic-inference-audit.json),
+and the [local validation receipt](../../benchmarks/voice-prosody/harmonic-local-validation.json).
+The final local suite passes 244 research tests and `npm run check`; software
+validation does not change the model's failed advancement gates.
 
 ## Candidate representation and loss: step 1
 

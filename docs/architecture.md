@@ -277,3 +277,15 @@ Grouped outputs are original candidate frequencies with preserved source/member
 provenance; their losses use actual emitted frequencies. These offline checkpoints
 are not browser assets or production estimators. The failed advancement gate is
 recorded in [SELECTOR_RESULTS.md](../research/voice-prosody/SELECTOR_RESULTS.md).
+
+The bounded harmonic-context follow-up adds `harmonic_selector_model` as an
+offline shared-scorer subclass, retaining the same candidates, grouping, targets
+and external voicing. Its absolute/relative context arms allocate identical
+parameters and differ only in the supplied frequency-ratio feature.
+`harmonic_challenge` requires an exact twelve-checkpoint/source freeze before
+generating prospective waveform inputs through the unchanged TypeScript replay.
+`recover_harmonic_scores` is a score-only recovery of the retained post-freeze
+JSON error; independent score, inference and bottleneck auditors bind the
+lineage. These components remain outside browser assets and production; both
+natural advancement and prospective challenge gates failed. See
+[HARMONIC_RESULTS.md](../research/voice-prosody/HARMONIC_RESULTS.md).

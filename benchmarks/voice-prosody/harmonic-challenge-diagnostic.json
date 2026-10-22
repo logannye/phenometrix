@@ -1,0 +1,1714 @@
+{
+  "schema": "phenometrix-harmonic-challenge-diagnostic.v1",
+  "scope": "Descriptive postfit bottlenecks for frozen relative+acceptable-set seeds; no additional gate, fit, waveform or reference access",
+  "run_path": "research/voice-prosody/runs/harmonic-context-v1",
+  "original_run_status": "failed",
+  "original_run_failure": "TypeError('Object of type bool is not JSON serializable')",
+  "score_recovery": {
+    "path": "research/voice-prosody/runs/harmonic-context-score-recovery-v1",
+    "status": "complete",
+    "all36_post_region_scores_agree": true
+  },
+  "selector_margin_provenance": "logits and margins not retained; no new selector inference performed",
+  "probability_provenance": {
+    "values_retained": false,
+    "binary_decision": "state0 iff p(voiced)<0.5 under frozen selector_experiment.infer; verified across all18 saved methods",
+    "model_weights_path": "research/voice-prosody/runs/delayed-mlp-seed20261022/weights.pt",
+    "model_weights_sha256": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+    "model_inference_repeated": false,
+    "calibration_established": false
+  },
+  "support_contract": {
+    "sample_rate_hz": 48000,
+    "measurement_delay_samples": 960,
+    "support_samples": 1920,
+    "end_grid": "2208+480*k",
+    "reference": "end-960",
+    "common_eligible": "reference>=3072 and reference+1536<=96000",
+    "post_region": "support_start=end-1920>=39840",
+    "correct_pitch": "finite voiced estimate within inclusive50c of constant analytic F0",
+    "denominator": "all common-eligible fully-post-change frames; no voicing or candidate-coverage exclusion"
+  },
+  "chronology": {
+    "checkpoints_frozen_at": "2026-10-22T22:28:12.210129+00:00",
+    "challenge_started_at": "2026-10-22T22:28:12.220413+00:00",
+    "challenge_completed_at": "2026-10-22T22:28:14.877645+00:00",
+    "predictions_frozen_at": "2026-10-22T22:28:34.835699+00:00",
+    "evidence_boundary": "stored timestamps and source control flow, not operating-system access logs"
+  },
+  "cases": {
+    "harmonic-balance-f0-p0": {
+      "frequency_hz": 87.3,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f0-p1": {
+      "frequency_hz": 87.3,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f1-p0": {
+      "frequency_hz": 137.9,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f1-p1": {
+      "frequency_hz": 137.9,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f2-p0": {
+      "frequency_hz": 223.7,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f2-p1": {
+      "frequency_hz": 223.7,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f3-p0": {
+      "frequency_hz": 337.1,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 0,
+            "incorrect_pitch": 112,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": {
+            "min_hz": 112.35488739972992,
+            "median_hz": 112.37742664971248,
+            "max_hz": 112.39902155252703,
+            "near_half_f0_frames": 0,
+            "near_double_f0_frames": 0
+          },
+          "success_within_50c_all_frames": 0.0,
+          "failure_all_frames": 1.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 112,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f3-p1": {
+      "frequency_hz": 337.1,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 0,
+            "incorrect_pitch": 112,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": {
+            "min_hz": 112.35423792294434,
+            "median_hz": 112.37626453505524,
+            "max_hz": 112.39861156830148,
+            "near_half_f0_frames": 0,
+            "near_double_f0_frames": 0
+          },
+          "success_within_50c_all_frames": 0.0,
+          "failure_all_frames": 1.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 112,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f4-p0": {
+      "frequency_hz": 467.3,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f4-p1": {
+      "frequency_hz": 467.3,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f5-p0": {
+      "frequency_hz": 613.7,
+      "phase_radians": [
+        0.37,
+        -0.41,
+        1.13
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    },
+    "harmonic-balance-f5-p1": {
+      "frequency_hz": 613.7,
+      "phase_radians": [
+        1.19,
+        0.23,
+        -0.73
+      ],
+      "post_region": {
+        "frames": 112,
+        "first_support_start_sample": 40128,
+        "last_support_end_sample_exclusive": 95328,
+        "first_reference_sample": 41088,
+        "last_reference_sample": 94368
+      },
+      "coverage": {
+        "raw_correct_candidate_frames": 112,
+        "grouped_correct_candidate_frames": 112,
+        "raw_correct_candidate_absent_frames": 0,
+        "grouping_lost_correct_candidate_frames": 0,
+        "no_raw_candidate_frames": 0,
+        "raw_fraction": 1.0,
+        "grouped_fraction": 1.0
+      },
+      "frozen_voicing_decisions": {
+        "p_below_half_frames": 0,
+        "p_at_or_above_half_frames": 112,
+        "agreement_across_saved_methods": 18
+      },
+      "designated_seeds": {
+        "relative__acceptable-set__seed20261022": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261023": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        },
+        "relative__acceptable-set__seed20261024": {
+          "frames": 112,
+          "counts": {
+            "correct_pitch": 112,
+            "incorrect_pitch": 0,
+            "unvoiced": 0,
+            "unavailable": 0
+          },
+          "incorrect_pitch_summary": null,
+          "success_within_50c_all_frames": 1.0,
+          "failure_all_frames": 0.0,
+          "outcome_by_candidate_coverage": {
+            "grouped_correct_candidate_present": {
+              "correct_pitch": 112,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "correct_candidate_lost_in_grouping": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            },
+            "raw_correct_candidate_absent": {
+              "correct_pitch": 0,
+              "incorrect_pitch": 0,
+              "unvoiced": 0,
+              "unavailable": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "pooled_descriptive": {
+    "relative__acceptable-set__seed20261022": {
+      "frames": 1344,
+      "correct_pitch": 1344,
+      "incorrect_pitch": 0,
+      "unvoiced": 0,
+      "unavailable": 0,
+      "success_within_50c_all_frames": 1.0
+    },
+    "relative__acceptable-set__seed20261023": {
+      "frames": 1344,
+      "correct_pitch": 1120,
+      "incorrect_pitch": 224,
+      "unvoiced": 0,
+      "unavailable": 0,
+      "success_within_50c_all_frames": 0.8333333333333334
+    },
+    "relative__acceptable-set__seed20261024": {
+      "frames": 1344,
+      "correct_pitch": 1344,
+      "incorrect_pitch": 0,
+      "unvoiced": 0,
+      "unavailable": 0,
+      "success_within_50c_all_frames": 1.0
+    }
+  },
+  "bound_sha256": {
+    "research/voice-prosody/runs/harmonic-context-v1/manifest.json": "39613f9e09a5ce08e3297df93564c69d1a352e2e1a34f21b391107b03985a91c",
+    "research/voice-prosody/runs/harmonic-context-v1/prediction-freeze.json": "ae26c900df1664057a14d54397b77363bfdcdb01564508156fc0a46b679c8f7e",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoint-freeze.json": "8931d900993e4e737fe6d00a05cc7c1c43f4d8e717c7ca5c76dde5d9b8c6bd2f",
+    "research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md": "c8807259374f286092268aae71b1387007c1b8478a8d30182be7f03e93c9c297",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md": "c8807259374f286092268aae71b1387007c1b8478a8d30182be7f03e93c9c297",
+    "research/voice-prosody/phenometrix_prosody/selector_experiment.py": "c7690766c09f936adad72c0160eb02384f18dd6de2d2505dd4c2e120efe09b44",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/selector_experiment.py": "c7690766c09f936adad72c0160eb02384f18dd6de2d2505dd4c2e120efe09b44",
+    "research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+    "research/voice-prosody/phenometrix_prosody/evaluate.py": "1f7f09d43dcc5226b17a730b8d7f604780fa23e5ec3a43d0b414539e714ad205",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/evaluate.py": "1f7f09d43dcc5226b17a730b8d7f604780fa23e5ec3a43d0b414539e714ad205",
+    "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+    "research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+    "research/voice-prosody/phenometrix_prosody/pilot.py": "8ded044fd3045c9ba03f08fa5fab2151926c0b73fab4338ace11300148033f70",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/pilot.py": "8ded044fd3045c9ba03f08fa5fab2151926c0b73fab4338ace11300148033f70",
+    "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+    "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+    "research/voice-prosody/phenometrix_prosody/selector_headroom.py": "0cb7722cfee1fdadd046952c67eccf92fababa2dd978d9351e779b159d6edf94",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/selector_headroom.py": "0cb7722cfee1fdadd046952c67eccf92fababa2dd978d9351e779b159d6edf94",
+    "research/voice-prosody/HARMONIC_EXPERIMENT_PLAN.md": "49b49e96769c383021a190c512bf35daddac624e40b2fc954805ef5105a6ea4e",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/HARMONIC_EXPERIMENT_PLAN.md": "49b49e96769c383021a190c512bf35daddac624e40b2fc954805ef5105a6ea4e",
+    "research/voice-prosody/phenometrix_prosody/harmonic_selector_experiment.py": "5c0272be89054bec6940f80e216044f6624d1743e2110c5427200aea86ba449a",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/harmonic_selector_experiment.py": "5c0272be89054bec6940f80e216044f6624d1743e2110c5427200aea86ba449a",
+    "research/voice-prosody/phenometrix_prosody/harmonic_selector_model.py": "260932b14d61f55c2046e845e81b17b0840cbb4ade5a4f196ba016d61917c15e",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/harmonic_selector_model.py": "260932b14d61f55c2046e845e81b17b0840cbb4ade5a4f196ba016d61917c15e",
+    "research/voice-prosody/phenometrix_prosody/harmonic_challenge.py": "7a650c2d1f890372d8dcee0e884120f256b5dabdae5893e19b63d1967d5ebdae",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/phenometrix_prosody/harmonic_challenge.py": "7a650c2d1f890372d8dcee0e884120f256b5dabdae5893e19b63d1967d5ebdae",
+    "research/voice-prosody/replay.ts": "033bd55c949800b15e49e160447b07b27a598c61383a356acc9ce57f4e540639",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/replay.ts": "033bd55c949800b15e49e160447b07b27a598c61383a356acc9ce57f4e540639",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+    "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+    "research/voice-prosody/fixtures.ts": "a65d1021c3677b9e6dff7d501c5cc05dad9655bc7dd6b929f14054ae030b9aae",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/fixtures.ts": "a65d1021c3677b9e6dff7d501c5cc05dad9655bc7dd6b929f14054ae030b9aae",
+    "research/voice-prosody/oracle.ts": "97f9fbee11ca55d744540ee3c06a94ee2e1963ac65a036429a3d5a4132b26d19",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/oracle.ts": "97f9fbee11ca55d744540ee3c06a94ee2e1963ac65a036429a3d5a4132b26d19",
+    "apps/capture-web/package.json": "15f462e10edb1c36afc1c2bc2c1a1369335c94a283546da13d9c42d60f8772c7",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/apps/capture-web/package.json": "15f462e10edb1c36afc1c2bc2c1a1369335c94a283546da13d9c42d60f8772c7",
+    "research/voice-prosody/pyproject.toml": "b0227de88cd281c2385fad777bebf3cf7750c467ad585260e88c11b8c8f44152",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/pyproject.toml": "b0227de88cd281c2385fad777bebf3cf7750c467ad585260e88c11b8c8f44152",
+    "research/voice-prosody/uv.lock": "76d25386794c17f87df582b88d47eb0eae06f06afb6662ba79094f358c9b2f87",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/research/voice-prosody/uv.lock": "76d25386794c17f87df582b88d47eb0eae06f06afb6662ba79094f358c9b2f87",
+    "pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d",
+    "research/voice-prosody/runs/harmonic-context-v1/source-snapshot/pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__nearest__seed20261022.pt": "88ff2b24141fb19e18d47a212fe796049e6c9542105e92a9985c8905ce388ffd",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__acceptable-set__seed20261022.pt": "1e69230b16dc6fe2fe50c3ca34427690bb10b8e63b4d5be41bb7598da36fbe15",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__nearest__seed20261022.pt": "2271f285193873e6a74b311824550aacb5eeff60ad913fd5da04d4479cbe77d6",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261022.pt": "7128ec952d2557224ceed90dea7f3259eae4ba74b2be7b4d79a9b492f6cc9c49",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__nearest__seed20261023.pt": "bf14074c811aa0599d263a089e561f104f4de433a8b8f3a60d4f7f5f259204d9",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__acceptable-set__seed20261023.pt": "dcff3a433178fb1967864d1a47d3e1d5fb4e40825ebd9de7618df7559accbde5",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__nearest__seed20261023.pt": "cdf344caed3f3b3a23ff7d5894e8578d74b23c32fa8a7a8f17d9c70106e2b877",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261023.pt": "b1c8c4ab3e180c9ecb469a37964ce8523d4e36d72f770b323c4d076ae89b1eda",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__nearest__seed20261024.pt": "a89613b3fd1ff094acf32e4838cc36c8894822ca71403c6ffbe9c04904e62351",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/absolute__acceptable-set__seed20261024.pt": "f149f2053aaaa782f92c1fe924125f24fc167094cda5964b71f1b91d636586db",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__nearest__seed20261024.pt": "dff113b92a09b71c6dccdcd3e23fa000e131f9efea301faefa5370c669b2b267",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261024.pt": "b47727bc60098639ec6a2cf275020cbb834b431b64c67ebeace701c24c1863eb",
+    "research/voice-prosody/runs/delayed-mlp-seed20261022/weights.pt": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/manifest.json": "b94a29e6034dd94518f5329d19be8b85a68dcc274bea9ebc9ce06af1dd0e9cbf",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/spec.json": "03a2ec1a4c026d8a6fd6dc28fef6b36b2b0a54e3cd9b77fff1404b875359122d",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f0-p0.f32le": "596228011ec245aee22d59fc54ff4b9d789d169562d3b0866a7d71ea5ac7d09f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f0-p0.npz": "a974eab94769c965275e39323c8c9d5b0f4478a87fc467e4fb15b7404094c29c",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f0-p0.npz": "d7d2074824cd27f377b3262b2c967a28ee405f443e6df1708b4302bf76ba2557",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f0-p1.f32le": "a2aac9171309d99b5043c9bb8dfd441de0122867b85069029689455e9027ff9f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f0-p1.npz": "9bf9df2ebe18f4f848fb4d47aeb5b3b9019c36978147de143d002bb64de2fe33",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f0-p1.npz": "b055c540b8896ae05905719fb8746334d4229f12933d234734a117e5e1c32266",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f1-p0.f32le": "4a182d4e476d48ef4bef92cd066ddb3f1b89a68e76783b63cf139c95844f4ca7",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f1-p0.npz": "4b1bdc7a53d119f8601bc20ce53a099a737ba4a1119a47b4778959ca6497b8e2",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f1-p0.npz": "def6c0713aed07c567f7d92585d3cd6632fa280ecdfcf5c3d1e019b9f577f8c6",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f1-p1.f32le": "2fd4f6969762167b3670ae72b2a89f9386f257143ae14132af485201c51d229c",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f1-p1.npz": "c9fe17997b24926aabc8715d169800937de18b19b607bd653df0c85aecae951c",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f1-p1.npz": "a49204c037d16e1ce1559af4c04220cdc80d0da6cf028d3f882fb179ad25d93b",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f2-p0.f32le": "b2a30b78af986adf43e4025b8db093b5220794ab247a4ff77993c2eb59ec06c9",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f2-p0.npz": "6726cfc30b532f8143c33e1242251122618f5f5dd7e88d2ca1bd022f1813f7bb",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f2-p0.npz": "abc3c0ce144706536f05d5f18cded33220ae0187d513005c9759483f66b44f37",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f2-p1.f32le": "bfba1f8716bc032af671b85eb0b420a3467e106570e0b45a58c1dfe9ddaede17",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f2-p1.npz": "c173811ac7db26766f1e12cad24ec3743a2ed911d1d85db3879ef6fe45a653a4",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f2-p1.npz": "4671ddc36aecbd95fe5d9d41eaa2101b23e88a42511fa14562d6362aaaa1ca30",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f3-p0.f32le": "2aaef3c508a03bb7cf76e9e446d5c45dc1f7c0754e01e914ad2585c5ca5fe3b0",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f3-p0.npz": "e2f6a8507bcdca26773f06762f94cc508817e4310d4206795810c0f0f67056e5",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f3-p0.npz": "189a3300ef89b4695888a7771fae9a50a83b8336ee268ce8b035c34fd4e3f88f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f3-p1.f32le": "0a91de71e4a3cf1ade032240c4c5a835e34ec3f4c77ff8dba8471210be73eb5d",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f3-p1.npz": "002bd54659455ce827220198ccedb5097bf374a090cec1640672835677b02ba8",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f3-p1.npz": "786b52f2eac1523671192c86437c4270a86d5fabcf9d206ba71a46d4abce9c84",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f4-p0.f32le": "433d0440d375fbbc0853108365434fa52b361f4b2e0acac72b488cd58a3a772f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f4-p0.npz": "7d4d614abb1eabd7bb857c1dd01da9cdafd273a659a05d03f53fc4c981b29cf5",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f4-p0.npz": "ff437f1cc07f885feddff79cf759fadd09ab3c3b70f364f4c144ab345076c98d",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f4-p1.f32le": "ef7e84bc100f102ca1b5e2e08ed12f76fd3f79d9cd92429050eb8bf4449ead8f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f4-p1.npz": "16c76ca1ba29c4091087c29f9395434f6578084ffe936d2a350b45d6beaa4c59",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f4-p1.npz": "8f34f77c36e49a300814a2e16fa0a75617a2b39dce322f866d983ccfb338c001",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f5-p0.f32le": "83d64b520a30f6500bfaa9d0b4cb7b07e90c9d7181bb2535b0e2f8003c8e907f",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f5-p0.npz": "ac9b7c04b5be51ac6a58d330a87cfcb129dc72e4cb0ee92aec76773eb65cc63a",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f5-p0.npz": "cfcd0f52714a31e7ef831885b7275159a7bde554d7785d8086804a2c5cf01c58",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/pcm/harmonic-balance-f5-p1.f32le": "4ce192a1e8b8947da4f39487f82af78a33fdd25c76311161a6926f71df64e9d4",
+    "research/voice-prosody/runs/harmonic-context-v1/challenge/features/harmonic-balance-f5-p1.npz": "0cea6fb2e7e7754e8e7654b6ef037c814a4df5313308b298f8917dfd3ddd6f6e",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/challenge-harmonic-balance-f5-p1.npz": "aff8ce3a855f8110484c93db6cd7036511c85c84adff844dc089660ba6f8e9fc",
+    "research/voice-prosody/runs/harmonic-context-score-recovery-v1/manifest.json": "d8dd00223d0566aaabf0e627a1472258a2e5aed68afc73f7e907d5d977ba9319",
+    "research/voice-prosody/runs/harmonic-context-score-recovery-v1/metrics.json": "f6a08b6d098943c407dcb42f92c881adbd5b501d67e72235794752714b05cb0c",
+    "research/voice-prosody/phenometrix_prosody/diagnose_harmonic_challenge.py": "2762e42a7ebb28cbd5ae68e4e613859529df042902a6aec4e02e32bddae8e53d"
+  }
+}
