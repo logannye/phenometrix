@@ -24,6 +24,46 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Additive candidate pool and matched retraining
+
+The [six-fit study](EXPANDED_POOL_RESULTS.md) preserves every original raw
+candidate and adds at most one already-admitted full-window peak. The same
+3,009-parameter shared scorer is retrained on six- and seven-candidate pools
+across three seeds, with matched schedules and original-six TRAIN scaling.
+Historical weights evaluated on both pools separate acquisition from retraining.
+
+Raw development coverage improves from 88.1304% to 88.2399% without eviction,
+but expanded-pool joint error is 8.4589%, versus 8.4020% for the matched control.
+517.3/641.9 Hz remain at 0/112 correct post-change targets despite full coverage.
+Fresh 633.1 Hz phases score 24/112 and 23/112 for every selector; the other ten
+new configurations pass. All 62 prior cases remain, and all 74 cases are reported.
+Unchanged natural and per-case gates reject advancement.
+
+The [fixed plan](EXPANDED_POOL_PLAN.md) explicitly permits consumed development
+references for prerequisite pass/stop checks before fitting; final scores reload
+the same references after predictions freeze. It does not claim globally blinded
+or independent development evaluation. Six final checkpoints precede generation
+of the twelve prospective configurations. The unchanged synthetic TRAIN bank
+already has complete original-pool coverage, limiting what the experiment teaches
+about selecting cases where only the added candidate is correct.
+
+With the existing pinned environment and historical local artifacts, an authorized
+reproduction uses a NEW ignored path:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.expanded_pool_experiment --output runs/expanded-pool-reproduction-v1
+```
+
+The runner refuses overwrites, caps the comparison at six fits and preserves
+source, target, schedule, checkpoint and prediction identities. The recorded run
+completed locally in 158.90 seconds, including 61.69 seconds of MPS fitting.
+See the [aggregate evidence](../../benchmarks/voice-prosody/expanded-pool-summary.json),
+[independent score/training audit](../../benchmarks/voice-prosody/expanded-pool-independent-audit.json),
+[target-free equation replay](../../benchmarks/voice-prosody/expanded-pool-inference-audit.json)
+and [local validation receipt](../../benchmarks/voice-prosody/expanded-pool-local-validation.json).
+No additional experiment, production promotion or new browser qualification
+follows from this no-go. These fresh cases are now consumed regressions.
+
 ## Candidate-coverage follow-up
 
 The [bounded no-fit study](CANDIDATE_COVERAGE_RESULTS.md) restores correct raw and

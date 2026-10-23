@@ -74,7 +74,7 @@ correctness and runtime behavior:
 | Evaluation | Result | What it establishes |
 | --- | --- | --- |
 | Frozen natural-speech evaluation | Hybrid joint error **9.67%**, DSP **11.85%**, original candidate MLP **9.12%** across 160 recordings from four previously reserved speakers and four fixed conditions | The MLP-voicing/YIN-pitch hybrid improves on classical comparators, while its own MLP remains better on mean natural error. Predictions froze before reference acquisition. |
-| Candidate retention with frozen selectors | At 517.3/641.9 Hz, correct-candidate coverage rises **0/112 → 112/112**, while correct selections remain **0/112** in both phases and all three seeds | Recovering a missing candidate is insufficient: the fixed selector still chooses incorrectly. Unchanged advancement gates reject the revised pipeline. |
+| Expanded candidate pool with matched retraining | Development joint error **8.4589%**, versus **8.4020%** for the matched original pool; targeted 517.3/641.9 Hz selections remain **0/112** despite correct candidates on every post-change frame | Preserving the original candidates and retraining does not resolve selection errors. Unchanged advancement gates reject the expanded pipeline. |
 | Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
 | Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
 
@@ -94,18 +94,31 @@ strata, failures, uncertainty, and timing definitions are in the
 [natural-speech and browser validation report](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md).
 
 Earlier [augmentation](research/voice-prosody/AUGMENTATION_RESULTS.md) repaired
-337.1/354.5 Hz ranking failures in every seed. Stationary augmentation repaired
-the same cases, so a specific benefit from harmonic-change training is not
-established. The latest study then changed candidate retention with those
-selector weights fixed and no new training. On reused development speech, raw
-candidate coverage of reference-voiced targets fell from **88.1304% to 87.6029%**
-and mean joint error rose
-from **8.4018% to 8.4571%**. Both policies passed all twelve new synthetic
-configurations, showing retained performance on those cases rather than a gain.
-The [study report](research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md) and
-[aggregate evidence](benchmarks/voice-prosody/candidate-coverage-summary.json)
-retain all fifty earlier cases, unchanged gates, and independent scoring and
-inference audits. This development set remains exploratory evidence, separate
+337.1/354.5 Hz failures under both stationary and changing harmonic balance;
+a specific benefit from harmonic-change training was not established. A later
+[candidate-retention study](research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md)
+restored missing candidates but displaced useful hypotheses elsewhere.
+
+The latest study preserves the original pool and adds one acoustic hypothesis,
+then compares six matched local fits across two pool sizes and three seeds.
+On reused development speech, raw correct-candidate coverage improves from
+**88.1304% to 88.2399%**, but the retrained expanded pool has higher joint error
+than the matched original pool. Holding the previous weights fixed gives
+**8.4018%** with the original pool and **8.4339%** with the expanded pool;
+retraining the expanded pool does not improve either control.
+
+Both pools, with either old or retrained weights, retain the 337.1/354.5 Hz
+repairs across all three seeds, but still miss all **112 post-change frames** at 517.3/641.9 Hz in both phases.
+Of twelve new synthetic configurations, ten score **112/112** for every selector.
+At 633.1 Hz, all selectors score only **24/112** and **23/112** across the two
+phases, despite expanded-pool coverage of **112/112**. These are within-family
+synthetic checks, not evidence of external generalization. The
+[study report](research/voice-prosody/EXPANDED_POOL_RESULTS.md) and
+[aggregate evidence](benchmarks/voice-prosody/expanded-pool-summary.json) retain
+all 62 earlier cases, the twelve fresh cases, and unchanged advancement gates.
+Independent [scoring](benchmarks/voice-prosody/expanded-pool-independent-audit.json)
+and [inference](benchmarks/voice-prosody/expanded-pool-inference-audit.json) audits
+passed. This reused development set remains exploratory evidence, separate
 from the reserved-speaker evaluation above.
 
 **The learned estimator remains a no-go for promotion.** Voicing and candidate

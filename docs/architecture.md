@@ -328,3 +328,25 @@ policies and all 62 cases. This boundary remains offline: repaired target
 coverage does not repair selection, natural error rises, and unchanged gates
 reject advancement. See the [candidate-coverage plan](../research/voice-prosody/CANDIDATE_COVERAGE_PLAN.md)
 and [results](../research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md).
+
+
+The additive-pool follow-up isolates a new research boundary in
+`expanded_candidate_features`: original six-candidate frequencies and source
+evidence remain, with at most one additional admitted full-window peak in a
+versioned seven-slot schema. `expanded_selector_model` accepts six or seven
+candidates with the same 3,009-parameter equations; both training arms use
+original-six natural-TRAIN scaling and original-feature MLP voicing. Group
+representatives remain observed members. Raw retention is guaranteed, while
+regrouping losses are measured separately.
+
+`expanded_pool_experiment` freezes sources, input caches, reference-based
+candidate prerequisites and matched training schedules, then six final
+checkpoints before `expanded_cases` generates twelve prospective configurations.
+Consumed development references are used for declared prerequisite pass/stop
+checks before training and reloaded for final scoring only after predictions
+freeze; this does not claim globally blinded development evaluation. All 62
+prior analytic cases remain. Independent score and target-free equation auditors
+verify retention, grouping, training exposure, outputs and unchanged gates.
+This is an offline experiment without production promotion or new browser
+qualification. See the [fixed plan](../research/voice-prosody/EXPANDED_POOL_PLAN.md)
+and [results](../research/voice-prosody/EXPANDED_POOL_RESULTS.md).
