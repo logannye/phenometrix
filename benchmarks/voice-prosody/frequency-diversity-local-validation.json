@@ -1,0 +1,262 @@
+{
+  "base_commit": "63e4ed7390ddee5095420e203d0a2c24a49535c1",
+  "checks": {
+    "documentation": {
+      "local_targets": 116,
+      "pass_result": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/documentation-check-final.json",
+        "sha256": "615cc482c2efb5e1248d152152c236905b18638dac5ec8f81686b42cd6acdd9f"
+      }
+    },
+    "independent_audit": {
+      "bound_artifacts": 8353,
+      "candidate_frame_pairs": 401408,
+      "execution": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/auditor-actual-attempt1.execution.json",
+        "sha256": "9f521f5ca37df6b7bc5591506cee6233a43273ab2bbd0d967b5bb62f10538ee0"
+      },
+      "pass_result": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-v1/independent-audit.json",
+        "sha256": "3587af269f38689d2b04d1db04e5cb524efc8cd3533d91b88e3edb1b921f570e"
+      }
+    },
+    "independent_audit_fixtures": {
+      "included_in_full_suite": true,
+      "passed": 44
+    },
+    "postrun_research_tests": {
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/postrun-pytest.log",
+        "sha256": "a899a4c4d2d14f48e6fbca2273ed862c4b3bce0245819c5420a7a1f4d7825b52"
+      },
+      "outer_elapsed_seconds": 14.562436582986265,
+      "passed": 1020,
+      "peak_python_rss_bytes": 498171904,
+      "pytest_seconds": 13.81,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/postrun-pytest.execution.json",
+        "sha256": "0efe55f09972ba5e66b2c3718f8105d90eadbaa536a7f9a4cec65328eee22193"
+      },
+      "sources_unchanged": true,
+      "timeout_seconds": 300,
+      "warnings": 3
+    },
+    "preflight_research_tests": {
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/preflight-pytest.log",
+        "sha256": "a899a4c4d2d14f48e6fbca2273ed862c4b3bce0245819c5420a7a1f4d7825b52"
+      },
+      "passed": 1020,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/preflight-pytest.execution.json",
+        "sha256": "5e7343cc533e6cd09d509514efa41b01fccb3ec626ef0e8920be8652ccb8e8d2"
+      },
+      "warnings": 3
+    },
+    "producer_fixtures": {
+      "included_in_full_suite": true,
+      "passed": 38
+    },
+    "repository_structure": {
+      "command": "npm run check",
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/npm-check.log",
+        "sha256": "733a3c3a80838eed72f1ae136613af2c94c3544b64e107f45c5b0f8c29acd8a4"
+      },
+      "pass_result": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/npm-check-execution.json",
+        "sha256": "fca703642e05f9f35c8b4074d43505a825b8d0a7c812873abef7a8e0b5cade72"
+      }
+    },
+    "supervisor_lifecycle": {
+      "passed": 16,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-execution-v1/supervisor-toy-tests-attempt4.json",
+        "sha256": "07a122382f879dc65f8e4f73931c8f7bd9421a2b1586054eef3a3077850cb4b7"
+      }
+    },
+    "terminal_resource_audit": {
+      "checks": 23,
+      "limitations": [
+        "RSS/CPU and disk limits are sampled observations, not kernel-enforced hard limits or whole-machine memory bounds.",
+        "The terminal receipt source/identity and recorded maxima are checked; the supervisor does not retain every time sample, so maxima cannot be reconstructed as a raw trajectory.",
+        "Current process absence is a point-in-time group/identity/marker snapshot, not a complete OS execution history.",
+        "Concurrent authorized pytest/auditor workloads are allowed and separately identified; no scientific run, model fit, data generation or model evaluation was launched by this audit.",
+        "Current output totals may include post-study audit files written after the supervisor final sample."
+      ],
+      "limits_bytes": {
+        "minimum_free_disk": 17179869184,
+        "new_run_plus_execution_outputs": 8589934592,
+        "node_or_launcher_rss": 2147483648,
+        "python_rss": 17179869184
+      },
+      "observations": {
+        "authorized_validation_marker_pids": [],
+        "current_free_bytes": 302317465600,
+        "current_new_output_bytes": 793042126,
+        "disk_poll_seconds": 5,
+        "elapsed_seconds": 556.1345974169672,
+        "lease_exclusive_lock_available": true,
+        "minimum_observed_free_bytes": 302669955072,
+        "poll_seconds": 0.5,
+        "recorded_peak_new_output_bytes": 791444265,
+        "remaining_group_pids": [],
+        "sampled_peak_group_rss_bytes": 1322139648,
+        "sampled_peak_rss_bytes": {
+          "descendant": 261668864,
+          "python": 1322139648
+        },
+        "sampled_process_count": 594,
+        "unexplained_scientific_marker_pids": []
+      },
+      "pass_result": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/terminal-resource-audit.json",
+        "sha256": "05d6ad4bc2ab857fb8954b85c7e5460312a60852c25eee87a2a48b9df14613e9"
+      }
+    }
+  },
+  "historical_bindings": {
+    "research/voice-prosody/runs/evidence-factorial-v1/manifest.json": "208a9549c32c93283d6225546340cc53ac16f29d1b4f6fe1ad491f70831fec25",
+    "research/voice-prosody/runs/evidence-factorial-v1/source-freeze.json": "d498c4400dd1b5b707436e034b0901aef44b1880ba3357f6e4ec2359da0c0c8a",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/acquisition/manifest.json": "1d62a8441f36d82868eaf4d3153aabd916a434ef6784f6b04c23314978809223",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/acquisition/spec.json": "a996267bd62d5443039ab92e56ffd72298d4736c88362360a798eea5621f631b",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/frame-table.npz": "49441f16c76ba1d3e68801a83169a9c5e64b4c4b6b5124323937a3378efc9c59",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/independent-audit.json": "25ce98cabcb0e48e6fdd04acf35bb6a00adc0d2ad973aa0da04e5636b73483e6",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/manifest.json": "8090a5cc19452e1c69066b24f7900a8a59d1800e77c9cb2de80487b40a0fdfab",
+    "research/voice-prosody/runs/evidence-factorial-v2/feasibility/report.json": "f09a7874d1f9e7d6c72266ea7c64c2c980c0b8c0a170bbc8a6af026e33fb0a12",
+    "research/voice-prosody/runs/evidence-factorial-v2/independent-audit.json": "6b79e7c0dcd29f2117a3bcb6f985da482c6fa6ffeb73239192a52920812109d5",
+    "research/voice-prosody/runs/evidence-factorial-v2/manifest.json": "f586e51633e3d784e13d8065412ba55926fd344bc900d5f76672d7603fe3322d",
+    "research/voice-prosody/runs/evidence-factorial-v2/source-freeze.json": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b",
+    "research/voice-prosody/runs/overnight-20261023/repair-v1-to-v2.json": "759dd150be4b7fb2ab8cbcf4fca1cc3a0f3522dfa6dc0291f6381cd5d84c8cb2"
+  },
+  "limitations": [
+    "Three historical NumPy matmul warnings; all assertions passed, cause undetermined.",
+    "Full fixture suite uses toy model updates and toy signals, not scientific fits or fresh evaluation cases.",
+    "Scientific audit verifies saved extraction/grouping evidence and hashes; no independent raw-waveform/full-ACF replay.",
+    "Resources are sampled observations; no whole-machine or sub-poll peak guarantee.",
+    "No product source changes; product/browser/database/native build suites were not rerun.",
+    "Publication commit and all-event Actions verification are recorded after push in an ignored shipping receipt."
+  ],
+  "local_only": true,
+  "platform": "macOS-26.2-arm64-arm-64bit",
+  "preflight_failure_preservation": {
+    "auditor_fixture_repair": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/auditor-fixture-repair.json",
+      "sha256": "1c243aa4a74d43c6901e337bcbbd502f9d9de589f7058014e44e147f2e3c6d58"
+    },
+    "supervisor_attempts": "All four toy attempts and pre-repair supervisor snapshot retained in ignored frequency-diversity-execution-v1; repairs occurred before scientific freeze."
+  },
+  "schema": "phenometrix-frequency-diversity-local-validation.v1",
+  "scientific_boundary": {
+    "attempts": 1,
+    "fresh_evaluation_cases": 0,
+    "learned_promotion": "unchanged no-go",
+    "new_scientific_fits": 0,
+    "new_train_configurations": 1536,
+    "production_dsp_changed": false,
+    "training_support_pass": true
+  },
+  "source_identity": {
+    "historical_files_unchanged": 58,
+    "scientific_files": 71,
+    "source_freeze": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/frequency-diversity-v1/source-freeze.json",
+      "sha256": "f1183405fe8a556d9293688037107e6099db480fd9e6ce496cae133912bcc918"
+    },
+    "source_sha256": {
+      "apps/capture-web/package.json": "15f462e10edb1c36afc1c2bc2c1a1369335c94a283546da13d9c42d60f8772c7",
+      "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+      "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+      "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+      "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+      "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+      "pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d",
+      "research/voice-prosody/AUGMENTATION_EXPERIMENT_PLAN.md": "858292c677324adf28e57641d187701d6360cbb9444a04790c2339ce66870a78",
+      "research/voice-prosody/CANDIDATE_COVERAGE_PLAN.md": "f0061ed646b5291b621c949617d3da8a4a9bf0c352403270262daeef475232a8",
+      "research/voice-prosody/EVIDENCE_EXPERIMENT_PLAN.md": "7b10646483edd085df00d651e4957ad4b92eef97c7da6b01e773a4e5bef162c3",
+      "research/voice-prosody/EXPANDED_POOL_PLAN.md": "4d02ecb08d6a2aceaf1b3cff488b324e242d070581425927077db6e6629f0784",
+      "research/voice-prosody/FREQUENCY_DIVERSITY_PLAN.md": "04a57cbdb8b3ea29ba967201b92b4e8fc32da3956bcae28569de9defc1cc9dd6",
+      "research/voice-prosody/HARMONIC_EXPERIMENT_PLAN.md": "49b49e96769c383021a190c512bf35daddac624e40b2fc954805ef5105a6ea4e",
+      "research/voice-prosody/OVERNIGHT_DEVELOPMENT_PLAN.md": "f5e0be6f7e4031f8a84dee156394692dff0992e123c24aae68f86aa24e154c16",
+      "research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md": "c8807259374f286092268aae71b1387007c1b8478a8d30182be7f03e93c9c297",
+      "research/voice-prosody/SUBHARMONIC_EXPERIMENT_PLAN.md": "c31dde73b5bdaf04ce2354cfee3bdc9d5da0c91508c28a4fedc1535390a6af37",
+      "research/voice-prosody/coverage_peaks.ts": "46e9a64ef974d05330044016e07e5efc79422638f707767208cb92720d18289f",
+      "research/voice-prosody/fixtures.ts": "a65d1021c3677b9e6dff7d501c5cc05dad9655bc7dd6b929f14054ae030b9aae",
+      "research/voice-prosody/oracle.ts": "97f9fbee11ca55d744540ee3c06a94ee2e1963ac65a036429a3d5a4132b26d19",
+      "research/voice-prosody/periodicity_evidence.ts": "9cb4e355d04f168718d62063434fa5c34751d6d12b26e1c2c597ef977dcdf5d5",
+      "research/voice-prosody/periodicity_evidence_worker.ts": "f8515aba671efcd43785426e3bc38448c7fc4a699520871ba6e21b6cab86148a",
+      "research/voice-prosody/phenometrix_prosody/alias_diagnostic.py": "719312cb6dcffa7bcfa7d0fd0f5bcf4c95a410fd0eb511820df608e915cc32fd",
+      "research/voice-prosody/phenometrix_prosody/audit_augmentation_experiment.py": "642cce03b8074618b357daec232ddae6c27c1101d5e6860b281f79be80dde423",
+      "research/voice-prosody/phenometrix_prosody/audit_candidate_coverage.py": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+      "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+      "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb",
+      "research/voice-prosody/phenometrix_prosody/audit_frequency_diversity.py": "f03d6436108e1c35e4d473d054b6d3a3775f9c7c7a60ef922155e9536b096891",
+      "research/voice-prosody/phenometrix_prosody/audit_harmonic_experiment.py": "980b376cdbe547196dcf666dcdde9c3d18de4eacae3420d1eab0a5149e11b404",
+      "research/voice-prosody/phenometrix_prosody/audit_harmonic_inference.py": "8a0d2f57253d07bcfe584a70df624529d7424744dd70cc7cde43fa7c99edc9bb",
+      "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+      "research/voice-prosody/phenometrix_prosody/audit_subharmonic_experiment.py": "6087f9df4be46655645b9ab0d7eb1499bc48f9d7911187cd2555f6ca75760e61",
+      "research/voice-prosody/phenometrix_prosody/augmentation_cases.py": "8a00061077d504a789706b153e116e066366c32239dd57b2c34d0d586930a4fb",
+      "research/voice-prosody/phenometrix_prosody/augmentation_experiment.py": "8a7f3baaeda85443d74eefc28760be7bf73f4facfdbf9dbebeec78d817a1f63a",
+      "research/voice-prosody/phenometrix_prosody/candidate_coverage_experiment.py": "43add08439063e67e77c158247fd2965d89d6183748938186db591b2c44021e7",
+      "research/voice-prosody/phenometrix_prosody/candidate_coverage_features.py": "d16a4e8dbcb3307e2371543e715892735363abb5fa2a7042172b7d2dc4e64e28",
+      "research/voice-prosody/phenometrix_prosody/coverage_cases.py": "8801465621fb3097f03d6988e1d51862584481b26218cdac422778ed7c85a529",
+      "research/voice-prosody/phenometrix_prosody/diagnose_subharmonic_challenge.py": "a0faca38c49849d7b669410eef6a409fd8679907dd1d77bd609d83d441a51340",
+      "research/voice-prosody/phenometrix_prosody/evaluate.py": "1f7f09d43dcc5226b17a730b8d7f604780fa23e5ec3a43d0b414539e714ad205",
+      "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+      "research/voice-prosody/phenometrix_prosody/evidence_cases.py": "9551656e561751f942363376020277f9e9f5e779ae008ba40205361e8ca2cc99",
+      "research/voice-prosody/phenometrix_prosody/evidence_experiment.py": "70d3c87be91b4ef281907669b26f671689e38bbc8736635b4473f34d8739b022",
+      "research/voice-prosody/phenometrix_prosody/evidence_feasibility.py": "c10fc396ab69197b2ec60825cbcc843e154106edf1a6bae19bd6cf50b7c535c2",
+      "research/voice-prosody/phenometrix_prosody/evidence_inputs.py": "2e924502e7e786bfa4515a82c5923a51503ae052aaf836079a92a05491bb94b0",
+      "research/voice-prosody/phenometrix_prosody/evidence_selector_model.py": "cd8a5aec4f780b29d53fd63e244107c7770e217cbc166a2658db8bdd1363f168",
+      "research/voice-prosody/phenometrix_prosody/expanded_candidate_features.py": "135f85d9f709b9debbfd2e169e69d273c12d93675a16b291569fa61e2907266f",
+      "research/voice-prosody/phenometrix_prosody/expanded_cases.py": "00b958ca4f7a201537ccffe32e5a4fcc67115d129529eab63e74f9973efe84d6",
+      "research/voice-prosody/phenometrix_prosody/expanded_pool_experiment.py": "1b99845625afe95d9a9a8dc376123f60c0843c0c84749171db9ef3326391f20b",
+      "research/voice-prosody/phenometrix_prosody/expanded_selector_model.py": "03914f2feffd00018bbdb0bfd6dce3baa35e272992a75cb2e605052efe46490f",
+      "research/voice-prosody/phenometrix_prosody/features.py": "3a610514a726a3907b6575a8803ac41575b48c6c36bd15ea845b13b1eeeb9c4b",
+      "research/voice-prosody/phenometrix_prosody/frequency_diversity.py": "57dddd5125d1bf19f30a1ac3c5568897490cf72ac47349e72abcbdc9b9f5f62d",
+      "research/voice-prosody/phenometrix_prosody/harmonic_challenge.py": "7a650c2d1f890372d8dcee0e884120f256b5dabdae5893e19b63d1967d5ebdae",
+      "research/voice-prosody/phenometrix_prosody/harmonic_selector_experiment.py": "5c0272be89054bec6940f80e216044f6624d1743e2110c5427200aea86ba449a",
+      "research/voice-prosody/phenometrix_prosody/harmonic_selector_model.py": "260932b14d61f55c2046e845e81b17b0840cbb4ade5a4f196ba016d61917c15e",
+      "research/voice-prosody/phenometrix_prosody/hybrid_followup.py": "786631235ceb71d71620c17f5483ae074455f51cb89c17d610c00a7afdba7252",
+      "research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+      "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+      "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+      "research/voice-prosody/phenometrix_prosody/periodicity_evidence.py": "43963df870eadfd47e8e941d02dacc1055132f0164a673fc60e93e714f20f498",
+      "research/voice-prosody/phenometrix_prosody/pilot.py": "8ded044fd3045c9ba03f08fa5fab2151926c0b73fab4338ace11300148033f70",
+      "research/voice-prosody/phenometrix_prosody/selector_experiment.py": "c7690766c09f936adad72c0160eb02384f18dd6de2d2505dd4c2e120efe09b44",
+      "research/voice-prosody/phenometrix_prosody/selector_headroom.py": "0cb7722cfee1fdadd046952c67eccf92fababa2dd978d9351e779b159d6edf94",
+      "research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+      "research/voice-prosody/phenometrix_prosody/subharmonic_challenge.py": "d5a11b5e4af027d5c3906b01747556533aa645ef03aacf5843f897a9b66be8f3",
+      "research/voice-prosody/phenometrix_prosody/subharmonic_experiment.py": "372b9a992734d97286bcd6f49667a60399517d104d08798ed7ffc8818e355fc5",
+      "research/voice-prosody/phenometrix_prosody/subharmonic_objective.py": "cdcbec0857420f8106192e32e7ae1e2b19adfd098e59503c35b3ced638b703df",
+      "research/voice-prosody/phenometrix_prosody/synthetic_curriculum.py": "904fa293739060ed04d3270b5b4a9d0c5e3af79e5d6a1dd5445540860d6d168d",
+      "research/voice-prosody/pyproject.toml": "b0227de88cd281c2385fad777bebf3cf7750c467ad585260e88c11b8c8f44152",
+      "research/voice-prosody/replay.ts": "033bd55c949800b15e49e160447b07b27a598c61383a356acc9ce57f4e540639",
+      "research/voice-prosody/tests/test_audit_frequency_diversity.py": "336aa658e5820683b3bd7d65e4a93fec65a537b4117079aba263935c351bfe0c",
+      "research/voice-prosody/tests/test_frequency_diversity.py": "00b6d32bb584a25e2e3f4f583e55e1d217e398871fc3b683eda26ca389ecf621",
+      "research/voice-prosody/uv.lock": "76d25386794c17f87df582b88d47eb0eae06f06afb6662ba79094f358c9b2f87"
+    },
+    "supervisor_sha256": {
+      "research/voice-prosody/runs/frequency-diversity-execution-v1/supervisor.py": "a67199caf70facc4742cebb6c679b906f01b174957de3494aaa84ab827da98ce"
+    }
+  },
+  "status": "passed_with_documented_limits",
+  "validated_at": "2026-10-23T17:51:40.980866+00:00"
+}

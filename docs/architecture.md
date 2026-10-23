@@ -371,3 +371,29 @@ outcomes explicitly unassessed. The saved study stopped at insufficient carrier
 support with zero fits or fresh evaluation cases. No model export, default DSP
 change, or browser qualification occurred. See the
 [results](../research/voice-prosody/EVIDENCE_RESULTS.md).
+
+
+The separate `frequency_diversity` producer is a terminal TRAIN-only support
+study. It refines a fixed integer-microhertz carrier lattice and generates only
+1,536 new synthetic configurations; the previous 512 remain a hash-bound,
+already-observed baseline. The existing synthesis, original candidate extractor,
+additive seven-candidate pool, grouping, support window, and correctness
+thresholds remain unchanged. Sources, specification, plan, and the external
+resource supervisor are frozen before generation. PCM, feature arrays, and full
+per-frame ledgers remain in ignored local research storage.
+
+`audit_frequency_diversity` independently enumerates the configuration metadata,
+checks the bijection between carrier indices and numeric frequencies, and
+reconstructs candidate retention, grouping, timing, coverage, and both targeted
+support strata. Distinct IDs cannot inflate frequency diversity. The primary
+support decision uses the new bank alone under the unchanged floors. Any
+old-plus-new summary is descriptive and cannot rescue a failing primary result.
+The audit distinguishes source/artifact consistency from adequate TRAIN support;
+neither establishes learnability or natural-speech generalization.
+
+This producer stops after its support report on either PASS or FAIL. It has no
+sampling-schedule, fitting, learned-inference, natural-reference, fresh-evaluation,
+export, or browser phase. A support pass does not authorize those stages or
+change a prior advancement decision. The default DSP estimator and production
+capture path remain unchanged. See the
+[TRAIN-only study plan](../research/voice-prosody/FREQUENCY_DIVERSITY_PLAN.md).

@@ -1,0 +1,353 @@
+{
+  "audit_execution": {
+    "attempt": 1,
+    "audit_internal_elapsed_seconds": 43.62337404116988,
+    "exit_code": 0,
+    "limit_violation": null,
+    "maximum_observed_python_rss_bytes": 17179869184,
+    "maximum_seconds": 300,
+    "observed_python_rss_peak_bytes": 930267136,
+    "outer_elapsed_seconds": 44.21482495777309,
+    "path": "research/voice-prosody/runs/frequency-diversity-validation-v1/auditor-actual-attempt1.execution.json",
+    "resource_scope": "Audit Python process sampled by supervisor; elapsed times describe this audit only, not signal-processing or model runtime.",
+    "sha256": "9f521f5ca37df6b7bc5591506cee6233a43273ab2bbd0d967b5bb62f10538ee0",
+    "stderr_bytes": 0,
+    "stderr_path": "research/voice-prosody/runs/frequency-diversity-validation-v1/auditor-actual-attempt1.stderr.log",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_path": "research/voice-prosody/runs/frequency-diversity-validation-v1/auditor-actual-attempt1.stdout.log",
+    "stdout_sha256": "97fd4522d4a3820cc031831317fac4964361b5c41eb5d9f7fbf7d3b5bb47884e"
+  },
+  "audit_pass": true,
+  "audit_source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/audit_augmentation_experiment.py": "642cce03b8074618b357daec232ddae6c27c1101d5e6860b281f79be80dde423",
+    "research/voice-prosody/phenometrix_prosody/audit_candidate_coverage.py": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+    "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb",
+    "research/voice-prosody/phenometrix_prosody/audit_frequency_diversity.py": "f03d6436108e1c35e4d473d054b6d3a3775f9c7c7a60ef922155e9536b096891",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_experiment.py": "980b376cdbe547196dcf666dcdde9c3d18de4eacae3420d1eab0a5149e11b404",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_inference.py": "8a0d2f57253d07bcfe584a70df624529d7424744dd70cc7cde43fa7c99edc9bb",
+    "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+    "research/voice-prosody/phenometrix_prosody/audit_subharmonic_experiment.py": "6087f9df4be46655645b9ab0d7eb1499bc48f9d7911187cd2555f6ca75760e61",
+    "research/voice-prosody/tests/test_audit_frequency_diversity.py": "336aa658e5820683b3bd7d65e4a93fec65a537b4117079aba263935c351bfe0c"
+  },
+  "baseline": {
+    "acquisition_rows": 100352,
+    "case_count": 512,
+    "common_eligible_rows": 97792,
+    "historical_feasibility_pass": false,
+    "regenerated_cases": 0
+  },
+  "candidate_frame_pairs_verified": 401408,
+  "combined_descriptive": {
+    "acquisition_rows": 401408,
+    "case_count": 2048,
+    "common_eligible_rows": 391168,
+    "coverage": {
+      "added_only": 15116,
+      "counterexample": 106372,
+      "expanded_group_covered": 389324,
+      "expanded_grouping_lost": 0,
+      "expanded_raw_covered": 389324,
+      "frames": 391168,
+      "new_frequency_added": 307544,
+      "original_group_covered": 374208,
+      "original_grouping_lost": 0,
+      "original_raw_covered": 374208
+    },
+    "new_case_count": 1536,
+    "old_case_count": 512,
+    "role": "descriptive only; cannot rescue new-only failure",
+    "support": {
+      "floor": {
+        "distinct_carriers": 6,
+        "distinct_cases": 24,
+        "distinct_gains": 2,
+        "distinct_phases": 2,
+        "rows": 512
+      },
+      "pass_result": true,
+      "strata": {
+        "added_only": {
+          "checks": {
+            "distinct_carriers": true,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 17,
+          "distinct_cases": 136,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "pass_result": true,
+          "rows": 15116
+        },
+        "counterexample": {
+          "checks": {
+            "distinct_carriers": true,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 120,
+          "distinct_cases": 956,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "pass_result": true,
+          "rows": 106372
+        }
+      }
+    }
+  },
+  "data_boundaries": {
+    "evaluation_cases": 0,
+    "fits": 0,
+    "historical_analytic_cases_retained_not_rerun": 74,
+    "learned_inference": 0,
+    "natural_content_read": false,
+    "reserved_evaluation_configurations_metadata_only_unconsumed": 12,
+    "schedules": 0
+  },
+  "full_local_receipt": {
+    "bound_artifacts": 8353,
+    "path": "research/voice-prosody/runs/frequency-diversity-v1/independent-audit.json",
+    "sha256": "3587af269f38689d2b04d1db04e5cb524efc8cd3533d91b88e3edb1b921f570e"
+  },
+  "historical_scientific_files_unchanged": 58,
+  "identities": {
+    "frame_table_sha256": "201a2b648dcd0714ea0c73c50648ab881be387ff000f50492fe309293f26d04c",
+    "report_sha256": "3338e407866bc87dac2bb4f6dcdbf244a5852ab7c890aacef37c1cee36d4522c",
+    "source_freeze_path": "research/voice-prosody/runs/frequency-diversity-v1/source-freeze.json",
+    "source_freeze_sha256": "f1183405fe8a556d9293688037107e6099db480fd9e6ce496cae133912bcc918",
+    "study_manifest_path": "research/voice-prosody/runs/frequency-diversity-v1/manifest.json",
+    "study_manifest_sha256": "8349835c4bac48332f629219063470ece8d84958e520790b300ab083cc9eb8a7",
+    "training_spec_sha256": "716c1a43267a87264c489222de2977509463475cdbc2f89f9ffa1d24e2e132c0"
+  },
+  "learned_model_promotion": "no-go unchanged; no learned model was evaluated or trained",
+  "limitations": [
+    "TRAIN candidate-support feasibility only; no learning, accuracy, calibration, runtime or promotion claim.",
+    "Saved source/phase declarations and output inventory are not operating-system access logs.",
+    "PCM byte identities and candidate union/grouping are checked; waveform synthesis and full raw ACF extraction are not independently replayed.",
+    "Numeric carrier diversity does not establish independent frequency/acoustic support; the bank deliberately refines observed TRAIN support.",
+    "Combined old/new support is descriptive and cannot rescue a failing new-only primary decision.",
+    "Earlier acquisition failure, support no-go and learned-model failures are preserved. A support pass authorizes no additional operation.",
+    "No full artifact ledger, PCM, candidate feature array, natural recording identifier or per-frame trajectory is included in this public receipt."
+  ],
+  "metadata_novelty": {
+    "claim": "Exact configured-carrier separation only; nearby frequencies and continuous support overlap.",
+    "exact_intersections": [],
+    "historical_configured_carriers": 152,
+    "nearest_new_carrier_hz": 379.64425,
+    "nearest_reserved_carrier_hz": 379.3,
+    "nearest_reserved_distance_hz": 0.3442499999999882,
+    "new_numeric_carriers": 192,
+    "old_train_carriers": 64,
+    "reserved_carriers": 6
+  },
+  "new_bank": {
+    "acquisition_rows": 301056,
+    "case_count": 1536,
+    "common_eligible_rows": 293376,
+    "coverage": {
+      "added_only": 11456,
+      "counterexample": 79576,
+      "expanded_group_covered": 291532,
+      "expanded_grouping_lost": 0,
+      "expanded_raw_covered": 291532,
+      "frames": 293376,
+      "new_frequency_added": 227668,
+      "original_group_covered": 280076,
+      "original_grouping_lost": 0,
+      "original_raw_covered": 280076
+    },
+    "per_region": {
+      "after-observation-change": {
+        "added_only": 11224,
+        "counterexample": 78262,
+        "expanded_group_covered": 170240,
+        "expanded_grouping_lost": 0,
+        "expanded_raw_covered": 170240,
+        "frames": 172032,
+        "new_frequency_added": 151004,
+        "original_group_covered": 159016,
+        "original_grouping_lost": 0,
+        "original_raw_covered": 159016
+      },
+      "before-observation-change": {
+        "added_only": 0,
+        "counterexample": 600,
+        "expanded_group_covered": 115200,
+        "expanded_grouping_lost": 0,
+        "expanded_raw_covered": 115200,
+        "frames": 115200,
+        "new_frequency_added": 75076,
+        "original_group_covered": 115200,
+        "original_grouping_lost": 0,
+        "original_raw_covered": 115200
+      },
+      "observation-boundary": {
+        "added_only": 232,
+        "counterexample": 714,
+        "expanded_group_covered": 6092,
+        "expanded_grouping_lost": 0,
+        "expanded_raw_covered": 6092,
+        "frames": 6144,
+        "new_frequency_added": 1588,
+        "original_group_covered": 5860,
+        "original_grouping_lost": 0,
+        "original_raw_covered": 5860
+      }
+    },
+    "support": {
+      "broad_rows": 293376,
+      "floor": {
+        "distinct_carriers": 6,
+        "distinct_cases": 24,
+        "distinct_gains": 2,
+        "distinct_phases": 2,
+        "rows": 512
+      },
+      "pass_result": true,
+      "primary_population": "new1536 only",
+      "strata": {
+        "added_only": {
+          "checks": {
+            "distinct_carriers": true,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 13,
+          "distinct_cases": 104,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "frequency_bin_rows": [
+            0,
+            0,
+            0,
+            0,
+            914,
+            8232,
+            2310
+          ],
+          "gain_rows": {
+            "0.035": 5728,
+            "0.075": 5728
+          },
+          "maximum_carrier_row_share": 0.08030726256983241,
+          "pass_result": true,
+          "phase_rows": {
+            "0": 5732,
+            "1": 5724
+          },
+          "rows": 11456
+        },
+        "counterexample": {
+          "checks": {
+            "distinct_carriers": true,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 90,
+          "distinct_cases": 716,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "frequency_bin_rows": [
+            26228,
+            26216,
+            26528,
+            4,
+            0,
+            0,
+            600
+          ],
+          "gain_rows": {
+            "0.035": 39788,
+            "0.075": 39788
+          },
+          "maximum_carrier_row_share": 0.011410475520257365,
+          "pass_result": true,
+          "phase_rows": {
+            "0": 39798,
+            "1": 39778
+          },
+          "rows": 79576
+        }
+      },
+      "terminal_policy": "No schedules, fitting, model inference or evaluation even if support passes"
+    }
+  },
+  "new_bank_concentration": {
+    "added_only": {
+      "largest_carrier_row_share": 0.08030726256983241,
+      "maximum_adjacent_gap_hz": 40.5,
+      "maximum_qualifying_hz": 693.51925,
+      "minimum_adjacent_gap_hz": 2.53125,
+      "minimum_qualifying_hz": 516.33175,
+      "per_gain_rows": {
+        "0": 5728,
+        "1": 5728
+      },
+      "per_mixture_rows": {
+        "0": 5930,
+        "1": 5526
+      },
+      "per_phase_rows": {
+        "0": 5732,
+        "1": 5724
+      },
+      "per_region_rows": {
+        "after-observation-change": 11224,
+        "before-observation-change": 0,
+        "observation-boundary": 232
+      },
+      "qualifying_carrier_count": 13,
+      "role": "descriptive; not an additional gate",
+      "span_hz": 177.1875
+    },
+    "counterexample": {
+      "largest_carrier_row_share": 0.011410475520257365,
+      "maximum_adjacent_gap_hz": 346.78125000000006,
+      "maximum_qualifying_hz": 698.58175,
+      "minimum_adjacent_gap_hz": 2.53125,
+      "minimum_qualifying_hz": 55.64425,
+      "per_gain_rows": {
+        "0": 39788,
+        "1": 39788
+      },
+      "per_mixture_rows": {
+        "0": 39802,
+        "1": 39774
+      },
+      "per_phase_rows": {
+        "0": 39798,
+        "1": 39778
+      },
+      "per_region_rows": {
+        "after-observation-change": 78262,
+        "before-observation-change": 600,
+        "observation-boundary": 714
+      },
+      "qualifying_carrier_count": 90,
+      "role": "descriptive; not an additional gate",
+      "span_hz": 642.9375
+    }
+  },
+  "new_train_support_pass": true,
+  "phase_chronology": {
+    "acquisition_completed_at": "2026-10-23T17:44:11.140919+00:00",
+    "acquisition_started_at": "2026-10-23T17:37:42.643017+00:00",
+    "completed_at": "2026-10-23T17:46:57.397273+00:00",
+    "coverage_completed_at": "2026-10-23T17:46:56.888319+00:00",
+    "coverage_started_at": "2026-10-23T17:44:11.189372+00:00",
+    "sources_frozen_at": "2026-10-23T17:37:42.583786+00:00",
+    "started_at": "2026-10-23T17:37:42.587873+00:00"
+  },
+  "schema": "phenometrix-public-frequency-diversity-independent-audit.v1",
+  "scope": "One saved TRAIN-only frequency-diversity acquisition; independent audit of original/expanded candidate retention, grouping, coverage, numeric support and provenance.",
+  "source_files": 71
+}

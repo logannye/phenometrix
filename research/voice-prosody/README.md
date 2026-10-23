@@ -24,9 +24,33 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## TRAIN-only frequency diversity
+
+The latest [frozen coverage experiment](FREQUENCY_DIVERSITY_RESULTS.md) refines
+the previous carrier grid without changing candidates, grouping, timing or
+support gates. Its **1,536 new TRAIN configurations** supply **11,456 added-only
+correct-candidate rows across 104 cases and 13 numeric carriers**, above the
+unchanged six-carrier floor. Counterexamples supply 79,576 rows across 716 cases
+and 90 carriers. Both strata pass all five support floors on the new bank alone.
+The old 512-case no-go remains a separately audited historical comparison.
+
+The runner is terminal after coverage reporting on either outcome: **zero fits,
+zero schedules, zero learned inference and zero evaluation cases**. The proposed
+exposure-versus-acoustic-evidence comparison remains untested and the learned
+estimator remains a no-go for promotion. Nearby noiseless carriers are dependent;
+frequency counts alone do not establish acoustic diversity or generalization.
+
+See the [prospective plan](FREQUENCY_DIVERSITY_PLAN.md),
+[aggregate result](../../benchmarks/voice-prosody/frequency-diversity-summary.json),
+[independent audit](../../benchmarks/voice-prosody/frequency-diversity-independent-audit.json),
+and [local validation](../../benchmarks/voice-prosody/frequency-diversity-local-validation.json).
+The result report includes read-only inspection commands. All 74 consumed
+analytic cases remain regressions; the twelve reserved evaluation configurations
+remain ungenerated. Raw TRAIN media and features stay local and ignored.
+
 ## Exposure and acoustic-evidence feasibility
 
-The latest [bounded study](EVIDENCE_RESULTS.md) stopped at its TRAIN-support
+The preceding [bounded study](EVIDENCE_RESULTS.md) stopped at its TRAIN-support
 prerequisite, before fitting. The fixed 512-case bank supplied 3,660 added-only
 correct-candidate rows across 32 configurations, but only **4 distinct carriers
 against a floor of 6**. The counterexample stratum passed. All gates remain
