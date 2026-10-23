@@ -1,0 +1,314 @@
+{
+  "data_boundaries": {
+    "analytic_train_duration_seconds_counting_repeat": 2048,
+    "analytic_train_duration_seconds_unique": 1024,
+    "consumed_historical_analytic_cases_retained_in_plan": 74,
+    "consumed_historical_cases_rerun_in_this_study": 0,
+    "mandatory_analytic_gates_executed_per_candidate_seed": 0,
+    "mandatory_analytic_gates_planned_per_candidate_seed": 78,
+    "natural_reference_content_read_in_these_attempts": false,
+    "new_natural_data_acquired": false,
+    "novelty_boundary": "The 12 reserved complete configurations remain unconsumed. They belong to the familiar noiseless harmonic family; metadata novelty does not establish disjoint frequency support or an independent natural cohort.",
+    "paired_repeated_feature_arrays_identical": 512,
+    "paired_repeated_pcm_identical": 512,
+    "prospective_challenge_configurations_reserved_in_metadata": 12,
+    "prospective_challenge_outcomes_observed": 0,
+    "prospective_challenge_pcm_generated": 0,
+    "prospective_challenge_spec_sha256": "23987c7d14dbd4490f1c73ec4eef2394d30aae5518021188c6962ae260022462",
+    "train_spec_sha256": "d778ff3731174844b792a1faff72dbed412a658d86e6f8b3efd4d9b432ff6f57",
+    "training_configurations_unique": 512,
+    "training_generations_attempted": 2,
+    "training_sequences_generated_counting_repeat": 1024
+  },
+  "decision": {
+    "audit_pass": true,
+    "bank_enlarged_after_outcome": false,
+    "promoted": false,
+    "reason": "Added-only-correct support spans 4 distinct configured carriers; the frozen minimum of 6 was not met.",
+    "scientific_gate_pass": false,
+    "stopped_before": "sampling schedule creation, natural prerequisite recheck, fitting, and fresh evaluation input generation",
+    "thresholds_or_floors_relaxed": false
+  },
+  "design": {
+    "arms": [
+      "existing__off",
+      "existing__on",
+      "targeted__off",
+      "targeted__on"
+    ],
+    "completed_fits": 0,
+    "contrast_boundary": "Targeted exposure is a new TRAIN bank plus case-balanced sampling package; it cannot separately identify broad-bank versus oversampling effects.",
+    "evidence_boundary": "Evidence-off and evidence-on allocate the same parameters; off residual weights receive zero gradients, so effective trainable capacity differs.",
+    "plan_path": "research/voice-prosody/EVIDENCE_EXPERIMENT_PLAN.md",
+    "plan_sha256": "7b10646483edd085df00d651e4957ad4b92eef97c7da6b01e773a4e5bef162c3",
+    "planned_maximum_fits": 12,
+    "planned_parameters_per_model": 3012,
+    "planned_targeted_batch_counts": {
+      "added_only": 128,
+      "broad": 256,
+      "counterexample": 128
+    },
+    "predesignated_candidate": "targeted__on",
+    "sampling_schedules_created": 0,
+    "seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "trained_models_produced": 0
+  },
+  "execution": {
+    "attempts": [
+      {
+        "attempt": "v1",
+        "completed_at": "2026-10-23T05:32:42.879694+00:00",
+        "disposable_observation_scope": "sampled bytes in this attempt, its execution logs, and overnight ledger folder",
+        "execution": {
+          "availability": "local ignored evidence; not distributed",
+          "path": "research/voice-prosody/runs/evidence-factorial-execution-v1/execution.json",
+          "sha256": "a52f62a4b575a5fbff89975f52b9973fba15a8439ee1b0b6243b77d880bcb0cc"
+        },
+        "exit_code": 1,
+        "expanded_coverage_cases_computed": 0,
+        "fits": 0,
+        "fresh_evaluation_cases_generated": 0,
+        "manifest": {
+          "availability": "local ignored evidence; not distributed",
+          "path": "research/voice-prosody/runs/evidence-factorial-v1/manifest.json",
+          "sha256": "208a9549c32c93283d6225546340cc53ac16f29d1b4f6fe1ad491f70831fec25"
+        },
+        "observed_disposable_bytes": 206341476,
+        "observed_peak_individual_process_rss_bytes": {
+          "node": 108888064,
+          "other": 106020864,
+          "python": 292470784
+        },
+        "outer_elapsed_seconds": 114.82700187526643,
+        "outer_execution_status": "failed",
+        "scientific_elapsed_seconds": 114.10636104177684,
+        "scientific_status": "failed",
+        "started_at": "2026-10-23T05:30:48.052575+00:00",
+        "train_configurations_generated": 512
+      },
+      {
+        "attempt": "v2",
+        "completed_at": "2026-10-23T05:39:12.899375+00:00",
+        "disposable_observation_scope": "sampled bytes summed across both scientific attempt folders, both execution folders, and overnight ledger folder; already cumulative and must not be added to v1",
+        "execution": {
+          "availability": "local ignored evidence; not distributed",
+          "path": "research/voice-prosody/runs/evidence-factorial-execution-v2/execution.json",
+          "sha256": "31045595057e6dc96af7f11d9dcac8353c3b60332e5468d4e9a95cd35563923b"
+        },
+        "exit_code": 0,
+        "expanded_coverage_cases_computed": 512,
+        "fits": 0,
+        "fresh_evaluation_cases_generated": 0,
+        "manifest": {
+          "availability": "local ignored evidence; not distributed",
+          "path": "research/voice-prosody/runs/evidence-factorial-v2/manifest.json",
+          "sha256": "f586e51633e3d784e13d8065412ba55926fd344bc900d5f76672d7603fe3322d"
+        },
+        "observed_disposable_bytes": 453927653,
+        "observed_peak_individual_process_rss_bytes": {
+          "node": 287457280,
+          "other": 287588352,
+          "python": 795344896
+        },
+        "outer_elapsed_seconds": 160.1891796658747,
+        "outer_execution_status": "complete",
+        "scientific_elapsed_seconds": 159.52538075018674,
+        "scientific_status": "feasibility_no_go",
+        "started_at": "2026-10-23T05:36:32.710037+00:00",
+        "train_configurations_generated": 512
+      }
+    ],
+    "audits_after_window": "Subsequent read-only audit and publication were separately authorized; no new scientific run occurred.",
+    "cumulative_fit_seconds": 0,
+    "cumulative_outer_scientific_execution_seconds": 275.0161815411411,
+    "local_only": true,
+    "measurement_limits": [
+      "RSS values are observed process peaks, not whole-system or synchronized aggregate memory.",
+      "Supervisor disposable bytes are periodic observations, not current publication size or exact final filesystem total.",
+      "The two execution elapsed times are summed; the v2 cumulative byte observation is not summed again with v1.",
+      "These resources describe analytic TRAIN preparation and auditing, not browser, microphone, throughput or physical-latency qualification."
+    ],
+    "resource_limit_scope": {
+      "cumulative_fit_seconds": 3600,
+      "disposable_output_bytes": 8589934592,
+      "minimum_free_disk_bytes": 17179869184,
+      "mps_allocated_bytes": 8589934592,
+      "node_process_rss_bytes": 2147483648,
+      "python_process_rss_bytes": 17179869184,
+      "wall_seconds_per_scientific_attempt": 10800
+    },
+    "scientific_execution_finished_at": "2026-10-23T05:39:12.595884+00:00",
+    "scientific_window_deadline_utc": "2026-10-23T12:18:58Z",
+    "v2_runner_observed_mps_allocated_bytes": 0,
+    "v2_runner_observed_node_high_water_rss_bytes": 287588352,
+    "v2_runner_observed_python_high_water_rss_bytes": 796704768,
+    "v2_scientific_output_bytes_at_completion": 274402514
+  },
+  "independent_audits": {
+    "feasibility": {
+      "audit_pass": true,
+      "bound_artifacts": 2229,
+      "full_local_receipt_sha256": "25ce98cabcb0e48e6fdd04acf35bb6a00adc0d2ad973aa0da04e5636b73483e6",
+      "path": "benchmarks/voice-prosody/evidence-feasibility-independent-audit.json",
+      "scientific_feasibility_pass": false,
+      "sha256": "8bcac33329b8f27fe9eb5d4ca5fbfee37876af6b68a099389e34039fba77cf9e"
+    },
+    "terminal_study": {
+      "audit_pass": true,
+      "bound_artifacts": 3361,
+      "full_local_receipt_sha256": "6b79e7c0dcd29f2117a3bcb6f985da482c6fa6ffeb73239192a52920812109d5",
+      "maximum_numeric_difference": 0.0,
+      "numeric_comparisons": 43,
+      "path": "benchmarks/voice-prosody/evidence-study-independent-audit.json",
+      "scientific_gate_pass": false,
+      "sha256": "e8f86c67db1aa1a738923f9f38e7c596d645a19f11c589b060237e5b43ea7d3a"
+    }
+  },
+  "limitations": [
+    "A failed support floor is not evidence that either planned feature or exposure treatment helps or fails to help a model.",
+    "No new natural accuracy, model calibration, seed confirmation, clinical validity, live microphone or runtime claim is established.",
+    "No natural holdout remains untouched from prior work; these attempts did not acquire or analyze a new cohort.",
+    "Candidate oracle coverage does not establish learnability, pitch correctness probability, or reliable pitch-derived trajectories.",
+    "All prior failures remain historical evidence. Production DSP behavior is unchanged; no learned model is promoted.",
+    "Public receipts contain aggregates and source-relative hash references only. Full arrays, media, checkpoints and artifact ledgers remain local."
+  ],
+  "repair": {
+    "both_attempts_zero_fit_no_fresh": true,
+    "new_source_freeze_sha256": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b",
+    "old_artifacts_rebound_or_overwritten": false,
+    "old_source_freeze_sha256": "d498c4400dd1b5b707436e034b0901aef44b1880ba3357f6e4ec2359da0c0c8a",
+    "only_changed_scientific_source": {
+      "research/voice-prosody/phenometrix_prosody/evidence_inputs.py": {
+        "after": "2e924502e7e786bfa4515a82c5923a51503ae052aaf836079a92a05491bb94b0",
+        "before": "df977e5fc140dcc6feddc7b6d74862b7e8ae92f99d46aac988560a4fec6aa1ac"
+      }
+    },
+    "preserved_first_failure": "ValueError('Preparation input bytes changed')",
+    "receipt": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/overnight-20261023/repair-v1-to-v2.json",
+      "sha256": "759dd150be4b7fb2ab8cbcf4fca1cc3a0f3522dfa6dc0291f6381cd5d84c8cb2"
+    },
+    "same_train_and_reserved_challenge_specs": true
+  },
+  "schema": "phenometrix-evidence-study-summary.v1",
+  "source_identity": {
+    "all_frozen_scientific_sources_verified_unchanged": true,
+    "scientific_source_count": 58,
+    "source_freeze": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/source-freeze.json",
+      "sha256": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b"
+    },
+    "source_map_canonical_json_sha256": "9443eed5443bac9f3af0b2e5ae8840d0054500fdc202d7390c25c588bdc650df",
+    "source_map_digest_method": "SHA256 of UTF-8 JSON with sorted keys, separators comma/colon, no whitespace, allow_nan=false"
+  },
+  "status": "audited_feasibility_no_go",
+  "study": "fixed TRAIN exposure package by primitive-period evidence",
+  "unchanged_gate_status": {
+    "development_fixed_voicing_oracle_headroom": "not rechecked in this attempt",
+    "historical74_and_reserved12_analytic_cases": "retained in plan; not executed",
+    "natural_joint_error_and_stratified_gates": "not executed; stopped at TRAIN support floor",
+    "natural_train_and_development_grouping_prerequisites": "not rechecked in this attempt",
+    "timing_and_browser_gates": "not executed"
+  },
+  "v2_train_feasibility": {
+    "acquisition_rows": 100352,
+    "candidate_coverage": {
+      "added_only": 3660,
+      "counterexample": 26796,
+      "expanded_group_covered": 97792,
+      "expanded_grouping_lost": 0,
+      "expanded_raw_covered": 97792,
+      "frames": 97792,
+      "new_frequency_added": 79876,
+      "original_group_covered": 94132,
+      "original_grouping_lost": 0,
+      "original_raw_covered": 94132
+    },
+    "cases": 512,
+    "common_eligible_rows": 97792,
+    "coverage_denominator": "All 97,792 common eligible analytic TRAIN rows, all voiced by construction; no model prediction or voicing outcomes used.",
+    "frequency_bin_edges_hz": [
+      50,
+      150,
+      250,
+      350,
+      450,
+      550,
+      650,
+      700
+    ],
+    "stratum_definitions": {
+      "added_only": "A common eligible frame with no original raw candidate within 50 cents, a distinct correct added candidate, and correct expanded grouped coverage.",
+      "broad": "All common eligible TRAIN frames; this stratum may overlap either targeted stratum.",
+      "counterexample": "A common eligible frame with a distinct incorrect added candidate and correct original and expanded grouped coverage."
+    },
+    "support": {
+      "broad_rows": 97792,
+      "floor": {
+        "distinct_carriers": 6,
+        "distinct_cases": 24,
+        "distinct_gains": 2,
+        "distinct_phases": 2,
+        "rows": 512
+      },
+      "on_failure": "no fits; no enlargement or revised threshold",
+      "pass_result": false,
+      "strata": {
+        "added_only": {
+          "checks": {
+            "distinct_carriers": false,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 4,
+          "distinct_cases": 32,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "frequency_bin_rows": [
+            0,
+            0,
+            0,
+            0,
+            912,
+            1832,
+            916
+          ],
+          "pass_result": false,
+          "rows": 3660
+        },
+        "counterexample": {
+          "checks": {
+            "distinct_carriers": true,
+            "distinct_cases": true,
+            "distinct_gains": true,
+            "distinct_phases": true,
+            "rows": true
+          },
+          "distinct_carriers": 30,
+          "distinct_cases": 240,
+          "distinct_gains": 2,
+          "distinct_phases": 2,
+          "frequency_bin_rows": [
+            9046,
+            9040,
+            8710,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pass_result": true,
+          "rows": 26796
+        }
+      }
+    }
+  }
+}

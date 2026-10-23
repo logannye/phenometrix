@@ -1,0 +1,276 @@
+{
+  "schema": "phenometrix-training-semantics-audit-v1",
+  "scope": "Descriptive source and frozen-training audit, not a new estimator evaluation or fit.",
+  "method": "Reconstruct endpoint-minus960 targets at48kHz and frozen64ms/+32ms common mask. Reference valid iff all4values finite and binary voiced/F0 agreement. Choose nearest supported candidate within50c; count all supported candidates within50c separately. Natural960conditions and128unique synthetic sequences. Every opened feature/reference SHA checked against frozen manifest.",
+  "natural": {
+    "frames": 676384,
+    "valid": 669664,
+    "voiced": 152772,
+    "unvoiced": 516892,
+    "covered": 132181,
+    "multiple_good": 121893,
+    "target_slot_counts": [
+      38988,
+      40992,
+      34750,
+      15756,
+      1670,
+      25
+    ],
+    "good_candidate_count_histogram": {
+      "0": 20591,
+      "1": 10288,
+      "2": 33829,
+      "3": 75806,
+      "4": 11862,
+      "5": 396
+    },
+    "valid_candidate_count_histogram": {
+      "0": 298154,
+      "1": 59294,
+      "2": 78087,
+      "3": 83923,
+      "4": 100058,
+      "5": 46091,
+      "6": 4057
+    },
+    "voiced_candidate_count_histogram": {
+      "0": 3538,
+      "1": 1526,
+      "2": 12729,
+      "3": 36555,
+      "4": 62726,
+      "5": 32623,
+      "6": 3075
+    },
+    "extra_good_candidates_not_target": 222611,
+    "near_duplicate_good_pairs_within5c": 85355,
+    "voiced_reference_hz_bins": [
+      {
+        "range_hz": [
+          0,
+          100
+        ],
+        "voiced": 33532,
+        "covered": 24147,
+        "multiple_good": 22082
+      },
+      {
+        "range_hz": [
+          100,
+          200
+        ],
+        "voiced": 88436,
+        "covered": 78758,
+        "multiple_good": 72117
+      },
+      {
+        "range_hz": [
+          200,
+          250
+        ],
+        "voiced": 24932,
+        "covered": 23716,
+        "multiple_good": 22538
+      },
+      {
+        "range_hz": [
+          250,
+          300
+        ],
+        "voiced": 5308,
+        "covered": 5043,
+        "multiple_good": 4669
+      },
+      {
+        "range_hz": [
+          300,
+          400
+        ],
+        "voiced": 564,
+        "covered": 517,
+        "multiple_good": 487
+      },
+      {
+        "range_hz": [
+          400,
+          500
+        ],
+        "voiced": 0,
+        "covered": 0,
+        "multiple_good": 0
+      },
+      {
+        "range_hz": [
+          500,
+          701
+        ],
+        "voiced": 0,
+        "covered": 0,
+        "multiple_good": 0
+      }
+    ]
+  },
+  "synthetic_unique": {
+    "frames": 31488,
+    "valid": 30848,
+    "voiced": 28920,
+    "unvoiced": 1928,
+    "covered": 28333,
+    "multiple_good": 25739,
+    "target_slot_counts": [
+      4943,
+      5666,
+      6175,
+      7215,
+      4323,
+      11
+    ],
+    "good_candidate_count_histogram": {
+      "0": 587,
+      "1": 2594,
+      "2": 10305,
+      "3": 12777,
+      "4": 2655,
+      "5": 2
+    },
+    "valid_candidate_count_histogram": {
+      "0": 1839,
+      "1": 79,
+      "2": 179,
+      "3": 4934,
+      "4": 10379,
+      "5": 11685,
+      "6": 1753
+    },
+    "voiced_candidate_count_histogram": {
+      "2": 170,
+      "3": 4933,
+      "4": 10379,
+      "5": 11685,
+      "6": 1753
+    },
+    "extra_good_candidates_not_target": 43832,
+    "near_duplicate_good_pairs_within5c": 36779,
+    "voiced_reference_hz_bins": [
+      {
+        "range_hz": [
+          0,
+          100
+        ],
+        "voiced": 6660,
+        "covered": 6656,
+        "multiple_good": 6652
+      },
+      {
+        "range_hz": [
+          100,
+          200
+        ],
+        "voiced": 7609,
+        "covered": 7607,
+        "multiple_good": 7603
+      },
+      {
+        "range_hz": [
+          200,
+          250
+        ],
+        "voiced": 2600,
+        "covered": 2599,
+        "multiple_good": 2599
+      },
+      {
+        "range_hz": [
+          250,
+          300
+        ],
+        "voiced": 2545,
+        "covered": 2545,
+        "multiple_good": 2543
+      },
+      {
+        "range_hz": [
+          300,
+          400
+        ],
+        "voiced": 4827,
+        "covered": 4826,
+        "multiple_good": 4744
+      },
+      {
+        "range_hz": [
+          400,
+          500
+        ],
+        "voiced": 2419,
+        "covered": 2036,
+        "multiple_good": 766
+      },
+      {
+        "range_hz": [
+          500,
+          701
+        ],
+        "voiced": 2260,
+        "covered": 2064,
+        "multiple_good": 832
+      }
+    ]
+  },
+  "synthetic_repetition_factor": 4,
+  "augmented_totals": {
+    "frames": 802336,
+    "valid": 793056,
+    "voiced": 268452,
+    "covered": 245513,
+    "target_slot_counts": [
+      58760,
+      63656,
+      59450,
+      44616,
+      18962,
+      69
+    ]
+  },
+  "natural_high_frequency": {
+    "at_least300_valid_voiced_frames": 564,
+    "dependent_conditions": 4,
+    "unique_reference_positions_at_least300": 141,
+    "fraction_valid_voiced": 0.003691775979891603,
+    "maximum_training_reference_hz": 361.072174072,
+    "at_least400_voiced_frames": 0
+  },
+  "source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/train.py": "7e535123bd01d45048c17e604e319622a05a565de66cb81b0689682c68ecb434",
+    "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+    "research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "research/voice-prosody/support_diagnostic.ts": "0fc85586002211c16ecc8308464852bdfd8eb5a70da3248efac4b63f3fb0c6ad",
+    "research/voice-prosody/phenometrix_prosody/synthetic_curriculum.py": "904fa293739060ed04d3270b5b4a9d0c5e3af79e5d6a1dd5445540860d6d168d"
+  },
+  "local_artifact_sha256": {
+    "delayed-train-features/manifest.json": "35e92d701dcd52891c256fa99b9567c5db4d80e14f4ef71858822b470edf5a87",
+    "delayed-train-features/acquisition-manifest.json": "50d25236779d5cd95d3eeef58826c5f30825cb733af10d70d664108d8df66f28",
+    "synthetic-train-curriculum/manifest.json": "8dd2e18a5ae705c6ce21edfab6dbd3acfdb86593a0d14ccffc96df2e0b708c90",
+    "synthetic-curriculum-plan/train-plan.json": "7da7463291ee318636b29b109dc2e9ec9515765915e37af95062166e49c5bb17",
+    "delayed-mlp-seed20261022/manifest.json": "73533700a756e295876a3145017b3d263c6af0b73d962ec2bf9b7cdd9ac2d61f",
+    "delayed-mlp-seed20261022/weights.pt": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+    "delayed-augmented-mlp-seed20261022/manifest.json": "ed81dbab0e63a4578e3684ed27655fce5464335e90e7108410e9ade45e021c62",
+    "delayed-augmented-mlp-seed20261022/weights.pt": "9c18d9aca2829071dfa869a99db6c53e891216b6cf17d7f1cf59f0166d33aee2",
+    "delayed-known-truth/features/constant-300.npz": "cb41b3a9d922184255368a1903e0138dfb84a7b13d34d1787d1d69ec4248284a",
+    "delayed-known-truth/predictions/constant-300.json.gz": "cbd142d1b4834556ef93b6537c71485a3f220520faae01905e0f8119affa8b43",
+    "delayed-augmented-known-truth/predictions/constant-300.json.gz": "52e1e59903aac6e9173b7cdd35e99bf153d3caf77e193debf3a5b8e0a4c036f9"
+  },
+  "original_executed_script_sha256": "b1e915fb1fa94e44ec6c3fdc1e60d7ddd8d3599041f554d83d4b4247ee0298c7",
+  "public_reproduction_script": "benchmarks/voice-prosody/source-snapshots/training-label-audit-v1.py",
+  "public_reproduction_script_sha256": "c655b841145d9be276e7e488cb1ed737bfaaaf45e8d3d641f5940233bc72fcaa",
+  "public_script_note": "Only repository-root discovery differs from the executed script. No second full audit was run during the isolated timing experiment.",
+  "limitations": [
+    "Train-only labels; no new development or sealed-test outcome access.",
+    "Frames and four corruptions are dependent observations.",
+    "Multiple acceptable candidates under50c do not prove loss design is the solecause of a model failure.",
+    "Source and single-frame mechanisms are diagnostic; frozen model counterfactuals are separate experiments."
+  ]
+}

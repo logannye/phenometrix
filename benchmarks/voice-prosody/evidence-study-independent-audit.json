@@ -1,0 +1,116 @@
+{
+  "audit_pass": true,
+  "audit_resources": {
+    "execution_record": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/terminal-audit-attempt1.execution.json",
+      "sha256": "afed149445136965b70d65081d70093099073226560bb481966375f994190825"
+    },
+    "internal_elapsed_seconds": 1.7595606669783592,
+    "outer_process_elapsed_seconds": 2.3024368747137487,
+    "peak_child_rss_bytes": 252444672,
+    "scope": "terminal independent audit only; Darwin ru_maxrss for its child process, not scientific-study peak or total system memory",
+    "stderr_bytes": 0
+  },
+  "audit_source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/audit_augmentation_experiment.py": "642cce03b8074618b357daec232ddae6c27c1101d5e6860b281f79be80dde423",
+    "research/voice-prosody/phenometrix_prosody/audit_candidate_coverage.py": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_scores.py": "0d743cf9fd91030b001bb7e3ab0890a99c3275ab12bf9a385833f32b8a105830",
+    "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_experiment.py": "980b376cdbe547196dcf666dcdde9c3d18de4eacae3420d1eab0a5149e11b404",
+    "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+    "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+    "research/voice-prosody/tests/test_audit_evidence_scores.py": "00356babb4d2995d900aaf6644bc4d7450f38f38be3c6a6b8bd2f5986819b329"
+  },
+  "audit_status": "complete",
+  "audited_at": "2026-10-23T17:07:19.503687+00:00",
+  "bound_artifacts_verified": 3361,
+  "feasibility_audit": {
+    "full_local_receipt_sha256": "25ce98cabcb0e48e6fdd04acf35bb6a00adc0d2ad973aa0da04e5636b73483e6",
+    "public_path": "benchmarks/voice-prosody/evidence-feasibility-independent-audit.json",
+    "public_sha256": "8bcac33329b8f27fe9eb5d4ca5fbfee37876af6b68a099389e34039fba77cf9e"
+  },
+  "focused_fixture_tests": {
+    "passed": 42,
+    "scope": "candidate arrays, gates, phase/refusal rules, toy checkpoints, saved-evidence checks and repair-source invariants; no scientific fitting or signal generation"
+  },
+  "fresh_cases_generated": 0,
+  "full_local_receipt": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/evidence-factorial-v2/independent-audit.json",
+    "sha256": "6b79e7c0dcd29f2117a3bcb6f985da482c6fa6ffeb73239192a52920812109d5"
+  },
+  "limitations": [
+    "Artifact/source chronology is not an operating-system access log.",
+    "An audit pass validates the declared result and cannot promote a scientific no-go.",
+    "No fits were performed; postfit scores, initialization reproduction and training exposure checks were not applicable or executed."
+  ],
+  "maximum_numeric_difference": 0.0,
+  "new_fits": 0,
+  "no_fit_no_fresh_verified": true,
+  "numeric_comparisons": 43,
+  "operations_performed_by_auditor": {
+    "fitting": false,
+    "model_inference": false,
+    "reserved_natural_content_read": false,
+    "waveform_generation": false
+  },
+  "publication_scope": "aggregate receipt; full artifact ledger remains local",
+  "repair_lineage": {
+    "both_attempts_zero_fit_no_fresh": true,
+    "changed_sources": {
+      "research/voice-prosody/phenometrix_prosody/evidence_inputs.py": {
+        "after": "2e924502e7e786bfa4515a82c5923a51503ae052aaf836079a92a05491bb94b0",
+        "before": "df977e5fc140dcc6feddc7b6d74862b7e8ae92f99d46aac988560a4fec6aa1ac"
+      }
+    },
+    "cumulative_outer_execution_seconds": 275.0161815411411,
+    "executions": [
+      {
+        "elapsed_seconds": 114.82700187526643,
+        "execution_sha256": "a52f62a4b575a5fbff89975f52b9973fba15a8439ee1b0b6243b77d880bcb0cc",
+        "observed_disposable_bytes": 206341476,
+        "returncode": 1,
+        "status": "failed",
+        "version": "v1"
+      },
+      {
+        "elapsed_seconds": 160.1891796658747,
+        "execution_sha256": "31045595057e6dc96af7f11d9dcac8353c3b60332e5468d4e9a95cd35563923b",
+        "observed_disposable_bytes": 453927653,
+        "returncode": 0,
+        "status": "complete",
+        "version": "v2"
+      }
+    ],
+    "new_source_freeze_sha256": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b",
+    "old_source_freeze_sha256": "d498c4400dd1b5b707436e034b0901aef44b1880ba3357f6e4ec2359da0c0c8a",
+    "paired_feature_arrays_identical": 512,
+    "paired_pcm_identical": 512,
+    "preserved_failed_manifest_sha256": "208a9549c32c93283d6225546340cc53ac16f29d1b4f6fe1ad491f70831fec25",
+    "rebindings_or_overwrites_performed": false,
+    "repair_path": "research/voice-prosody/runs/overnight-20261023/repair-v1-to-v2.json",
+    "repair_sha256": "759dd150be4b7fb2ab8cbcf4fca1cc3a0f3522dfa6dc0291f6381cd5d84c8cb2",
+    "training_sequences_generated_across_attempts": 1024
+  },
+  "run_manifest": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/evidence-factorial-v2/manifest.json",
+    "sha256": "f586e51633e3d784e13d8065412ba55926fd344bc900d5f76672d7603fe3322d"
+  },
+  "schema": "phenometrix-public-evidence-study-audit.v1",
+  "scientific_gate_pass": false,
+  "scientific_status": "feasibility_no_go",
+  "source_identity": {
+    "all_frozen_scientific_sources_verified_unchanged": true,
+    "scientific_source_count": 58,
+    "source_freeze": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/source-freeze.json",
+      "sha256": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b"
+    },
+    "source_map_canonical_json_sha256": "9443eed5443bac9f3af0b2e5ae8840d0054500fdc202d7390c25c588bdc650df",
+    "source_map_digest_method": "SHA256 of UTF-8 JSON with sorted keys, separators comma/colon, no whitespace, allow_nan=false"
+  }
+}

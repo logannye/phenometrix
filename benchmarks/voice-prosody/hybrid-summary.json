@@ -1,0 +1,1228 @@
+{
+  "schema": "phenometrix-no-fit-hybrid-public-summary-v1",
+  "disposition": {
+    "research_gate_components_pass": {
+      "hybrid_original": true,
+      "hybrid_augmented": true
+    },
+    "preferred_research_candidate": "hybrid_original",
+    "selection_rule": "Prefer hybrid_original if both independently pass; secondary hybrid_augmented only if original fails and secondary passes; no automatic production promotion",
+    "production_promotion": false,
+    "production_default": "legacy DSP unchanged",
+    "hybrid_browser_runtime_qualified": false,
+    "independent_natural_holdout_tested": false,
+    "sealed_test_accessed": false
+  },
+  "estimator": {
+    "contract": "phenometrix.mlp-voicing-yin-pitch.v1",
+    "voicing": "Frozen MLP probability >=0.5; uncalibrated",
+    "pitch": "Raw cached YIN frequency, regardless of old RMS/correlation voicing gates; finite inclusive 50..700 Hz required",
+    "invalid_voiced_pitch": "unavailable",
+    "correctness_probability": null,
+    "new_fit": false,
+    "threshold_search": false,
+    "measurement_delay_ms": 20,
+    "nominal_target": "16+10k ms; acquired at target+20 ms; no interpolation",
+    "natural_primary_mask": "t>=64ms and t+32ms<=N; exact16+10k-ms nominal target grid",
+    "product_time_contract_changed": false
+  },
+  "provenance": {
+    "plan_sha256": "71adf6745c1d28e4ec7595445678f8eb970a3c591fd171d7c2609aab58f9ca6a",
+    "source_sha256": {
+      "research/voice-prosody/HYBRID_FOLLOWUP_PLAN.md": "35b52a430e545cf731164bd5747251010ff754fb16519d00b8e9e40d8cd8edab",
+      "research/voice-prosody/hybrid_features.ts": "a792e256d17b71163fb5be8ae2bfeabb1fdcd8250e4eeae85b5c86893eea4c68",
+      "research/voice-prosody/phenometrix_prosody/hybrid_followup.py": "786631235ceb71d71620c17f5483ae074455f51cb89c17d610c00a7afdba7252",
+      "research/voice-prosody/phenometrix_prosody/hybrid_natural.py": "fab3e738410ffde819a941361d6c1a108b4f0452f4446176876243f350bc00bb",
+      "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+      "research/voice-prosody/phenometrix_prosody/evaluate.py": "1f7f09d43dcc5226b17a730b8d7f604780fa23e5ec3a43d0b414539e714ad205",
+      "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+      "research/voice-prosody/phenometrix_prosody/evaluate_curriculum.py": "07f4e2a4f5f8537bb21578f22927789ded465604372ad74dccda13dace15f32c",
+      "research/voice-prosody/phenometrix_prosody/synthetic_curriculum.py": "904fa293739060ed04d3270b5b4a9d0c5e3af79e5d6a1dd5445540860d6d168d",
+      "research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+      "research/voice-prosody/phenometrix_prosody/pilot.py": "8ded044fd3045c9ba03f08fa5fab2151926c0b73fab4338ace11300148033f70",
+      "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+      "research/voice-prosody/tests/test_hybrid_followup.py": "a23caf29bfe8c83091e14ba3b1a3c596581409bfb193cc463109bdde553a38e6",
+      "research/voice-prosody/tests/test_hybrid_natural.py": "6d9e28a36d31d584be1701bc6e12ef0b50f76861ef07a57e4067fec2fbb671a0",
+      "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+      "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+      "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+      "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+      "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0"
+    },
+    "models": {
+      "original": {
+        "directory": "delayed-mlp-seed20261022",
+        "weights_sha256": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+        "manifest_sha256": "73533700a756e295876a3145017b3d263c6af0b73d962ec2bf9b7cdd9ac2d61f"
+      },
+      "augmented": {
+        "directory": "delayed-augmented-mlp-seed20261022",
+        "weights_sha256": "9c18d9aca2829071dfa869a99db6c53e891216b6cf17d7f1cf59f0166d33aee2",
+        "manifest_sha256": "ed81dbab0e63a4578e3684ed27655fce5464335e90e7108410e9ade45e021c62"
+      }
+    },
+    "natural_features": {
+      "directory": "delayed-development-features",
+      "manifest_sha256": "31f51e93b59f9a70c6f4b8c66cbf20b84fef900e44c75b8134aefad0cade3e8c"
+    },
+    "source_evaluations": {
+      "original": {
+        "directory": "delayed-development-evaluation",
+        "manifest_sha256": "c1d178ad5eac9f337e770f325041e02d04e326f56d687d4c77460063d07fc2a5",
+        "prediction_freeze_sha256": "64358ddf2a654a6c20ef3023c3eccdda92612707d465cb422a20163e99258d2e"
+      },
+      "augmented": {
+        "directory": "delayed-augmented-development-evaluation",
+        "manifest_sha256": "ca3774b2890f1435985207c10aed51bba6b2c37df8621ece55f6f28830ab8fe0",
+        "prediction_freeze_sha256": "ff12a69872defd1a1cdb85b55ba1035be229bb53a22d5d0bfdc2cdf9b89a4cde"
+      }
+    },
+    "synthetic_inputs": {
+      "support-diagnostic-v1/manifest.json": "33f165a8d933e59bf79d3f8013e19c792ecc4057fcb7ce0f57baef9db31a0f66",
+      "delayed-known-truth/manifest.json": "111f53f8bb9f1e79ef53e7ee9ff7f261c4571ce37a5405f2e3d9d0551baafd17",
+      "synthetic-challenge-curriculum/manifest.json": "93044e94b27db6cf09ba8269eab3365d0987582ad79c1299ee0552928554cd94",
+      "delayed-augmented-challenge/manifest.json": "33afccebe0029a2e6690938935000244819598d7eb74d19aa5c8ec56d7c5fbe1",
+      "synthetic-curriculum-plan/challenge-plan.json": "007b63dfcb30d5b08c5dc98d8134ce818d75bb3e9272e2761b47e54b9b5cd6b1"
+    },
+    "artifact_hashes": {
+      "research/voice-prosody/runs/hybrid-followup-plan-v1/plan.json": {
+        "sha256": "71adf6745c1d28e4ec7595445678f8eb970a3c591fd171d7c2609aab58f9ca6a",
+        "bytes": 29378
+      },
+      "research/voice-prosody/runs/hybrid-followup-plan-v1/declaration.json": {
+        "sha256": "f0d07ee5bd7126bbfe9f0a43d980e394c0620211978ae6d6eb7d65842a91a3e9",
+        "bytes": 132
+      },
+      "research/voice-prosody/runs/hybrid-natural-v1/manifest.json": {
+        "sha256": "380b43dc1968bccccb114fab38cb3b6f0eced50e3e26d148e56eeb9e27159439",
+        "bytes": 356376
+      },
+      "research/voice-prosody/runs/hybrid-natural-v1/prediction-freeze.json": {
+        "sha256": "3a7be525cb503f48d146e1af2f6bcc8feff62825038c9e8d5ed273e75eea6bb0",
+        "bytes": 356252
+      },
+      "research/voice-prosody/runs/hybrid-natural-v1/metrics.json": {
+        "sha256": "225d63547591ee210ff65431dfb3b71e0c7ba239a57365ffee1d68f168fe64c9",
+        "bytes": 5255977
+      },
+      "research/voice-prosody/runs/hybrid-natural-v1/baseline-identity-audit.json": {
+        "sha256": "db66b6678b3f2dd70d3766b4b081b573483c8f27e603a848485c076f2cfaf5ae",
+        "bytes": 4747
+      },
+      "research/voice-prosody/runs/hybrid-synthetic-v1/manifest.json": {
+        "sha256": "58d595452643ad19b2d68e618a1758633148f5b836fbadd921b310c3beea834c",
+        "bytes": 41014
+      },
+      "research/voice-prosody/runs/hybrid-synthetic-v1/prediction-freeze.json": {
+        "sha256": "a4ff117e3ef280a2d0b0c6617985900f6aae1a418a7a2ab36f3c50d0efae30c3",
+        "bytes": 40890
+      },
+      "research/voice-prosody/runs/hybrid-synthetic-v1/metrics.json": {
+        "sha256": "695b878a09b2ac3e706a6fbd22d782d64d11fc20b1fe744e75e1b446b9bee441",
+        "bytes": 1190283
+      },
+      "research/voice-prosody/runs/hybrid-synthetic-v1/independent-audit.json": {
+        "sha256": "1191ce3b899ae154daa86ff916f345ef9b6ab59f54796df654358045e6f20d6d",
+        "bytes": 1438
+      }
+    },
+    "posthoc_independent_audit_source": {
+      "path": "research/voice-prosody/phenometrix_prosody/audit_hybrid_synthetic.py",
+      "sha256": "6a76aa1f8b158272f476b4b5e16a3b699872506751c9da870ab148a763655dcd",
+      "part_of_pre_outcome_plan": false
+    }
+  },
+  "validation": {
+    "focused_tests": 11,
+    "focused_tests_passed": 11,
+    "natural_baseline_identity_audit": {
+      "schema": "phenometrix-hybrid-natural-baseline-identity-audit-v1",
+      "plan_sha256": "71adf6745c1d28e4ec7595445678f8eb970a3c591fd171d7c2609aab58f9ca6a",
+      "new_metrics_sha256": "225d63547591ee210ff65431dfb3b71e0c7ba239a57365ffee1d68f168fe64c9",
+      "audit_script_sha256": "80d4e365846e2217fe77bd56007796ae1ff1a2bce35db4d9229c01739c580e0d",
+      "comparison": "Exact JSON numeric equality, no tolerance; all metric fields and prediction-outside-reference counts; same recording order.",
+      "checks": [
+        {
+          "source_directory": "delayed-development-evaluation",
+          "source_metrics_sha256": "b3f46fac1a4fe88567acba58b7a0aa240c803d1fe17b9f8953c9d96d2a745586",
+          "method": "dsp",
+          "new_method": "dsp",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-development-evaluation",
+          "source_metrics_sha256": "b3f46fac1a4fe88567acba58b7a0aa240c803d1fe17b9f8953c9d96d2a745586",
+          "method": "yin",
+          "new_method": "yin",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-development-evaluation",
+          "source_metrics_sha256": "b3f46fac1a4fe88567acba58b7a0aa240c803d1fe17b9f8953c9d96d2a745586",
+          "method": "continuity",
+          "new_method": "continuity",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-development-evaluation",
+          "source_metrics_sha256": "b3f46fac1a4fe88567acba58b7a0aa240c803d1fe17b9f8953c9d96d2a745586",
+          "method": "gru",
+          "new_method": "gru",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-development-evaluation",
+          "source_metrics_sha256": "b3f46fac1a4fe88567acba58b7a0aa240c803d1fe17b9f8953c9d96d2a745586",
+          "method": "mlp",
+          "new_method": "mlp_original",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-augmented-development-evaluation",
+          "source_metrics_sha256": "8af3dc6693f1e4d1d324fb2caf3b215cdeedd260b6971bdd363b7f11642a7cf9",
+          "method": "dsp",
+          "new_method": "dsp",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-augmented-development-evaluation",
+          "source_metrics_sha256": "8af3dc6693f1e4d1d324fb2caf3b215cdeedd260b6971bdd363b7f11642a7cf9",
+          "method": "yin",
+          "new_method": "yin",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-augmented-development-evaluation",
+          "source_metrics_sha256": "8af3dc6693f1e4d1d324fb2caf3b215cdeedd260b6971bdd363b7f11642a7cf9",
+          "method": "continuity",
+          "new_method": "continuity",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-augmented-development-evaluation",
+          "source_metrics_sha256": "8af3dc6693f1e4d1d324fb2caf3b215cdeedd260b6971bdd363b7f11642a7cf9",
+          "method": "gru",
+          "new_method": "gru",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        },
+        {
+          "source_directory": "delayed-augmented-development-evaluation",
+          "source_metrics_sha256": "8af3dc6693f1e4d1d324fb2caf3b215cdeedd260b6971bdd363b7f11642a7cf9",
+          "method": "mlp",
+          "new_method": "mlp_augmented",
+          "record_count": 320,
+          "all_record_metrics_exactly_equal": true,
+          "all_four_aggregate_levels_exactly_equal": true,
+          "outside_reference_counts_exactly_equal": true
+        }
+      ],
+      "record_method_comparisons": 3200,
+      "aggregate_method_level_comparisons": 40,
+      "pass": true
+    },
+    "both_variant_predictions_frozen_before_reference_reads": true,
+    "frozen_source_files": 19,
+    "synthetic_independent_audit": {
+      "schema": "phenometrix-hybrid-synthetic-independent-audit.v1",
+      "status": "pass",
+      "created_at": "2026-10-22T19:06:49.104799+00:00",
+      "audit_source_sha256": "6a76aa1f8b158272f476b4b5e16a3b699872506751c9da870ab148a763655dcd",
+      "plan_sha256": "71adf6745c1d28e4ec7595445678f8eb970a3c591fd171d7c2609aab58f9ca6a",
+      "metrics_sha256": "695b878a09b2ac3e706a6fbd22d782d64d11fc20b1fe744e75e1b446b9bee441",
+      "prediction_freeze_sha256": "a4ff117e3ef280a2d0b0c6617985900f6aae1a418a7a2ab36f3c50d0efae30c3",
+      "verified_source_bindings": 19,
+      "verified_pcm_feature_prediction_records": 78,
+      "verified_acquisition_frame_alignment": 16968,
+      "independent_case_method_count_checks": 560,
+      "verified_gates": {
+        "hybrid_original": {
+          "fresh_challenge_pass": true,
+          "extra_signed_transition_medians_ms": {
+            "median_step_target_settling_lag_ms": 0.0,
+            "median_glide_equivalent_delay_ms": 0.09791366653065126,
+            "median_signed_target_delay_ms": 0.09791366653065126
+          }
+        },
+        "hybrid_augmented": {
+          "fresh_challenge_pass": true,
+          "extra_signed_transition_medians_ms": {
+            "median_step_target_settling_lag_ms": 0.0,
+            "median_glide_equivalent_delay_ms": 0.08923120656380235,
+            "median_signed_target_delay_ms": 0.08923120656380235
+          }
+        }
+      },
+      "limitations": "Byte identities and analytic arithmetic only; no new inference, natural holdout, or deployment qualification."
+    }
+  },
+  "declared_gate_thresholds": {
+    "natural_joint_error_reduction_vs_each_dsp_yin_continuity": 0.01,
+    "maximum_voiced_success_loss_vs_best_classical": 0.02,
+    "maximum_clean_joint_error_excess_vs_best_classical": 0.01,
+    "each_original_stationary_minimum": 0.95,
+    "each_original_postchange_observation_minimum": 0.95,
+    "fresh_equal_voiced_scenario_minimum": 0.9,
+    "fresh_each_voiced_scenario_minimum": 0.8,
+    "fresh_each_unvoiced_false_positive_maximum": 0.05,
+    "original_transition_extra_median_ms_combined_steps_glides": 10,
+    "all_original_transition_delays_required": 8
+  },
+  "natural_development": {
+    "evidence": "Adaptive reuse of previously inspected and scored development; exploratory, not an independent holdout",
+    "source_recordings": 80,
+    "condition_records": 320,
+    "speakers": [
+      "F01",
+      "F03",
+      "M01",
+      "M03"
+    ],
+    "conditions": [
+      "clean",
+      "noise10db",
+      "first_difference",
+      "clip01"
+    ],
+    "counts_including_four_condition_repeats": {
+      "eligible_valid_frames": 253292,
+      "reference_voiced_frames": 60760,
+      "reference_unvoiced_frames": 192532,
+      "excluded_invalid_reference": 0,
+      "excluded_boundary": 1600
+    },
+    "aggregation": "pool recording counts within speaker-condition; equal16cell macro",
+    "metric_units": "Rates are fractions; cents are cents; percentile values here are equal-cell means of within-cell percentiles.",
+    "equal_speaker_equal_condition": {
+      "dsp": {
+        "joint_error": 0.10606543069013794,
+        "reference_voiced_success_rate": 0.624533897328836,
+        "voicing_false_positive_rate": 0.02013784993435218,
+        "voicing_false_negative_rate": 0.32325558282660166,
+        "voicing_false_negative_or_unavailable_rate": 0.32325558282660166,
+        "measurement_coverage": 1.0,
+        "jointly_voiced_coverage": 0.6767444171733983,
+        "median_jointly_voiced_cents": 14.048438474598019,
+        "p95_jointly_voiced_cents": 58.779637995925526,
+        "octave_error_rate_reference_voiced": 0.00621206016977439
+      },
+      "yin": {
+        "joint_error": 0.11020958244028423,
+        "reference_voiced_success_rate": 0.648801161212553,
+        "voicing_false_positive_rate": 0.033666697477132565,
+        "voicing_false_negative_rate": 0.2558173323372882,
+        "voicing_false_negative_or_unavailable_rate": 0.2558173323372882,
+        "measurement_coverage": 1.0,
+        "jointly_voiced_coverage": 0.7441826676627117,
+        "median_jointly_voiced_cents": 13.87912923962161,
+        "p95_jointly_voiced_cents": 153.98753170237075,
+        "octave_error_rate_reference_voiced": 0.008428505455664197
+      },
+      "continuity": {
+        "joint_error": 0.11598272288480463,
+        "reference_voiced_success_rate": 0.6939284381478548,
+        "voicing_false_positive_rate": 0.05519551017570082,
+        "voicing_false_negative_rate": 0.19023361802303065,
+        "voicing_false_negative_or_unavailable_rate": 0.19023361802303065,
+        "measurement_coverage": 1.0,
+        "jointly_voiced_coverage": 0.8097663819769694,
+        "median_jointly_voiced_cents": 15.13789426618175,
+        "p95_jointly_voiced_cents": 467.7248292033746,
+        "octave_error_rate_reference_voiced": 0.01429409012672112
+      },
+      "gru": {
+        "joint_error": 0.07952654498412282,
+        "reference_voiced_success_rate": 0.7637854730804092,
+        "voicing_false_positive_rate": 0.029178402485751154,
+        "voicing_false_negative_rate": 0.11631290948695447,
+        "voicing_false_negative_or_unavailable_rate": 0.11678560026782867,
+        "measurement_coverage": 0.9997481056485353,
+        "jointly_voiced_coverage": 0.8832143997321713,
+        "median_jointly_voiced_cents": 13.966235410254725,
+        "p95_jointly_voiced_cents": 199.96953202254198,
+        "octave_error_rate_reference_voiced": 0.014848236717079036
+      },
+      "mlp_original": {
+        "joint_error": 0.08634933205028454,
+        "reference_voiced_success_rate": 0.7540572519466112,
+        "voicing_false_positive_rate": 0.035203689438239996,
+        "voicing_false_negative_rate": 0.13267944208674287,
+        "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+        "measurement_coverage": 1.0,
+        "jointly_voiced_coverage": 0.867320557913257,
+        "median_jointly_voiced_cents": 13.863730133472007,
+        "p95_jointly_voiced_cents": 181.30479915704024,
+        "octave_error_rate_reference_voiced": 0.016869070889503252
+      },
+      "mlp_augmented": {
+        "joint_error": 0.08261998483703448,
+        "reference_voiced_success_rate": 0.7703421746579289,
+        "voicing_false_positive_rate": 0.03544708583313014,
+        "voicing_false_negative_rate": 0.12693539017656502,
+        "voicing_false_negative_or_unavailable_rate": 0.12693539017656502,
+        "measurement_coverage": 1.0,
+        "jointly_voiced_coverage": 0.8730646098234349,
+        "median_jointly_voiced_cents": 13.039102478158659,
+        "p95_jointly_voiced_cents": 97.341909913896,
+        "octave_error_rate_reference_voiced": 0.013907766107982151
+      },
+      "hybrid_original": {
+        "joint_error": 0.08922415958726268,
+        "reference_voiced_success_rate": 0.7419326476068762,
+        "voicing_false_positive_rate": 0.03510604329776526,
+        "voicing_false_negative_rate": 0.13267944208674287,
+        "voicing_false_negative_or_unavailable_rate": 0.132776566646183,
+        "measurement_coverage": 0.9999028767575536,
+        "jointly_voiced_coverage": 0.867223433353817,
+        "median_jointly_voiced_cents": 14.934868786018775,
+        "p95_jointly_voiced_cents": 239.17933462381032,
+        "octave_error_rate_reference_voiced": 0.014235330322170434
+      },
+      "hybrid_augmented": {
+        "joint_error": 0.08814157194660549,
+        "reference_voiced_success_rate": 0.7468489388499198,
+        "voicing_false_positive_rate": 0.035323761581320764,
+        "voicing_false_negative_rate": 0.12693539017656502,
+        "voicing_false_negative_or_unavailable_rate": 0.12703251473600513,
+        "measurement_coverage": 0.9998827376279209,
+        "jointly_voiced_coverage": 0.8729674852639949,
+        "median_jointly_voiced_cents": 14.97263343216307,
+        "p95_jointly_voiced_cents": 287.4054637371705,
+        "octave_error_rate_reference_voiced": 0.014461130792630273
+      }
+    },
+    "per_condition_equal_speaker": {
+      "hybrid_original": {
+        "clean": {
+          "joint_error": 0.08108102882088553,
+          "reference_voiced_success_rate": 0.8107031620207034,
+          "voicing_false_positive_rate": 0.0461057831592346,
+          "voicing_false_negative_rate": 0.05073800286887737,
+          "voicing_false_negative_or_unavailable_rate": 0.050867502281464194,
+          "measurement_coverage": 0.9998509685896655,
+          "jointly_voiced_coverage": 0.9491324977185358,
+          "median_jointly_voiced_cents": 15.754017878602806,
+          "p95_jointly_voiced_cents": 102.11439477772434,
+          "octave_error_rate_reference_voiced": 0.012342818842197113
+        },
+        "noise10db": {
+          "joint_error": 0.07565871503429555,
+          "reference_voiced_success_rate": 0.8035507983180377,
+          "voicing_false_positive_rate": 0.036929499469170894,
+          "voicing_false_negative_rate": 0.052933465807761544,
+          "voicing_false_negative_or_unavailable_rate": 0.05306296522034836,
+          "measurement_coverage": 0.9999239740914918,
+          "jointly_voiced_coverage": 0.9469370347796515,
+          "median_jointly_voiced_cents": 16.127034811375005,
+          "p95_jointly_voiced_cents": 105.72071971800793,
+          "octave_error_rate_reference_voiced": 0.012141583418132533
+        },
+        "first_difference": {
+          "joint_error": 0.11850534175278887,
+          "reference_voiced_success_rate": 0.54441697109593,
+          "voicing_false_positive_rate": 0.011106188866418036,
+          "voicing_false_negative_rate": 0.3770438550828531,
+          "voicing_false_negative_or_unavailable_rate": 0.3770438550828531,
+          "measurement_coverage": 0.9999855957593915,
+          "jointly_voiced_coverage": 0.622956144917147,
+          "median_jointly_voiced_cents": 11.804245335829126,
+          "p95_jointly_voiced_cents": 641.8844111044846,
+          "octave_error_rate_reference_voiced": 0.020192957511378513
+        },
+        "clip01": {
+          "joint_error": 0.08165155274108075,
+          "reference_voiced_success_rate": 0.8090596589928338,
+          "voicing_false_positive_rate": 0.0462827016962375,
+          "voicing_false_negative_rate": 0.05000244458747953,
+          "voicing_false_negative_or_unavailable_rate": 0.05013194400006635,
+          "measurement_coverage": 0.9998509685896655,
+          "jointly_voiced_coverage": 0.9498680559999336,
+          "median_jointly_voiced_cents": 16.054177118268164,
+          "p95_jointly_voiced_cents": 106.99781289502435,
+          "octave_error_rate_reference_voiced": 0.012263961516973579
+        }
+      },
+      "hybrid_augmented": {
+        "clean": {
+          "joint_error": 0.08086399915803602,
+          "reference_voiced_success_rate": 0.8102868662571279,
+          "voicing_false_positive_rate": 0.045695461638454324,
+          "voicing_false_negative_rate": 0.051534982261660214,
+          "voicing_false_negative_or_unavailable_rate": 0.05166448167424704,
+          "measurement_coverage": 0.9998350541457162,
+          "jointly_voiced_coverage": 0.9483355183257529,
+          "median_jointly_voiced_cents": 15.71296606946622,
+          "p95_jointly_voiced_cents": 100.97476142411472,
+          "octave_error_rate_reference_voiced": 0.012113286792063367
+        },
+        "noise10db": {
+          "joint_error": 0.07620905732358482,
+          "reference_voiced_success_rate": 0.8034812552533906,
+          "voicing_false_positive_rate": 0.03760816283877016,
+          "voicing_false_negative_rate": 0.05401486714038367,
+          "voicing_false_negative_or_unavailable_rate": 0.05414436655297049,
+          "measurement_coverage": 0.9999080596475425,
+          "jointly_voiced_coverage": 0.9458556334470295,
+          "median_jointly_voiced_cents": 16.101480002582417,
+          "p95_jointly_voiced_cents": 103.54938901140267,
+          "octave_error_rate_reference_voiced": 0.011973767525416942
+        },
+        "first_difference": {
+          "joint_error": 0.11424819821345161,
+          "reference_voiced_success_rate": 0.5646767440888066,
+          "voicing_false_positive_rate": 0.012296746254050816,
+          "voicing_false_negative_rate": 0.3512958187097981,
+          "voicing_false_negative_or_unavailable_rate": 0.3512958187097981,
+          "measurement_coverage": 0.9999696813154422,
+          "jointly_voiced_coverage": 0.6487041812902019,
+          "median_jointly_voiced_cents": 12.06744766484946,
+          "p95_jointly_voiced_cents": 840.1697349409394,
+          "octave_error_rate_reference_voiced": 0.021442513843372164
+        },
+        "clip01": {
+          "joint_error": 0.08124503309134955,
+          "reference_voiced_success_rate": 0.8089508898003539,
+          "voicing_false_positive_rate": 0.045694675594007764,
+          "voicing_false_negative_rate": 0.050895892594418096,
+          "voicing_false_negative_or_unavailable_rate": 0.05102539200700491,
+          "measurement_coverage": 0.9998181554029826,
+          "jointly_voiced_coverage": 0.948974607992995,
+          "median_jointly_voiced_cents": 16.00863999175419,
+          "p95_jointly_voiced_cents": 104.9279695722256,
+          "octave_error_rate_reference_voiced": 0.01231495500966862
+        }
+      }
+    },
+    "per_speaker_equal_condition": {
+      "hybrid_original": {
+        "F01": {
+          "joint_error": 0.09399070596473359,
+          "reference_voiced_success_rate": 0.7817892824704814,
+          "voicing_false_positive_rate": 0.060897952603578914,
+          "voicing_false_negative_rate": 0.08507417499243113,
+          "voicing_false_negative_or_unavailable_rate": 0.08507417499243113,
+          "measurement_coverage": 0.9999840855560507,
+          "jointly_voiced_coverage": 0.9149258250075689,
+          "median_jointly_voiced_cents": 14.450230733717957,
+          "p95_jointly_voiced_cents": 375.6454877125725,
+          "octave_error_rate_reference_voiced": 0.02134423251589464
+        },
+        "F03": {
+          "joint_error": 0.06087232081124683,
+          "reference_voiced_success_rate": 0.8751155268022182,
+          "voicing_false_positive_rate": 0.039280779858765734,
+          "voicing_false_negative_rate": 0.05730129390018484,
+          "voicing_false_negative_or_unavailable_rate": 0.057474584103512014,
+          "measurement_coverage": 0.9997119151878313,
+          "jointly_voiced_coverage": 0.942525415896488,
+          "median_jointly_voiced_cents": 8.658516820477601,
+          "p95_jointly_voiced_cents": 71.40419657346168,
+          "octave_error_rate_reference_voiced": 0.01819547134935305
+        },
+        "M01": {
+          "joint_error": 0.0981309990536704,
+          "reference_voiced_success_rate": 0.6494978479196557,
+          "voicing_false_positive_rate": 0.02031567777876028,
+          "voicing_false_negative_rate": 0.1865136298421808,
+          "voicing_false_negative_or_unavailable_rate": 0.18672883787661407,
+          "measurement_coverage": 0.9999155062863323,
+          "jointly_voiced_coverage": 0.8132711621233859,
+          "median_jointly_voiced_cents": 20.74367304771683,
+          "p95_jointly_voiced_cents": 390.4832693579774,
+          "octave_error_rate_reference_voiced": 0.012553802008608322
+        },
+        "M03": {
+          "joint_error": 0.1039026125193999,
+          "reference_voiced_success_rate": 0.6613279332351497,
+          "voicing_false_positive_rate": 0.019929762949956104,
+          "voicing_false_negative_rate": 0.2018286696121748,
+          "voicing_false_negative_or_unavailable_rate": 0.2018286696121748,
+          "measurement_coverage": 1.0,
+          "jointly_voiced_coverage": 0.7981713303878252,
+          "median_jointly_voiced_cents": 15.887054542162714,
+          "p95_jointly_voiced_cents": 119.18438485122971,
+          "octave_error_rate_reference_voiced": 0.004847815414825724
+        }
+      },
+      "hybrid_augmented": {
+        "F01": {
+          "joint_error": 0.09430899484372016,
+          "reference_voiced_success_rate": 0.7803511958825311,
+          "voicing_false_positive_rate": 0.06083749798484604,
+          "voicing_false_negative_rate": 0.08848016954283985,
+          "voicing_false_negative_or_unavailable_rate": 0.08848016954283985,
+          "measurement_coverage": 0.9999204277802534,
+          "jointly_voiced_coverage": 0.9115198304571602,
+          "median_jointly_voiced_cents": 14.387488808546921,
+          "p95_jointly_voiced_cents": 373.5130640874769,
+          "octave_error_rate_reference_voiced": 0.02119285498032092
+        },
+        "F03": {
+          "joint_error": 0.059763194284397324,
+          "reference_voiced_success_rate": 0.8793322550831792,
+          "voicing_false_positive_rate": 0.03920402210623272,
+          "voicing_false_negative_rate": 0.05164048059149723,
+          "voicing_false_negative_or_unavailable_rate": 0.0518137707948244,
+          "measurement_coverage": 0.9997119151878313,
+          "jointly_voiced_coverage": 0.9481862292051755,
+          "median_jointly_voiced_cents": 8.663483217517228,
+          "p95_jointly_voiced_cents": 75.0499970954055,
+          "octave_error_rate_reference_voiced": 0.018830868761552683
+        },
+        "M01": {
+          "joint_error": 0.09666080843585237,
+          "reference_voiced_success_rate": 0.655093256814921,
+          "voicing_false_positive_rate": 0.020094614908479972,
+          "voicing_false_negative_rate": 0.18113342898134863,
+          "voicing_false_negative_or_unavailable_rate": 0.1813486370157819,
+          "measurement_coverage": 0.9998986075435987,
+          "jointly_voiced_coverage": 0.8186513629842181,
+          "median_jointly_voiced_cents": 20.79578315835801,
+          "p95_jointly_voiced_cents": 386.92464810449417,
+          "octave_error_rate_reference_voiced": 0.01248206599713056
+        },
+        "M03": {
+          "joint_error": 0.10183329022245215,
+          "reference_voiced_success_rate": 0.6726190476190477,
+          "voicing_false_positive_rate": 0.021158911325724318,
+          "voicing_false_negative_rate": 0.18648748159057438,
+          "voicing_false_negative_or_unavailable_rate": 0.18648748159057438,
+          "measurement_coverage": 1.0,
+          "jointly_voiced_coverage": 0.8135125184094256,
+          "median_jointly_voiced_cents": 16.04377854423013,
+          "p95_jointly_voiced_cents": 314.1341456613057,
+          "octave_error_rate_reference_voiced": 0.005338733431516937
+        }
+      }
+    },
+    "per_speaker_condition": {
+      "hybrid_original": {
+        "F01": {
+          "clean": {
+            "joint_error": 0.09351327264625374,
+            "reference_voiced_success_rate": 0.8407508325764457,
+            "voicing_false_positive_rate": 0.0760116072867967,
+            "voicing_false_negative_rate": 0.01907356948228883,
+            "voicing_false_negative_or_unavailable_rate": 0.01907356948228883,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9809264305177112,
+            "median_jointly_voiced_cents": 14.631742071360406,
+            "p95_jointly_voiced_cents": 113.42209678763594,
+            "octave_error_rate_reference_voiced": 0.021495610051468363
+          },
+          "noise10db": {
+            "joint_error": 0.08708383729072507,
+            "reference_voiced_success_rate": 0.8307599152285801,
+            "voicing_false_positive_rate": 0.0651297759148799,
+            "voicing_false_negative_rate": 0.023312140478353012,
+            "voicing_false_negative_or_unavailable_rate": 0.023312140478353012,
+            "measurement_coverage": 0.9999363422242027,
+            "jointly_voiced_coverage": 0.9766878595216469,
+            "median_jointly_voiced_cents": 15.178486362833679,
+            "p95_jointly_voiced_cents": 121.90807092651164,
+            "octave_error_rate_reference_voiced": 0.021495610051468363
+          },
+          "first_difference": {
+            "joint_error": 0.10229804570628302,
+            "reference_voiced_success_rate": 0.6130790190735694,
+            "voicing_false_positive_rate": 0.02651942608415283,
+            "voicing_false_negative_rate": 0.27974568574023617,
+            "voicing_false_negative_or_unavailable_rate": 0.27974568574023617,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.7202543142597638,
+            "median_jointly_voiced_cents": 13.067428469218541,
+            "p95_jointly_voiced_cents": 1145.917786353244,
+            "octave_error_rate_reference_voiced": 0.02119285498032092
+          },
+          "clip01": {
+            "joint_error": 0.09306766821567254,
+            "reference_voiced_success_rate": 0.8425673630033303,
+            "voicing_false_positive_rate": 0.07593100112848622,
+            "voicing_false_negative_rate": 0.018165304268846504,
+            "voicing_false_negative_or_unavailable_rate": 0.018165304268846504,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9818346957311535,
+            "median_jointly_voiced_cents": 14.923266031459198,
+            "p95_jointly_voiced_cents": 121.3339967828983,
+            "octave_error_rate_reference_voiced": 0.02119285498032092
+          }
+        },
+        "F03": {
+          "clean": {
+            "joint_error": 0.06159253284166859,
+            "reference_voiced_success_rate": 0.91728280961183,
+            "voicing_false_positive_rate": 0.054037457783236105,
+            "voicing_false_negative_rate": 0.018484288354898338,
+            "voicing_false_negative_or_unavailable_rate": 0.018715341959334567,
+            "measurement_coverage": 0.9995390643005301,
+            "jointly_voiced_coverage": 0.9812846580406654,
+            "median_jointly_voiced_cents": 8.803021156591125,
+            "p95_jointly_voiced_cents": 61.91254619248494,
+            "octave_error_rate_reference_voiced": 0.016404805914972273
+          },
+          "noise10db": {
+            "joint_error": 0.05127909656602904,
+            "reference_voiced_success_rate": 0.9124306839186691,
+            "voicing_false_positive_rate": 0.03906969603929997,
+            "voicing_false_negative_rate": 0.014094269870609981,
+            "voicing_false_negative_or_unavailable_rate": 0.01432532347504621,
+            "measurement_coverage": 0.9998271491126988,
+            "jointly_voiced_coverage": 0.9856746765249538,
+            "median_jointly_voiced_cents": 9.564644250714093,
+            "p95_jointly_voiced_cents": 67.96552469800365,
+            "octave_error_rate_reference_voiced": 0.016173752310536044
+          },
+          "first_difference": {
+            "joint_error": 0.06902512099562111,
+            "reference_voiced_success_rate": 0.7534658040665434,
+            "voicing_false_positive_rate": 0.009978507829290759,
+            "voicing_false_negative_rate": 0.17768022181146026,
+            "voicing_false_negative_or_unavailable_rate": 0.17768022181146026,
+            "measurement_coverage": 0.9999423830375662,
+            "jointly_voiced_coverage": 0.8223197781885397,
+            "median_jointly_voiced_cents": 7.43135359235012,
+            "p95_jointly_voiced_cents": 93.8477498943889,
+            "octave_error_rate_reference_voiced": 0.024260628465804065
+          },
+          "clip01": {
+            "joint_error": 0.06159253284166859,
+            "reference_voiced_success_rate": 0.91728280961183,
+            "voicing_false_positive_rate": 0.054037457783236105,
+            "voicing_false_negative_rate": 0.018946395563770795,
+            "voicing_false_negative_or_unavailable_rate": 0.019177449168207024,
+            "measurement_coverage": 0.9995390643005301,
+            "jointly_voiced_coverage": 0.9808225508317929,
+            "median_jointly_voiced_cents": 8.835048282255068,
+            "p95_jointly_voiced_cents": 61.890965508969245,
+            "octave_error_rate_reference_voiced": 0.015942698706099816
+          }
+        },
+        "M01": {
+          "clean": {
+            "joint_error": 0.08476409355143977,
+            "reference_voiced_success_rate": 0.733428981348637,
+            "voicing_false_positive_rate": 0.02864974798832788,
+            "voicing_false_negative_rate": 0.07948350071736011,
+            "voicing_false_negative_or_unavailable_rate": 0.07977044476327116,
+            "measurement_coverage": 0.9998648100581317,
+            "jointly_voiced_coverage": 0.9202295552367289,
+            "median_jointly_voiced_cents": 22.13322454380687,
+            "p95_jointly_voiced_cents": 117.64732881475017,
+            "octave_error_rate_reference_voiced": 0.008034433285509325
+          },
+          "noise10db": {
+            "joint_error": 0.08104637015006083,
+            "reference_voiced_success_rate": 0.7230989956958394,
+            "voicing_false_positive_rate": 0.0206914846582368,
+            "voicing_false_negative_rate": 0.08694404591104735,
+            "voicing_false_negative_or_unavailable_rate": 0.0872309899569584,
+            "measurement_coverage": 0.9999324050290659,
+            "jointly_voiced_coverage": 0.9127690100430416,
+            "median_jointly_voiced_cents": 22.345455111217174,
+            "p95_jointly_voiced_cents": 116.67338111995488,
+            "octave_error_rate_reference_voiced": 0.007460545193687231
+          },
+          "first_difference": {
+            "joint_error": 0.1416790590780046,
+            "reference_voiced_success_rate": 0.41004304160688665,
+            "voicing_false_positive_rate": 0.0035370059244849237,
+            "voicing_false_negative_rate": 0.5004304160688666,
+            "voicing_false_negative_or_unavailable_rate": 0.5004304160688666,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.49956958393113343,
+            "median_jointly_voiced_cents": 16.102309067677517,
+            "p95_jointly_voiced_cents": 1209.5245122830627,
+            "octave_error_rate_reference_voiced": 0.02697274031563845
+          },
+          "clip01": {
+            "joint_error": 0.08503447343517642,
+            "reference_voiced_success_rate": 0.7314203730272597,
+            "voicing_false_positive_rate": 0.028384472543991512,
+            "voicing_false_negative_rate": 0.07919655667144906,
+            "voicing_false_negative_or_unavailable_rate": 0.07948350071736011,
+            "measurement_coverage": 0.9998648100581317,
+            "jointly_voiced_coverage": 0.9205164992826399,
+            "median_jointly_voiced_cents": 22.39370346816575,
+            "p95_jointly_voiced_cents": 118.08785521414181,
+            "octave_error_rate_reference_voiced": 0.0077474892395982785
+          }
+        },
+        "M03": {
+          "clean": {
+            "joint_error": 0.08445421624418004,
+            "reference_voiced_success_rate": 0.7513500245459008,
+            "voicing_false_positive_rate": 0.0257243195785777,
+            "voicing_false_negative_rate": 0.0859106529209622,
+            "voicing_false_negative_or_unavailable_rate": 0.0859106529209622,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9140893470790378,
+            "median_jointly_voiced_cents": 17.448083742652823,
+            "p95_jointly_voiced_cents": 115.47560731602636,
+            "octave_error_rate_reference_voiced": 0.003436426116838488
+          },
+          "noise10db": {
+            "joint_error": 0.0832255561303673,
+            "reference_voiced_success_rate": 0.7479135984290624,
+            "voicing_false_positive_rate": 0.0228270412642669,
+            "voicing_false_negative_rate": 0.08738340697103583,
+            "voicing_false_negative_or_unavailable_rate": 0.08738340697103583,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9126165930289641,
+            "median_jointly_voiced_cents": 17.41955352073507,
+            "p95_jointly_voiced_cents": 116.33590212756152,
+            "octave_error_rate_reference_voiced": 0.003436426116838488
+          },
+          "first_difference": {
+            "joint_error": 0.16101914123124678,
+            "reference_voiced_success_rate": 0.4010800196367207,
+            "voicing_false_positive_rate": 0.004389815627743635,
+            "voicing_false_negative_rate": 0.5503190967108493,
+            "voicing_false_negative_or_unavailable_rate": 0.5503190967108493,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.4496809032891507,
+            "median_jointly_voiced_cents": 10.61589021407033,
+            "p95_jointly_voiced_cents": 118.24759588724292,
+            "octave_error_rate_reference_voiced": 0.008345606283750613
+          },
+          "clip01": {
+            "joint_error": 0.08691153647180548,
+            "reference_voiced_success_rate": 0.7449680903289151,
+            "voicing_false_positive_rate": 0.026777875329236173,
+            "voicing_false_negative_rate": 0.08370152184585174,
+            "voicing_false_negative_or_unavailable_rate": 0.08370152184585174,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9162984781541482,
+            "median_jointly_voiced_cents": 18.06469069119263,
+            "p95_jointly_voiced_cents": 126.67843407408806,
+            "octave_error_rate_reference_voiced": 0.004172803141875307
+          }
+        }
+      },
+      "hybrid_augmented": {
+        "F01": {
+          "clean": {
+            "joint_error": 0.09357693042205105,
+            "reference_voiced_success_rate": 0.8380260369361187,
+            "voicing_false_positive_rate": 0.07528615186200226,
+            "voicing_false_negative_rate": 0.02300938540720557,
+            "voicing_false_negative_or_unavailable_rate": 0.02300938540720557,
+            "measurement_coverage": 0.9999363422242027,
+            "jointly_voiced_coverage": 0.9769906145927945,
+            "median_jointly_voiced_cents": 14.60209741133052,
+            "p95_jointly_voiced_cents": 110.40926094890436,
+            "octave_error_rate_reference_voiced": 0.02119285498032092
+          },
+          "noise10db": {
+            "joint_error": 0.08740212616971163,
+            "reference_voiced_success_rate": 0.8295488949439903,
+            "voicing_false_positive_rate": 0.0651297759148799,
+            "voicing_false_negative_rate": 0.02482591583409022,
+            "voicing_false_negative_or_unavailable_rate": 0.02482591583409022,
+            "measurement_coverage": 0.9998726844484054,
+            "jointly_voiced_coverage": 0.9751740841659098,
+            "median_jointly_voiced_cents": 15.16410611948967,
+            "p95_jointly_voiced_cents": 118.40746096271539,
+            "octave_error_rate_reference_voiced": 0.021495610051468363
+          },
+          "first_difference": {
+            "joint_error": 0.10318925456744542,
+            "reference_voiced_success_rate": 0.613381774144717,
+            "voicing_false_positive_rate": 0.027647912300499757,
+            "voicing_false_negative_rate": 0.2848925219497427,
+            "voicing_false_negative_or_unavailable_rate": 0.2848925219497427,
+            "measurement_coverage": 0.9999363422242027,
+            "jointly_voiced_coverage": 0.7151074780502573,
+            "median_jointly_voiced_cents": 12.916700258625632,
+            "p95_jointly_voiced_cents": 1149.271090280606,
+            "octave_error_rate_reference_voiced": 0.02089009990917348
+          },
+          "clip01": {
+            "joint_error": 0.09306766821567254,
+            "reference_voiced_success_rate": 0.8404480775052983,
+            "voicing_false_positive_rate": 0.07528615186200226,
+            "voicing_false_negative_rate": 0.02119285498032092,
+            "voicing_false_negative_or_unavailable_rate": 0.02119285498032092,
+            "measurement_coverage": 0.9999363422242027,
+            "jointly_voiced_coverage": 0.978807145019679,
+            "median_jointly_voiced_cents": 14.86705144474186,
+            "p95_jointly_voiced_cents": 115.96444415768211,
+            "octave_error_rate_reference_voiced": 0.02119285498032092
+          }
+        },
+        "F03": {
+          "clean": {
+            "joint_error": 0.05986402396865637,
+            "reference_voiced_success_rate": 0.919362292051756,
+            "voicing_false_positive_rate": 0.05242554498004298,
+            "voicing_false_negative_rate": 0.014787430683918669,
+            "voicing_false_negative_or_unavailable_rate": 0.015018484288354898,
+            "measurement_coverage": 0.9995390643005301,
+            "jointly_voiced_coverage": 0.984981515711645,
+            "median_jointly_voiced_cents": 8.803021156591125,
+            "p95_jointly_voiced_cents": 63.114260870713444,
+            "octave_error_rate_reference_voiced": 0.016404805914972273
+          },
+          "noise10db": {
+            "joint_error": 0.052200967964968883,
+            "reference_voiced_success_rate": 0.9126617375231053,
+            "voicing_false_positive_rate": 0.04037457783236107,
+            "voicing_false_negative_rate": 0.013632162661737524,
+            "voicing_false_negative_or_unavailable_rate": 0.013863216266173753,
+            "measurement_coverage": 0.9998271491126988,
+            "jointly_voiced_coverage": 0.9861367837338263,
+            "median_jointly_voiced_cents": 9.56097930171086,
+            "p95_jointly_voiced_cents": 67.7382334292507,
+            "octave_error_rate_reference_voiced": 0.016404805914972273
+          },
+          "first_difference": {
+            "joint_error": 0.06723899516017516,
+            "reference_voiced_success_rate": 0.7654805914972274,
+            "voicing_false_positive_rate": 0.01159042063248388,
+            "voicing_false_negative_rate": 0.16335489833641406,
+            "voicing_false_negative_or_unavailable_rate": 0.16335489833641406,
+            "measurement_coverage": 0.9999423830375662,
+            "jointly_voiced_coverage": 0.836645101663586,
+            "median_jointly_voiced_cents": 7.461337266841046,
+            "p95_jointly_voiced_cents": 106.35472974818906,
+            "octave_error_rate_reference_voiced": 0.02657116451016636
+          },
+          "clip01": {
+            "joint_error": 0.05974879004378889,
+            "reference_voiced_success_rate": 0.9198243992606284,
+            "voicing_false_positive_rate": 0.05242554498004298,
+            "voicing_false_negative_rate": 0.014787430683918669,
+            "voicing_false_negative_or_unavailable_rate": 0.015018484288354898,
+            "measurement_coverage": 0.9995390643005301,
+            "jointly_voiced_coverage": 0.984981515711645,
+            "median_jointly_voiced_cents": 8.828595144925883,
+            "p95_jointly_voiced_cents": 62.99276433346882,
+            "octave_error_rate_reference_voiced": 0.015942698706099816
+          }
+        },
+        "M01": {
+          "clean": {
+            "joint_error": 0.08375016898742733,
+            "reference_voiced_success_rate": 0.7348637015781923,
+            "voicing_false_positive_rate": 0.02776549650720665,
+            "voicing_false_negative_rate": 0.0812051649928264,
+            "voicing_false_negative_or_unavailable_rate": 0.08149210903873745,
+            "measurement_coverage": 0.9998648100581317,
+            "jointly_voiced_coverage": 0.9185078909612625,
+            "median_jointly_voiced_cents": 22.038333264219478,
+            "p95_jointly_voiced_cents": 112.46486735142102,
+            "octave_error_rate_reference_voiced": 0.007173601147776184
+          },
+          "noise10db": {
+            "joint_error": 0.08084358523725835,
+            "reference_voiced_success_rate": 0.7262553802008608,
+            "voicing_false_positive_rate": 0.021398885843133788,
+            "voicing_false_negative_rate": 0.08751793400286945,
+            "voicing_false_negative_or_unavailable_rate": 0.08780487804878048,
+            "measurement_coverage": 0.9999324050290659,
+            "jointly_voiced_coverage": 0.9121951219512195,
+            "median_jointly_voiced_cents": 22.250907688811207,
+            "p95_jointly_voiced_cents": 111.2668215539434,
+            "octave_error_rate_reference_voiced": 0.006312769010043041
+          },
+          "first_difference": {
+            "joint_error": 0.13796133567662566,
+            "reference_voiced_success_rate": 0.4269727403156385,
+            "voicing_false_positive_rate": 0.003890706516933416,
+            "voicing_false_negative_rate": 0.4763271162123386,
+            "voicing_false_negative_or_unavailable_rate": 0.4763271162123386,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.5236728837876614,
+            "median_jointly_voiced_cents": 16.500188212235606,
+            "p95_jointly_voiced_cents": 1209.5245122830627,
+            "octave_error_rate_reference_voiced": 0.02898134863701578
+          },
+          "clip01": {
+            "joint_error": 0.08408814384209815,
+            "reference_voiced_success_rate": 0.7322812051649928,
+            "voicing_false_positive_rate": 0.027323370766646034,
+            "voicing_false_negative_rate": 0.07948350071736011,
+            "voicing_false_negative_or_unavailable_rate": 0.07977044476327116,
+            "measurement_coverage": 0.9997972150871975,
+            "jointly_voiced_coverage": 0.9202295552367289,
+            "median_jointly_voiced_cents": 22.39370346816575,
+            "p95_jointly_voiced_cents": 114.44239122954966,
+            "octave_error_rate_reference_voiced": 0.007460545193687231
+          }
+        },
+        "M03": {
+          "clean": {
+            "joint_error": 0.0862648732540093,
+            "reference_voiced_success_rate": 0.7488954344624448,
+            "voicing_false_positive_rate": 0.027304653204565408,
+            "voicing_false_negative_rate": 0.08713794796269023,
+            "voicing_false_negative_or_unavailable_rate": 0.08713794796269023,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9128620520373097,
+            "median_jointly_voiced_cents": 17.40841244572375,
+            "p95_jointly_voiced_cents": 117.91065652542004,
+            "octave_error_rate_reference_voiced": 0.003681885125184094
+          },
+          "noise10db": {
+            "joint_error": 0.08438954992240041,
+            "reference_voiced_success_rate": 0.7454590083456063,
+            "voicing_false_positive_rate": 0.023529411764705882,
+            "voicing_false_negative_rate": 0.0900834560628375,
+            "voicing_false_negative_or_unavailable_rate": 0.0900834560628375,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9099165439371625,
+            "median_jointly_voiced_cents": 17.42992690031792,
+            "p95_jointly_voiced_cents": 116.7850400997012,
+            "octave_error_rate_reference_voiced": 0.003681885125184094
+          },
+          "first_difference": {
+            "joint_error": 0.14860320744956027,
+            "reference_voiced_success_rate": 0.4528718703976436,
+            "voicing_false_positive_rate": 0.006057945566286216,
+            "voicing_false_negative_rate": 0.4806087383406971,
+            "voicing_false_negative_or_unavailable_rate": 0.4806087383406971,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.5193912616593029,
+            "median_jointly_voiced_cents": 11.391564921695565,
+            "p95_jointly_voiced_cents": 895.5286074518997,
+            "octave_error_rate_reference_voiced": 0.009327442317133039
+          },
+          "clip01": {
+            "joint_error": 0.08807553026383859,
+            "reference_voiced_success_rate": 0.7432498772704959,
+            "voicing_false_positive_rate": 0.02774363476733977,
+            "voicing_false_negative_rate": 0.08811978399607266,
+            "voicing_false_negative_or_unavailable_rate": 0.08811978399607266,
+            "measurement_coverage": 1.0,
+            "jointly_voiced_coverage": 0.9118802160039273,
+            "median_jointly_voiced_cents": 17.945209909183273,
+            "p95_jointly_voiced_cents": 126.31227856820183,
+            "octave_error_rate_reference_voiced": 0.004663721158566519
+          }
+        }
+      }
+    },
+    "quality_components_against_classical": {
+      "hybrid_original": {
+        "status": "quality_components_pass_pending_other_gates",
+        "pass": true,
+        "comparators": [
+          "dsp",
+          "yin",
+          "continuity"
+        ],
+        "joint_error_reduction_by_comparator": {
+          "dsp": 0.016841271102875255,
+          "yin": 0.020985422853021546,
+          "continuity": 0.02675856329754195
+        },
+        "voiced_success_loss_against_best_simple": -0.048004209459021396,
+        "clean_joint_error_excess_against_best_simple": -0.004962628227874591
+      },
+      "hybrid_augmented": {
+        "status": "quality_components_pass_pending_other_gates",
+        "pass": true,
+        "comparators": [
+          "dsp",
+          "yin",
+          "continuity"
+        ],
+        "joint_error_reduction_by_comparator": {
+          "dsp": 0.017923858743532445,
+          "yin": 0.022068010493678736,
+          "continuity": 0.02784115093819914
+        },
+        "voiced_success_loss_against_best_simple": -0.052920500702065,
+        "clean_joint_error_excess_against_best_simple": -0.005179657890724096
+      }
+    },
+    "joint_error_change_vs_own_mlp_descriptive_not_gate": {
+      "original": 0.002874827536978139,
+      "augmented": 0.005521587109571013
+    },
+    "pooled_residual_counts_descriptive_not_primary_macro": {
+      "hybrid_original": {
+        "correct_frames": 230926,
+        "voicing_false_positive_count": 6896,
+        "voicing_false_negative_count": 8005,
+        "unavailable_reference_voiced_count": 6,
+        "unavailable_frames": 26,
+        "reference_voiced_success_count": 45310,
+        "octave_error_count": 851,
+        "voiced_pitch_errors_outside_50c": 7439
+      },
+      "hybrid_augmented": {
+        "correct_frames": 231198,
+        "voicing_false_positive_count": 6935,
+        "voicing_false_negative_count": 7627,
+        "unavailable_reference_voiced_count": 6,
+        "unavailable_frames": 31,
+        "reference_voiced_success_count": 45626,
+        "octave_error_count": 867,
+        "voiced_pitch_errors_outside_50c": 7501
+      }
+    },
+    "weakest_condition": "first_difference: original and augmented voiced success 54.44% and 56.47%; voicing false-negative rates 37.70% and 35.13%."
+  },
+  "synthetic": {
+    "cohort_counts": {
+      "original_regression": 14,
+      "previous_challenge_regression": 32,
+      "fresh_frozen_challenge": 32
+    },
+    "fresh_challenge_frozen_before_outcomes": true,
+    "gates": {
+      "hybrid_original": {
+        "original_cases": {
+          "stationary_success": {
+            "constant-100": 1.0,
+            "constant-200": 1.0,
+            "constant-300": 1.0
+          },
+          "postchange_observation_success": {
+            "observation-change-100": 1.0,
+            "observation-change-200": 1.0,
+            "observation-change-300": 1.0
+          },
+          "stationary_component_pass": true,
+          "observation_component_pass": true
+        },
+        "original_transition": {
+          "extra_median_target_delay_vs_delayed_dsp_ms": {
+            "median_signed_target_delay_ms": 0.09791366653065126,
+            "median_step_target_settling_lag_ms": 0.0,
+            "median_glide_equivalent_delay_ms": 0.09791366653065126
+          },
+          "transition_lag_component_pass": true
+        },
+        "fresh_challenge": {
+          "voiced_scenario_count": 28,
+          "unvoiced_scenario_count": 4,
+          "equal_scenario_reference_voiced_success": 0.9950914014895057,
+          "minimum_scenario_reference_voiced_success": 0.9383886255924171,
+          "voiced_scenarios_below_80percent": [],
+          "unvoiced_scenarios_above_5percent_false_positive": [],
+          "unvoiced_false_positive_count": 0,
+          "unvoiced_reference_frames": 844,
+          "unvoiced_false_positive_rate": 0.0,
+          "challenge_component_pass": true,
+          "final_keep": false
+        },
+        "previous_challenge_regression": {
+          "voiced_scenario_count": 28,
+          "unvoiced_scenario_count": 4,
+          "equal_scenario_reference_voiced_success": 0.9983698873740368,
+          "minimum_scenario_reference_voiced_success": 0.9875518672199171,
+          "voiced_scenarios_below_80percent": [],
+          "unvoiced_scenarios_above_5percent_false_positive": [],
+          "unvoiced_false_positive_count": 0,
+          "unvoiced_reference_frames": 964,
+          "unvoiced_false_positive_rate": 0.0,
+          "challenge_component_pass": true,
+          "final_keep": false
+        },
+        "final_keep": false
+      },
+      "hybrid_augmented": {
+        "original_cases": {
+          "stationary_success": {
+            "constant-100": 1.0,
+            "constant-200": 1.0,
+            "constant-300": 1.0
+          },
+          "postchange_observation_success": {
+            "observation-change-100": 1.0,
+            "observation-change-200": 1.0,
+            "observation-change-300": 1.0
+          },
+          "stationary_component_pass": true,
+          "observation_component_pass": true
+        },
+        "original_transition": {
+          "extra_median_target_delay_vs_delayed_dsp_ms": {
+            "median_signed_target_delay_ms": 0.08923120656380235,
+            "median_step_target_settling_lag_ms": 0.0,
+            "median_glide_equivalent_delay_ms": 0.08923120656380235
+          },
+          "transition_lag_component_pass": true
+        },
+        "fresh_challenge": {
+          "voiced_scenario_count": 28,
+          "unvoiced_scenario_count": 4,
+          "equal_scenario_reference_voiced_success": 0.998645903859174,
+          "minimum_scenario_reference_voiced_success": 0.985781990521327,
+          "voiced_scenarios_below_80percent": [],
+          "unvoiced_scenarios_above_5percent_false_positive": [],
+          "unvoiced_false_positive_count": 0,
+          "unvoiced_reference_frames": 844,
+          "unvoiced_false_positive_rate": 0.0,
+          "challenge_component_pass": true,
+          "final_keep": false
+        },
+        "previous_challenge_regression": {
+          "voiced_scenario_count": 28,
+          "unvoiced_scenario_count": 4,
+          "equal_scenario_reference_voiced_success": 0.9983698873740368,
+          "minimum_scenario_reference_voiced_success": 0.9875518672199171,
+          "voiced_scenarios_below_80percent": [],
+          "unvoiced_scenarios_above_5percent_false_positive": [],
+          "unvoiced_false_positive_count": 0,
+          "unvoiced_reference_frames": 964,
+          "unvoiced_false_positive_rate": 0.0,
+          "challenge_component_pass": true,
+          "final_keep": false
+        },
+        "final_keep": false
+      }
+    },
+    "original_300_waveform": "Stationary 300 Hz fundamental, 0.075*(sin(phi)+0.5*sin(2*phi)+0.25*sin(3*phi)); not a pure tone.",
+    "original_300_success": {
+      "hybrid_original": 151,
+      "hybrid_augmented": 151
+    },
+    "original_300_reference_voiced_frames": 151
+  },
+  "limitations": [
+    "The original endpoint candidate-oracle gate failed and remains failed; the 20 ms delayed target is a separate research contract.",
+    "The original MLP, GRU and augmented MLP candidate-selection failures remain documented. The hybrid bypasses their pitch selector; it does not validate that selector.",
+    "The hybrid raises joint error on natural development versus its own MLP by about 0.2875 and 0.5522 percentage points, despite passing the declared classical-comparator gates.",
+    "Only four development speakers and 80 short public utterances were assessed, repeated under four transformations. Repeated development use is adaptive and cannot support an independent natural generalization claim.",
+    "Fresh synthetic scenarios are a deterministic mechanism challenge, not a population holdout. Original and previous synthetic cohorts are regression evidence.",
+    "No sealed-test, seed-confirmation, calibrated F0-correctness, live microphone demonstration, clinical validation, or voice-duration/coverage aggregate qualification.",
+    "Prior browser timings measured a different pitch path; hybrid runtime and live capture behavior remain unqualified.",
+    "Reference extraction and physical timing limitations remain in ALIGNMENT_AUDIT.md and STREAMING_RESULTS.md. No physical end-to-end latency claim."
+  ],
+  "reports": [
+    "research/voice-prosody/HYBRID_FOLLOWUP_PLAN.md",
+    "research/voice-prosody/HYBRID_RESULTS.md",
+    "research/voice-prosody/ALIAS_DIAGNOSIS.md",
+    "research/voice-prosody/SUBHARMONIC_SWEEP.md",
+    "research/voice-prosody/RESULTS.md",
+    "research/voice-prosody/STREAMING_RESULTS.md"
+  ]
+}

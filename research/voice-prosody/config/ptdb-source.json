@@ -1,0 +1,24 @@
+{
+  "schema": "phenometrix-ptdb-source-v1",
+  "official_page": "https://www.spsc.tugraz.at/databases-and-tools/ptdb-tug-pitch-tracking-database-from-graz-university-of-technology.html",
+  "base_url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/",
+  "technical_report": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/DOCUMENTATION/PTDB-TUG_REPORT.pdf",
+  "timing_source": "https://www.speech.kth.se/snack/man/snack2.2/tcl-man.html#spitch",
+  "citation": "G. Pirker, M. Wohlmayr, S. Petrik, and F. Pernkopf, A Pitch Tracking Corpus with Evaluation on Multipitch Tracking Scenario, Interspeech, pp. 1509-1512, 2011.",
+  "licenses": {"database": "ODbL-1.0", "contents": "DbCL-1.0"},
+  "roles": {"mic": "inference input", "ref": "laryngograph-derived training/evaluation target only", "lar": "reference alignment audit only; forbidden inference feature"},
+  "audio": {"sample_rate": 48000, "channels": 1, "sample_width_bytes": 2, "encoding": "PCM signed little endian"},
+  "reference": {
+    "columns": ["f0_hz", "voicing_probability", "local_rms", "peak_normalized_cross_correlation"],
+    "algorithm": "Snack ESPS/RAPT on high-pass filtered laryngograph",
+    "window_ms": 32,
+    "hop_ms": 10,
+    "first_nominal_target_ms": 16,
+    "highpass_delay_compensated": "UNKNOWN",
+    "highpass_filter": {"family": "linear-phase Kaiser", "n_as_reported": 2400, "beta": 0.5, "female_cutoff_hz": 25, "male_cutoff_hz": 15},
+    "documented_snack_default_range_hz": [60, 400],
+    "range_note": "Report script sets no minpitch/maxpitch; exact production Snack version and default applicability not established. Audit actual files."
+  },
+  "source_archive_checksums": {"md5": "e590798aa0befaf7b458d3c38cda4030", "sha1": "f1d40b7fdb8a949f834684172a5523726e077497", "applies_to": "SPEECH_DATA_ZIPPED.zip only, not individual files"},
+  "acquisition": {"default_split": "train", "initial_per_speaker": 2, "max_data_bytes": 1073741824, "full_archive": false}
+}

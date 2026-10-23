@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "phenometrix.local-hybrid-validation.v1",
+  "status": "passed",
+  "recordedAt": "2026-10-22T21:22:33.777284+00:00",
+  "baseCommit": "a0de18b520eb02f8eee787f36a826a5c577539dc",
+  "branch": "codex/causal-voice-estimation",
+  "identityNote": "Precommit source byte identities. The containing Git commit binds this record; measured runtime and natural freeze artifacts bind their own exact source snapshots. No self-referential commit hash.",
+  "execution": "All scientific computation, browser validation and tests local; no hosted jobs or new model fit.",
+  "platform": {
+    "chip": "Apple M4 Max",
+    "cpuCores": 16,
+    "gpuCores": 40,
+    "unifiedMemoryGiB": 128,
+    "architecture": "arm64",
+    "node": "24.3.0",
+    "pnpm": "9.12.3",
+    "python": "3.11.15",
+    "browser": "HeadlessChrome/155.0.0.0",
+    "neuralRuntime": "local single-thread ONNX Runtime Web1.23.2 WASM; original frozen weights; no new training"
+  },
+  "checks": {
+    "repository": {
+      "status": "passed",
+      "execution": {
+        "name": "pnpm-test",
+        "command": [
+          "pnpm",
+          "test"
+        ],
+        "started_at": "2026-10-22T20:37:35.801677+00:00",
+        "finished_at": "2026-10-22T20:37:47.075831+00:00",
+        "exit_code": 0,
+        "log_sha256": "26e0c4082e2d131655b667e058fec09b95bd31b242810c579d05909199aab88b"
+      },
+      "log": {
+        "localPath": "research/voice-prosody/runs/hybrid-local-validation/pnpm-test.log",
+        "sha256": "26e0c4082e2d131655b667e058fec09b95bd31b242810c579d05909199aab88b",
+        "bytes": 10520
+      },
+      "passedUnitTests": 734,
+      "passedUnitFiles": 73,
+      "structure": "passed",
+      "typescript": "passed",
+      "productionBuilds": "passed"
+    },
+    "researchPython": {
+      "status": "passed",
+      "execution": {
+        "name": "research-pytest",
+        "command": [
+          "/Users/logannye/Projects/phenometrix/research/voice-prosody/.venv/bin/python",
+          "-m",
+          "pytest",
+          "research/voice-prosody/tests",
+          "-q"
+        ],
+        "started_at": "2026-10-22T20:37:47.076155+00:00",
+        "finished_at": "2026-10-22T20:37:49.151498+00:00",
+        "exit_code": 0,
+        "log_sha256": "e4513fb03a570c5af380c4c238e2590ecd3374bf7fef308c5e9a9889dd813047"
+      },
+      "log": {
+        "localPath": "research/voice-prosody/runs/hybrid-local-validation/research-pytest.log",
+        "sha256": "e4513fb03a570c5af380c4c238e2590ecd3374bf7fef308c5e9a9889dd813047",
+        "bytes": 260
+      },
+      "passed": 157
+    },
+    "productBrowsers": {
+      "status": "passed",
+      "capturePassed": 12,
+      "clinicianPassed": 6,
+      "sourceStable": true,
+      "manifest": {
+        "localPath": "research/voice-prosody/runs/hybrid-final-browser-validation-clean/manifest.json",
+        "sha256": "ceb8c10f493b71ff42a56c5631c04446ccf505ec203e0db0397c55a066836ebe",
+        "bytes": 13676
+      },
+      "log": {
+        "localPath": "research/voice-prosody/runs/hybrid-final-browser-validation-clean/product-browser.log",
+        "sha256": "ca171dfc262a7f2930cc911fa575227dcd2d6d401111db0e2931b61c7d024a71",
+        "bytes": 4757
+      },
+      "earlierOverlappingRun": "Initial18 tests passed while a repository build overlapped; retained locally but superseded by the complete isolated18-test rerun."
+    },
+    "existingResearchBrowsers": {
+      "status": "passed",
+      "passed": 5,
+      "sourceStable": true,
+      "manifest": {
+        "localPath": "research/voice-prosody/runs/hybrid-final-research-regression/manifest.json",
+        "sha256": "8ea53bfc094bf81ffc387c40f3d477925766ac9ba57962348f5517a79b17285b",
+        "bytes": 11306
+      },
+      "log": {
+        "localPath": "research/voice-prosody/runs/hybrid-final-research-regression/browser.log",
+        "sha256": "b66a26c9d3e6f5362e6d7310cfa579a0b5ca3ebf00da588d924aae9c6aceaef7",
+        "bytes": 1614
+      }
+    },
+    "productionPublicAssets": {
+      "status": "passed",
+      "outputs": [
+        "dist",
+        "dist-embedded"
+      ],
+      "verifiedPublicFiles": 10,
+      "researchAssetsExcluded": true,
+      "publicFileSha256": {
+        "asset-manifest.json": "1783d811067f68229c991bc128e986795a8dc530400b0d2968bf5a738669676f",
+        "mediapipe/vision_wasm_internal.js": "e7fd9858e8e8f221d9b96eddc11f8e077f263e0b7bbd79d3cbe882b134274f8c",
+        "mediapipe/vision_wasm_internal.wasm": "6a5c64584c2ab61c763b6e204afbdbc7ce1caf7f5216187322bca8df94f646bc",
+        "mediapipe/vision_wasm_module_internal.js": "1f1d6215324a1fe62f6742d49a3db911170987ca18ad8c1b75f1a1c82acf2b44",
+        "mediapipe/vision_wasm_module_internal.wasm": "617b8e0248dbd27e9d7ece4218004eae4cefb499196d1bb4fa0e3fef21708756",
+        "mediapipe/vision_wasm_nosimd_internal.js": "438d1fe8ff7f4d946025bc211c291543c037d8a3785ed4eee60f1f521b236296",
+        "mediapipe/vision_wasm_nosimd_internal.wasm": "8a3092d34c79d3f57e6ba8592105e8a90f6b07c27891ffecd14cca428bfd3e31",
+        "models/README.md": "a3dfb249fe267bbc354a72d1235617cffd633942a78e6e284ab7cf64f7f5be98",
+        "models/face_landmarker.task": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+        "voice-capture-worklet.js": "1f9fbce6cd30b1335c782760acab2ea68f4328453e2a63ca2a83c3df24ac01a0"
+      }
+    },
+    "hybridValidation": {
+      "status": "declared-natural-and-browser-components-passed-production-unqualified",
+      "summary": {
+        "localPath": "benchmarks/voice-prosody/hybrid-validation-summary.json",
+        "sha256": "a9026fb634045551e0dbe71fbcd5166f913e21a28c5478d4e12fdc2866d16432",
+        "bytes": 5692378
+      },
+      "independentNaturalAudit": "c0369dc79539e4bb02089230fa1f17ad4b05424b100f451bb5d918a58d8f3970",
+      "independentRuntimeAudits": 13,
+      "measuredReplays": 5,
+      "repairedParityDevelopmentFrames": 4420,
+      "repairedParityReservedFrames": 10812,
+      "originalParityFailurePreserved": true,
+      "additionalSeriesAuditSha256": "1c1e337d1b8201f4767834920a11999df00029e172d00bdde40a840da994ce22"
+    },
+    "unchangedSidecarAndPostgres": {
+      "rerun": false,
+      "historicalEvidence": "benchmarks/voice-prosody/local-validation.json"
+    },
+    "finalPrecommitStructure": {
+      "command": "npm run check",
+      "status": "passed",
+      "localLog": "research/voice-prosody/runs/hybrid-local-validation/structure-final.log",
+      "logSha256": "733a3c3a80838eed72f1ae136613af2c94c3544b64e107f45c5b0f8c29acd8a4",
+      "changedMarkdownLinks": "passed",
+      "gitDiffWhitespace": "passed"
+    }
+  },
+  "limits": [
+    "Four held-out speakers within one corpus, not external-population validation.",
+    "Hybrid joint error is0.5590pp worse than its own original candidate MLP.",
+    "Reserved numerical implementation repair is a disclosed regression check, not untouched implementation validation.",
+    "Correctness probabilities remain uncalibrated; production stays DSP.",
+    "Software freshness does not establish hardware acquisition latency or timer precision.",
+    "Raw cross-clock negatives are retained; no time correction or clamping.",
+    "Bounded queues are not a whole-browser heap-growth measurement."
+  ],
+  "sourceSha256": {
+    "README.md": "3e97bdab9911436814aa6114b40f486a11c7a8dcbd431be8501fef1fb1a83dee",
+    "apps/capture-web/e2e/voice-hybrid.spec.ts": "d22cb8f10c286cd09d7aecfa34179257e18b99f33e3161b29da14415de99e09c",
+    "apps/capture-web/e2e/voice-research.spec.ts": "613164fbf240f111f065a1e999c7faee985fe4268059e9c77b73217d068060c7",
+    "apps/capture-web/playwright.config.ts": "eed35597fbfebff0ff5bc8ac08035d2bd3fdea565e84952c253ebffa9ebe3f6c",
+    "apps/capture-web/playwright.research.config.ts": "1d55345fd4e02843d284699bd18951b80a256a7d4788d68c376dfe1887906145",
+    "apps/capture-web/scripts/prepare-voice-mlp-research.mjs": "739eb121350be2634a2be0f969f8fe9cd23ac08abd83fa948464ffcb7fff9ec1",
+    "apps/capture-web/src/research-voice-config.test.ts": "d83681258b8b72385e0ed8418227f806ebeda88038bd163273e06781b4f8257d",
+    "apps/capture-web/src/research-voice-config.ts": "7ac04ad1e878af45b0e16526300678c97704f228af7808fb5f52cfd15f084b64",
+    "apps/capture-web/src/research-voice-hybrid-parity-worker.ts": "d5745c23db61a94aeb859a100fa29926ae4b4c35c9dc0116e13b80ad85467231",
+    "apps/capture-web/src/research-voice-mlp.test.ts": "89b5b072c3eb0fc1a96d3844a7208411ffeac0d6693fb0e294f3e42a121494a5",
+    "apps/capture-web/src/research-voice-mlp.ts": "203cb2c0446d6ce166ffde7c94b02bd767686141be73448fb5c4c9a74d689c7b",
+    "apps/capture-web/src/research-voice-replay.ts": "e8a478dc806d79a3e5dacc3d6edfe692921efc20c8bf790d45d2b37cef7705e6",
+    "apps/capture-web/src/research-voice-trained-worker.ts": "373358fa11a57ed3eab350f3efe2af483f69e5616d6721e482b68fd4f9678c46",
+    "apps/capture-web/src/research-voice-yin.test.ts": "a836c8811337c96154cdfd9bfac34876469285ccd0b5ac0499a6c253e56c403b",
+    "apps/capture-web/src/research-voice-yin.ts": "4bb69cec11c739d41678b1ff886ed9d327f734fbbbccc5ca63869198fe2d1b57",
+    "apps/capture-web/src/voice-research-hook.ts": "b2cb9dfd0b8c6ccf5607dd970c597ccc72252ae052fd9570871a3d75af35bf95",
+    "apps/capture-web/src/voice-worker.ts": "0887404ca16506ea58ba00046bf76201480f19f2a2986d5c8b476556c19dc1d1",
+    "docs/architecture.md": "7a31488843f1f14be14c9a2684edfdaf763abfda8a2ff3eae4377e8592ac7544",
+    "docs/voice-foundation.md": "5b80742dea91a88ca8617094a4f67cb36a1e3f2468d67eb0e263a36fb153a727",
+    "research/voice-prosody/HYBRID_RESULTS.md": "612b19db7a39f1ada3098375203656f039f4278f82e11e4a7b5417fe90211ce6",
+    "research/voice-prosody/HYBRID_VALIDATION_PLAN.md": "448eaf011253fe09de306a1daeadd3f4b0ccad6f66433addeda8c75ff3c47507",
+    "research/voice-prosody/HYBRID_VALIDATION_RESULTS.md": "e88ef9cc46576f48b967174c2f686a76b15ac4ba3aed8c5d4674abf9a38bbbef",
+    "research/voice-prosody/README.md": "110629999c472e5829afbba3c97aba7a1a8a43021f14b84375895b58bc872db6",
+    "research/voice-prosody/YIN_NUMERICAL_REPAIR_PLAN.md": "e4728711e23d4767828fd1dc655b7894c765a8065c40974710275c941004696c",
+    "research/voice-prosody/phenometrix_prosody/audit_hybrid_browser.py": "a90dcc4efddc5bba92e1eaf8ca8f844046d4e764fcb5a1bb1942b1599c5c15f0",
+    "research/voice-prosody/phenometrix_prosody/audit_hybrid_validation.py": "93c69f56eb863d38162a4c674838f8944a16b027e027dc96902fd55ac4f68ec6",
+    "research/voice-prosody/phenometrix_prosody/hybrid_parity.py": "6e14a1cfe2f08c65e5d5c533f7f9599dc0ec9fb94112452523afef217c5c35a6",
+    "research/voice-prosody/phenometrix_prosody/hybrid_reserved_parity.py": "3ae1a3e4401d8f3ae530b3184dfcb76d2c5ed8537e1b6663c33d0c3c98ec04d5",
+    "research/voice-prosody/phenometrix_prosody/hybrid_validation.py": "304e53cf096b105dd9d02503641e581d416a2f640c594c1ff3d0b5817b45c37c",
+    "research/voice-prosody/phenometrix_prosody/sealed_metadata_audit.py": "78c3c3db06e0b6e2627fa69fe24999a766d1cad6aaef397268300aa3fd979986",
+    "research/voice-prosody/run_frozen_hybrid_stage.py": "91a4e25a92d89b098030c2cb7f5ea116c4b29dfe2100d1270c2a69e989b65e20",
+    "research/voice-prosody/run_hybrid_browser.py": "afa698e267becd305629b7e4d6309c641e226a713461f22611ff8ec9f7754a1b",
+    "research/voice-prosody/summarize_hybrid_validation.py": "6be3db85eadb605350ae65ecbef622ab4b6c28710150225f14beaaf5937a1dd1",
+    "research/voice-prosody/tests/test_audit_hybrid_browser.py": "d3d10c8be3b475c9bb7e0e2474491dad2f61af4c14fe86d8c0f9dd34fd95c60c",
+    "research/voice-prosody/tests/test_audit_hybrid_validation.py": "fe4bb909983ab0389cc18ded00eebc6b9b5226b4207e5f1077b7b11fd1fca358",
+    "research/voice-prosody/tests/test_hybrid_validation.py": "a7ba2fa765ebbbfbd7fdc878cf382ab0a8153f5b7b6b80a61eadd22484cd410d",
+    "research/voice-prosody/tests/test_sealed_metadata_audit.py": "467efe71885914df5e225c046411ce9ee68cac405076caee619c805235f4d1b6"
+  }
+}

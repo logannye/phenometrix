@@ -1,0 +1,394 @@
+{
+  "schema": "phenometrix.subharmonic-refitted-control-audit.v1",
+  "status": "complete",
+  "audited_at": "2026-10-22T22:58:55.602760+00:00",
+  "scope": "Stored checkpoint tensors and frozen development states/Hz only; no inference, references, labels, fitting, or new waveforms.",
+  "source_sha256": "d871b0a10989cdb46dd64f4f73309660fe157fdc4387c75be8d5fdfe431a4057",
+  "seeds": {
+    "20261022": {
+      "refitted_method": "set__seed20261022",
+      "prior_method": "relative__acceptable-set__seed20261022",
+      "initial_tensor_hash_identical": true,
+      "tensors": {
+        "scaling_fitted": {
+          "shape": [],
+          "dtype": "torch.bool",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_mean": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_scale": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_mean": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_scale": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.weight": {
+          "shape": [
+            32,
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.weight": {
+          "shape": [
+            32,
+            73
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.weight": {
+          "shape": [
+            1,
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.bias": {
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.weight": {
+          "shape": [
+            32,
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        }
+      },
+      "all_state_tensors_identical": true,
+      "max_tensor_absolute_difference": 0.0,
+      "development_frames": 255532,
+      "state_mismatches": 0,
+      "hz_mismatches_nan_equal": 0,
+      "hz_availability_mismatches": 0,
+      "jointly_finite_hz_frames": 59791,
+      "max_finite_hz_absolute_difference": 0.0
+    },
+    "20261023": {
+      "refitted_method": "set__seed20261023",
+      "prior_method": "relative__acceptable-set__seed20261023",
+      "initial_tensor_hash_identical": true,
+      "tensors": {
+        "scaling_fitted": {
+          "shape": [],
+          "dtype": "torch.bool",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_mean": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_scale": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_mean": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_scale": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.weight": {
+          "shape": [
+            32,
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.weight": {
+          "shape": [
+            32,
+            73
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.weight": {
+          "shape": [
+            1,
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.bias": {
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.weight": {
+          "shape": [
+            32,
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        }
+      },
+      "all_state_tensors_identical": true,
+      "max_tensor_absolute_difference": 0.0,
+      "development_frames": 255532,
+      "state_mismatches": 0,
+      "hz_mismatches_nan_equal": 0,
+      "hz_availability_mismatches": 0,
+      "jointly_finite_hz_frames": 59791,
+      "max_finite_hz_absolute_difference": 0.0
+    },
+    "20261024": {
+      "refitted_method": "set__seed20261024",
+      "prior_method": "relative__acceptable-set__seed20261024",
+      "initial_tensor_hash_identical": true,
+      "tensors": {
+        "scaling_fitted": {
+          "shape": [],
+          "dtype": "torch.bool",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_mean": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_scale": {
+          "shape": [
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_mean": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "global_scale": {
+          "shape": [
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.weight": {
+          "shape": [
+            32,
+            8
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "candidate_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.weight": {
+          "shape": [
+            32,
+            73
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_hidden.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.weight": {
+          "shape": [
+            1,
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "shared_head.bias": {
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.weight": {
+          "shape": [
+            32,
+            9
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        },
+        "message_encoder.bias": {
+          "shape": [
+            32
+          ],
+          "dtype": "torch.float32",
+          "identical": true,
+          "max_absolute_difference": 0.0
+        }
+      },
+      "all_state_tensors_identical": true,
+      "max_tensor_absolute_difference": 0.0,
+      "development_frames": 255532,
+      "state_mismatches": 0,
+      "hz_mismatches_nan_equal": 0,
+      "hz_availability_mismatches": 0,
+      "jointly_finite_hz_frames": 59791,
+      "max_finite_hz_absolute_difference": 0.0
+    }
+  },
+  "bound_input_sha256": {
+    "research/voice-prosody/runs/subharmonic-objective-v1/manifest.json": "d3600c00e099e4aa4f426dfbdb46399d968b13189f4a878e69beff39e3f72c17",
+    "research/voice-prosody/runs/harmonic-context-v1/prediction-freeze.json": "ae26c900df1664057a14d54397b77363bfdcdb01564508156fc0a46b679c8f7e",
+    "research/voice-prosody/runs/subharmonic-objective-v1/checkpoints/set__seed20261022.pt": "f5d6b02d1730eb2456b509b7ab56cce644d7e2e7e01f2cf80e37e042d0c0ef28",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261022.pt": "7128ec952d2557224ceed90dea7f3259eae4ba74b2be7b4d79a9b492f6cc9c49",
+    "research/voice-prosody/runs/subharmonic-objective-v1/predictions/set__seed20261022.npz": "1ed978b0899422a97c5d495e9b7afea31ddc7281b92bbcec89a1c71fb39f46ce",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/relative__acceptable-set__seed20261022.npz": "1ed978b0899422a97c5d495e9b7afea31ddc7281b92bbcec89a1c71fb39f46ce",
+    "research/voice-prosody/runs/subharmonic-objective-v1/checkpoints/set__seed20261023.pt": "0fa238fd4f5b8b20f3d0c623148819d70eb458a762c5112a2c53c1e302da6969",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261023.pt": "b1c8c4ab3e180c9ecb469a37964ce8523d4e36d72f770b323c4d076ae89b1eda",
+    "research/voice-prosody/runs/subharmonic-objective-v1/predictions/set__seed20261023.npz": "77703ea57c9be80ccdab36212747e4e76e176b40bb7b3dbd1648e0501b1ae43a",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/relative__acceptable-set__seed20261023.npz": "77703ea57c9be80ccdab36212747e4e76e176b40bb7b3dbd1648e0501b1ae43a",
+    "research/voice-prosody/runs/subharmonic-objective-v1/checkpoints/set__seed20261024.pt": "d0c91a01a9aeff5148d0e54354d339fe40cc4f61397556429ce7be6bd8c5eea0",
+    "research/voice-prosody/runs/harmonic-context-v1/checkpoints/relative__acceptable-set__seed20261024.pt": "b47727bc60098639ec6a2cf275020cbb834b431b64c67ebeace701c24c1863eb",
+    "research/voice-prosody/runs/subharmonic-objective-v1/predictions/set__seed20261024.npz": "2fa100f85f2db93e2dc681ff79c6b44bf8294d5b0c9505fbac8c847741cce2bf",
+    "research/voice-prosody/runs/harmonic-context-v1/predictions/relative__acceptable-set__seed20261024.npz": "2fa100f85f2db93e2dc681ff79c6b44bf8294d5b0c9505fbac8c847741cce2bf"
+  },
+  "all_three_controls_exactly_reproduce": true,
+  "total_saved_development_frame_pairs": 766596,
+  "limitations": [
+    "Comparison reproduces the baseline control numerically; it does not independently replay optimization or inference.",
+    "Prior prediction freeze is pinned by its historical SHA256. New complete-run manifest is bound as observed, and all checkpoint/prediction bytes are checked against each manifest."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "phenometrix-ptdb-split-v1",
+  "seed": 20261022,
+  "algorithm": "Python random.Random(seed).shuffle(list(range(1,11))); first 6 train, next 2 development, final 2 sealed_test",
+  "assignment": {"train": [4, 8, 7, 9, 10, 2], "development": [1, 3], "sealed_test": [5, 6]},
+  "group": "matched Fxx/Mxx pair and all their source recordings, crops, augmentations, and replays",
+  "primary_excluded_prompts": ["sa1", "sa2"],
+  "documented_missing_recordings": ["F08_si1912", "F08_si1913"],
+  "pilot_selection": "Per speaker, rank eligible prompts by SHA256 UTF-8(seed:integer_pair:prompt), ascending; keep first N. No reference/audio outcomes affect selection.",
+  "freeze_status": "split fixed before outcomes; benchmark protocol and final test remain unfrozen",
+  "sealed_test_rule": "Metadata permitted. Audio and reference contents require explicit split plus matching protocol/model/source/configuration/inventory freeze."
+}

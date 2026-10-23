@@ -1,172 +1,169 @@
 # PhenoMetrix
 
-> Nonclinical research prototype. Not a medical device. No validated diagnostic,
-> treatment, emergency-detection, or disease-severity claims. Local development
-> uses synthetic participants; real-patient deployment requires separate
-> institutional authorization and integration work.
+**Face and voice measurements with inspectable evidence.**
 
-PhenoMetrix derives quality-aware face and voice measurements from ordinary
-telehealth conversation. Its three capabilities are **Ambient Capture**,
-**Personal Trajectory**, and **Clinician Evidence Card**.
+PhenoMetrix turns consented audiovisual signals into versioned measurements,
+compares compatible observations over time, and presents the result for human
+review. It is a **nonclinical research prototype**, built around local signal
+processing, explicit quality limits, and reproducible ML experiments.
 
-The default integration direction is an analysis branch inside the patient's
-existing telehealth client, imported treatment context, and evidence available
-without interrupting care. The repository implements that integration substrate
-alongside the original local demo. It does not include a provisioned Zoom
-installation or a connected clinical EHR.
+A telehealth conversation contains observable changes in facial movement and
+voice. Turning those signals into useful measurements requires distinguishing
+changes in the person from changes in the microphone, lighting, task, or software.
+PhenoMetrix records those conditions and withholds measurements when the evidence
+is insufficient. Clinical interpretation and utility require separate validation.
 
-See the [integration runbook](docs/encounter-integration.md),
-[architecture](docs/architecture.md), [development baseline](docs/development-baseline.md),
-and [validation boundaries](docs/validation.md). The
-[platform vision](docs/telehealth-platform-vision.md) describes the broader direction.
+## Three capabilities
 
-## Implemented encounter path
+| Capability | What it does |
+| --- | --- |
+| **Ambient Capture** | Processes consented face and voice signals independently, checks source quality, and returns measured or reason-coded withheld outcomes. The current registry contains 20 facial and 7 voice metrics. |
+| **Personal Trajectory** | Selects compatible prior observations, preserves inclusion/exclusion reasons, and computes transparent within-person comparisons. |
+| **Clinician Evidence Card** | Connects each descriptive result to its source, protocol, versions, and uncertainty so a reviewer can inspect, correct, or dismiss it. |
 
-```text
-existing clinic identity, encounter binding, and modality-specific consent
-  → authorized branch on the host's patient media tracks
-  → local face/voice workers and bounded transient primitives
-  → up to five-minute derived observations throughout the encounter
-  → scoped API + append-only PostgreSQL history + leased analysis worker
-  → immutable history snapshot + protocol + treatment-alignment specification
-  → descriptive points, qualified baseline differences, and phase coverage
-  → nonblocking evidence panel and durable clinician review
+The local demo supports independently consented captures and a page-memory
+reference. The encounter integration adds durable derived observations,
+versioned history, and scoped review. Medical contexts belong in separately
+versioned protocol packs; an engineering measurement is not a diagnosis,
+disease-severity score, or treatment recommendation.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Consented camera and microphone] --> B[Local browser workers]
+    B --> C[Quality-qualified derived observations]
+    C --> D[Versioned history and compatible comparisons]
+    D --> E[Source-linked evidence card]
 ```
 
-`createEmbeddedEncounter()` uses a host-owned stream, video element, and running
-audio context. It does not request devices, open another login, add a capture
-screen, or stop capture merely because the page becomes hidden. Encounter
-lifecycle, source attribution, authorization, and resource failure govern
-capture. Host tracks retain their existing owner. `startIntegratedEncounter()`
-connects capture to the scoped service client; hosts must supply their actual
-authenticated encounter integration.
+- **Local acquisition and bounded streaming.** Face processing uses MediaPipe
+  in a worker. Audio flows through an AudioWorklet and a worker with fixed PCM
+  and result credits. Dropped input, stale results, and discontinuities remain
+  explicit gaps and reset feature history. Raw media and native model outputs
+  do not enter durable observation payloads.
+- **Time is part of the measurement contract.** Voice frames carry sample
+  support, processing time, segment identity, and loss information. A same-clock
+  lease requires a recorded software render-age bound of at most 100 ms before
+  delivery. This bounds age since the last required rendered input; physical
+  microphone latency, timestamp precision, and later display delay remain
+  unqualified.
+- **Deterministic analysis and durable provenance.** Shared TypeScript contracts
+  connect capture, trajectory, and evidence. The encounter service uses scoped
+  authorization, append-only PostgreSQL history, transactional analysis jobs,
+  worker leases, and revision checks that prevent stale publication. Corrections
+  create new versions rather than rewriting previous evidence.
+- **ML experiments stay attributable.** The voice research pipeline uses the
+  browser's feature extractor, PyTorch training, ONNX browser inference, frozen
+  checkpoints and predictions, and independent scoring and inference audits.
+  Candidate support, unavailable outputs, measurement delay, and failed
+  advancement gates are retained alongside aggregate results.
 
-The integrated entry point automatically probes the authenticated service and
-renews a bounded UTC estimate before it expires. Live accuracy requires a fresh
-attestation from the deployment's clock monitor; missing evidence remains
-unqualified. Voice calibration can use screened natural listening periods,
-without a patient prompt. This passive estimator is engineering-only and still
-requires real-device and clinical qualification.
+**The default capture path uses the versioned DSP estimator. Learned estimators
+remain research options.** The embedded API can attach to a host-owned patient
+stream without taking ownership of the call. A deployed Zoom/EHR connection,
+clinical authorization, and acquisition validation are not bundled. See the
+[architecture](docs/architecture.md) and
+[encounter integration guide](docs/encounter-integration.md).
 
-The service implements signed tenant/study/participant authorization, explicit
-grants and bindings, idempotent ingestion, append-only corrections, transactional
-analysis jobs, worker leases, stale-publication protection, and source-linked
-reviews. A FHIR R4 normalizer and configured-source sync preserve administration
-versus order status, dose units, revisions, and date precision. EHR credentials,
-terminology mappings, patient matching, and scheduling remain external.
+## Evidence so far
 
-A Zoom RTMS reference adapter implements transport and participant-attribution
-boundaries. Transport tests do not qualify Zoom-derived measurements. The initial
-HFS protocol excludes platform patient tracks pending acquisition validation.
+The strongest completed results distinguish signal accuracy from software
+correctness and runtime behavior:
 
-## Initial treatment-alignment research protocol
+| Evaluation | Result | What it establishes |
+| --- | --- | --- |
+| Frozen natural-speech evaluation | Hybrid joint error **9.67%**, DSP **11.85%**, original candidate MLP **9.12%** across 160 recordings from four previously reserved speakers and four fixed conditions | The MLP-voicing/YIN-pitch hybrid improves on classical comparators, while its own MLP remains better on mean natural error. Predictions froze before reference acquisition. |
+| Expanded candidate pool with matched retraining | Development joint error **8.4589%**, versus **8.4020%** for the matched original pool; targeted 517.3/641.9 Hz selections remain **0/112** despite correct candidates on every post-change frame | Preserving the original candidates and retraining does not resolve selection errors. Unchanged advancement gates reject the expanded pipeline. |
+| Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
+| Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
+| Exposure versus acoustic evidence: four arms, three seeds | Targeted exposure clears **78/78 analytic gates in every seed**, versus **72/78** with existing exposure; candidate development joint error is **8.4135%**, versus original MLP **8.6349%** | Targeted training repairs retained pitch-selection failures. The **0.2214 percentage-point** natural-error improvement misses the required **0.5-point** gate; promotion remains a no-go. Saved results survive a preserved terminal reporting failure. |
 
-The new protocol targets research with adults who already have a clinician
-diagnosis of hemifacial spasm and receive botulinum injections. It compares four
-existing engineering measurements: left/right eye aperture and left/right lid
-closure completeness. These are **not spasm counts, spasm burden, clinical
-severity, or proof of treatment response**.
+Natural joint error counts incorrect voicing, unavailable outputs, and pitch
+errors greater than 50 cents. Results average speakers and conditions equally.
+These research estimators use 40 ms windows with **20 ms measurement delay**,
+which is separate from processing latency. The natural references are
+laryngograph-derived PTDB-TUG labels; this is one corpus, not external clinical
+validation. The reserved sample is now consumed and cannot serve as a fresh
+holdout again. Some transformed-speech strata remain substantially worse than
+the aggregate. The expanded-pool figures use reused development speech and
+are not directly comparable to the reserved-speaker results.
 
-The deterministic core uses a sealed protocol/specification and immutable
-history. It selects a compatible pretreatment baseline, aggregates by encounter,
-preserves source versions and exclusions, flags concurrent treatments and
-possible carryover, and stops index-cycle comparisons at a subsequent documented
-injection. Unknown treatment timing permits technically qualified calendar
-observations but disables treatment alignment and baseline deltas.
+The browser run was a source-frozen functional replay on an Apple M4 Max with
+128 GiB RAM, not a controlled hardware benchmark or a real-microphone latency
+study. Queue bounds do not establish whole-browser heap bounds. Full methods,
+strata, failures, uncertainty, and timing definitions are in the
+[natural-speech and browser validation report](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md).
 
-Sparse data remains sparse. There are no fitted curves, interpolated
-observations, causal effects, peak-response or wearing-off estimates, dose
-recommendations, or automatic clinical actions. Measurement error and minimum
-detectable change are unknown. Quality thresholds and windows are engineering
-choices awaiting validation.
+The ML research separates three sources of error: whether the correct pitch is
+available, whether the model selects it, and whether the output is reliable
+enough to report. Earlier augmentation repaired specific harmonic-balance
+failures, but adding correct candidates and retraining still left systematic
+selection errors. The [expanded-pool study](research/voice-prosody/EXPANDED_POOL_RESULTS.md)
+records those failures alongside its modest increase in candidate coverage.
 
-## Existing local demo
+A [frozen four-arm, three-seed study](research/voice-prosody/EXPOSURE_STUDY_RESULTS.md)
+now separates targeted training exposure from one compact causal acoustic
+feature. Using the audited 1,536-configuration TRAIN bank, targeted exposure
+repairs the retained 517.3, 633.1 and 641.9 Hz failures with the feature either
+off or on. The feature alone does not repair them, and adds only a small natural
+error reduction. This supports improving training exposure within this study;
+it does not show that acoustic evidence is unnecessary in general.
 
-`pnpm dev` retains the unilateral facial movement research demonstration:
+All four arms also succeed on all twelve fresh synthetic configurations, so
+those cases do not distinguish the interventions. The natural development set
+is reused, and the synthetic bank remains narrow, noiseless and associated with
+frequency. No external or untouched-speaker generalization is established.
+The run saved all twelve checkpoints, frozen predictions and metrics, then
+failed while printing its final summary. That execution failure remains
+preserved. A separate audit verified **3.26 million frame-model comparisons**
+with zero state or pitch mismatches, without repeating fits or generating more
+cases. The [prior support no-go](research/voice-prosody/EVIDENCE_RESULTS.md),
+[TRAIN coverage study](research/voice-prosody/FREQUENCY_DIVERSITY_RESULTS.md), and
+all observed failures remain part of the evidence.
 
-```text
-participant-asserted affected side + consent
-  → independent camera/microphone permission and calibration
-  → first live capture → ObservationV3 + report after media disposal
-  → explicit acceptance as the page-memory reference
-  → second independently consented live capture
-  → strict six-row comparison + page-local accept/dismiss
-  → discard on reset, visibility loss, or reload
-```
+**The learned estimator remains a no-go for promotion.** Voicing and candidate
+probabilities are uncalibrated; benchmark improvements do not establish clinical
+usefulness or qualify a learned estimator for the default path.
 
-This demo has no server requests, durable history, retained recordings,
-transcripts, embeddings, or authenticated review. Voice contributes to its
-generic 27-outcome report; the condition comparison selects six facial metrics.
-Its affected side and identity are unverified. Review buttons update page memory.
-The new durable contract is separate; legacy ObservationV3 remains unchanged.
+## Run locally
 
-Both paths reuse the versioned `ambient-core` registry: 7 voice and 20 facial
-metrics. Measurements require qualified source windows; otherwise they are
-withheld with reasons. Native landmarks, image frames, and raw audio stay outside
-observation contracts. Facial geometry is derived in the worker.
+Use Node 22.12+ on the Node 22 line or Node 24+, pnpm 9.12.3, and Chrome on macOS.
 
-## Privacy and clinical boundaries
-
-- Capture, analysis, retention, and permitted modalities require explicit
-  authorization. An HFS session can authorize face only.
-- Routine capture retains derived observations through the governed service;
-  it does not upload raw media, transcripts, voiceprints, or embeddings.
-- Optional research clips use a separate, disabled-by-default governance
-  package requiring separate consent, retention policy, encrypted storage,
-  authorization, and audit adapters. No production media store is bundled.
-- Evidence access checks current source consent. Corrections create new
-  versions and analyses instead of rewriting prior evidence.
-- Software controls do not establish patient identity proofing, institutional
-  approval, measurement validity, or clinical readiness.
-
-Acute stroke screening remains a standing product exclusion. See
-[safety.md](docs/safety.md). No metric supports disease grading or equivalence
-to House-Brackmann, Sunnybrook, or an HFS clinical scale.
-
-## Run and verify
-
-Use Node 22.12+ on the Node 22 line (or Node 24+), pnpm 9.12.3, and current
-Chrome on macOS for the browser prototype.
-
-```bash
+```sh
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-The legacy demo runs at `http://127.0.0.1:4173`. Start the synthetic evidence
-preview with `pnpm dev:evidence` at `http://127.0.0.1:4175`. The durable synthetic
-service requires PostgreSQL; follow the [integration runbook](docs/encounter-integration.md)
-and [service README](apps/encounter-service/README.md) before `pnpm dev:encounter`.
-Do not use real patient data in synthetic development.
+Open **http://127.0.0.1:4173** for the live local demonstration. Camera and
+microphone consent are independent. The page-local reference is discarded on
+reset, visibility loss, or reload; it is not durable clinical history. Use
+synthetic participants for development.
 
-```bash
-pnpm verify
-pnpm test:postgres
-git diff --check
+```sh
+pnpm dev:evidence  # synthetic evidence-card preview on port 4175
+pnpm test          # structure checks, unit tests, TypeScript, and builds
 ```
 
-`pnpm verify` runs structure/digest checks, unit tests, TypeScript, production
-builds, browser suites, and isolated Python tests. It requires Chrome and
-uv/Python 3.11. PostgreSQL tests run separately against a configured test database.
-Mocked media tests do not establish real-device or platform support. The optional
-[WavLM service](services/voice-inference/README.md) remains disabled by default
-and disconnected from browser capture.
+The [service guide](apps/encounter-service/README.md) covers PostgreSQL and
+`pnpm dev:encounter`. The [research guide](research/voice-prosody/README.md)
+provides the pinned Python environment, corpus/provenance rules, reproduction
+commands, and exact validation receipts. Browser suites, PostgreSQL tests, and
+the optional disconnected voice sidecar have separate prerequisites documented
+there and in the integration guides.
 
-## Repository map
+## Explore the repository
 
-| Path | Responsibility |
+| Area | Start here |
 | --- | --- |
-| `apps/capture-web` | Legacy local demo and embedded host capture entry points |
-| `apps/encounter-service` | Scoped API, PostgreSQL, workers, FHIR boundaries |
-| `apps/clinician-review` | Embeddable evidence panel and synthetic preview |
-| `packages/ambient-core` | Deterministic face and voice extraction |
-| `packages/contracts` | Legacy v3 and separate durable contracts |
-| `packages/condition-profiles` | Facial movement demo and HFS research protocol |
-| `packages/encounter-capture` | Capture controller, ambient bridge, RTMS reference |
-| `packages/encounter-client` | Existing-host scoped API client |
-| `packages/trajectory-core` | Legacy pair comparison and multi-visit analysis |
-| `packages/evidence-core` | Source-preserving reports and evidence projections |
-| `packages/research-governance` | Optional research-media boundary |
-| `packages/event-log` | Legacy session-only journal |
-| `services/voice-inference` | Optional disconnected WavLM service |
-| `protocols`, `examples` | Archival guided/v2 artifacts |
+| Product direction and boundaries | [Platform vision](docs/telehealth-platform-vision.md), [validation](docs/validation.md), [safety](docs/safety.md) |
+| Capture and streaming | [Browser app](apps/capture-web), [voice foundation](docs/voice-foundation.md) |
+| Measurements and contracts | [Ambient core](packages/ambient-core), [contracts](packages/contracts) |
+| Longitudinal evidence | [Trajectory core](packages/trajectory-core), [evidence core](packages/evidence-core), [review panel](apps/clinician-review) |
+| Host integration and persistence | [Encounter service](apps/encounter-service), [integration runbook](docs/encounter-integration.md) |
+| ML experiments and reproducibility | [Voice research](research/voice-prosody/README.md), [public aggregate evidence](benchmarks/voice-prosody) |
+
+Routine capture retains derived observations through the governed service.
+Research-media retention requires separate consent and is disabled by default.
+No clinical validation, autonomous clinical action, or production deployment is
+established by this repository.

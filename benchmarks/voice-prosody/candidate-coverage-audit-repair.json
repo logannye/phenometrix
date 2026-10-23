@@ -1,0 +1,11 @@
+{
+  "schema": "phenometrix-independent-audit-repair.v1",
+  "first_attempt_source_sha256": "a7db615f59d4a4b2db4dfe0c2f14fbcb3c7f1694ce41b50ca973b52523fdbd0c",
+  "first_attempt_tests_sha256": "6f0035062f8131f4c29415d7f512ad25a7890437ee5205faedd61a4168233f8e",
+  "first_error": "ValueError: Reference content hashed before prediction freeze",
+  "reason": "Auditor used a broad records/train or records/development path heuristic. New extraction legitimately binds MIC WAV files in those directories. Corrected guard uses acquisition-manifest role=ref exact paths. No scientific source, data, predictions, gates, or scoring formula changed.",
+  "corrected_source_sha256": "14a0f69c5966039e6c1f32268dd3ccfcf0b27e0481728fd1bfae703f78085fbb",
+  "corrected_tests_sha256": "a1b93d78b4352318673091d9fa425b4331594aeea790bc6731ce0721b87ec632",
+  "focused_tests_passed": 10,
+  "first_stderr_sha256": "ec6ea55092b1a6aa3df09255ccbaa68a87d61b47d529a269b20cfa7dbcba224b"
+}

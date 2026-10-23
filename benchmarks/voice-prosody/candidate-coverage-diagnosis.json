@@ -1,0 +1,166 @@
+{
+  "schema": "phenometrix-candidate-coverage-diagnosis-v1",
+  "status": "complete",
+  "created_at": "2026-10-23T00:20:47.020Z",
+  "scope": "Already-consumed four analytic failures only; no fit, new waveform, new challenge, natural reference, selector inference or threshold search",
+  "mechanism": "True-frequency peaks are admitted and accurately interpolated, then discarded by integer-height ranking. Longer period multiples align more closely to integer8k lags.",
+  "policy_proposal": "shortest-admitted-full40-v1; replace only full40 selection, same .35 admission/interpolation/bounds/source-score semantics; no candidate expansion",
+  "limitations": [
+    "Short-lag selection may admit overtone/noise candidates and remove useful long-lag candidates elsewhere; no global coverage or model-benefit claim.",
+    "This is descriptive evidence from consumed cases, not a new validation set."
+  ],
+  "records": [
+    {
+      "id": "augmentation-balance-f4-p0",
+      "known_frequency_hz": 517.3,
+      "fully_post_common_frames": 112,
+      "valid_near_truth_peak_count": 112,
+      "nearest_peak_score_rank_range": [
+        10,
+        10
+      ],
+      "earliest_admitted_peak_near_truth_count": 112,
+      "median_index_window": {
+        "end": 68928,
+        "closest": {
+          "hz": 517.4680575206144,
+          "confidence": 0.9127512131551032,
+          "lagSamples": 15.459891453650362,
+          "log2HzOver50": 3.371469810092355,
+          "rank": 10,
+          "cents": 0.5623422608245556
+        },
+        "old": {
+          "hz": 258.5949288353177,
+          "confidence": 0.9977085049341322,
+          "lagSamples": 30.93641486331961,
+          "log2HzOver50": 2.370693983516788
+        },
+        "earliest": {
+          "hz": 517.4680575206144,
+          "confidence": 0.9127512131551032,
+          "lagSamples": 15.459891453650362,
+          "log2HzOver50": 3.371469810092355
+        }
+      }
+    },
+    {
+      "id": "augmentation-balance-f4-p1",
+      "known_frequency_hz": 517.3,
+      "fully_post_common_frames": 112,
+      "valid_near_truth_peak_count": 112,
+      "nearest_peak_score_rank_range": [
+        10,
+        10
+      ],
+      "earliest_admitted_peak_near_truth_count": 112,
+      "median_index_window": {
+        "end": 68928,
+        "closest": {
+          "hz": 517.4496566145383,
+          "confidence": 0.9108558325761269,
+          "lagSamples": 15.460441219230352,
+          "log2HzOver50": 3.3714185076639898,
+          "rank": 10,
+          "cents": 0.500779346786371
+        },
+        "old": {
+          "hz": 258.6071106898667,
+          "confidence": 0.996933818131751,
+          "lagSamples": 30.93495758356761,
+          "log2HzOver50": 2.370761944196781
+        },
+        "earliest": {
+          "hz": 517.4496566145383,
+          "confidence": 0.9108558325761269,
+          "lagSamples": 15.460441219230352,
+          "log2HzOver50": 3.3714185076639898
+        }
+      }
+    },
+    {
+      "id": "augmentation-balance-f5-p0",
+      "known_frequency_hz": 641.9,
+      "fully_post_common_frames": 112,
+      "valid_near_truth_peak_count": 112,
+      "nearest_peak_score_rank_range": [
+        12,
+        12
+      ],
+      "earliest_admitted_peak_near_truth_count": 112,
+      "median_index_window": {
+        "end": 68928,
+        "closest": {
+          "hz": 642.4412302447846,
+          "confidence": 0.8676748273063839,
+          "lagSamples": 12.45250090339286,
+          "log2HzOver50": 3.683564484326151,
+          "rank": 12,
+          "cents": 1.4591080026956855
+        },
+        "old": {
+          "hz": 320.85267627928437,
+          "confidence": 0.9964356406405629,
+          "lagSamples": 24.9335616980687,
+          "log2HzOver50": 2.681911017005471
+        },
+        "earliest": {
+          "hz": 642.4412302447846,
+          "confidence": 0.8676748273063839,
+          "lagSamples": 12.45250090339286,
+          "log2HzOver50": 3.683564484326151
+        }
+      }
+    },
+    {
+      "id": "augmentation-balance-f5-p1",
+      "known_frequency_hz": 641.9,
+      "fully_post_common_frames": 112,
+      "valid_near_truth_peak_count": 112,
+      "nearest_peak_score_rank_range": [
+        12,
+        12
+      ],
+      "earliest_admitted_peak_near_truth_count": 112,
+      "median_index_window": {
+        "end": 68928,
+        "closest": {
+          "hz": 642.448028271527,
+          "confidence": 0.8677400535950232,
+          "lagSamples": 12.452369137973049,
+          "log2HzOver50": 3.6835797502012517,
+          "rank": 12,
+          "cents": 1.4774270528160003
+        },
+        "old": {
+          "hz": 320.8455448756238,
+          "confidence": 0.9956897824313762,
+          "lagSamples": 24.93411589399258,
+          "log2HzOver50": 2.681878950715253
+        },
+        "earliest": {
+          "hz": 642.448028271527,
+          "confidence": 0.8677400535950232,
+          "lagSamples": 12.452369137973049,
+          "log2HzOver50": 3.6835797502012517
+        }
+      }
+    }
+  ],
+  "bound_sha256": {
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/manifest.json": "a5bbe584f61515eaa142fda7ee5a2a397bc4bb2e72a4d73f7fb8c4684ec2a8f0",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/pcm/augmentation-balance-f4-p0.f32le": "9f44e343a2942dacb733623f82eb1d76e7a8287d91faa7db3ce4a537d8967603",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/features/augmentation-balance-f4-p0.npz": "a5399d3632c5031e6143b830f0a745f7c9a913776d45f18ba2b58b329b6ce971",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/pcm/augmentation-balance-f4-p1.f32le": "b6825151c94f8d58d50847321ed34661bd994f58c19d8d7a2846e5c006ca6f69",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/features/augmentation-balance-f4-p1.npz": "181c5db806da9a3ddd20ed4e375ac3ba9e05da15be2b81b6da79ac5b52e8d698",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/pcm/augmentation-balance-f5-p0.f32le": "1a08a535351d0c899dd26ddd3a7e7cded00910c3f581a067d8f8ce2c437d44ca",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/features/augmentation-balance-f5-p0.npz": "dae610a96220ae5e72e5cc719aefd2ae39da34d26195b33c980dd79942abb315",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/pcm/augmentation-balance-f5-p1.f32le": "2cc883cd6770325bb4162b28c034dbc962571833a8a78491cd9a09895d1669dc",
+    "research/voice-prosody/runs/harmonic-augmentation-v1/challenge/features/augmentation-balance-f5-p1.npz": "f050658a19ded3456fd92c6a18754263f2ed3558174b4187353bdfa299cabede",
+    "research/voice-prosody/coverage_peaks.ts": "46e9a64ef974d05330044016e07e5efc79422638f707767208cb92720d18289f",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "research/voice-prosody/diagnose_candidate_coverage.ts": "f7cbca3775513644523b4a61251f6619fce2ea73ac9d1d510ae6275b74e1506d"
+  }
+}

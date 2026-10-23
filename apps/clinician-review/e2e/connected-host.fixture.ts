@@ -5,6 +5,8 @@ import { startIntegratedEncounter, type HostEncounterEvent } from "../../capture
 import type { VisualWorkerRequest } from "../../capture-web/src/face-worker-protocol.js";
 import { mountTreatmentResponsePanel } from "../src/panel.js";
 
+declare global { interface Window { synchronizeSyntheticServiceClock(nowMs: number): Promise<void>; } }
+
 /** Browser-only, explicitly fabricated media. The controller, finalization worker,
  * signed HTTP client/service, trajectory worker and panel are production code. */
 export async function startSyntheticConnectedHost(input: {
@@ -16,6 +18,9 @@ export async function startSyntheticConnectedHost(input: {
     acceptedFrames: 0, faceWorkerStops: 0, clockResponses: 0,
     inFlightRequests: 0, maximumInFlightRequests: 0, clockProbesInFlight: 0,
     clockProbeCyclesCompleted: 0, clockProbeCyclesFailed: 0, authorizationRequestsInFlight: 0,
+    recentClockFailures: [] as string[],
+    recentClockProbes: [] as Array<{ sentAtMs: number; receivedAtMs: number; serverReceivedAtMs: number; serverSentAtMs: number }>,
+    recentCalibrations: [] as Array<{ localMs: number; offsetMs: number; uncertaintyMs: number; expiresAtMs: number }>,
     requests: [] as string[], statuses: [] as string[], unavailability: [] as string[], events: [] as string[] };
   let observer: (event: HostEncounterEvent) => void = () => {};
   let nextFrame: ((now: number, metadata: { presentationTime: number; width: number; height: number }) => void) | null = null;
@@ -78,12 +83,24 @@ export async function startSyntheticConnectedHost(input: {
     stats.requests.push(`${options?.method ?? "GET"} ${pathname}`);
     stats.inFlightRequests++;
     stats.maximumInFlightRequests = Math.max(stats.maximumInFlightRequests, stats.inFlightRequests);
+    const sentAtMs = Date.now();
+    // The test runner can be stepping through a 5 s virtual interval while its
+    // Node fixture already holds the endpoint. Synchronize at request issue so
+    // real HTTP completion cannot observe fictional server clock advancement.
+    // This fabricated shared clock proves propagation, never UTC accuracy.
     try {
+      await window.synchronizeSyntheticServiceClock(sentAtMs);
       const response = await fetch(resource, options);
       // Fetch resolves at headers. Keep the real request active through its body
       // so a simulated clock step cannot turn body transit into fictional RTT.
       const body = await response.arrayBuffer();
-      if (pathname.endsWith("/clock")) stats.clockResponses++;
+      if (pathname.endsWith("/clock")) {
+        stats.clockResponses++;
+        const sample = JSON.parse(new TextDecoder().decode(body));
+        stats.recentClockProbes.push({ sentAtMs, receivedAtMs: Date.now(),
+          serverReceivedAtMs: sample.serverReceivedAtMs, serverSentAtMs: sample.serverSentAtMs });
+        if (stats.recentClockProbes.length > 6) stats.recentClockProbes.shift();
+      }
       return new Response(body, { status: response.status, statusText: response.statusText, headers: response.headers });
     } finally { stats.inFlightRequests--; }
   };
@@ -93,9 +110,19 @@ export async function startSyntheticConnectedHost(input: {
       stats.clockProbesInFlight++;
       try {
         const result = await underlyingClient.calibrateClock(...args);
-        if (result) stats.clockProbeCyclesCompleted++;
+        if (result) {
+          stats.clockProbeCyclesCompleted++;
+          stats.recentCalibrations.push({ localMs: Date.now(), offsetMs: result.utcOffsetMs,
+            uncertaintyMs: result.uncertaintyMs, expiresAtMs: result.localExpiresAtMs });
+          if (stats.recentCalibrations.length > 8) stats.recentCalibrations.shift();
+        }
         return result;
-      } catch (error) { stats.clockProbeCyclesFailed++; throw error; }
+      } catch (error) {
+        stats.clockProbeCyclesFailed++;
+        stats.recentClockFailures.push(error instanceof Error ? error.message : String(error));
+        if (stats.recentClockFailures.length > 4) stats.recentClockFailures.shift();
+        throw error;
+      }
       finally { stats.clockProbesInFlight--; }
     },
     async captureContext(...args: Parameters<typeof underlyingClient.captureContext>) {

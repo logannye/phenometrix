@@ -1,0 +1,155 @@
+{
+  "artifact_identities": {
+    "aggregate_report": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/feasibility/report.json",
+      "sha256": "f09a7874d1f9e7d6c72266ea7c64c2c980c0b8c0a170bbc8a6af026e33fb0a12"
+    },
+    "full_frame_table": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/feasibility/frame-table.npz",
+      "sha256": "49441f16c76ba1d3e68801a83169a9c5e64b4c4b6b5124323937a3378efc9c59"
+    },
+    "preparation_manifest": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/feasibility/manifest.json",
+      "sha256": "8090a5cc19452e1c69066b24f7900a8a59d1800e77c9cb2de80487b40a0fdfab"
+    }
+  },
+  "audit_pass": true,
+  "audit_source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+    "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb"
+  },
+  "audited_at": "2026-10-23T17:04:35.431771+00:00",
+  "bound_artifacts_verified": 2229,
+  "common_train_candidate_coverage": {
+    "added_only": 3660,
+    "counterexample": 26796,
+    "expanded_group_covered": 97792,
+    "expanded_grouping_lost": 0,
+    "expanded_raw_covered": 97792,
+    "frames": 97792,
+    "new_frequency_added": 79876,
+    "original_group_covered": 94132,
+    "original_grouping_lost": 0,
+    "original_raw_covered": 94132
+  },
+  "counts": {
+    "acquisition_rows": 100352,
+    "case_count": 512,
+    "common_eligible_rows": 97792,
+    "final_checkpoint_bindings_checked": 0,
+    "schedule_count": 0,
+    "schedule_draws_verified": 0
+  },
+  "feasibility": {
+    "broad_rows": 97792,
+    "floor": {
+      "distinct_carriers": 6,
+      "distinct_cases": 24,
+      "distinct_gains": 2,
+      "distinct_phases": 2,
+      "rows": 512
+    },
+    "on_failure": "no fits; no enlargement or revised threshold",
+    "pass_result": false,
+    "strata": {
+      "added_only": {
+        "checks": {
+          "distinct_carriers": false,
+          "distinct_cases": true,
+          "distinct_gains": true,
+          "distinct_phases": true,
+          "rows": true
+        },
+        "distinct_carriers": 4,
+        "distinct_cases": 32,
+        "distinct_gains": 2,
+        "distinct_phases": 2,
+        "frequency_bin_rows": [
+          0,
+          0,
+          0,
+          0,
+          912,
+          1832,
+          916
+        ],
+        "pass_result": false,
+        "rows": 3660
+      },
+      "counterexample": {
+        "checks": {
+          "distinct_carriers": true,
+          "distinct_cases": true,
+          "distinct_gains": true,
+          "distinct_phases": true,
+          "rows": true
+        },
+        "distinct_carriers": 30,
+        "distinct_cases": 240,
+        "distinct_gains": 2,
+        "distinct_phases": 2,
+        "frequency_bin_rows": [
+          9046,
+          9040,
+          8710,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pass_result": true,
+        "rows": 26796
+      }
+    }
+  },
+  "frequency_bin_edges_hz": [
+    50,
+    150,
+    250,
+    350,
+    450,
+    550,
+    650,
+    700
+  ],
+  "fresh_evaluation_present": false,
+  "full_local_receipt": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/evidence-factorial-v2/feasibility/independent-audit.json",
+    "sha256": "25ce98cabcb0e48e6fdd04acf35bb6a00adc0d2ad973aa0da04e5636b73483e6"
+  },
+  "limitations": [
+    "Saved source/manifest chronology is not operating-system access history.",
+    "PCM bytes and prior independent expansion/grouping equations are verified; no waveform resynthesis or model inference is performed.",
+    "This verifies TRAIN feasibility and sampling, not accuracy, calibration, clinical validity or promotion.",
+    "Candidate coverage is an oracle property of this noiseless TRAIN bank, not learned prediction accuracy.",
+    "No natural recording identities, per-frame arrays, PCM, model weights or full input ledgers are included."
+  ],
+  "phase_chronology": {
+    "acquisition_completed_at": "2026-10-23T05:38:29.764509+00:00",
+    "acquisition_started_at": "2026-10-23T05:36:33.243446+00:00",
+    "preparation_completed_at": "2026-10-23T05:39:11.966396+00:00",
+    "preparation_started_at": "2026-10-23T05:36:33.192558+00:00",
+    "sources_frozen_at": "2026-10-23T05:36:33.107575+00:00"
+  },
+  "publication_scope": "aggregate receipt; full artifact ledger remains local",
+  "reserved_challenge_spec_sha256": "23987c7d14dbd4490f1c73ec4eef2394d30aae5518021188c6962ae260022462",
+  "schema": "phenometrix-public-evidence-feasibility-audit.v1",
+  "scientific_feasibility_pass": false,
+  "scientific_status": "feasibility_no_go",
+  "source_identity": {
+    "all_frozen_scientific_sources_verified_unchanged": true,
+    "scientific_source_count": 58,
+    "source_freeze": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/evidence-factorial-v2/source-freeze.json",
+      "sha256": "b4a584b204b513c4c7721117fce0e4e3562db0f644df14e5f25f39688881613b"
+    },
+    "source_map_canonical_json_sha256": "9443eed5443bac9f3af0b2e5ae8840d0054500fdc202d7390c25c588bdc650df",
+    "source_map_digest_method": "SHA256 of UTF-8 JSON with sorted keys, separators comma/colon, no whitespace, allow_nan=false"
+  },
+  "training_spec_sha256": "d778ff3731174844b792a1faff72dbed412a658d86e6f8b3efd4d9b432ff6f57"
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   isCurrentVoiceWorkerResponse,
+  isCurrentVoiceTransportDiagnostics,
   VOICE_WORKER_MESSAGE_VERSION
 } from "./voice-worker-protocol.js";
 
@@ -34,4 +35,15 @@ describe("voice worker response guard", () => {
     ).toBe(false);
     expect(isCurrentVoiceWorkerResponse(null, 2)).toBe(false);
   });
+  it("requires complete finite transport snapshots for the current epoch", () => {
+    const snapshot = { schemaVersion: "phenometric.voice-worklet-message.v2", type: "transport-diagnostics",
+      captureEpoch: 4, final: true, sequence: 2, sampleClockEndExclusive: 2048,
+      droppedBlockCount: 0, droppedSampleCount: 128, discardedPartialSampleCount: 128,
+      inFlightBlockCountAtDispose: 2, maximumInFlightBlocks: 4 };
+    expect(isCurrentVoiceTransportDiagnostics(snapshot, 4)).toBe(true);
+    expect(isCurrentVoiceTransportDiagnostics(snapshot, 5)).toBe(false);
+    expect(isCurrentVoiceTransportDiagnostics({ ...snapshot, droppedSampleCount: NaN }, 4)).toBe(false);
+    expect(isCurrentVoiceTransportDiagnostics({ ...snapshot, inFlightBlockCountAtDispose: 5 }, 4)).toBe(false);
+  });
+
 });

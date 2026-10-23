@@ -227,7 +227,7 @@ export async function installAmbientBrowserFixture(
       } as unknown as AudioNode;
     }
 
-    class AudioContextMock {
+    class AudioContextMock extends EventTarget {
       readonly sampleRate = 48_000;
       readonly currentTime = 0;
       readonly destination = audioNode();
@@ -263,8 +263,24 @@ export async function installAmbientBrowserFixture(
       value: AudioContextMock
     });
 
+    let fixtureRenderLease: Record<string, unknown> | null = null;
+    let fixtureClockMappingId = 0;
     class AudioWorkletNodeMock extends EventTarget {
-      readonly port = { postMessage() {}, close() {} };
+      readonly port = {
+        onmessage: null as ((event: { data: unknown }) => void) | null,
+        postMessage: (message: { type?: string; clockMappingId?: number; lease?: Record<string, unknown> }) => {
+          if (message.type === "capture-epoch" || message.type === "clock-mapping") {
+            fixtureRenderLease = null; fixtureClockMappingId = message.clockMappingId ?? 0;
+          }
+          if (message.type === "render-freshness-lease" && message.lease) {
+            fixtureRenderLease = message.lease;
+            queueMicrotask(() => this.port.onmessage?.({ data: {
+              schemaVersion: "phenometric.voice-render-freshness.v1", type: "render-freshness-lease-ack",
+              leaseId: message.lease!.leaseId, captureEpoch: message.lease!.captureEpoch,
+              clockMappingId: message.lease!.clockMappingId, disposition: "accepted" } }));
+          }
+        }, close() {}
+      };
       constructor() {
         super();
         audioProcessorFailureHook = () => {
@@ -281,7 +297,7 @@ export async function installAmbientBrowserFixture(
       value: AudioWorkletNodeMock
     });
 
-    const workerVersion = "phenometric.voice-worker-message.v1";
+    const workerVersion = "phenometric.voice-worker-message.v3";
     const diagnostics = {
       receivedBlockCount: 0,
       droppedBlockCount: 0,
@@ -295,6 +311,7 @@ export async function installAmbientBrowserFixture(
       onmessage: ((event: MessageEvent) => void) | null = null;
       onerror: ((event: ErrorEvent) => void) | null = null;
       private timers: number[] = [];
+      private voiceBatchId = 0;
 
       constructor(scriptUrl: URL | string) {
         super();
@@ -307,6 +324,21 @@ export async function installAmbientBrowserFixture(
       }
 
       private emit(data: unknown): void {
+        // This fixture supplies lifecycle observations, not measured browser timings.
+        if (typeof data === "object" && data !== null && "type" in data && data.type === "signal-frame") {
+          const record = { ...data, renderLease: fixtureRenderLease, timing: {
+            schemaVersion: "phenometric.voice-stream-timing.v2", status: "unavailable",
+            unavailableReason: "inconsistent-clock-mapping", sampleAvailabilityMs: 0,
+            workerReadyAtMs: 0, coordinate: "main-performance-ms"
+          } };
+          const batchId = ++this.voiceBatchId;
+          const captureEpoch = (data as unknown as { captureEpoch: number }).captureEpoch;
+          this.emit({ schemaVersion: workerVersion, type: "result-batch", captureEpoch, batchId,
+            clockMappingId: fixtureClockMappingId, records: [record] });
+          this.emit({ schemaVersion: workerVersion, type: "result-batch-complete", captureEpoch, batchId,
+            clockMappingId: fixtureClockMappingId, timing: { workerServiceMs: 0 } });
+          return;
+        }
         const event = new MessageEvent("message", { data });
         this.dispatchEvent(event);
         this.onmessage?.(event);
@@ -437,7 +469,7 @@ export async function installAmbientBrowserFixture(
               provenance: {
                 processorRef: "browser-voice-dsp@1.1",
                 runtime: "audio-worklet-voice-worker",
-                workletSchemaVersion: "phenometric.voice-worklet-message.v1",
+                workletSchemaVersion: "phenometric.voice-worklet-message.v2",
                 workerSchemaVersion: workerVersion,
                 signalFrameSchemaVersion: "phenometric.voice-signal-frame.v1",
                 analysisWindowMs: 40,

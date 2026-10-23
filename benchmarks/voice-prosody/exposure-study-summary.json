@@ -1,0 +1,1073 @@
+{
+  "analytic": {
+    "existing__off": [
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261022
+      },
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261023
+      },
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261024
+      }
+    ],
+    "existing__on": [
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261022
+      },
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261023
+      },
+      {
+        "failed_mandatory_cases": [
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 517.3,
+            "case": "augmentation-balance-f4-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p0",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 641.9,
+            "case": "augmentation-balance-f5-p1",
+            "correct_frames": 0,
+            "frames": 112,
+            "group": "consumed_augmentation",
+            "success_fraction": 0.0
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p0",
+            "correct_frames": 24,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.21428571428571427
+          },
+          {
+            "carrier_hz": 633.1,
+            "case": "expanded-balance-f4-p1",
+            "correct_frames": 23,
+            "frames": 112,
+            "group": "consumed_expansion",
+            "success_fraction": 0.20535714285714285
+          }
+        ],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 72,
+        "seed": 20261024
+      }
+    ],
+    "targeted__off": [
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261022
+      },
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261023
+      },
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261024
+      }
+    ],
+    "targeted__on": [
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261022
+      },
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261023
+      },
+      {
+        "failed_mandatory_cases": [],
+        "fresh_cases": 12,
+        "fresh_minimum_success_fraction": 1.0,
+        "fresh_passed_cases": 12,
+        "mandatory_cases": 78,
+        "passed_mandatory_cases": 78,
+        "seed": 20261024
+      }
+    ]
+  },
+  "base_commit": "5e33e118a6da247bc6cabe05ad91eb9d1fbcf95a",
+  "baselines": {
+    "original_hybrid": {
+      "cell_count": 16,
+      "joint_error": 0.08922415958726268,
+      "measurement_coverage": 0.9999028767575535,
+      "octave_error_rate_reference_voiced": 0.014235330322170434,
+      "reference_voiced_success_rate": 0.7419326476068763,
+      "voicing_false_negative_or_unavailable_rate": 0.13277656664618298,
+      "voicing_false_negative_rate": 0.13267944208674287,
+      "voicing_false_positive_rate": 0.03510604329776526
+    },
+    "original_mlp": {
+      "cell_count": 16,
+      "joint_error": 0.08634933205028454,
+      "measurement_coverage": 1.0,
+      "octave_error_rate_reference_voiced": 0.016869070889503252,
+      "reference_voiced_success_rate": 0.7540572519466112,
+      "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+      "voicing_false_negative_rate": 0.13267944208674287,
+      "voicing_false_positive_rate": 0.035203689438239996
+    }
+  },
+  "bindings": {
+    "checkpoint-freeze.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/checkpoint-freeze.json",
+      "sha256": "7d8d479455a8f23f8bd4d714718ceafd8e779d4e5ae5a221bce8d93054ed6ed0"
+    },
+    "forensic-audit-v2.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/forensic-audit-v2.json",
+      "sha256": "031149f640c74c7799393355202dc5a4aa1a2a2d47d3fe9807542b2aea6fe85d"
+    },
+    "manifest.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/manifest.json",
+      "sha256": "5b88365a1fbd10e8e303c05f5996d4840e6755cb86aca6a276423b02bef8f980"
+    },
+    "metrics.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/metrics.json",
+      "sha256": "87cfe91b4e59bb366002f6a378d09ff28a51e7ab432c5213998d93b942009790"
+    },
+    "prediction-freeze.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/prediction-freeze.json",
+      "sha256": "e4abd029531895b4cefb565750ad4d3ef5d9d0dd6cf066f03508429e328ba585"
+    },
+    "source-freeze.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/source-freeze.json",
+      "sha256": "985cc71530226dac1d2eaabcc8368f18fdcb565dfb3105eb845c24c93d336fc8"
+    }
+  },
+  "decision": {
+    "analytic": {
+      "by_seed_case": {
+        "targeted__on__seed20261022": {
+          "challenge/evidence-balance-f0-p0": true,
+          "challenge/evidence-balance-f0-p1": true,
+          "challenge/evidence-balance-f1-p0": true,
+          "challenge/evidence-balance-f1-p1": true,
+          "challenge/evidence-balance-f2-p0": true,
+          "challenge/evidence-balance-f2-p1": true,
+          "challenge/evidence-balance-f3-p0": true,
+          "challenge/evidence-balance-f3-p1": true,
+          "challenge/evidence-balance-f4-p0": true,
+          "challenge/evidence-balance-f4-p1": true,
+          "challenge/evidence-balance-f5-p0": true,
+          "challenge/evidence-balance-f5-p1": true,
+          "consumed_augmentation/augmentation-balance-f0-p0": true,
+          "consumed_augmentation/augmentation-balance-f0-p1": true,
+          "consumed_augmentation/augmentation-balance-f1-p0": true,
+          "consumed_augmentation/augmentation-balance-f1-p1": true,
+          "consumed_augmentation/augmentation-balance-f2-p0": true,
+          "consumed_augmentation/augmentation-balance-f2-p1": true,
+          "consumed_augmentation/augmentation-balance-f3-p0": true,
+          "consumed_augmentation/augmentation-balance-f3-p1": true,
+          "consumed_augmentation/augmentation-balance-f4-p0": true,
+          "consumed_augmentation/augmentation-balance-f4-p1": true,
+          "consumed_augmentation/augmentation-balance-f5-p0": true,
+          "consumed_augmentation/augmentation-balance-f5-p1": true,
+          "consumed_coverage/coverage-balance-f0-p0": true,
+          "consumed_coverage/coverage-balance-f0-p1": true,
+          "consumed_coverage/coverage-balance-f1-p0": true,
+          "consumed_coverage/coverage-balance-f1-p1": true,
+          "consumed_coverage/coverage-balance-f2-p0": true,
+          "consumed_coverage/coverage-balance-f2-p1": true,
+          "consumed_coverage/coverage-balance-f3-p0": true,
+          "consumed_coverage/coverage-balance-f3-p1": true,
+          "consumed_coverage/coverage-balance-f4-p0": true,
+          "consumed_coverage/coverage-balance-f4-p1": true,
+          "consumed_coverage/coverage-balance-f5-p0": true,
+          "consumed_coverage/coverage-balance-f5-p1": true,
+          "consumed_expansion/expanded-balance-f0-p0": true,
+          "consumed_expansion/expanded-balance-f0-p1": true,
+          "consumed_expansion/expanded-balance-f1-p0": true,
+          "consumed_expansion/expanded-balance-f1-p1": true,
+          "consumed_expansion/expanded-balance-f2-p0": true,
+          "consumed_expansion/expanded-balance-f2-p1": true,
+          "consumed_expansion/expanded-balance-f3-p0": true,
+          "consumed_expansion/expanded-balance-f3-p1": true,
+          "consumed_expansion/expanded-balance-f4-p0": true,
+          "consumed_expansion/expanded-balance-f4-p1": true,
+          "consumed_expansion/expanded-balance-f5-p0": true,
+          "consumed_expansion/expanded-balance-f5-p1": true,
+          "consumed_harmonic/harmonic-balance-f0-p0": true,
+          "consumed_harmonic/harmonic-balance-f0-p1": true,
+          "consumed_harmonic/harmonic-balance-f1-p0": true,
+          "consumed_harmonic/harmonic-balance-f1-p1": true,
+          "consumed_harmonic/harmonic-balance-f2-p0": true,
+          "consumed_harmonic/harmonic-balance-f2-p1": true,
+          "consumed_harmonic/harmonic-balance-f3-p0": true,
+          "consumed_harmonic/harmonic-balance-f3-p1": true,
+          "consumed_harmonic/harmonic-balance-f4-p0": true,
+          "consumed_harmonic/harmonic-balance-f4-p1": true,
+          "consumed_harmonic/harmonic-balance-f5-p0": true,
+          "consumed_harmonic/harmonic-balance-f5-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p1": true,
+          "regression/constant-100": true,
+          "regression/constant-200": true,
+          "regression/constant-300": true,
+          "regression/observation-change-100": true,
+          "regression/observation-change-200": true,
+          "regression/observation-change-300": true
+        },
+        "targeted__on__seed20261023": {
+          "challenge/evidence-balance-f0-p0": true,
+          "challenge/evidence-balance-f0-p1": true,
+          "challenge/evidence-balance-f1-p0": true,
+          "challenge/evidence-balance-f1-p1": true,
+          "challenge/evidence-balance-f2-p0": true,
+          "challenge/evidence-balance-f2-p1": true,
+          "challenge/evidence-balance-f3-p0": true,
+          "challenge/evidence-balance-f3-p1": true,
+          "challenge/evidence-balance-f4-p0": true,
+          "challenge/evidence-balance-f4-p1": true,
+          "challenge/evidence-balance-f5-p0": true,
+          "challenge/evidence-balance-f5-p1": true,
+          "consumed_augmentation/augmentation-balance-f0-p0": true,
+          "consumed_augmentation/augmentation-balance-f0-p1": true,
+          "consumed_augmentation/augmentation-balance-f1-p0": true,
+          "consumed_augmentation/augmentation-balance-f1-p1": true,
+          "consumed_augmentation/augmentation-balance-f2-p0": true,
+          "consumed_augmentation/augmentation-balance-f2-p1": true,
+          "consumed_augmentation/augmentation-balance-f3-p0": true,
+          "consumed_augmentation/augmentation-balance-f3-p1": true,
+          "consumed_augmentation/augmentation-balance-f4-p0": true,
+          "consumed_augmentation/augmentation-balance-f4-p1": true,
+          "consumed_augmentation/augmentation-balance-f5-p0": true,
+          "consumed_augmentation/augmentation-balance-f5-p1": true,
+          "consumed_coverage/coverage-balance-f0-p0": true,
+          "consumed_coverage/coverage-balance-f0-p1": true,
+          "consumed_coverage/coverage-balance-f1-p0": true,
+          "consumed_coverage/coverage-balance-f1-p1": true,
+          "consumed_coverage/coverage-balance-f2-p0": true,
+          "consumed_coverage/coverage-balance-f2-p1": true,
+          "consumed_coverage/coverage-balance-f3-p0": true,
+          "consumed_coverage/coverage-balance-f3-p1": true,
+          "consumed_coverage/coverage-balance-f4-p0": true,
+          "consumed_coverage/coverage-balance-f4-p1": true,
+          "consumed_coverage/coverage-balance-f5-p0": true,
+          "consumed_coverage/coverage-balance-f5-p1": true,
+          "consumed_expansion/expanded-balance-f0-p0": true,
+          "consumed_expansion/expanded-balance-f0-p1": true,
+          "consumed_expansion/expanded-balance-f1-p0": true,
+          "consumed_expansion/expanded-balance-f1-p1": true,
+          "consumed_expansion/expanded-balance-f2-p0": true,
+          "consumed_expansion/expanded-balance-f2-p1": true,
+          "consumed_expansion/expanded-balance-f3-p0": true,
+          "consumed_expansion/expanded-balance-f3-p1": true,
+          "consumed_expansion/expanded-balance-f4-p0": true,
+          "consumed_expansion/expanded-balance-f4-p1": true,
+          "consumed_expansion/expanded-balance-f5-p0": true,
+          "consumed_expansion/expanded-balance-f5-p1": true,
+          "consumed_harmonic/harmonic-balance-f0-p0": true,
+          "consumed_harmonic/harmonic-balance-f0-p1": true,
+          "consumed_harmonic/harmonic-balance-f1-p0": true,
+          "consumed_harmonic/harmonic-balance-f1-p1": true,
+          "consumed_harmonic/harmonic-balance-f2-p0": true,
+          "consumed_harmonic/harmonic-balance-f2-p1": true,
+          "consumed_harmonic/harmonic-balance-f3-p0": true,
+          "consumed_harmonic/harmonic-balance-f3-p1": true,
+          "consumed_harmonic/harmonic-balance-f4-p0": true,
+          "consumed_harmonic/harmonic-balance-f4-p1": true,
+          "consumed_harmonic/harmonic-balance-f5-p0": true,
+          "consumed_harmonic/harmonic-balance-f5-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p1": true,
+          "regression/constant-100": true,
+          "regression/constant-200": true,
+          "regression/constant-300": true,
+          "regression/observation-change-100": true,
+          "regression/observation-change-200": true,
+          "regression/observation-change-300": true
+        },
+        "targeted__on__seed20261024": {
+          "challenge/evidence-balance-f0-p0": true,
+          "challenge/evidence-balance-f0-p1": true,
+          "challenge/evidence-balance-f1-p0": true,
+          "challenge/evidence-balance-f1-p1": true,
+          "challenge/evidence-balance-f2-p0": true,
+          "challenge/evidence-balance-f2-p1": true,
+          "challenge/evidence-balance-f3-p0": true,
+          "challenge/evidence-balance-f3-p1": true,
+          "challenge/evidence-balance-f4-p0": true,
+          "challenge/evidence-balance-f4-p1": true,
+          "challenge/evidence-balance-f5-p0": true,
+          "challenge/evidence-balance-f5-p1": true,
+          "consumed_augmentation/augmentation-balance-f0-p0": true,
+          "consumed_augmentation/augmentation-balance-f0-p1": true,
+          "consumed_augmentation/augmentation-balance-f1-p0": true,
+          "consumed_augmentation/augmentation-balance-f1-p1": true,
+          "consumed_augmentation/augmentation-balance-f2-p0": true,
+          "consumed_augmentation/augmentation-balance-f2-p1": true,
+          "consumed_augmentation/augmentation-balance-f3-p0": true,
+          "consumed_augmentation/augmentation-balance-f3-p1": true,
+          "consumed_augmentation/augmentation-balance-f4-p0": true,
+          "consumed_augmentation/augmentation-balance-f4-p1": true,
+          "consumed_augmentation/augmentation-balance-f5-p0": true,
+          "consumed_augmentation/augmentation-balance-f5-p1": true,
+          "consumed_coverage/coverage-balance-f0-p0": true,
+          "consumed_coverage/coverage-balance-f0-p1": true,
+          "consumed_coverage/coverage-balance-f1-p0": true,
+          "consumed_coverage/coverage-balance-f1-p1": true,
+          "consumed_coverage/coverage-balance-f2-p0": true,
+          "consumed_coverage/coverage-balance-f2-p1": true,
+          "consumed_coverage/coverage-balance-f3-p0": true,
+          "consumed_coverage/coverage-balance-f3-p1": true,
+          "consumed_coverage/coverage-balance-f4-p0": true,
+          "consumed_coverage/coverage-balance-f4-p1": true,
+          "consumed_coverage/coverage-balance-f5-p0": true,
+          "consumed_coverage/coverage-balance-f5-p1": true,
+          "consumed_expansion/expanded-balance-f0-p0": true,
+          "consumed_expansion/expanded-balance-f0-p1": true,
+          "consumed_expansion/expanded-balance-f1-p0": true,
+          "consumed_expansion/expanded-balance-f1-p1": true,
+          "consumed_expansion/expanded-balance-f2-p0": true,
+          "consumed_expansion/expanded-balance-f2-p1": true,
+          "consumed_expansion/expanded-balance-f3-p0": true,
+          "consumed_expansion/expanded-balance-f3-p1": true,
+          "consumed_expansion/expanded-balance-f4-p0": true,
+          "consumed_expansion/expanded-balance-f4-p1": true,
+          "consumed_expansion/expanded-balance-f5-p0": true,
+          "consumed_expansion/expanded-balance-f5-p1": true,
+          "consumed_harmonic/harmonic-balance-f0-p0": true,
+          "consumed_harmonic/harmonic-balance-f0-p1": true,
+          "consumed_harmonic/harmonic-balance-f1-p0": true,
+          "consumed_harmonic/harmonic-balance-f1-p1": true,
+          "consumed_harmonic/harmonic-balance-f2-p0": true,
+          "consumed_harmonic/harmonic-balance-f2-p1": true,
+          "consumed_harmonic/harmonic-balance-f3-p0": true,
+          "consumed_harmonic/harmonic-balance-f3-p1": true,
+          "consumed_harmonic/harmonic-balance-f4-p0": true,
+          "consumed_harmonic/harmonic-balance-f4-p1": true,
+          "consumed_harmonic/harmonic-balance-f5-p0": true,
+          "consumed_harmonic/harmonic-balance-f5-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f0-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f1-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f2-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f3-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f4-p1": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p0": true,
+          "consumed_subharmonic/subharmonic-balance-f5-p1": true,
+          "regression/constant-100": true,
+          "regression/constant-200": true,
+          "regression/constant-300": true,
+          "regression/observation-change-100": true,
+          "regression/observation-change-200": true,
+          "regression/observation-change-300": true
+        }
+      },
+      "pass": true,
+      "passed_by_seed": {
+        "targeted__on__seed20261022": 78,
+        "targeted__on__seed20261023": 78,
+        "targeted__on__seed20261024": 78
+      },
+      "required_per_seed": 78
+    },
+    "arm_mean_joint_error": {
+      "existing__off": 0.08458918396884359,
+      "existing__on": 0.08451561998003816,
+      "targeted__off": 0.0841499195953142,
+      "targeted__on": 0.08413488101041511
+    },
+    "checks": {
+      "each_seed_improves_original_mlp": true,
+      "mean_improves_both_by_half_point": false,
+      "no_condition_worsens_over_one_point": true,
+      "voiced_success_not_lower": true
+    },
+    "condition_error_excess_over_mlp": {
+      "clean": -0.0024508301196060067,
+      "clip01": -0.002329246450304967,
+      "first_difference": -0.001673660944933028,
+      "noise10db": -0.0024040666446337594
+    },
+    "factorial_error_differences": {
+      "evidence_on_minus_off_existing": -7.356398880542514e-05,
+      "evidence_on_minus_off_targeted": -1.5038584899096374e-05,
+      "interaction": 5.8525403906328766e-05,
+      "targeted_minus_existing_off": -0.00043926437352938275
+    },
+    "joint_error_improvement_over_frozen": {
+      "original_hybrid": 0.005089278576847572,
+      "original_mlp": 0.0022144510398694334
+    },
+    "mean_joint_error": 0.08413488101041511,
+    "mean_voiced_success": 0.7634526032607155,
+    "pass": false,
+    "predesignated_candidate": "targeted__on",
+    "prerequisites": {
+      "development_grouping_loss": true,
+      "raw_fixed_voicing_oracle_headroom": true,
+      "train_grouping_loss": true,
+      "train_support": true
+    },
+    "promising_for_next_study": false
+  },
+  "default_estimator_changed": false,
+  "execution_status": "failed",
+  "experiment": {
+    "all_analytic_cases_now_consumed": 86,
+    "arms": [
+      "existing__off",
+      "existing__on",
+      "targeted__off",
+      "targeted__on"
+    ],
+    "epochs_per_fit": 12,
+    "existing_train_configurations": 96,
+    "fits": 12,
+    "fresh_analytic_configurations": 12,
+    "fresh_untouched_speakers": 0,
+    "gate_relaxations": 0,
+    "natural_development_records": 320,
+    "optimizer_updates_per_fit": 396,
+    "parameters_per_model": 3012,
+    "predesignated_candidate": "targeted__on",
+    "retained_analytic_regressions": 74,
+    "scientific_attempts": 1,
+    "seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "targeted_draws_per_batch": {
+      "added_only": 128,
+      "broad": 256,
+      "counterexample": 128
+    },
+    "targeted_train_configurations": 1536,
+    "training_bank_regenerated": false
+  },
+  "factorial_error_differences_percentage_points": {
+    "evidence_on_minus_off_existing": -0.007356398880542514,
+    "evidence_on_minus_off_targeted": -0.0015038584899096374,
+    "interaction": 0.0058525403906328766,
+    "targeted_minus_existing_off": -0.043926437352938275
+  },
+  "failure": "TypeError('Object of type bool is not JSON serializable')",
+  "limitations": [
+    "Run failed during terminal printing after saving results; failed status is preserved.",
+    "Forensic qualification is explicitly posthoc, uses frozen equations and does not repair or repeat the scientific attempt.",
+    "All fresh cases pass every arm; they do not identify the intervention benefit.",
+    "TRAIN bank composition and sampling change together, with frequency-associated noiseless strata.",
+    "Natural development and all PTDB speakers are consumed; no external generalization, calibration, clinical or deployment claim.",
+    "TRAIN logit diagnostics and optimizer steps are not independently replayed."
+  ],
+  "natural": {
+    "existing__off": {
+      "mean_joint_error": 0.08458918396884359,
+      "mean_reference_voiced_success": 0.7614459156674789,
+      "seeds": [
+        {
+          "cell_count": 16,
+          "joint_error": 0.08464340716982835,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.010500277185483084,
+          "reference_voiced_success_rate": 0.761140257638655,
+          "seed": 20261022,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.08475088637712436,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.010704258401045094,
+          "reference_voiced_success_rate": 0.7607505485578193,
+          "seed": 20261023,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.08437325835957804,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.009927239981165716,
+          "reference_voiced_success_rate": 0.7624469408059624,
+          "seed": 20261024,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        }
+      ]
+    },
+    "existing__on": {
+      "mean_joint_error": 0.08451561998003816,
+      "mean_reference_voiced_success": 0.7617532516384715,
+      "seeds": [
+        {
+          "cell_count": 16,
+          "joint_error": 0.08457714504733228,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.010406654414826784,
+          "reference_voiced_success_rate": 0.7614119286965301,
+          "seed": 20261022,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.0846788215481131,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.010600676121780981,
+          "reference_voiced_success_rate": 0.7610383012338151,
+          "seed": 20261023,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.0842908933446691,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.00983201258473885,
+          "reference_voiced_success_rate": 0.7628095249850693,
+          "seed": 20261024,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        }
+      ]
+    },
+    "targeted__off": {
+      "mean_joint_error": 0.0841499195953142,
+      "mean_reference_voiced_success": 0.7633914667208554,
+      "seeds": [
+        {
+          "cell_count": 16,
+          "joint_error": 0.08428054351029564,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011389221524474948,
+          "reference_voiced_success_rate": 0.7629184651740978,
+          "seed": 20261022,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.08403916796145339,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011710701140544764,
+          "reference_voiced_success_rate": 0.7638138498625235,
+          "seed": 20261023,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.0841300473141936,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011374030010600798,
+          "reference_voiced_success_rate": 0.7634420851259449,
+          "seed": 20261024,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        }
+      ]
+    },
+    "targeted__on": {
+      "mean_joint_error": 0.0841348810104151,
+      "mean_reference_voiced_success": 0.7634526032607155,
+      "seeds": [
+        {
+          "cell_count": 16,
+          "joint_error": 0.08427483696854456,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011377285637712585,
+          "reference_voiced_success_rate": 0.7629431015811005,
+          "seed": 20261022,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.08399761885783544,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011760101022624935,
+          "reference_voiced_success_rate": 0.7639807057677479,
+          "seed": 20261023,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        },
+        {
+          "cell_count": 16,
+          "joint_error": 0.08413218720486529,
+          "measurement_coverage": 1.0,
+          "octave_error_rate_reference_voiced": 0.011340579117043881,
+          "reference_voiced_success_rate": 0.7634340024332982,
+          "seed": 20261024,
+          "voicing_false_negative_or_unavailable_rate": 0.13267944208674287,
+          "voicing_false_negative_rate": 0.13267944208674287,
+          "voicing_false_positive_rate": 0.035203689438239996
+        }
+      ]
+    }
+  },
+  "preserved_train_failures": {
+    "carrier_hz": [
+      696.0505,
+      698.58175
+    ],
+    "configurations": 16,
+    "uncovered_common_rows": 1844
+  },
+  "qualification_posthoc": true,
+  "resources": {
+    "fit_elapsed_seconds": 159.27472162479535,
+    "output_bytes": 243333879,
+    "peak_observed_mps_allocated_bytes": 179058432,
+    "peak_observed_mps_driver_allocated_bytes": 1132478464,
+    "peak_observed_node_rss_bytes": 113754112,
+    "peak_observed_python_rss_bytes": 7253983232
+  },
+  "saved_artifacts_independently_qualified": true,
+  "schema": "phenometrix-exposure-study-public-summary.v1",
+  "scientific_gate_pass": false,
+  "source_sha256": {
+    "apps/capture-web/package.json": "15f462e10edb1c36afc1c2bc2c1a1369335c94a283546da13d9c42d60f8772c7",
+    "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+    "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+    "pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d",
+    "research/voice-prosody/AUGMENTATION_EXPERIMENT_PLAN.md": "858292c677324adf28e57641d187701d6360cbb9444a04790c2339ce66870a78",
+    "research/voice-prosody/CANDIDATE_COVERAGE_PLAN.md": "f0061ed646b5291b621c949617d3da8a4a9bf0c352403270262daeef475232a8",
+    "research/voice-prosody/EVIDENCE_EXPERIMENT_PLAN.md": "7b10646483edd085df00d651e4957ad4b92eef97c7da6b01e773a4e5bef162c3",
+    "research/voice-prosody/EXPANDED_POOL_PLAN.md": "4d02ecb08d6a2aceaf1b3cff488b324e242d070581425927077db6e6629f0784",
+    "research/voice-prosody/EXPOSURE_STUDY_PLAN.md": "2fc8e4776d9216986cd2f68a731dc2bc0be9fbf0a8fa98c6ccc2edfc141628bc",
+    "research/voice-prosody/FREQUENCY_DIVERSITY_PLAN.md": "04a57cbdb8b3ea29ba967201b92b4e8fc32da3956bcae28569de9defc1cc9dd6",
+    "research/voice-prosody/HARMONIC_EXPERIMENT_PLAN.md": "49b49e96769c383021a190c512bf35daddac624e40b2fc954805ef5105a6ea4e",
+    "research/voice-prosody/OVERNIGHT_DEVELOPMENT_PLAN.md": "f5e0be6f7e4031f8a84dee156394692dff0992e123c24aae68f86aa24e154c16",
+    "research/voice-prosody/SELECTOR_EXPERIMENT_PLAN.md": "c8807259374f286092268aae71b1387007c1b8478a8d30182be7f03e93c9c297",
+    "research/voice-prosody/SUBHARMONIC_EXPERIMENT_PLAN.md": "c31dde73b5bdaf04ce2354cfee3bdc9d5da0c91508c28a4fedc1535390a6af37",
+    "research/voice-prosody/coverage_peaks.ts": "46e9a64ef974d05330044016e07e5efc79422638f707767208cb92720d18289f",
+    "research/voice-prosody/fixtures.ts": "a65d1021c3677b9e6dff7d501c5cc05dad9655bc7dd6b929f14054ae030b9aae",
+    "research/voice-prosody/oracle.ts": "97f9fbee11ca55d744540ee3c06a94ee2e1963ac65a036429a3d5a4132b26d19",
+    "research/voice-prosody/periodicity_evidence.ts": "9cb4e355d04f168718d62063434fa5c34751d6d12b26e1c2c597ef977dcdf5d5",
+    "research/voice-prosody/periodicity_evidence_worker.ts": "f8515aba671efcd43785426e3bc38448c7fc4a699520871ba6e21b6cab86148a",
+    "research/voice-prosody/phenometrix_prosody/alias_diagnostic.py": "719312cb6dcffa7bcfa7d0fd0f5bcf4c95a410fd0eb511820df608e915cc32fd",
+    "research/voice-prosody/phenometrix_prosody/audit_augmentation_experiment.py": "642cce03b8074618b357daec232ddae6c27c1101d5e6860b281f79be80dde423",
+    "research/voice-prosody/phenometrix_prosody/audit_candidate_coverage.py": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_scores.py": "0d743cf9fd91030b001bb7e3ab0890a99c3275ab12bf9a385833f32b8a105830",
+    "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_study.py": "baf722bdc39e910e7030ba237ec7b6dbed04c0f78ae3e77bf2b82a84bf3b1c8b",
+    "research/voice-prosody/phenometrix_prosody/audit_frequency_diversity.py": "f03d6436108e1c35e4d473d054b6d3a3775f9c7c7a60ef922155e9536b096891",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_experiment.py": "980b376cdbe547196dcf666dcdde9c3d18de4eacae3420d1eab0a5149e11b404",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_inference.py": "8a0d2f57253d07bcfe584a70df624529d7424744dd70cc7cde43fa7c99edc9bb",
+    "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+    "research/voice-prosody/phenometrix_prosody/audit_subharmonic_experiment.py": "6087f9df4be46655645b9ab0d7eb1499bc48f9d7911187cd2555f6ca75760e61",
+    "research/voice-prosody/phenometrix_prosody/augmentation_cases.py": "8a00061077d504a789706b153e116e066366c32239dd57b2c34d0d586930a4fb",
+    "research/voice-prosody/phenometrix_prosody/augmentation_experiment.py": "8a7f3baaeda85443d74eefc28760be7bf73f4facfdbf9dbebeec78d817a1f63a",
+    "research/voice-prosody/phenometrix_prosody/candidate_coverage_experiment.py": "43add08439063e67e77c158247fd2965d89d6183748938186db591b2c44021e7",
+    "research/voice-prosody/phenometrix_prosody/candidate_coverage_features.py": "d16a4e8dbcb3307e2371543e715892735363abb5fa2a7042172b7d2dc4e64e28",
+    "research/voice-prosody/phenometrix_prosody/coverage_cases.py": "8801465621fb3097f03d6988e1d51862584481b26218cdac422778ed7c85a529",
+    "research/voice-prosody/phenometrix_prosody/diagnose_subharmonic_challenge.py": "a0faca38c49849d7b669410eef6a409fd8679907dd1d77bd609d83d441a51340",
+    "research/voice-prosody/phenometrix_prosody/evaluate.py": "1f7f09d43dcc5226b17a730b8d7f604780fa23e5ec3a43d0b414539e714ad205",
+    "research/voice-prosody/phenometrix_prosody/evaluate_curriculum.py": "07f4e2a4f5f8537bb21578f22927789ded465604372ad74dccda13dace15f32c",
+    "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+    "research/voice-prosody/phenometrix_prosody/evidence_cases.py": "9551656e561751f942363376020277f9e9f5e779ae008ba40205361e8ca2cc99",
+    "research/voice-prosody/phenometrix_prosody/evidence_experiment.py": "70d3c87be91b4ef281907669b26f671689e38bbc8736635b4473f34d8739b022",
+    "research/voice-prosody/phenometrix_prosody/evidence_feasibility.py": "c10fc396ab69197b2ec60825cbcc843e154106edf1a6bae19bd6cf50b7c535c2",
+    "research/voice-prosody/phenometrix_prosody/evidence_inputs.py": "2e924502e7e786bfa4515a82c5923a51503ae052aaf836079a92a05491bb94b0",
+    "research/voice-prosody/phenometrix_prosody/evidence_selector_model.py": "cd8a5aec4f780b29d53fd63e244107c7770e217cbc166a2658db8bdd1363f168",
+    "research/voice-prosody/phenometrix_prosody/expanded_candidate_features.py": "135f85d9f709b9debbfd2e169e69d273c12d93675a16b291569fa61e2907266f",
+    "research/voice-prosody/phenometrix_prosody/expanded_cases.py": "00b958ca4f7a201537ccffe32e5a4fcc67115d129529eab63e74f9973efe84d6",
+    "research/voice-prosody/phenometrix_prosody/expanded_pool_experiment.py": "1b99845625afe95d9a9a8dc376123f60c0843c0c84749171db9ef3326391f20b",
+    "research/voice-prosody/phenometrix_prosody/expanded_selector_model.py": "03914f2feffd00018bbdb0bfd6dce3baa35e272992a75cb2e605052efe46490f",
+    "research/voice-prosody/phenometrix_prosody/exposure_inputs.py": "7b85f11ca1b43f87849177e40fd5a0187d46f5f6acfc6f234ada74812b92da6f",
+    "research/voice-prosody/phenometrix_prosody/exposure_study.py": "58da0ea59255aa87db241e1bb540c803bf197b56a97d39286af25a6d9bb38fa3",
+    "research/voice-prosody/phenometrix_prosody/features.py": "3a610514a726a3907b6575a8803ac41575b48c6c36bd15ea845b13b1eeeb9c4b",
+    "research/voice-prosody/phenometrix_prosody/frequency_diversity.py": "57dddd5125d1bf19f30a1ac3c5568897490cf72ac47349e72abcbdc9b9f5f62d",
+    "research/voice-prosody/phenometrix_prosody/harmonic_challenge.py": "7a650c2d1f890372d8dcee0e884120f256b5dabdae5893e19b63d1967d5ebdae",
+    "research/voice-prosody/phenometrix_prosody/harmonic_selector_experiment.py": "5c0272be89054bec6940f80e216044f6624d1743e2110c5427200aea86ba449a",
+    "research/voice-prosody/phenometrix_prosody/harmonic_selector_model.py": "260932b14d61f55c2046e845e81b17b0840cbb4ade5a4f196ba016d61917c15e",
+    "research/voice-prosody/phenometrix_prosody/hybrid_followup.py": "786631235ceb71d71620c17f5483ae074455f51cb89c17d610c00a7afdba7252",
+    "research/voice-prosody/phenometrix_prosody/measurement_alignment.py": "490dd944f62b1ca0b2f7e9d17849d0466d96d4f6e11826cc8d79c61038112e40",
+    "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+    "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+    "research/voice-prosody/phenometrix_prosody/periodicity_evidence.py": "43963df870eadfd47e8e941d02dacc1055132f0164a673fc60e93e714f20f498",
+    "research/voice-prosody/phenometrix_prosody/pilot.py": "8ded044fd3045c9ba03f08fa5fab2151926c0b73fab4338ace11300148033f70",
+    "research/voice-prosody/phenometrix_prosody/selector_experiment.py": "c7690766c09f936adad72c0160eb02384f18dd6de2d2505dd4c2e120efe09b44",
+    "research/voice-prosody/phenometrix_prosody/selector_headroom.py": "0cb7722cfee1fdadd046952c67eccf92fababa2dd978d9351e779b159d6edf94",
+    "research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+    "research/voice-prosody/phenometrix_prosody/subharmonic_challenge.py": "d5a11b5e4af027d5c3906b01747556533aa645ef03aacf5843f897a9b66be8f3",
+    "research/voice-prosody/phenometrix_prosody/subharmonic_experiment.py": "372b9a992734d97286bcd6f49667a60399517d104d08798ed7ffc8818e355fc5",
+    "research/voice-prosody/phenometrix_prosody/subharmonic_objective.py": "cdcbec0857420f8106192e32e7ae1e2b19adfd098e59503c35b3ced638b703df",
+    "research/voice-prosody/phenometrix_prosody/synthetic_curriculum.py": "904fa293739060ed04d3270b5b4a9d0c5e3af79e5d6a1dd5445540860d6d168d",
+    "research/voice-prosody/pyproject.toml": "b0227de88cd281c2385fad777bebf3cf7750c467ad585260e88c11b8c8f44152",
+    "research/voice-prosody/replay.ts": "033bd55c949800b15e49e160447b07b27a598c61383a356acc9ce57f4e540639",
+    "research/voice-prosody/tests/test_audit_evidence_scores.py": "00356babb4d2995d900aaf6644bc4d7450f38f38be3c6a6b8bd2f5986819b329",
+    "research/voice-prosody/tests/test_audit_exposure_study.py": "b6cefad201cf71cbabd4a2c686eb5b1b304092cbf3e70645eddda91b5788fa0a",
+    "research/voice-prosody/tests/test_audit_frequency_diversity.py": "336aa658e5820683b3bd7d65e4a93fec65a537b4117079aba263935c351bfe0c",
+    "research/voice-prosody/tests/test_evidence_selector_model.py": "41c402e38700c5854e7b72e38e118ef2755731be8e83afcf742f87158190fc5b",
+    "research/voice-prosody/tests/test_exposure_inputs.py": "e48e81ec2ab5e1f6cd33b15387be37db8d9378bcf5249d71eca6bbd081f4df11",
+    "research/voice-prosody/tests/test_exposure_study.py": "4785fc2d0f6e95bb85539644f61f6148f2bc6e03a5b90d1a5dc8f6f95af5e27a",
+    "research/voice-prosody/tests/test_frequency_diversity.py": "00b6d32bb584a25e2e3f4f583e55e1d217e398871fc3b683eda26ca389ecf621",
+    "research/voice-prosody/uv.lock": "76d25386794c17f87df582b88d47eb0eae06f06afb6662ba79094f358c9b2f87"
+  }
+}

@@ -1,0 +1,1558 @@
+{
+  "audit_date": "2026-10-22",
+  "cycle_probe": {
+    "interpretation": "Partial cycle correspondence, not a timing calibration. No reference shifts applied; high-pass delay compensation unresolved.",
+    "lar_sha256": "569243a194f427a133673f758df3d4b46f660c126e0761c966638b8ed10bde42",
+    "method": "Inspect five deterministic training-only raw LAR intervals; not a scorer.\n\n    Probe midpoints of the five longest reference-positive runs, using 32 ms\n    centered raw first-difference windows. Select the shortest local ACF peak\n    within 90% of the largest normalized peak in 50..700 Hz. This exploratory\n    cycle check cannot establish boundary timing or filter-delay compensation.\n    ",
+    "probes": [
+      {
+        "absolute_cents": 0.07539443654448058,
+        "nominal_target_ms": 7476.0,
+        "normalized_correlation": 0.5998513707828198,
+        "raw_derivative_acf_hz": 166.66666666666666,
+        "reference_hz": 166.659408569,
+        "reference_index": 746,
+        "selected_cycle_samples": 288,
+        "voiced_run_indices": [
+          714,
+          778
+        ]
+      },
+      {
+        "absolute_cents": 102.37523874103483,
+        "nominal_target_ms": 3206.0,
+        "normalized_correlation": 0.10834129312818519,
+        "raw_derivative_acf_hz": 224.29906542056074,
+        "reference_hz": 211.41986084,
+        "reference_index": 319,
+        "selected_cycle_samples": 214,
+        "voiced_run_indices": [
+          298,
+          340
+        ]
+      },
+      {
+        "absolute_cents": 25.590223758190103,
+        "nominal_target_ms": 3656.0,
+        "normalized_correlation": 0.2585855871489733,
+        "raw_derivative_acf_hz": 170.2127659574468,
+        "reference_hz": 167.715270996,
+        "reference_index": 364,
+        "selected_cycle_samples": 282,
+        "voiced_run_indices": [
+          345,
+          384
+        ]
+      },
+      {
+        "absolute_cents": 14.472254269557908,
+        "nominal_target_ms": 4436.0,
+        "normalized_correlation": 0.40527451014513177,
+        "raw_derivative_acf_hz": 170.8185053380783,
+        "reference_hz": 169.396499634,
+        "reference_index": 442,
+        "selected_cycle_samples": 281,
+        "voiced_run_indices": [
+          429,
+          455
+        ]
+      },
+      {
+        "absolute_cents": 17.409239773393214,
+        "nominal_target_ms": 4816.0,
+        "normalized_correlation": 0.3345587190806592,
+        "raw_derivative_acf_hz": 146.78899082568807,
+        "reference_hz": 145.320281982,
+        "reference_index": 480,
+        "selected_cycle_samples": 327,
+        "voiced_run_indices": [
+          472,
+          488
+        ]
+      }
+    ],
+    "recording_id": "F04_si1146",
+    "reference_sha256": "c389ea1644744a1215c149be5a264684a0cccafa2afd7e8d35eb1d52d856b3f3",
+    "schema": "phenometrix-training-cycle-probe-v1",
+    "split": "train"
+  },
+  "cycle_probe_sha256": "3d87365558f30ae4ab62805a0932d1094f52b729dbaf9ac24d67460c124cd1c5",
+  "data_tool_sha256": "9b4a75014b38655c9beaa2dde5757b492f9e0af2d0ba5db1f539695e58ad34c5",
+  "file_audit_sha256": "a0ebbfc602c769577d7c5e05338405489e521ac3ddb5b253ebee25d7da28e141",
+  "git_payload_policy": "Metadata identities, aggregate audits and small numerical probes only; no corpus media, reference trajectories, or prompt text committed.",
+  "inventory_audit": {
+    "excluded_universal_recordings": 40,
+    "files": 14154,
+    "files_per_role": {
+      "lar": 4718,
+      "mic": 4718,
+      "ref": 4718
+    },
+    "incomplete_recordings": {},
+    "matched_pair_differences": {
+      "01": {
+        "female_only": [],
+        "male_only": []
+      },
+      "02": {
+        "female_only": [],
+        "male_only": []
+      },
+      "03": {
+        "female_only": [],
+        "male_only": []
+      },
+      "04": {
+        "female_only": [],
+        "male_only": []
+      },
+      "05": {
+        "female_only": [],
+        "male_only": []
+      },
+      "06": {
+        "female_only": [],
+        "male_only": []
+      },
+      "07": {
+        "female_only": [],
+        "male_only": []
+      },
+      "08": {
+        "female_only": [],
+        "male_only": [
+          "si1912",
+          "si1913"
+        ]
+      },
+      "09": {
+        "female_only": [],
+        "male_only": []
+      },
+      "10": {
+        "female_only": [],
+        "male_only": []
+      }
+    },
+    "missing_from_documented_membership": [
+      "F08_si1912",
+      "F08_si1913"
+    ],
+    "no_shared_prompt_gate": true,
+    "primary_prompt_intersections": {
+      "development__sealed_test": {
+        "normalized_text_count": 0,
+        "prompt_ids": []
+      },
+      "train__development": {
+        "normalized_text_count": 0,
+        "prompt_ids": []
+      },
+      "train__sealed_test": {
+        "normalized_text_count": 0,
+        "prompt_ids": []
+      }
+    },
+    "primary_recordings": 4678,
+    "recordings": 4718,
+    "recordings_per_speaker": {
+      "F01": 236,
+      "F02": 236,
+      "F03": 236,
+      "F04": 236,
+      "F05": 236,
+      "F06": 236,
+      "F07": 236,
+      "F08": 234,
+      "F09": 236,
+      "F10": 236,
+      "M01": 236,
+      "M02": 236,
+      "M03": 236,
+      "M04": 236,
+      "M05": 236,
+      "M06": 236,
+      "M07": 236,
+      "M08": 236,
+      "M09": 236,
+      "M10": 236
+    }
+  },
+  "inventory_sha256": "414c9b8e1ec8b462ae01c92d0b434519631e66bf67428120acb9b881085c798b",
+  "licenses": {
+    "contents": "https://opendatacommons.org/licenses/dbcl/1-0/",
+    "database": "https://opendatacommons.org/licenses/odbl/1-0/"
+  },
+  "manifest_sha256": "8f176ec5937b04b489687cf9e475d451d12949734f1980270fbcfa8e3cd1575f",
+  "pilot": {
+    "acquired_file_bytes": 33858276,
+    "acquired_files": [
+      {
+        "bytes": 832364,
+        "downloaded_at": "2026-10-22T15:53:00.400059+00:00",
+        "etag": "\"cb36c-49fa4029ae080\"",
+        "last_modified": "Tue, 29 Mar 2011 19:24:34 GMT",
+        "path": "records/train/F02/mic_F02_si822.wav",
+        "recording_id": "F02_si822",
+        "role": "mic",
+        "sha256": "c33f3e243e197c037767197b79105911b49d99498c7b3751908193a661d7511b",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F02/mic_F02_si822.wav"
+      },
+      {
+        "bytes": 33894,
+        "downloaded_at": "2026-10-22T15:53:01.086398+00:00",
+        "etag": "\"8466-49fce58477500\"",
+        "last_modified": "Thu, 31 Mar 2011 21:55:00 GMT",
+        "path": "records/train/F02/ref_F02_si822.f0",
+        "recording_id": "F02_si822",
+        "role": "ref",
+        "sha256": "b701cb8ce20796486f254586fc9ea7708b952b21918264cdd5daa480262ff89b",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F02/ref_F02_si822.f0"
+      },
+      {
+        "bytes": 832364,
+        "downloaded_at": "2026-10-22T15:53:03.172084+00:00",
+        "etag": "\"cb36c-49fc5445a87c0\"",
+        "last_modified": "Thu, 31 Mar 2011 11:05:11 GMT",
+        "path": "records/train/F02/lar_F02_si822.wav",
+        "recording_id": "F02_si822",
+        "role": "lar",
+        "sha256": "b24e5738596a1563410adf9db1aea0d2a90a9051c477e689492edcc20b4dc613",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F02/lar_F02_si822.wav"
+      },
+      {
+        "bytes": 585644,
+        "downloaded_at": "2026-10-22T15:53:04.755229+00:00",
+        "etag": "\"8efac-49fa3f0e70440\"",
+        "last_modified": "Tue, 29 Mar 2011 19:19:37 GMT",
+        "path": "records/train/F02/mic_F02_si645.wav",
+        "recording_id": "F02_si645",
+        "role": "mic",
+        "sha256": "bbe32a79db6916759ce51f7a5cc9f147235b45ee4b33526b2c6515f08f9f422c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F02/mic_F02_si645.wav"
+      },
+      {
+        "bytes": 23677,
+        "downloaded_at": "2026-10-22T15:53:05.459062+00:00",
+        "etag": "\"5c7d-49fce3fb8d600\"",
+        "last_modified": "Thu, 31 Mar 2011 21:48:08 GMT",
+        "path": "records/train/F02/ref_F02_si645.f0",
+        "recording_id": "F02_si645",
+        "role": "ref",
+        "sha256": "e8ebcdcc5adacaa3518c1e3d4a3106582930a876c92cdd15670f2e7537b4be3a",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F02/ref_F02_si645.f0"
+      },
+      {
+        "bytes": 585644,
+        "downloaded_at": "2026-10-22T15:53:06.878401+00:00",
+        "etag": "\"8efac-49fc532e3b480\"",
+        "last_modified": "Thu, 31 Mar 2011 11:00:18 GMT",
+        "path": "records/train/F02/lar_F02_si645.wav",
+        "recording_id": "F02_si645",
+        "role": "lar",
+        "sha256": "097dc046fbc7b5f0db177dde66e493bb527845989e0c90b679cc721dcab01fe0",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F02/lar_F02_si645.wav"
+      },
+      {
+        "bytes": 929324,
+        "downloaded_at": "2026-10-22T15:53:08.772956+00:00",
+        "etag": "\"e2e2c-49fa3b18aec80\"",
+        "last_modified": "Tue, 29 Mar 2011 19:01:54 GMT",
+        "path": "records/train/F04/mic_F04_si1146.wav",
+        "recording_id": "F04_si1146",
+        "role": "mic",
+        "sha256": "0df16609337b7b2ea346c25c771024cff2ddf61b6d8b911407bf5f194036c52c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F04/mic_F04_si1146.wav"
+      },
+      {
+        "bytes": 36700,
+        "downloaded_at": "2026-10-22T15:53:09.461446+00:00",
+        "etag": "\"8f5c-49fce0272cd00\"",
+        "last_modified": "Thu, 31 Mar 2011 21:31:00 GMT",
+        "path": "records/train/F04/ref_F04_si1146.f0",
+        "recording_id": "F04_si1146",
+        "role": "ref",
+        "sha256": "c389ea1644744a1215c149be5a264684a0cccafa2afd7e8d35eb1d52d856b3f3",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F04/ref_F04_si1146.f0"
+      },
+      {
+        "bytes": 929324,
+        "downloaded_at": "2026-10-22T15:53:11.010082+00:00",
+        "etag": "\"e2e2c-49fb9e9bbae80\"",
+        "last_modified": "Wed, 30 Mar 2011 21:32:26 GMT",
+        "path": "records/train/F04/lar_F04_si1146.wav",
+        "recording_id": "F04_si1146",
+        "role": "lar",
+        "sha256": "569243a194f427a133673f758df3d4b46f660c126e0761c966638b8ed10bde42",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F04/lar_F04_si1146.wav"
+      },
+      {
+        "bytes": 855404,
+        "downloaded_at": "2026-10-22T15:53:12.816112+00:00",
+        "etag": "\"d0d6c-49fa3ab397e00\"",
+        "last_modified": "Tue, 29 Mar 2011 19:00:08 GMT",
+        "path": "records/train/F04/mic_F04_si1079.wav",
+        "recording_id": "F04_si1079",
+        "role": "mic",
+        "sha256": "2f6de675ab041a8fa1e96999aa4619dd9871dab3284cf97467d8a02332cbdf08",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F04/mic_F04_si1079.wav"
+      },
+      {
+        "bytes": 32818,
+        "downloaded_at": "2026-10-22T15:53:13.524945+00:00",
+        "etag": "\"8032-49fcdf9bf0480\"",
+        "last_modified": "Thu, 31 Mar 2011 21:28:34 GMT",
+        "path": "records/train/F04/ref_F04_si1079.f0",
+        "recording_id": "F04_si1079",
+        "role": "ref",
+        "sha256": "ed147f71b881c45ca1cf7bf37248da734436aa05cccf742ee37acc1de55c735f",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F04/ref_F04_si1079.f0"
+      },
+      {
+        "bytes": 855404,
+        "downloaded_at": "2026-10-22T15:53:15.291321+00:00",
+        "etag": "\"d0d6c-49fb9e3798240\"",
+        "last_modified": "Wed, 30 Mar 2011 21:30:41 GMT",
+        "path": "records/train/F04/lar_F04_si1079.wav",
+        "recording_id": "F04_si1079",
+        "role": "lar",
+        "sha256": "9b53ffd42524de87b0f8918331926fcd530bb44a01a8a9895498deb9b663fd6a",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F04/lar_F04_si1079.wav"
+      },
+      {
+        "bytes": 600044,
+        "downloaded_at": "2026-10-22T15:53:16.674314+00:00",
+        "etag": "\"927ec-49fa42af513c0\"",
+        "last_modified": "Tue, 29 Mar 2011 19:35:51 GMT",
+        "path": "records/train/F07/mic_F07_sx316.wav",
+        "recording_id": "F07_sx316",
+        "role": "mic",
+        "sha256": "b27e56ba8d80e88ed531010c2a19bc0cabde9d59e6a2491bd30221d25bc12609",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F07/mic_F07_sx316.wav"
+      },
+      {
+        "bytes": 23276,
+        "downloaded_at": "2026-10-22T15:53:17.354287+00:00",
+        "etag": "\"5aec-49fceb013a740\"",
+        "last_modified": "Thu, 31 Mar 2011 22:19:33 GMT",
+        "path": "records/train/F07/ref_F07_sx316.f0",
+        "recording_id": "F07_sx316",
+        "role": "ref",
+        "sha256": "98df2ed9bcdd0c83688379d487c4f3ba993f9c4929b9a60b70c12fd7a85efca4",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F07/ref_F07_sx316.f0"
+      },
+      {
+        "bytes": 600044,
+        "downloaded_at": "2026-10-22T15:53:18.794605+00:00",
+        "etag": "\"927ec-49fc55c414e00\"",
+        "last_modified": "Thu, 31 Mar 2011 11:11:52 GMT",
+        "path": "records/train/F07/lar_F07_sx316.wav",
+        "recording_id": "F07_sx316",
+        "role": "lar",
+        "sha256": "434fdf063712f152675d74efbdecbe7020a7088605e2d3c9070a628c9b50ae7e",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F07/lar_F07_sx316.wav"
+      },
+      {
+        "bytes": 673964,
+        "downloaded_at": "2026-10-22T15:53:20.182461+00:00",
+        "etag": "\"a48ac-49fa441b9ef40\"",
+        "last_modified": "Tue, 29 Mar 2011 19:42:13 GMT",
+        "path": "records/train/F07/mic_F07_si1753.wav",
+        "recording_id": "F07_si1753",
+        "role": "mic",
+        "sha256": "7f728418765e9f3fe69bf8c441bd259ac18f97b0387cd718d100728bcc80312b",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F07/mic_F07_si1753.wav"
+      },
+      {
+        "bytes": 26880,
+        "downloaded_at": "2026-10-22T15:53:21.875336+00:00",
+        "etag": "\"6900-49fcea7bb6c40\"",
+        "last_modified": "Thu, 31 Mar 2011 22:17:13 GMT",
+        "path": "records/train/F07/ref_F07_si1753.f0",
+        "recording_id": "F07_si1753",
+        "role": "ref",
+        "sha256": "a757f5797c54a3008f20006efd01235fe56c785652b85e3d660476eed0b6ce9c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F07/ref_F07_si1753.f0"
+      },
+      {
+        "bytes": 673964,
+        "downloaded_at": "2026-10-22T15:53:23.294416+00:00",
+        "etag": "\"a48ac-49fc5711de180\"",
+        "last_modified": "Thu, 31 Mar 2011 11:17:42 GMT",
+        "path": "records/train/F07/lar_F07_si1753.wav",
+        "recording_id": "F07_si1753",
+        "role": "lar",
+        "sha256": "f4af27a95fb49de1cbefec37167d2c812f442274ac4ead1b8fd02f78ef48beec",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F07/lar_F07_si1753.wav"
+      },
+      {
+        "bytes": 660524,
+        "downloaded_at": "2026-10-22T15:53:24.689671+00:00",
+        "etag": "\"a142c-49fa4cbb60800\"",
+        "last_modified": "Tue, 29 Mar 2011 20:20:48 GMT",
+        "path": "records/train/F08/mic_F08_si1776.wav",
+        "recording_id": "F08_si1776",
+        "role": "mic",
+        "sha256": "94e73276005339a9769c60ecc0c0b3d4e3befa6c30cbd5cd987d6b6765edad1e",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F08/mic_F08_si1776.wav"
+      },
+      {
+        "bytes": 24516,
+        "downloaded_at": "2026-10-22T15:53:25.372892+00:00",
+        "etag": "\"5fc4-49fcf36a9ffc0\"",
+        "last_modified": "Thu, 31 Mar 2011 22:57:11 GMT",
+        "path": "records/train/F08/ref_F08_si1776.f0",
+        "recording_id": "F08_si1776",
+        "role": "ref",
+        "sha256": "2256a947b16e9bbe105f174a607969b7f0dd09e16b629fe0dc16b9aa3eaac789",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F08/ref_F08_si1776.f0"
+      },
+      {
+        "bytes": 660524,
+        "downloaded_at": "2026-10-22T15:53:26.773821+00:00",
+        "etag": "\"a142c-49fc61a188c40\"",
+        "last_modified": "Thu, 31 Mar 2011 12:04:57 GMT",
+        "path": "records/train/F08/lar_F08_si1776.wav",
+        "recording_id": "F08_si1776",
+        "role": "lar",
+        "sha256": "4a936527e8dc12bda265cb523f419c1f0d67b5392c2d1072ccc361c3585dae1c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F08/lar_F08_si1776.wav"
+      },
+      {
+        "bytes": 659564,
+        "downloaded_at": "2026-10-22T15:53:28.348358+00:00",
+        "etag": "\"a106c-49fa4cefd43c0\"",
+        "last_modified": "Tue, 29 Mar 2011 20:21:43 GMT",
+        "path": "records/train/F08/mic_F08_si1812.wav",
+        "recording_id": "F08_si1812",
+        "role": "mic",
+        "sha256": "6f5982d10f189e7f0168fa7541a9a916295dfe97b85777fa838e92cebd37004c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F08/mic_F08_si1812.wav"
+      },
+      {
+        "bytes": 25399,
+        "downloaded_at": "2026-10-22T15:53:29.051806+00:00",
+        "etag": "\"6337-49fcf3b40ed00\"",
+        "last_modified": "Thu, 31 Mar 2011 22:58:28 GMT",
+        "path": "records/train/F08/ref_F08_si1812.f0",
+        "recording_id": "F08_si1812",
+        "role": "ref",
+        "sha256": "22fc7a5be6f0b90a901e75e5bed1a834c08d8f22e479c4329db4e7dc7e101cfb",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F08/ref_F08_si1812.f0"
+      },
+      {
+        "bytes": 659564,
+        "downloaded_at": "2026-10-22T15:53:30.483223+00:00",
+        "etag": "\"a106c-49fc61d6f0a40\"",
+        "last_modified": "Thu, 31 Mar 2011 12:05:53 GMT",
+        "path": "records/train/F08/lar_F08_si1812.wav",
+        "recording_id": "F08_si1812",
+        "role": "lar",
+        "sha256": "dcdb51ecff422f6fa6b617c3906916dc9704707c46d83d0753ec826271966c20",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F08/lar_F08_si1812.wav"
+      },
+      {
+        "bytes": 562604,
+        "downloaded_at": "2026-10-22T15:53:31.893001+00:00",
+        "etag": "\"895ac-49fa30cad1d00\"",
+        "last_modified": "Tue, 29 Mar 2011 18:15:48 GMT",
+        "path": "records/train/F09/mic_F09_si2003.wav",
+        "recording_id": "F09_si2003",
+        "role": "mic",
+        "sha256": "72849b3a1644d8f9e5b86abac54400e9c8e0463fd9efb30484721324f7a07578",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F09/mic_F09_si2003.wav"
+      },
+      {
+        "bytes": 22405,
+        "downloaded_at": "2026-10-22T15:53:32.591138+00:00",
+        "etag": "\"5785-49fcc5c911780\"",
+        "last_modified": "Thu, 31 Mar 2011 19:33:02 GMT",
+        "path": "records/train/F09/ref_F09_si2003.f0",
+        "recording_id": "F09_si2003",
+        "role": "ref",
+        "sha256": "9bb99f2c3b24a66cfbc56848f95d09a6b15267894adc5aafad27346ac3bbe516",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F09/ref_F09_si2003.f0"
+      },
+      {
+        "bytes": 562604,
+        "downloaded_at": "2026-10-22T15:53:33.994262+00:00",
+        "etag": "\"895ac-49fb9156be000\"",
+        "last_modified": "Wed, 30 Mar 2011 20:33:04 GMT",
+        "path": "records/train/F09/lar_F09_si2003.wav",
+        "recording_id": "F09_si2003",
+        "role": "lar",
+        "sha256": "0b4e113ca29ecae0ca2efc275bc45670536bdd0401cca66281e40c4ac667a149",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F09/lar_F09_si2003.wav"
+      },
+      {
+        "bytes": 561644,
+        "downloaded_at": "2026-10-22T15:53:35.368633+00:00",
+        "etag": "\"891ec-49fa3103161c0\"",
+        "last_modified": "Tue, 29 Mar 2011 18:16:47 GMT",
+        "path": "records/train/F09/mic_F09_si2040.wav",
+        "recording_id": "F09_si2040",
+        "role": "mic",
+        "sha256": "f62b9098e6602798ce9334235da1428be29a479cb974b1233de9eae24e06515a",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F09/mic_F09_si2040.wav"
+      },
+      {
+        "bytes": 22564,
+        "downloaded_at": "2026-10-22T15:53:36.096158+00:00",
+        "etag": "\"5824-49fcc61745000\"",
+        "last_modified": "Thu, 31 Mar 2011 19:34:24 GMT",
+        "path": "records/train/F09/ref_F09_si2040.f0",
+        "recording_id": "F09_si2040",
+        "role": "ref",
+        "sha256": "c42e885c38395e2be292832be36089f07b4a54f7473b3d49f5ceaf9fba1e6ccb",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F09/ref_F09_si2040.f0"
+      },
+      {
+        "bytes": 561644,
+        "downloaded_at": "2026-10-22T15:53:37.510986+00:00",
+        "etag": "\"891ec-49fb918d1a040\"",
+        "last_modified": "Wed, 30 Mar 2011 20:34:01 GMT",
+        "path": "records/train/F09/lar_F09_si2040.wav",
+        "recording_id": "F09_si2040",
+        "role": "lar",
+        "sha256": "2a078cfa5a8e9d5f561885f725e95d70f3dbd6d047a1073c0aee71287cb7f767",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F09/lar_F09_si2040.wav"
+      },
+      {
+        "bytes": 659564,
+        "downloaded_at": "2026-10-22T15:53:38.897252+00:00",
+        "etag": "\"a106c-49fa2eab39a80\"",
+        "last_modified": "Tue, 29 Mar 2011 18:06:18 GMT",
+        "path": "records/train/F10/mic_F10_si2256.wav",
+        "recording_id": "F10_si2256",
+        "role": "mic",
+        "sha256": "a443bf2a4b8b2b27d4bcdad33eb11e053fdaecb82630c3db7c52a7c6c47913a7",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F10/mic_F10_si2256.wav"
+      },
+      {
+        "bytes": 26249,
+        "downloaded_at": "2026-10-22T15:53:39.603771+00:00",
+        "etag": "\"6689-49fcb59e1f280\"",
+        "last_modified": "Thu, 31 Mar 2011 18:20:42 GMT",
+        "path": "records/train/F10/ref_F10_si2256.f0",
+        "recording_id": "F10_si2256",
+        "role": "ref",
+        "sha256": "b1a81f29bdc2b2fbe2846d121eb61ca682038d03df371d1a559974f020fa1059",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F10/ref_F10_si2256.f0"
+      },
+      {
+        "bytes": 659564,
+        "downloaded_at": "2026-10-22T15:53:40.990262+00:00",
+        "etag": "\"a106c-49fb8f0c3b840\"",
+        "last_modified": "Wed, 30 Mar 2011 20:22:49 GMT",
+        "path": "records/train/F10/lar_F10_si2256.wav",
+        "recording_id": "F10_si2256",
+        "role": "lar",
+        "sha256": "ec612a03615f68aa79810033780427211300fced447fd7211252142aed48e672",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F10/lar_F10_si2256.wav"
+      },
+      {
+        "bytes": 808364,
+        "downloaded_at": "2026-10-22T15:53:42.649647+00:00",
+        "etag": "\"c55ac-49fa2dac981c0\"",
+        "last_modified": "Tue, 29 Mar 2011 18:01:51 GMT",
+        "path": "records/train/F10/mic_F10_sx423.wav",
+        "recording_id": "F10_sx423",
+        "role": "mic",
+        "sha256": "41328d5dce36a6f2def694adb4c23204d72b1258c16169b09668d6527c5fdbee",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F10/mic_F10_sx423.wav"
+      },
+      {
+        "bytes": 33180,
+        "downloaded_at": "2026-10-22T15:53:43.350693+00:00",
+        "etag": "\"819c-49fcb68300e80\"",
+        "last_modified": "Thu, 31 Mar 2011 18:24:42 GMT",
+        "path": "records/train/F10/ref_F10_sx423.f0",
+        "recording_id": "F10_sx423",
+        "role": "ref",
+        "sha256": "62dcc912a088d414b6debefe70e4a002bfef451160d80d2094dff1f2b84f91ef",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F10/ref_F10_sx423.f0"
+      },
+      {
+        "bytes": 808364,
+        "downloaded_at": "2026-10-22T15:53:44.768679+00:00",
+        "etag": "\"c55ac-49fb8e125eac0\"",
+        "last_modified": "Wed, 30 Mar 2011 20:18:27 GMT",
+        "path": "records/train/F10/lar_F10_sx423.wav",
+        "recording_id": "F10_sx423",
+        "role": "lar",
+        "sha256": "b53693a57fbffa3bffc2deacb8e7fcbed15ef30968414380bc22f99e1957f890",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F10/lar_F10_sx423.wav"
+      },
+      {
+        "bytes": 807404,
+        "downloaded_at": "2026-10-22T15:53:46.304438+00:00",
+        "etag": "\"c51ec-49fda2ea38d40\"",
+        "last_modified": "Fri, 01 Apr 2011 12:02:21 GMT",
+        "path": "records/train/M02/mic_M02_si822.wav",
+        "recording_id": "M02_si822",
+        "role": "mic",
+        "sha256": "5c52cbdba087a38d4d3caa2ace39f3988867d75e852991fc84d577c6136803c1",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M02/mic_M02_si822.wav"
+      },
+      {
+        "bytes": 30557,
+        "downloaded_at": "2026-10-22T15:53:46.989160+00:00",
+        "etag": "\"775d-49fd6b2a7c600\"",
+        "last_modified": "Fri, 01 Apr 2011 07:52:56 GMT",
+        "path": "records/train/M02/ref_M02_si822.f0",
+        "recording_id": "M02_si822",
+        "role": "ref",
+        "sha256": "a5b2194ddb1fee6f4291651f3e241370d5d3971f6bc065b3f69c87fcfd90c262",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M02/ref_M02_si822.f0"
+      },
+      {
+        "bytes": 807404,
+        "downloaded_at": "2026-10-22T15:53:48.568899+00:00",
+        "etag": "\"c51ec-49fdd040703c0\"",
+        "last_modified": "Fri, 01 Apr 2011 15:25:11 GMT",
+        "path": "records/train/M02/lar_M02_si822.wav",
+        "recording_id": "M02_si822",
+        "role": "lar",
+        "sha256": "930e6d9522acfe300cd3646ca8f5ba2ad748966b66d01257904b3584e72850ef",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M02/lar_M02_si822.wav"
+      },
+      {
+        "bytes": 587564,
+        "downloaded_at": "2026-10-22T15:53:49.961507+00:00",
+        "etag": "\"8f72c-49fda1eb97480\"",
+        "last_modified": "Fri, 01 Apr 2011 11:57:54 GMT",
+        "path": "records/train/M02/mic_M02_si645.wav",
+        "recording_id": "M02_si645",
+        "role": "mic",
+        "sha256": "f2f3ca746f0d3022fe6000f29290cc4d903d7d70eba14c1de75b8c4b22a4fb09",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M02/mic_M02_si645.wav"
+      },
+      {
+        "bytes": 21046,
+        "downloaded_at": "2026-10-22T15:53:50.649127+00:00",
+        "etag": "\"5236-49fd69c4dba40\"",
+        "last_modified": "Fri, 01 Apr 2011 07:46:41 GMT",
+        "path": "records/train/M02/ref_M02_si645.f0",
+        "recording_id": "M02_si645",
+        "role": "ref",
+        "sha256": "7d697da4d0ac14344399610de302904c65666b333643d072c28d0f9bbda9ad41",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M02/ref_M02_si645.f0"
+      },
+      {
+        "bytes": 587564,
+        "downloaded_at": "2026-10-22T15:53:52.057000+00:00",
+        "etag": "\"8f72c-49fdcf43b6f80\"",
+        "last_modified": "Fri, 01 Apr 2011 15:20:46 GMT",
+        "path": "records/train/M02/lar_M02_si645.wav",
+        "recording_id": "M02_si645",
+        "role": "lar",
+        "sha256": "94a8fc0c681593956103e6d6ece2adf76f895f6f02215fd0bdca5e6c5f7d50ab",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M02/lar_M02_si645.wav"
+      },
+      {
+        "bytes": 953324,
+        "downloaded_at": "2026-10-22T15:53:53.812997+00:00",
+        "etag": "\"e8bec-49fda55528180\"",
+        "last_modified": "Fri, 01 Apr 2011 12:13:10 GMT",
+        "path": "records/train/M04/mic_M04_si1146.wav",
+        "recording_id": "M04_si1146",
+        "role": "mic",
+        "sha256": "2270dc0c4a7570ad743cd7a07cf177dcfebf2d5e085569141e47a2c9f27cec5e",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M04/mic_M04_si1146.wav"
+      },
+      {
+        "bytes": 38853,
+        "downloaded_at": "2026-10-22T15:53:54.491972+00:00",
+        "etag": "\"97c5-49fd710e3eb40\"",
+        "last_modified": "Fri, 01 Apr 2011 08:19:17 GMT",
+        "path": "records/train/M04/ref_M04_si1146.f0",
+        "recording_id": "M04_si1146",
+        "role": "ref",
+        "sha256": "5a5e4b08e4c216f401fd53346b521dd27d4d33700bf45a2cccb2ce9638572e70",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M04/ref_M04_si1146.f0"
+      },
+      {
+        "bytes": 953324,
+        "downloaded_at": "2026-10-22T15:53:56.075203+00:00",
+        "etag": "\"e8bec-49fdd420427c0\"",
+        "last_modified": "Fri, 01 Apr 2011 15:42:31 GMT",
+        "path": "records/train/M04/lar_M04_si1146.wav",
+        "recording_id": "M04_si1146",
+        "role": "lar",
+        "sha256": "813ecf1a4e76710a8cdd268ac3bd6e08674b69ace4d483e434e9b1df7c5a8b34",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M04/lar_M04_si1146.wav"
+      },
+      {
+        "bytes": 855404,
+        "downloaded_at": "2026-10-22T15:53:57.515324+00:00",
+        "etag": "\"d0d6c-49fda4e77bec0\"",
+        "last_modified": "Fri, 01 Apr 2011 12:11:15 GMT",
+        "path": "records/train/M04/mic_M04_si1079.wav",
+        "recording_id": "M04_si1079",
+        "role": "mic",
+        "sha256": "0a3cea0f5c1f06c24a246c9e9609dc4e577f9d1da6350906d9172fc1cc8554f7",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M04/mic_M04_si1079.wav"
+      },
+      {
+        "bytes": 34018,
+        "downloaded_at": "2026-10-22T15:53:58.223877+00:00",
+        "etag": "\"84e2-49fd707884a00\"",
+        "last_modified": "Fri, 01 Apr 2011 08:16:40 GMT",
+        "path": "records/train/M04/ref_M04_si1079.f0",
+        "recording_id": "M04_si1079",
+        "role": "ref",
+        "sha256": "111f452e6aa9d0df39d730369151235dc06836eb646440ef931e24e05d891698",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M04/ref_M04_si1079.f0"
+      },
+      {
+        "bytes": 855404,
+        "downloaded_at": "2026-10-22T15:53:59.796488+00:00",
+        "etag": "\"d0d6c-49fdd3b1a22c0\"",
+        "last_modified": "Fri, 01 Apr 2011 15:40:35 GMT",
+        "path": "records/train/M04/lar_M04_si1079.wav",
+        "recording_id": "M04_si1079",
+        "role": "lar",
+        "sha256": "2b8a520c29f55bed08f6c3eaa0d08dd2289860760769bec5a8a84c3979c1dd67",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M04/lar_M04_si1079.wav"
+      },
+      {
+        "bytes": 587564,
+        "downloaded_at": "2026-10-22T15:54:01.540223+00:00",
+        "etag": "\"8f72c-49fd9b15993c0\"",
+        "last_modified": "Fri, 01 Apr 2011 11:27:19 GMT",
+        "path": "records/train/M07/mic_M07_sx316.wav",
+        "recording_id": "M07_sx316",
+        "role": "mic",
+        "sha256": "8d11dcd6038a09d2a6853b4de37c4d67086c893702b75dcbab70ffe75c0e6a26",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M07/mic_M07_sx316.wav"
+      },
+      {
+        "bytes": 20769,
+        "downloaded_at": "2026-10-22T15:54:02.258399+00:00",
+        "etag": "\"5121-49fd5e80f2640\"",
+        "last_modified": "Fri, 01 Apr 2011 06:56:17 GMT",
+        "path": "records/train/M07/ref_M07_sx316.f0",
+        "recording_id": "M07_sx316",
+        "role": "ref",
+        "sha256": "b7b124153b6260d7f2a4152df890a98dccd7765c1df7b5b82b8c292d30c42616",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M07/ref_M07_sx316.f0"
+      },
+      {
+        "bytes": 587564,
+        "downloaded_at": "2026-10-22T15:54:03.673540+00:00",
+        "etag": "\"8f72c-49fdc3d01eb00\"",
+        "last_modified": "Fri, 01 Apr 2011 14:29:32 GMT",
+        "path": "records/train/M07/lar_M07_sx316.wav",
+        "recording_id": "M07_sx316",
+        "role": "lar",
+        "sha256": "0eda2208b313c0cf25fd55dfbbd55e5adb6332150128a421f7ad86cfa6ec2a51",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M07/lar_M07_sx316.wav"
+      },
+      {
+        "bytes": 733484,
+        "downloaded_at": "2026-10-22T15:54:05.219060+00:00",
+        "etag": "\"b312c-49fd9c45d2180\"",
+        "last_modified": "Fri, 01 Apr 2011 11:32:38 GMT",
+        "path": "records/train/M07/mic_M07_si1753.wav",
+        "recording_id": "M07_si1753",
+        "role": "mic",
+        "sha256": "9623ea7a7531db6a561a697bc8b3e8ffefb3ea7f1b6aa20fab596858303f57b2",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M07/mic_M07_si1753.wav"
+      },
+      {
+        "bytes": 27522,
+        "downloaded_at": "2026-10-22T15:54:05.945363+00:00",
+        "etag": "\"6b82-49fd5df892480\"",
+        "last_modified": "Fri, 01 Apr 2011 06:53:54 GMT",
+        "path": "records/train/M07/ref_M07_si1753.f0",
+        "recording_id": "M07_si1753",
+        "role": "ref",
+        "sha256": "28663d708f7f1a589c837428a09ad78c86d6634f37e662ef68ad3c4b392ad6e0",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M07/ref_M07_si1753.f0"
+      },
+      {
+        "bytes": 733484,
+        "downloaded_at": "2026-10-22T15:54:07.360849+00:00",
+        "etag": "\"b312c-49fdc6467fa40\"",
+        "last_modified": "Fri, 01 Apr 2011 14:40:33 GMT",
+        "path": "records/train/M07/lar_M07_si1753.wav",
+        "recording_id": "M07_si1753",
+        "role": "lar",
+        "sha256": "801db15856050be4736d40eb825e064d8911df7c4336b5bc0a80feb58825a8d5",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M07/lar_M07_si1753.wav"
+      },
+      {
+        "bytes": 635564,
+        "downloaded_at": "2026-10-22T15:54:08.779436+00:00",
+        "etag": "\"9b2ac-49fd846989640\"",
+        "last_modified": "Fri, 01 Apr 2011 09:45:53 GMT",
+        "path": "records/train/M08/mic_M08_si1776.wav",
+        "recording_id": "M08_si1776",
+        "role": "mic",
+        "sha256": "97947b8614cd6b8981795c7109887e3378b9a7e3477967f16ab799bef1b950d2",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M08/mic_M08_si1776.wav"
+      },
+      {
+        "bytes": 22881,
+        "downloaded_at": "2026-10-22T15:54:09.474941+00:00",
+        "etag": "\"5961-49fcfd971c080\"",
+        "last_modified": "Thu, 31 Mar 2011 23:42:42 GMT",
+        "path": "records/train/M08/ref_M08_si1776.f0",
+        "recording_id": "M08_si1776",
+        "role": "ref",
+        "sha256": "f3a3cfae3ef537001137353c85986df9a51be320f7802492608196f22527e215",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M08/ref_M08_si1776.f0"
+      },
+      {
+        "bytes": 635564,
+        "downloaded_at": "2026-10-22T15:54:10.885591+00:00",
+        "etag": "\"9b2ac-49fdb21e2ab80\"",
+        "last_modified": "Fri, 01 Apr 2011 13:10:22 GMT",
+        "path": "records/train/M08/lar_M08_si1776.wav",
+        "recording_id": "M08_si1776",
+        "role": "lar",
+        "sha256": "cc3d6b215a9e32d5fb15508bc0ea19939e5ed9e21cd745c736e5d683793339de",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M08/lar_M08_si1776.wav"
+      },
+      {
+        "bytes": 585644,
+        "downloaded_at": "2026-10-22T15:54:12.352461+00:00",
+        "etag": "\"8efac-49fd849844480\"",
+        "last_modified": "Fri, 01 Apr 2011 09:46:42 GMT",
+        "path": "records/train/M08/mic_M08_si1812.wav",
+        "recording_id": "M08_si1812",
+        "role": "mic",
+        "sha256": "52fbeea12842263d6efc65b9761ea19edc8306333fa52ec832c288d3ab0ac2c5",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M08/mic_M08_si1812.wav"
+      },
+      {
+        "bytes": 22151,
+        "downloaded_at": "2026-10-22T15:54:13.035883+00:00",
+        "etag": "\"5687-49fcfddea2940\"",
+        "last_modified": "Thu, 31 Mar 2011 23:43:57 GMT",
+        "path": "records/train/M08/ref_M08_si1812.f0",
+        "recording_id": "M08_si1812",
+        "role": "ref",
+        "sha256": "a3c48e10cc1eb601e8a9743544e798d894150680de54c7ec88fe9034f60bfcdd",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M08/ref_M08_si1812.f0"
+      },
+      {
+        "bytes": 585644,
+        "downloaded_at": "2026-10-22T15:54:14.464308+00:00",
+        "etag": "\"8efac-49fdb24bf1780\"",
+        "last_modified": "Fri, 01 Apr 2011 13:11:10 GMT",
+        "path": "records/train/M08/lar_M08_si1812.wav",
+        "recording_id": "M08_si1812",
+        "role": "lar",
+        "sha256": "b8518951bd4dec1c1b86fdfbb2192761e3ec5e96f470e5676c8b424de6f3d52b",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M08/lar_M08_si1812.wav"
+      },
+      {
+        "bytes": 513644,
+        "downloaded_at": "2026-10-22T15:54:15.985363+00:00",
+        "etag": "\"7d66c-49fd8f3cea0c0\"",
+        "last_modified": "Fri, 01 Apr 2011 10:34:19 GMT",
+        "path": "records/train/M09/mic_M09_si2003.wav",
+        "recording_id": "M09_si2003",
+        "role": "mic",
+        "sha256": "cb99f700d875f5d6f5fe1f39e79eb7e527dc0ae3218320e57fbe5e85f8d9fce5",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M09/mic_M09_si2003.wav"
+      },
+      {
+        "bytes": 19474,
+        "downloaded_at": "2026-10-22T15:54:16.680355+00:00",
+        "etag": "\"4c12-49fd06ddc2300\"",
+        "last_modified": "Fri, 01 Apr 2011 00:24:12 GMT",
+        "path": "records/train/M09/ref_M09_si2003.f0",
+        "recording_id": "M09_si2003",
+        "role": "ref",
+        "sha256": "31565bcc87586ff821e4026666fbfbe4c57d69104d958ed94d6669bfb3db655d",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M09/ref_M09_si2003.f0"
+      },
+      {
+        "bytes": 513644,
+        "downloaded_at": "2026-10-22T15:54:18.031134+00:00",
+        "etag": "\"7d66c-49fdbbdcfa980\"",
+        "last_modified": "Fri, 01 Apr 2011 13:53:58 GMT",
+        "path": "records/train/M09/lar_M09_si2003.wav",
+        "recording_id": "M09_si2003",
+        "role": "lar",
+        "sha256": "e0932c61a543d56346ae403538b003f3c70cbc542253bd2fae5a79ffe23588d1",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M09/lar_M09_si2003.wav"
+      },
+      {
+        "bytes": 489644,
+        "downloaded_at": "2026-10-22T15:54:19.425729+00:00",
+        "etag": "\"778ac-49fd8f6e815c0\"",
+        "last_modified": "Fri, 01 Apr 2011 10:35:11 GMT",
+        "path": "records/train/M09/mic_M09_si2040.wav",
+        "recording_id": "M09_si2040",
+        "role": "mic",
+        "sha256": "57aae675649b88767d0063c08ea76137637f3ba9582a4026e8b0c825b299db7a",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M09/mic_M09_si2040.wav"
+      },
+      {
+        "bytes": 18770,
+        "downloaded_at": "2026-10-22T15:54:20.117504+00:00",
+        "etag": "\"4952-49fd0729194c0\"",
+        "last_modified": "Fri, 01 Apr 2011 00:25:31 GMT",
+        "path": "records/train/M09/ref_M09_si2040.f0",
+        "recording_id": "M09_si2040",
+        "role": "ref",
+        "sha256": "035cdf97305a974e2ea54d33d38821d18f2fab4c842b3ee871013feab40ee54c",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M09/ref_M09_si2040.f0"
+      },
+      {
+        "bytes": 489644,
+        "downloaded_at": "2026-10-22T15:54:21.500345+00:00",
+        "etag": "\"778ac-49fdbc0e91e80\"",
+        "last_modified": "Fri, 01 Apr 2011 13:54:50 GMT",
+        "path": "records/train/M09/lar_M09_si2040.wav",
+        "recording_id": "M09_si2040",
+        "role": "lar",
+        "sha256": "5b157ac2257bb6fce3c2863ab98f7c64d79f9f4857839d9b2b43fae877b6c70a",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M09/lar_M09_si2040.wav"
+      },
+      {
+        "bytes": 636524,
+        "downloaded_at": "2026-10-22T15:54:22.880149+00:00",
+        "etag": "\"9b66c-49fda025a4580\"",
+        "last_modified": "Fri, 01 Apr 2011 11:49:58 GMT",
+        "path": "records/train/M10/mic_M10_si2256.wav",
+        "recording_id": "M10_si2256",
+        "role": "mic",
+        "sha256": "7b566d8e71e8a8f3150e5b569898e365cc575770a404d7090a12cae065d28369",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M10/mic_M10_si2256.wav"
+      },
+      {
+        "bytes": 25333,
+        "downloaded_at": "2026-10-22T15:54:23.598934+00:00",
+        "etag": "\"62f5-49fd6212911c0\"",
+        "last_modified": "Fri, 01 Apr 2011 07:12:15 GMT",
+        "path": "records/train/M10/ref_M10_si2256.f0",
+        "recording_id": "M10_si2256",
+        "role": "ref",
+        "sha256": "c55b2f2ec9a99d8df99a1ca51daf33488f59600b111172c171b925925054a561",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M10/ref_M10_si2256.f0"
+      },
+      {
+        "bytes": 636524,
+        "downloaded_at": "2026-10-22T15:54:25.009151+00:00",
+        "etag": "\"9b66c-49fdc921f7800\"",
+        "last_modified": "Fri, 01 Apr 2011 14:53:20 GMT",
+        "path": "records/train/M10/lar_M10_si2256.wav",
+        "recording_id": "M10_si2256",
+        "role": "lar",
+        "sha256": "7b574867b09bd017569df29687d496bb5ef6fc93e6880ccd7a497965c8791928",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M10/lar_M10_si2256.wav"
+      },
+      {
+        "bytes": 831404,
+        "downloaded_at": "2026-10-22T15:54:27.603189+00:00",
+        "etag": "\"cafac-49fd9ec0f7c00\"",
+        "last_modified": "Fri, 01 Apr 2011 11:43:44 GMT",
+        "path": "records/train/M10/mic_M10_sx423.wav",
+        "recording_id": "M10_sx423",
+        "role": "mic",
+        "sha256": "2b38094b288069db08f1a48099e0c5ed0672b31d534a26a4c6205c3884b7cd0e",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M10/mic_M10_sx423.wav"
+      },
+      {
+        "bytes": 32992,
+        "downloaded_at": "2026-10-22T15:54:28.301199+00:00",
+        "etag": "\"80e0-49fd62e8309c0\"",
+        "last_modified": "Fri, 01 Apr 2011 07:15:59 GMT",
+        "path": "records/train/M10/ref_M10_sx423.f0",
+        "recording_id": "M10_sx423",
+        "role": "ref",
+        "sha256": "5284c519d954eb207740e7035f2c964c4615d7816ffd4dca99104389159bdcb1",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M10/ref_M10_sx423.f0"
+      },
+      {
+        "bytes": 831404,
+        "downloaded_at": "2026-10-22T15:54:29.873205+00:00",
+        "etag": "\"cafac-49fdc84887700\"",
+        "last_modified": "Fri, 01 Apr 2011 14:49:32 GMT",
+        "path": "records/train/M10/lar_M10_sx423.wav",
+        "recording_id": "M10_sx423",
+        "role": "lar",
+        "sha256": "61e10c2b2f1a8976d6840952ba6e4d3e132bc5c985f680a4d37873dd22752e34",
+        "split": "train",
+        "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M10/lar_M10_sx423.wav"
+      }
+    ],
+    "all_24_mic_lar_sample_counts_match": true,
+    "audio_format": {
+      "channels": 1,
+      "compression": "NONE",
+      "sample_rate": 48000,
+      "sample_width_bytes": 2
+    },
+    "audio_seconds": 172.97,
+    "data_tree_bytes": 43563148,
+    "files": 72,
+    "last_nominal_target_to_end_ms_range": [
+      54.0,
+      54.0
+    ],
+    "nonpositive_f0_positive_voicing_rows": 0,
+    "nonpositive_f0_rows": 13139,
+    "positive_f0_max_hz": 326.452911377,
+    "positive_f0_min_hz": 53.5937652588,
+    "positive_f0_zero_voicing_rows": 0,
+    "recording_ids": [
+      "F02_si645",
+      "F02_si822",
+      "F04_si1079",
+      "F04_si1146",
+      "F07_si1753",
+      "F07_sx316",
+      "F08_si1776",
+      "F08_si1812",
+      "F09_si2003",
+      "F09_si2040",
+      "F10_si2256",
+      "F10_sx423",
+      "M02_si645",
+      "M02_si822",
+      "M04_si1079",
+      "M04_si1146",
+      "M07_si1753",
+      "M07_sx316",
+      "M08_si1776",
+      "M08_si1812",
+      "M09_si2003",
+      "M09_si2040",
+      "M10_si2256",
+      "M10_sx423"
+    ],
+    "recordings": 24,
+    "reference_rows": 17153,
+    "split": "train",
+    "voicing_values": [
+      0.0,
+      1.0
+    ]
+  },
+  "reproduction": [
+    "cd research/voice-prosody && .venv/bin/python -m phenometrix_prosody.data inventory",
+    "cd research/voice-prosody && .venv/bin/python -m phenometrix_prosody.data acquire --split train --per-speaker 2 --roles mic,ref,lar",
+    "cd research/voice-prosody && .venv/bin/python -m phenometrix_prosody.data probe"
+  ],
+  "runtime": {
+    "machine": "arm64",
+    "platform": "macOS-26.2-arm64-arm-64bit",
+    "python": "3.11.15"
+  },
+  "schema": "phenometrix-ptdb-inventory-audit-v1",
+  "seed": 20261022,
+  "source_base_revision": "7e10705a562688f8582ec99c94495f9ba0b645ad",
+  "sources": [
+    {
+      "bytes": 10632,
+      "downloaded_at": "2026-10-22T15:51:55.431156+00:00",
+      "sha256": "847881b51c2201e06172b269d6b5cb1a7920b5b8f8222be1def8e35e3fa87e3d",
+      "url": "https://www.spsc.tugraz.at/databases-and-tools/ptdb-tug-pitch-tracking-database-from-graz-university-of-technology.html"
+    },
+    {
+      "bytes": 1534,
+      "downloaded_at": "2026-10-22T15:51:55.949571+00:00",
+      "sha256": "4f658327ec4d927d3032cf37bcc614a0c0652a2574e2d16a648ad449fd7eae14",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/DOCUMENTATION/SPEAKER-PROFILES.txt"
+    },
+    {
+      "bytes": 2713,
+      "downloaded_at": "2026-10-22T15:51:56.491515+00:00",
+      "sha256": "f4df7494f6798b970972b30258d238cd349ba0fe8ee1db0c8c4a333ec100c3d6",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/DOCUMENTATION/RECORDING-PROTOCOL.txt"
+    },
+    {
+      "bytes": 144539,
+      "downloaded_at": "2026-10-22T15:51:57.506277+00:00",
+      "sha256": "46683a8d0bfa90c9ea6f32edcba3537ba731ce953f1b547b44a4676a282312e9",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/DOCUMENTATION/TIMIT-PROMPTS.txt"
+    },
+    {
+      "bytes": 57,
+      "downloaded_at": "2026-10-22T15:51:58.025783+00:00",
+      "sha256": "cc08fb4d637854d55dfec0bfbde192e601d688664cdd89c8a89ac41e99b02355",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH_DATA_ZIPPED.zip.md5"
+    },
+    {
+      "bytes": 115,
+      "downloaded_at": "2026-10-22T15:51:58.538987+00:00",
+      "sha256": "ca035bb108b484f0cd4d8a23997e894aa278aa93c2fb76e61af1d69f31e7e7e1",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH_DATA_ZIPPED.zip.sha1"
+    },
+    {
+      "bytes": 25278,
+      "downloaded_at": "2026-10-22T15:51:58.774238+00:00",
+      "sha256": "607680718977f6f6c9607972afd98f208573f19251315ed1362a8589b51beaf5",
+      "url": "https://opendatacommons.org/licenses/odbl/odbl-10.txt"
+    },
+    {
+      "bytes": 2374,
+      "downloaded_at": "2026-10-22T15:51:58.954914+00:00",
+      "sha256": "3cbfa990f26df856c6a7d3fff3d1f236e3b0165b1e8257ca0d00f15758754f81",
+      "url": "https://opendatacommons.org/licenses/dbcl/dbcl-10.txt"
+    },
+    {
+      "bytes": 51217,
+      "downloaded_at": "2026-10-22T15:51:59.826798+00:00",
+      "sha256": "064bfb29a7ccc4526ade53f7d380ece7e7b49b299b1f77a18a9949ea0ac2bc8a",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F01/"
+    },
+    {
+      "bytes": 50981,
+      "downloaded_at": "2026-10-22T15:51:59.839842+00:00",
+      "sha256": "630d33e7ceac40276a47143c3866fdf9eb436be43dcf7f16aeb00cfbe9f28c77",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F01/"
+    },
+    {
+      "bytes": 51217,
+      "downloaded_at": "2026-10-22T15:51:59.839862+00:00",
+      "sha256": "d458b98fcfbdf37331dd7a70de592ea2de8411227c61ed6cf6a2cd9cb7341b53",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F01/"
+    },
+    {
+      "bytes": 51231,
+      "downloaded_at": "2026-10-22T15:51:59.808154+00:00",
+      "sha256": "42379345f3af4cf8fe2cb95da9f22211eae5fa73590389e5a02a50b820c731f1",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F02/"
+    },
+    {
+      "bytes": 50995,
+      "downloaded_at": "2026-10-22T15:52:00.730303+00:00",
+      "sha256": "b63525272ff719f07c40a36c4a49d6341caebf9d4bd86e65f424ea01914cf84f",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F02/"
+    },
+    {
+      "bytes": 51231,
+      "downloaded_at": "2026-10-22T15:52:00.706496+00:00",
+      "sha256": "eae7256b411f30b812d6c7e6e4782faa24f6143393d1686345dfd32ba9b708c7",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F02/"
+    },
+    {
+      "bytes": 51347,
+      "downloaded_at": "2026-10-22T15:52:00.688412+00:00",
+      "sha256": "d53b63cad4e047325bd80de4dee3df93bd3d37d4aec7ef8e0f7e4da13c94cbdb",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F03/"
+    },
+    {
+      "bytes": 51111,
+      "downloaded_at": "2026-10-22T15:52:00.706450+00:00",
+      "sha256": "6dcf8f40f5e57bc0e05d257268afe98c006f3c83423146738bbb626585e5e1c5",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F03/"
+    },
+    {
+      "bytes": 51347,
+      "downloaded_at": "2026-10-22T15:52:01.549707+00:00",
+      "sha256": "36c01a126901470d7f1b8d250d7d1957b5505aab58fda637110d649647882381",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F03/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:01.576243+00:00",
+      "sha256": "a18c246831ef5461e81f4e10e36a5d5b1cd3b1c8ed600554a35e4c6c483b99b4",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F04/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:01.595000+00:00",
+      "sha256": "7af5643fcf3035a0e20e505e176c0ee17d50280116eafef73f31d44c0feddf1e",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F04/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:01.584388+00:00",
+      "sha256": "72119fb9ae38759a10b9ee4c05ed1f7e4a10d86a8ba1fa42c1209e63eb5afa23",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F04/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:02.408445+00:00",
+      "sha256": "d1ccbd38d5435aac270553ff6f1a1100202f80d27b50fd18ca2c97af509cb48e",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F05/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:02.444885+00:00",
+      "sha256": "e6ede9830ebf4c059bfd11f010f7b17412faa93398168b66bdbad5c479739a46",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F05/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:02.444931+00:00",
+      "sha256": "4a55914bf3c21fc5ab2a47e7bd7202e74369471e0f28ce798d70bdc62df02a34",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F05/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:02.466647+00:00",
+      "sha256": "334fc19c9147a6c0d6e9e7354de61125eb7513569e0ea2f1133edb5327c8a403",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F06/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:03.280061+00:00",
+      "sha256": "ddc87dc3019a9dffc7f7a23c2eb7dcece006e6574d76537014b3488e4f08311d",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F06/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:03.653948+00:00",
+      "sha256": "717515d370a4213dd392dad6d341795d0298ff5695705cd14313a42b8aa8b6c7",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F06/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:04.664560+00:00",
+      "sha256": "95eb15604916eb65e0dbf4da7b7b215656b4bc19a84f0b46c9064bc0cb7a4009",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F07/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:03.681429+00:00",
+      "sha256": "5dbd0f42412dfdbe4dab01614744bc860dc9a809cfe3397103956c1aeca80e9b",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F07/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:04.188522+00:00",
+      "sha256": "6dd3b8bd7fe77b4310278bddf306e34d19982604069e79a87e4512413d50a0ce",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F07/"
+    },
+    {
+      "bytes": 51267,
+      "downloaded_at": "2026-10-22T15:52:04.530495+00:00",
+      "sha256": "5e225a6f75ec967d28819ffd542b2ac3b4d10f3f8ba9e3436280613f996f3828",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F08/"
+    },
+    {
+      "bytes": 51033,
+      "downloaded_at": "2026-10-22T15:52:05.513129+00:00",
+      "sha256": "6bbce03843b6b819664c16a0b77839969add978c8956a94e1e993a238e6a6c65",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F08/"
+    },
+    {
+      "bytes": 51267,
+      "downloaded_at": "2026-10-22T15:52:05.061315+00:00",
+      "sha256": "aedf7913df19e76ee46a598fdc25d9efc7debd044213343fa5dfd871059576f3",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F08/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:05.494778+00:00",
+      "sha256": "190da79a35051c3477c3b8254cd3fd830fd45b92918b1b24f135c2a4407c3e13",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F09/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:05.828176+00:00",
+      "sha256": "01a0ee2c80627e4648dac9e97d4b8815e37e237239be781da60192aca40dee07",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F09/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:06.332598+00:00",
+      "sha256": "04265580070ab8690d123212d9ef78fc5ee8b6fd26d3c2a4cd7e0138a25dfcbc",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F09/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:06.366406+00:00",
+      "sha256": "438a8ad5b463dce20d0f6b1071c5384085e78f3b0dd8ce7062c547f302280b2d",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/MIC/F10/"
+    },
+    {
+      "bytes": 51463,
+      "downloaded_at": "2026-10-22T15:52:06.552582+00:00",
+      "sha256": "57be35f280051020bea4821809fffe1316ffd1a63ce1b31b1d86af7ccf496bba",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/REF/F10/"
+    },
+    {
+      "bytes": 51699,
+      "downloaded_at": "2026-10-22T15:52:06.712964+00:00",
+      "sha256": "84064d4677a1af422a398ee0fb1311a089b4a2c96eb9b52b624922acb93feb8d",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/FEMALE/LAR/F10/"
+    },
+    {
+      "bytes": 51211,
+      "downloaded_at": "2026-10-22T15:52:07.212174+00:00",
+      "sha256": "dab3e553bbcd61cd7c09aaa1f703a117e9c5421e505cb742157942fc9ebd6d05",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M01/"
+    },
+    {
+      "bytes": 50975,
+      "downloaded_at": "2026-10-22T15:52:07.229841+00:00",
+      "sha256": "4dd95d9421482e9ba7aba9a48ceaa6e12c2b38248bdc15f425a502b9c4125fde",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M01/"
+    },
+    {
+      "bytes": 51211,
+      "downloaded_at": "2026-10-22T15:52:07.406989+00:00",
+      "sha256": "6f185681dfcb00293736321c2c698034d9fb27e8bae9d1a3703f0310b3418347",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M01/"
+    },
+    {
+      "bytes": 51225,
+      "downloaded_at": "2026-10-22T15:52:08.265703+00:00",
+      "sha256": "94d074ec13416796cf06fdfcc24f5e741b5b87c137b7ee673ee7515555465792",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M02/"
+    },
+    {
+      "bytes": 50989,
+      "downloaded_at": "2026-10-22T15:52:08.503214+00:00",
+      "sha256": "00cb3c658605a513375f042f05a0d384e3ce304fe21c032b70e492d127b4834d",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M02/"
+    },
+    {
+      "bytes": 51225,
+      "downloaded_at": "2026-10-22T15:52:08.107727+00:00",
+      "sha256": "a27f890fe25dccc73e1694446be00824e9a01ad3c21bc1ea8cc72c20a34555b8",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M02/"
+    },
+    {
+      "bytes": 51341,
+      "downloaded_at": "2026-10-22T15:52:08.445702+00:00",
+      "sha256": "45e8eb632cdaf2f725e8b7fc20e0a751cd3d0fc48fc1cfa54ab6ea7f268b8b56",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M03/"
+    },
+    {
+      "bytes": 51105,
+      "downloaded_at": "2026-10-22T15:52:10.164214+00:00",
+      "sha256": "ded539487bc22051bd4e79dfdbd6a96b24bb13ef058894b39ab2af0a0024bb02",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M03/"
+    },
+    {
+      "bytes": 51341,
+      "downloaded_at": "2026-10-22T15:52:09.688764+00:00",
+      "sha256": "d503914f184c6a3f403d711fcdfed41bfd7c89004447694b8f495ebb6a6b19fd",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M03/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:09.477539+00:00",
+      "sha256": "2547f598e1ba53256ce8397d0e95031a68c96bc0b65679dc3b7c4129b43c1bfe",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M04/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:09.525959+00:00",
+      "sha256": "8ea29fb5c48854c5015d17ca5b6782c32abd4773f37d5a1d8ae25564a41a61d1",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M04/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:10.331724+00:00",
+      "sha256": "55577d67a260704553a9e109e7f8083b12f8b23dfbe15cfb983330fa712dd771",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M04/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:11.115017+00:00",
+      "sha256": "fe48059a8269a47e9bffb5c36731d8e52b8a8ef0d802f2ada4e0120dafb8ff79",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M05/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:10.554483+00:00",
+      "sha256": "481ac302bd06a59c4df6b9070c8da092b69e202b191c843bf42e51bac5f01308",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M05/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:11.387787+00:00",
+      "sha256": "e3014b0b5920a92f1c19f7bf818fda1e324eaddb73af1e3406c09164063a7d83",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M05/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:11.555929+00:00",
+      "sha256": "da1e3ada01da9d13dcf0f7fd6f9e131f10d182b8cbc0ae4eb841c19946e644ea",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M06/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:11.956695+00:00",
+      "sha256": "b0be948d71407cba60dfc6fb6d690308f1afeca0fa44f14f15089d996b5c19cf",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M06/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:13.018593+00:00",
+      "sha256": "ca7b1ef9b1e3f44dc36c1d9f65db491a4f8f3935579f3b5a7e26a52bd82daf26",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M06/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:12.845106+00:00",
+      "sha256": "773559ad44ef1a2ea23d5ceef8d3196471845cc5f79a813daf37144a41314f3e",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M07/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:12.434154+00:00",
+      "sha256": "429f856e0615490457545417de482cd1581f3f810a974b2f71c7fe0bd1a30f2f",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M07/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:13.604402+00:00",
+      "sha256": "ffc9f7ebe678c441df56b4730eb3cc94cd2994b266498231247bb89f69f19ea2",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M07/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:13.314257+00:00",
+      "sha256": "f92ab1fe076e9dcce45b5e0c0a8720458ec9e77d9a814e4410ab54b2168223cb",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M08/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:13.700397+00:00",
+      "sha256": "0fdb234d8ac8d01cdeab76bc5d59b582e53c3e3971611b8c072253a15fc3e96b",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M08/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:13.887928+00:00",
+      "sha256": "e7229c1398e177511957717e37bde812fcd8dce721ac0b779646c76f6d124521",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M08/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:14.187767+00:00",
+      "sha256": "3bed9bebbecc4db9921b498d0c9223378936674a94a186c51ae856cb2765e590",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M09/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:14.998229+00:00",
+      "sha256": "cd86ac2fd0b5488a6096519cb51cbb98ab81014fcfaf58e1adc84ab69c3c5a4e",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M09/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:14.574085+00:00",
+      "sha256": "15e9286fa9362cc8e8c859b44db395fca47265d53a0f06b542ee58fccb75c9f0",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M09/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:14.759866+00:00",
+      "sha256": "887a8bc58b94c35bbf0d485fe3f598ad1f49565c79fa4a5ab26867bd0623b063",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/MIC/M10/"
+    },
+    {
+      "bytes": 51457,
+      "downloaded_at": "2026-10-22T15:52:15.039357+00:00",
+      "sha256": "e95312c7d659ad7afb80eeda90f76450d575979b9109487effdd455ffe8d3017",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/REF/M10/"
+    },
+    {
+      "bytes": 51693,
+      "downloaded_at": "2026-10-22T15:52:15.433228+00:00",
+      "sha256": "788f3a5c1dc307d5c738d468b6ed9156e5f781d30e77f4dd055818c32d71651a",
+      "url": "https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH%20DATA/MALE/LAR/M10/"
+    }
+  ],
+  "split_assignment": {
+    "development": [
+      1,
+      3
+    ],
+    "sealed_test": [
+      5,
+      6
+    ],
+    "train": [
+      4,
+      8,
+      7,
+      9,
+      10,
+      2
+    ]
+  },
+  "status": "inventory_and_file_contracts_pass; physiological_reference_timing_unresolved",
+  "uncertainties": [
+    "16+10*k ms is the report/Snack nominal grid, not independently validated physiological boundary timing.",
+    "Report gives a linear-phase Kaiser high-pass n=2400 but no filter invocation, compensation, crop, or producer-version record; a roughly25ms causal group delay is possible, not established.",
+    "Reference tail is54ms in every pilot file; do not extrapolate reference rows or confuse missing tail with unvoiced truth.",
+    "Pilot includes F0 below documented Snack60Hz default, so manual defaults do not establish production reference range.",
+    "Cycle probes show partial raw-sensor/reference correspondence but cannot choose a fixed timestamp correction.",
+    "No development or sealed-test audio/reference content acquired. No model benchmark or clinical claim is established."
+  ]
+}

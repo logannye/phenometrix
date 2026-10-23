@@ -1,0 +1,212 @@
+{
+  "schema": "phenometrix-harmonic-ranking-diagnosis-receipt.v1",
+  "status": "complete",
+  "scope": "Read-only frozen synthetic regression and checkpoint diagnosis; no fitting, no reserved/test data, no production change",
+  "full_local_diagnosis": {
+    "path": "research/voice-prosody/runs/harmonic-diagnosis-v1/diagnosis.json",
+    "sha256": "e4e6f4ab28358077b5d3aa6012fcc574468d6d87e4b2af673b047a0c803db647"
+  },
+  "exact_script_snapshot": {
+    "path": "benchmarks/voice-prosody/harmonic-ranking-diagnose.py",
+    "sha256": "b589c220b4726495f05fa175fed4b1967ddd6877110e505f5d7042db2aead158",
+    "byte_identical_to_run_script": true,
+    "execution_note": "Copy this snapshot into a NEW research/voice-prosody/runs/<name>/diagnose.py and invoke it there. Its output and source snapshot stay inside that ignored run directory; do not execute the public copy in place."
+  },
+  "reproduce_from_repository_root": [
+    "mkdir research/voice-prosody/runs/harmonic-diagnosis-replay-v1",
+    "cp benchmarks/voice-prosody/harmonic-ranking-diagnose.py research/voice-prosody/runs/harmonic-diagnosis-replay-v1/diagnose.py",
+    "OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=research/voice-prosody research/voice-prosody/.venv/bin/python research/voice-prosody/runs/harmonic-diagnosis-replay-v1/diagnose.py"
+  ],
+  "opened_source_input_sha256": {
+    "research/voice-prosody/runs/harmonic-diagnosis-v1/diagnose.py": "b589c220b4726495f05fa175fed4b1967ddd6877110e505f5d7042db2aead158",
+    "research/voice-prosody/runs/selector-factorial-v1/manifest.json": "df56e53be7399807f068616961ba9eac6ff1d6ce7dd76d6614166d79bbd664f5",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoint-freeze.json": "6362fcc7ef2422cbb2e3c96950f3cabf11afe1061d94b579784a6efd0ad504bf",
+    "research/voice-prosody/runs/selector-factorial-v1/prediction-freeze.json": "3d8b54af8f96669d5ce567060a1308a187d3c6cf24172e1ea06c0a2eadd4c271",
+    "research/voice-prosody/runs/selector-factorial-v1/metrics.json": "b65476a46d644d736dc2bb758aebf30b9cae2186be24664ac51ce983713c0c43",
+    "research/voice-prosody/phenometrix_prosody/selector_model.py": "9867920a51af56e8a497b95bbd548491699a6546d1b4c15abfba18bce6316724",
+    "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py": "6c844b1058d4eab9d6730d30514c9fa754f3acf286929bd9d59e3c0fc21ba31f",
+    "research/voice-prosody/phenometrix_prosody/model.py": "411a5c9572265473cc7566bf30bfe918fd08b2660e49e18195dc80ac7e3df7b5",
+    "research/voice-prosody/phenometrix_prosody/__init__.py": "5b94bb49fc8529ee5647f55980fd18f9a18f5be8b1038c6c74a72d6f116fdb62",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__nearest__seed20261022.pt": "7ba3819d5e791d07079dae900b9e6b510d7d2a2d641716f74e825ee810278092",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__nearest__seed20261023.pt": "3ef88152fd0a6e864330820ea181eba1767293bf3b18c13c87836cbbfdcb407f",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__nearest__seed20261024.pt": "74d2e7785b2a161fdf887ad4fd9caa1aa0cef91639455c213cbae6a1019af27c",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__acceptable-set__seed20261022.pt": "aa2f171312ada2a3897c8978970af8b68abadcf27ff9d842e09e851bb9c82cbd",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__acceptable-set__seed20261023.pt": "2432734b8f9411b3360f1e1a4ed82c74d265c726dac3b5b9ad01bc5e6d601a39",
+    "research/voice-prosody/runs/selector-factorial-v1/checkpoints/shared-candidates__acceptable-set__seed20261024.pt": "f057bc94b324fb47ee0b8008743ca0bad2b16dafd0e963c9b0c5d5c3b8309f55",
+    "research/voice-prosody/runs/delayed-known-truth/features/constant-100.npz": "e9cba2925100d95f23aece76c085a5cacda5ffbf2ed096880337ee66da1629d8",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/constant-100.json.gz": "4ff87e975a6c9cab1e0e9f73dd7930e5c0e05242c28d58a5717c397aa0e041be",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-constant-100.npz": "1fcdc2115da30013a74252456eec95c65f2394ac1534700d4670a0e72f2085c9",
+    "research/voice-prosody/runs/delayed-known-truth/features/constant-200.npz": "c657d5b0ad230fef8df290418e9df75415b21442935b0ece9bd1016ed469654a",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/constant-200.json.gz": "3d66a9575363e668cc27f49da07fbf13ef721e83ec8982617cfb16983cff08c2",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-constant-200.npz": "a72360d2e5aaefe8284dcf4bc86a3fa534bce9cfe734f92cb53a4c32fad5fa77",
+    "research/voice-prosody/runs/delayed-known-truth/features/constant-300.npz": "cb41b3a9d922184255368a1903e0138dfb84a7b13d34d1787d1d69ec4248284a",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/constant-300.json.gz": "cbd142d1b4834556ef93b6537c71485a3f220520faae01905e0f8119affa8b43",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-constant-300.npz": "4e795780d654f66b8a06a8f831162ce366098196cee2cf8c6da865d93fc77f18",
+    "research/voice-prosody/runs/delayed-known-truth/features/observation-change-100.npz": "385e14e4ee45d518362ebd62cfba35d3433121487a4226a5435c9bf5df7694af",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/observation-change-100.json.gz": "1bc869d687539b5a05ffb52c2b61140d4917f5159d9826f2531e87aedda2861b",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-observation-change-100.npz": "c708d4309854b24a4436d9da5e157d393b391db4286a8f104db54e6f3e4cdd47",
+    "research/voice-prosody/runs/delayed-known-truth/features/observation-change-200.npz": "0d2bfb637017f28724f194b47aa28dd901a675e32312343d6bde6303d8007ccb",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/observation-change-200.json.gz": "3722d25d3e081f217b77997eb461f8bbde198bbe4f99b21dc6768b125a232679",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-observation-change-200.npz": "db19d5530407eafb35853945985aa2e91480000e543d0ce86f265257b43d6c64",
+    "research/voice-prosody/runs/delayed-known-truth/features/observation-change-300.npz": "4b923087ba6398b23b5050f0adfeb3d419e15280df65748b712cfc8b8bd9f897",
+    "research/voice-prosody/runs/delayed-known-truth/predictions/observation-change-300.json.gz": "09014bb9df5c5900d996622f41d7943b78c37f81ecc0500236d1996d1c92b355",
+    "research/voice-prosody/runs/selector-factorial-v1/predictions/synthetic-observation-change-300.npz": "d06de49b4f719470961db7e1f71d7aaa4ce017c99f6b2c0fd4a51d9ffaef1d3e"
+  },
+  "frozen_prediction_decision_parity": {
+    "cpu_frame_model_comparisons": 5616,
+    "mismatches": 0,
+    "fixture_count": 6,
+    "selector_checkpoints": 6
+  },
+  "waveform": {
+    "f0_hz": 300,
+    "sample_rate_hz": 48000,
+    "change_seconds": 0.6,
+    "gain": 0.075,
+    "before_harmonic_coefficients": [
+      1,
+      0.5,
+      0.25
+    ],
+    "after_harmonic_coefficients": [
+      0,
+      1,
+      0.5
+    ],
+    "phases_radians": [
+      0,
+      0,
+      0
+    ],
+    "source": "research/voice-prosody/phenometrix_prosody/evaluate_synthetic.py"
+  },
+  "postchange_300": {
+    "frames": 95,
+    "correct_group_available_frames": 95,
+    "frozen_original_voicing_positive_frames": 95,
+    "per_model": {
+      "shared-candidates__nearest__seed20261022": {
+        "correct_frames": 95,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": 1.6946637630462646,
+          "median": 1.6972019672393799,
+          "max": 1.6972019672393799,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      },
+      "shared-candidates__nearest__seed20261023": {
+        "correct_frames": 95,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": 1.2659900188446045,
+          "median": 1.2687699794769287,
+          "max": 1.2687699794769287,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      },
+      "shared-candidates__nearest__seed20261024": {
+        "correct_frames": 95,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": 1.647125482559204,
+          "median": 1.6479628086090088,
+          "max": 1.6479628086090088,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      },
+      "shared-candidates__acceptable-set__seed20261022": {
+        "correct_frames": 95,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": 1.1490048170089722,
+          "median": 1.1490048170089722,
+          "max": 1.1529394388198853,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      },
+      "shared-candidates__acceptable-set__seed20261023": {
+        "correct_frames": 0,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": -0.15160131454467773,
+          "median": -0.15160131454467773,
+          "max": -0.14618682861328125,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      },
+      "shared-candidates__acceptable-set__seed20261024": {
+        "correct_frames": 95,
+        "frames": 95,
+        "correct_minus_wrong_logit_margin": {
+          "min": 1.1782718896865845,
+          "median": 1.1782718896865845,
+          "max": 1.1798080205917358,
+          "finite_count": 95,
+          "nonfinite_unopposed_count": 0
+        }
+      }
+    }
+  },
+  "mechanism_evidence": {
+    "failed_model": "shared-candidates__acceptable-set__seed20261023",
+    "before_success": {
+      "correct": 52,
+      "frames": 52
+    },
+    "boundary_success": {
+      "correct": 4,
+      "frames": 4
+    },
+    "after_success": {
+      "correct": 0,
+      "frames": 95
+    },
+    "before_best_correct_logit": 3.8578262329101562,
+    "after_best_correct_logit": 4.02117395401001,
+    "before_100hz_alias_logit": 0.3482567071914673,
+    "after_100hz_alias_logit": 4.1727752685546875,
+    "after_alias_hz": 99.9956978234305,
+    "after_correct_group_hz": 299.8895877586632,
+    "after_alias_evidence": {
+      "amdf": 0.9994864463806152,
+      "acf40_refined": 0.9999871850013733
+    },
+    "after_correct_group_evidence": {
+      "acf20_refined": 0.9846493005752563
+    },
+    "after_other_acceptable_hz": 296.2962962962963,
+    "after_other_acceptable_autocorrelation": 0.9845784306526184,
+    "after_original_voicing_probability": 0.9379865418307538,
+    "maximum_absolute_candidate_training_z_before": 5.5760579109191895,
+    "maximum_absolute_candidate_training_z_after": 5.574700832366943,
+    "maximum_absolute_global_training_z_after": 2.9148809909820557,
+    "candidate_embedding_abs_above_point99_fraction_before": 0.0078125,
+    "candidate_embedding_abs_above_point99_fraction_after": 0.01875000074505806
+  },
+  "interpretation": [
+    "The correct near-300-Hz candidates remain available and the frozen voicing head is positive.",
+    "The failed seed ranks the approximately threefold-period alias above the correct candidate after the source-evidence pattern changes.",
+    "The correct candidate logit increases slightly; the competing alias logit increases much more.",
+    "All six selectors pass all 100/200/300 stationary cases and the 100/200-Hz observation changes. Five of six pass the 300-Hz postchange region.",
+    "The passing checkpoints show this representation can express a correct choice on these fixtures; they do not establish generalization or isolate the loss as a cause.",
+    "The inspected z-scores do not show a new gross scaling blowup; joint feature-distribution support has not been established."
+  ],
+  "failure_history_preserved": {
+    "prior_run": "research/voice-prosody/runs/selector-factorial-v1",
+    "prior_checkpoint_or_source_modified": false,
+    "old_postchange_failure_reclassified": false,
+    "gate_relaxation": false
+  },
+  "limitations": [
+    "This diagnoses six existing analytic regression fixtures only.",
+    "Training scaling z-scores are descriptive; they do not establish joint distribution support.",
+    "Six distinct frozen checkpoints are compared; no causal attribution to loss alone is possible.",
+    "No parameters, features, thresholds, candidates, references or gates are changed."
+  ]
+}

@@ -36,3 +36,11 @@ data/
 # Built host integration bundles
 **/dist-embedded/
 **/dist-library/
+
+# Public-corpus research outputs stay separate from encounter records.
+research/voice-prosody/runs/
+research/voice-prosody/cache/
+research/voice-prosody/checkpoints/
+
+# Private source request.
+research/voice-prosody/SPECIFICATION.md
