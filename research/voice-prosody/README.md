@@ -24,6 +24,32 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Exposure and acoustic-evidence feasibility
+
+The latest [bounded study](EVIDENCE_RESULTS.md) stopped at its TRAIN-support
+prerequisite, before fitting. The fixed 512-case bank supplied 3,660 added-only
+correct-candidate rows across 32 configurations, but only **4 distinct carriers
+against a floor of 6**. The counterexample stratum passed. All gates remain
+unchanged; training exposure versus candidate-conditioned acoustic evidence is
+still an untested comparison.
+
+The shipped research harness includes a trailing-window periodicity feature in
+TypeScript and NumPy, a zero-initialized residual scorer, frozen study/sampling
+contracts, independent support and terminal audits, and a local HTML failure
+report. These components passed the full 938-test research suite; the required
+repository structure check passed. Neither model promotion nor new browser
+qualification follows from these engineering checks.
+
+The [fixed plan](EVIDENCE_EXPERIMENT_PLAN.md),
+[aggregate summary](../../benchmarks/voice-prosody/evidence-study-summary.json),
+[feasibility audit](../../benchmarks/voice-prosody/evidence-feasibility-independent-audit.json),
+[terminal audit](../../benchmarks/voice-prosody/evidence-study-independent-audit.json),
+and [local validation](../../benchmarks/voice-prosody/evidence-local-validation.json)
+retain the no-go and repair lineage. All 74 consumed cases remain historical
+regressions, without rerunning them; the twelve reserved fresh configurations
+remain ungenerated. The overnight authorization has ended. See the results for
+commands that inspect saved artifacts without launching an experiment.
+
 ## Additive candidate pool and matched retraining
 
 The [six-fit study](EXPANDED_POOL_RESULTS.md) preserves every original raw

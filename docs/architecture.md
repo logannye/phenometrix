@@ -350,3 +350,24 @@ verify retention, grouping, training exposure, outputs and unchanged gates.
 This is an offline experiment without production promotion or new browser
 qualification. See the [fixed plan](../research/voice-prosody/EXPANDED_POOL_PLAN.md)
 and [results](../research/voice-prosody/EXPANDED_POOL_RESULTS.md).
+
+
+The exposure/evidence study adds research-only `periodicity_evidence` kernels
+in TypeScript and NumPy. Their contract uses the existing trailing 1,920 samples
+at 48 kHz and the actual emitted grouped candidate frequency, returning period
+correlation, subperiod contrast, and explicit validity. Grouping happens first;
+no future samples, candidate eviction, or new voicing inputs are introduced.
+`evidence_selector_model` adds a zero-initialized three-weight residual while
+preserving the base scorer and original MLP voicing. `evidence_feasibility`
+checks TRAIN support before schedules or fits; `evidence_experiment` binds source,
+input, schedule, checkpoint, and prediction chronology for a prospective 2×2×3
+comparison. A failed prerequisite blocks every dependent scientific stage.
+
+Independent `audit_evidence_feasibility` and `audit_evidence_scores` modules
+reconstruct support and verify source/artifact/repair identities, distinguishing
+an audit pass from a scientific pass. `local_evidence_report` produces a local,
+self-contained HTML view from hash-bound saved evidence, with unavailable model
+outcomes explicitly unassessed. The saved study stopped at insufficient carrier
+support with zero fits or fresh evaluation cases. No model export, default DSP
+change, or browser qualification occurred. See the
+[results](../research/voice-prosody/EVIDENCE_RESULTS.md).

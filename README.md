@@ -77,6 +77,7 @@ correctness and runtime behavior:
 | Expanded candidate pool with matched retraining | Development joint error **8.4589%**, versus **8.4020%** for the matched original pool; targeted 517.3/641.9 Hz selections remain **0/112** despite correct candidates on every post-change frame | Preserving the original candidates and retraining does not resolve selection errors. Unchanged advancement gates reject the expanded pipeline. |
 | Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
 | Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
+| Latest training-feasibility study | **512 synthetic TRAIN configurations**; 3,660 qualifying frames span **4 distinct frequencies**, below the required **6**; **zero fits** | Independent audits confirm the stop decision. The proposed comparison of training exposure and acoustic evidence remains untested. |
 
 Natural joint error counts incorrect voicing, unavailable outputs, and pitch
 errors greater than 50 cents. Results average speakers and conditions equally.
@@ -85,7 +86,8 @@ which is separate from processing latency. The natural references are
 laryngograph-derived PTDB-TUG labels; this is one corpus, not external clinical
 validation. The reserved sample is now consumed and cannot serve as a fresh
 holdout again. Some transformed-speech strata remain substantially worse than
-the aggregate.
+the aggregate. The expanded-pool figures use reused development speech and
+are not directly comparable to the reserved-speaker results.
 
 The browser run was a source-frozen functional replay on an Apple M4 Max with
 128 GiB RAM, not a controlled hardware benchmark or a real-microphone latency
@@ -93,33 +95,23 @@ study. Queue bounds do not establish whole-browser heap bounds. Full methods,
 strata, failures, uncertainty, and timing definitions are in the
 [natural-speech and browser validation report](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md).
 
-Earlier [augmentation](research/voice-prosody/AUGMENTATION_RESULTS.md) repaired
-337.1/354.5 Hz failures under both stationary and changing harmonic balance;
-a specific benefit from harmonic-change training was not established. A later
-[candidate-retention study](research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md)
-restored missing candidates but displaced useful hypotheses elsewhere.
+The ML research separates three sources of error: whether the correct pitch is
+available, whether the model selects it, and whether the output is reliable
+enough to report. Earlier augmentation repaired specific harmonic-balance
+failures, but adding correct candidates and retraining still left systematic
+selection errors. The [expanded-pool study](research/voice-prosody/EXPANDED_POOL_RESULTS.md)
+records those failures alongside its modest increase in candidate coverage.
 
-The latest study preserves the original pool and adds one acoustic hypothesis,
-then compares six matched local fits across two pool sizes and three seeds.
-On reused development speech, raw correct-candidate coverage improves from
-**88.1304% to 88.2399%**, but the retrained expanded pool has higher joint error
-than the matched original pool. Holding the previous weights fixed gives
-**8.4018%** with the original pool and **8.4339%** with the expanded pool;
-retraining the expanded pool does not improve either control.
-
-Both pools, with either old or retrained weights, retain the 337.1/354.5 Hz
-repairs across all three seeds, but still miss all **112 post-change frames** at 517.3/641.9 Hz in both phases.
-Of twelve new synthetic configurations, ten score **112/112** for every selector.
-At 633.1 Hz, all selectors score only **24/112** and **23/112** across the two
-phases, despite expanded-pool coverage of **112/112**. These are within-family
-synthetic checks, not evidence of external generalization. The
-[study report](research/voice-prosody/EXPANDED_POOL_RESULTS.md) and
-[aggregate evidence](benchmarks/voice-prosody/expanded-pool-summary.json) retain
-all 62 earlier cases, the twelve fresh cases, and unchanged advancement gates.
-Independent [scoring](benchmarks/voice-prosody/expanded-pool-independent-audit.json)
-and [inference](benchmarks/voice-prosody/expanded-pool-inference-audit.json) audits
-passed. This reused development set remains exploratory evidence, separate
-from the reserved-speaker evaluation above.
+The latest work adds a compact, causal periodicity feature and a controlled
+study designed to distinguish missing training exposure from missing acoustic
+evidence. Its training-feasibility gate stopped the experiment: many qualifying
+frames came from too few distinct frequencies. Two independent audits verified
+the no-go and preserved the failed preparation attempt and its repair. No new
+model was fitted and no fresh evaluation case was consumed. The
+[results and validation report](research/voice-prosody/EVIDENCE_RESULTS.md)
+explains the feature, support counts, local failure viewer, and unchanged gates.
+This establishes a more inspectable research system; it does not establish an
+accuracy improvement from the new feature.
 
 **The learned estimator remains a no-go for promotion.** Voicing and candidate
 probabilities are uncalibrated; benchmark improvements do not establish clinical
