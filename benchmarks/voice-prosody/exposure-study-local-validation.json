@@ -1,0 +1,177 @@
+{
+  "base_commit": "5e33e118a6da247bc6cabe05ad91eb9d1fbcf95a",
+  "checks": {
+    "final-research-tests": {
+      "elapsed_seconds": 14.38771333405748,
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/final-research-tests.log",
+        "sha256": "a97fd6f9ca4daeb763eeae29dcc0996ace645b02d08ee4bf069c8bfca677b909"
+      },
+      "pass": true,
+      "passed": 1210,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/final-research-tests.json",
+        "sha256": "f436576f84e359049dac5fb7457ad5697575b8df5db197f17cd498f8e32b639e"
+      },
+      "sources_unchanged": true,
+      "warnings": 3
+    },
+    "npm-check": {
+      "elapsed_seconds": 1.277979708276689,
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/npm-check.log",
+        "sha256": "733a3c3a80838eed72f1ae136613af2c94c3544b64e107f45c5b0f8c29acd8a4"
+      },
+      "pass": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/npm-check.json",
+        "sha256": "1923637b1502c240faa606ad3c7bc31a1ace37b49f0c7a26f1691572d005b2f2"
+      }
+    },
+    "postrun-research-tests": {
+      "elapsed_seconds": 17.694228999782354,
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/postrun-research-tests.log",
+        "sha256": "fd35bdd7588681aae60e39ce762317dbe13c0e1fb8171ae86e0ccca8faeba21f"
+      },
+      "pass": true,
+      "passed": 1147,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/postrun-research-tests.json",
+        "sha256": "010d3ebda0b93cb350077fb6468c1aa3f923232fb60380b9625d8c3e5e981c0a"
+      },
+      "sources_unchanged": true,
+      "warnings": 3
+    },
+    "preflight-research-tests": {
+      "elapsed_seconds": 15.035485458094627,
+      "log": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/preflight-research-tests.log",
+        "sha256": "dc08f542ff5b91d898df16a1b444ea6dbeeb7fcbbb7eadb9f2e59232dbcd303c"
+      },
+      "pass": true,
+      "passed": 1119,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/preflight-research-tests.json",
+        "sha256": "ff3ae05fbe7d7442b280373ae7b83b9e004390e03a11707a07eec65646238dc6"
+      },
+      "sources_unchanged": true,
+      "warnings": 3
+    },
+    "saved_result_audit": {
+      "pass": true,
+      "posthoc": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-v1/forensic-audit-v2.json",
+        "sha256": "031149f640c74c7799393355202dc5a4aa1a2a2d47d3fe9807542b2aea6fe85d"
+      },
+      "scientific_run_status": "failed"
+    },
+    "supervisor_lifecycle": {
+      "passed": 23,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-execution-v1/supervisor-toy-tests-attempt3.json",
+        "sha256": "9cbd6cbe3004f0705b2c49f7175105738a6b985c008ea3e69a6d8ad87d5120ed"
+      }
+    },
+    "terminal_resource_audit": {
+      "check_count": 33,
+      "execution_returncode": 1,
+      "execution_status": "failed",
+      "limitations": [
+        "RSS, disk and process metrics are sampled observations, not hard OS-enforced ceilings or full between-poll process history.",
+        "MPS current-allocation and fitting-time limits are producer-reported internal guards; driver allocation is descriptive, not the8GiB guarded quantity.",
+        "Producer Node RSS covers the persistent peak worker; external per-descendant sampling additionally covers observed transient replay processes.",
+        "No raw resource sample trajectory is retained by the supervisor; aggregate peaks and terminal state are audited.",
+        "This receipt intentionally preserves failed run status. Numerical/scientific claims require their own separately authorized independent audit."
+      ],
+      "pass_result": true,
+      "receipt": {
+        "availability": "local ignored evidence; not distributed",
+        "path": "research/voice-prosody/runs/exposure-study-validation-v1/terminal-resource-audit.json",
+        "sha256": "a22b72cb6e5c0ff5defb466c2375b29bbee0b2c5910ed9c52afe8b81d9bc3554"
+      },
+      "recorded_external": {
+        "cleanup": {
+          "individual_signals": [],
+          "remaining_pids": [],
+          "returncode": 1,
+          "signals": []
+        },
+        "descendant_rss_peak_bytes": 103809024,
+        "elapsed_seconds": 562.7682037921622,
+        "group_rss_peak_bytes": 7340998656,
+        "maximum_scientific_seconds": 10800,
+        "maximum_watchdog_seconds": 10830,
+        "minimum_free_bytes": 297427668992,
+        "new_output_peak_bytes": 243476041,
+        "observed_escaped_descendant_pids": [],
+        "observed_process_count": 8,
+        "python_rss_peak_bytes": 7241269248
+      },
+      "recorded_internal": {
+        "fit_elapsed_seconds": 159.27472162479535,
+        "output_bytes": 243333879,
+        "peak_observed_mps_allocated_bytes": 179058432,
+        "peak_observed_mps_driver_allocated_bytes": 1132478464,
+        "peak_observed_node_rss_bytes": 113754112,
+        "peak_observed_python_rss_bytes": 7253983232
+      },
+      "scientific_run_success": false,
+      "source_preservation": {
+        "count": 82,
+        "current_mismatches": [],
+        "snapshot_mismatches": []
+      }
+    }
+  },
+  "local_only": true,
+  "not_run": [
+    "installs",
+    "native or Rust builds",
+    "remote compute",
+    "new natural-data acquisition",
+    "model export",
+    "browser qualification",
+    "product/browser/database/native build suites"
+  ],
+  "posthoc_source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_forensic.py": "6c58d44c6a5ccc607139a300a9c2fc7c669acf633d36868f158bd2b72950f819",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_forensic_v2.py": "1c519eb2261ce0203c9158742d5f94ee947b2305409e3d8b622969385cc01193",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_strict_analytic.py": "eecbfbf29ebef2ed5c9decaf937fcb0581be70652bb80912fa940097561cfef6",
+    "research/voice-prosody/tests/test_audit_exposure_forensic.py": "08360be60b2faa280ead1cbb41155422cd73300917cf3ad6d952a4309d243739",
+    "research/voice-prosody/tests/test_audit_exposure_forensic_v2.py": "777092ec2b5af6219b41f3082ac681b0ec04e61b7fead3e413fffcc88147308c",
+    "research/voice-prosody/tests/test_exposure_reporting_failure.py": "cede6041cf059a3c9b59bc4d918bc672babe4523d228a3f640a5e26c12158821"
+  },
+  "preflight": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/exposure-study-validation-v1/preflight.json",
+    "sha256": "7cde3a7b07a83c091023ff82754980b54899ef2e7dc8b5e01f31b2daf7898288"
+  },
+  "preserved_reporting_failure_fixture": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/exposure-study-reporting-failure-v1/receipt.json",
+    "sha256": "feac0266481721f17f851eefa58271ad6072fb5c728818e934d361889523c974"
+  },
+  "preserved_scientific_execution": {
+    "availability": "local ignored evidence; not distributed",
+    "path": "research/voice-prosody/runs/exposure-study-execution-v1/execution.json",
+    "sha256": "61aed9bd4ca5585bca4aff53aa5c547f985d023994d3ae59339a1ae75f4a6f9a"
+  },
+  "publication_scope": "Source, tests, aggregate evidence and documentation only; PCM, features, references, weights, frame predictions and full ledgers stay ignored locally.",
+  "schema": "phenometrix-exposure-local-validation.v1",
+  "warnings": [
+    "Three historical NumPy matmul warnings in model.py; assertions pass and cause remains unestablished.",
+    "Scientific scoring emitted a PyTorch non-writable NumPy-view warning; exact saved target/output checks are separately audited."
+  ]
+}

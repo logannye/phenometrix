@@ -1,0 +1,168 @@
+{
+  "audit_source_sha256": {
+    "research/voice-prosody/phenometrix_prosody/audit_augmentation_experiment.py": "642cce03b8074618b357daec232ddae6c27c1101d5e6860b281f79be80dde423",
+    "research/voice-prosody/phenometrix_prosody/audit_candidate_coverage.py": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_feasibility.py": "cdacd1e89cae1f05bd8855c549a835a6ad7478415ee1bb198fee57867b9a47c7",
+    "research/voice-prosody/phenometrix_prosody/audit_evidence_scores.py": "0d743cf9fd91030b001bb7e3ab0890a99c3275ab12bf9a385833f32b8a105830",
+    "research/voice-prosody/phenometrix_prosody/audit_expanded_pool.py": "7c0f110840ea713c9cb0674624c2460261571930117fa5a00e19b5b70a1f65eb",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_forensic.py": "6c58d44c6a5ccc607139a300a9c2fc7c669acf633d36868f158bd2b72950f819",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_forensic_v2.py": "1c519eb2261ce0203c9158742d5f94ee947b2305409e3d8b622969385cc01193",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_strict_analytic.py": "eecbfbf29ebef2ed5c9decaf937fcb0581be70652bb80912fa940097561cfef6",
+    "research/voice-prosody/phenometrix_prosody/audit_exposure_study.py": "baf722bdc39e910e7030ba237ec7b6dbed04c0f78ae3e77bf2b82a84bf3b1c8b",
+    "research/voice-prosody/phenometrix_prosody/audit_frequency_diversity.py": "f03d6436108e1c35e4d473d054b6d3a3775f9c7c7a60ef922155e9536b096891",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_experiment.py": "980b376cdbe547196dcf666dcdde9c3d18de4eacae3420d1eab0a5149e11b404",
+    "research/voice-prosody/phenometrix_prosody/audit_harmonic_inference.py": "8a0d2f57253d07bcfe584a70df624529d7424744dd70cc7cde43fa7c99edc9bb",
+    "research/voice-prosody/phenometrix_prosody/audit_selector_experiment.py": "5d2991f7cd12142809cfb1ba8eeee915bc469406d07dcb390a2da0dc42e2916c",
+    "research/voice-prosody/phenometrix_prosody/audit_subharmonic_experiment.py": "6087f9df4be46655645b9ab0d7eb1499bc48f9d7911187cd2555f6ca75760e61",
+    "research/voice-prosody/phenometrix_prosody/harmonic_selector_model.py": "260932b14d61f55c2046e845e81b17b0840cbb4ade5a4f196ba016d61917c15e",
+    "research/voice-prosody/phenometrix_prosody/metrics.py": "dd91c76e74b51c507ebd34846e82b4b1a4392edea904dbfddc3d8180b5071ab8",
+    "research/voice-prosody/tests/test_audit_evidence_scores.py": "00356babb4d2995d900aaf6644bc4d7450f38f38be3c6a6b8bd2f5986819b329",
+    "research/voice-prosody/tests/test_audit_exposure_forensic.py": "08360be60b2faa280ead1cbb41155422cd73300917cf3ad6d952a4309d243739",
+    "research/voice-prosody/tests/test_audit_exposure_forensic_v2.py": "777092ec2b5af6219b41f3082ac681b0ec04e61b7fead3e413fffcc88147308c",
+    "research/voice-prosody/tests/test_audit_exposure_study.py": "b6cefad201cf71cbabd4a2c686eb5b1b304092cbf3e70645eddda91b5788fa0a",
+    "research/voice-prosody/tests/test_evidence_selector_model.py": "41c402e38700c5854e7b72e38e118ef2755731be8e83afcf742f87158190fc5b"
+  },
+  "bindings": {
+    "forensic-audit-v2.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/forensic-audit-v2.json",
+      "sha256": "031149f640c74c7799393355202dc5a4aa1a2a2d47d3fe9807542b2aea6fe85d"
+    },
+    "forensic-audit.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/forensic-audit.json",
+      "sha256": "187258fb3e3db3038c805289e0f1ce8fdd62a8aa853a74375723a8fa05357777"
+    },
+    "independent-audit.json": {
+      "availability": "local ignored evidence; not distributed",
+      "path": "research/voice-prosody/runs/exposure-study-v1/independent-audit.json",
+      "sha256": "5d4028968cd86cb3717d097ee64be6b6f59dcf73d7e2b4d8f78665fed2ba5251"
+    }
+  },
+  "bound_artifacts": 16349,
+  "checkpoint_checks": {
+    "checkpoints": 12,
+    "fit_elapsed_seconds": 159.27472162479535,
+    "initial_tensor_sha256": {
+      "20261022": "b3ed81c51ce9afd1729de468c6512a93a9e7d48fe32690eac3899873dddad91c",
+      "20261023": "fa44abfef15fe978a976a64bbeb355531ae7698b7ea1acd8f1291ac275ba0ddb",
+      "20261024": "320e8741479e07b8c90c888cd15d6af81b47c30c013910f36b18bc0e5a167a94"
+    },
+    "optimizer_replay_performed": false,
+    "optimizer_updates_each": 396,
+    "original_six_scaling_exact": true,
+    "parameters_each": 3012
+  },
+  "checkpoint_inference_performed": true,
+  "combined_audit_elapsed_seconds": 327.5142596666701,
+  "control_frame_pairs": 808428,
+  "elapsed_seconds": 156.71366850007325,
+  "frozen_failed_attempt_audit": {
+    "bound_artifacts": 13655,
+    "elapsed_seconds": 2.409334958065301,
+    "failure_inventory": {
+      "attempted_fits": 12,
+      "completed_fits": 12,
+      "failure": "TypeError('Object of type bool is not JSON serializable')",
+      "fresh_directory_present": true,
+      "no_retry_performed_by_auditor": true,
+      "qualification_complete": false,
+      "status": "failed"
+    },
+    "pass_result": true,
+    "qualification_complete": false,
+    "scientific_status": "failed"
+  },
+  "inference": {
+    "datasets": 406,
+    "explicit_cpu_equations": true,
+    "frame_model_comparisons": 3261936,
+    "hz_mismatches": 0,
+    "maximum_original_probability_difference": 2.43436102165262e-07,
+    "new_models": 12,
+    "original_voicing_frames": 271828,
+    "probability_absolute_tolerance": 1e-06,
+    "state_mismatches": 0,
+    "voicing_gate_mismatches": 0
+  },
+  "limitations": [
+    "This wrapper was declared after the failed run and observed outcomes; it is not a prospective scientific rerun.",
+    "The original scientific status remains failed. Passing saved-artifact verification does not repair finalization or relax any advancement gate.",
+    "Declared artifact chronology is not an operating-system reference-access log.",
+    "Optimization and TRAIN before/after logit diagnostics are not independently replayed.",
+    "Raw periodicity replay covers only the predeclared4608 synthetic TRAIN windows; no full candidate extractor or natural PCM replay.",
+    "Natural development is consumed; synthetic configuration freshness is not independent frequency support; no clinical or deployment qualification."
+  ],
+  "maximum_numeric_difference": 3.3306690738754696e-16,
+  "new_fits": 0,
+  "new_waveforms": 0,
+  "numeric_comparisons": 358684,
+  "original_metrics_sha256": "87cfe91b4e59bb366002f6a378d09ff28a51e7ab432c5213998d93b942009790",
+  "original_run_manifest_sha256": "5b88365a1fbd10e8e303c05f5996d4840e6755cb86aca6a276423b02bef8f980",
+  "pass_result": true,
+  "peak_observed_python_rss_bytes": 999522304,
+  "posthoc": true,
+  "preserved_first_forensic_failure": {
+    "elapsed_seconds": 166.80624804226682,
+    "failure": "ValueError('Fresh scenario differs')",
+    "pass_result": false,
+    "posthoc": true,
+    "scientific_status": "failed",
+    "status": "failed"
+  },
+  "qualification_scope": "Posthoc verification of already-saved checkpoints, predictions and scores only",
+  "raw_periodicity_replay": {
+    "acquired_rows_per_case": [
+      4,
+      80,
+      194
+    ],
+    "active_candidate_windows": 17530,
+    "all_training_evidence_arithmetic_frames": 319872,
+    "cases": 1536,
+    "channel_absolute_tolerance": 1e-07,
+    "common_row_ordinals": [
+      0,
+      76,
+      190
+    ],
+    "correlation_absolute_tolerance": 2e-13,
+    "exact_valid_period_anchor": true,
+    "frames": 4608,
+    "maximum_channel_difference": 7.105427357601002e-15,
+    "maximum_correlation_difference": 5.551115123125783e-16,
+    "scope": "Saved synthetic TRAIN PCM only; three fixed acquired windows per new-bank case; no full extractor or natural PCM replay"
+  },
+  "saved_artifact_checks_pass": true,
+  "schema": "phenometrix-exposure-posthoc-forensic-audit.v2",
+  "scientific_failure": "TypeError('Object of type bool is not JSON serializable')",
+  "scientific_gate_pass": false,
+  "scientific_status": "failed",
+  "scientific_status_changed": false,
+  "status": "complete",
+  "strict_scenario_admission": "All thirteen fields must exactly match the frozen twelve configurations; score equations and gates unchanged.",
+  "training": {
+    "counterfactual_scope": "bank and sampling change together; no isolated oversampling claim",
+    "epochs": 12,
+    "natural_grouped_zero_rows": 105,
+    "natural_schedule_arrays": 36,
+    "natural_union_rows": 132466,
+    "optimizer_replay_performed": false,
+    "synthetic_banks": {
+      "existing": {
+        "covered_rows": 18336,
+        "rows": 18336
+      },
+      "targeted": {
+        "covered_rows": 299196,
+        "rows": 301056
+      }
+    },
+    "synthetic_draws_per_epoch": 16896,
+    "synthetic_schedule_arrays": 72,
+    "targeted_origin_arrays": 36,
+    "targets_schedules_exposures_exact": true,
+    "train_logit_diagnostics_independently_recomputed": false,
+    "updates_per_fit": 396
+  }
+}

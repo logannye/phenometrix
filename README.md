@@ -77,7 +77,7 @@ correctness and runtime behavior:
 | Expanded candidate pool with matched retraining | Development joint error **8.4589%**, versus **8.4020%** for the matched original pool; targeted 517.3/641.9 Hz selections remain **0/112** despite correct candidates on every post-change frame | Preserving the original candidates and retraining does not resolve selection errors. Unchanged advancement gates reject the expanded pipeline. |
 | Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
 | Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
-| Latest TRAIN-only frequency-diversity study | **1,536 new synthetic configurations**; 11,456 added-only correct-candidate frames span **13 frequencies**, above the unchanged minimum of **6**; **zero fits** | A fixed refinement clears the training-support bottleneck on the new bank alone. It establishes candidate availability, with no new model-accuracy or generalization result. |
+| Exposure versus acoustic evidence: four arms, three seeds | Targeted exposure clears **78/78 analytic gates in every seed**, versus **72/78** with existing exposure; candidate development joint error is **8.4135%**, versus original MLP **8.6349%** | Targeted training repairs retained pitch-selection failures. The **0.2214 percentage-point** natural-error improvement misses the required **0.5-point** gate; promotion remains a no-go. Saved results survive a preserved terminal reporting failure. |
 
 Natural joint error counts incorrect voicing, unavailable outputs, and pitch
 errors greater than 50 cents. Results average speakers and conditions equally.
@@ -102,22 +102,25 @@ failures, but adding correct candidates and retraining still left systematic
 selection errors. The [expanded-pool study](research/voice-prosody/EXPANDED_POOL_RESULTS.md)
 records those failures alongside its modest increase in candidate coverage.
 
-The next ML question is whether selection failures come from insufficient
-training exposure or insufficient acoustic evidence. A compact, causal periodicity
-feature and a controlled comparison are implemented, but the
-[preceding study](research/voice-prosody/EVIDENCE_RESULTS.md) stopped before fitting:
-its qualifying TRAIN examples spanned only four frequencies against a minimum
-of six. That no-go and its failed preparation attempt remain preserved.
+A [frozen four-arm, three-seed study](research/voice-prosody/EXPOSURE_STUDY_RESULTS.md)
+now separates targeted training exposure from one compact causal acoustic
+feature. Using the audited 1,536-configuration TRAIN bank, targeted exposure
+repairs the retained 517.3, 633.1 and 641.9 Hz failures with the feature either
+off or on. The feature alone does not repair them, and adds only a small natural
+error reduction. This supports improving training exposure within this study;
+it does not show that acoustic evidence is unnecessary in general.
 
-The latest [TRAIN-only study](research/voice-prosody/FREQUENCY_DIVERSITY_RESULTS.md)
-refined a fixed frequency grid before execution and met every unchanged support
-floor using the new bank alone. An independent audit reconstructs the result
-from saved candidates. This supplies a more useful training bank for a future
-controlled learning experiment; no model was fitted and no evaluation case was
-consumed. Added-only examples still cluster at high frequencies and share simple
-noiseless waveforms, so the result establishes neither broad acoustic diversity
-nor improved natural-speech accuracy. The exposure-versus-evidence comparison
-remains untested.
+All four arms also succeed on all twelve fresh synthetic configurations, so
+those cases do not distinguish the interventions. The natural development set
+is reused, and the synthetic bank remains narrow, noiseless and associated with
+frequency. No external or untouched-speaker generalization is established.
+The run saved all twelve checkpoints, frozen predictions and metrics, then
+failed while printing its final summary. That execution failure remains
+preserved. A separate audit verified **3.26 million frame-model comparisons**
+with zero state or pitch mismatches, without repeating fits or generating more
+cases. The [prior support no-go](research/voice-prosody/EVIDENCE_RESULTS.md),
+[TRAIN coverage study](research/voice-prosody/FREQUENCY_DIVERSITY_RESULTS.md), and
+all observed failures remain part of the evidence.
 
 **The learned estimator remains a no-go for promotion.** Voicing and candidate
 probabilities are uncalibrated; benchmark improvements do not establish clinical

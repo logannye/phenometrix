@@ -397,3 +397,28 @@ export, or browser phase. A support pass does not authorize those stages or
 change a prior advancement decision. The default DSP estimator and production
 capture path remain unchanged. See the
 [TRAIN-only study plan](../research/voice-prosody/FREQUENCY_DIVERSITY_PLAN.md).
+
+The separately versioned `exposure_study` runner consumes the audited refined
+TRAIN bank through `exposure_inputs`; it does not regenerate that bank or alter
+the preceding coverage experiment. It crosses existing versus targeted exposure
+with the unchanged periodicity feature off versus on, under matched schedules,
+initialization and optimization. The predesignated candidate is fixed before
+fitting. Sources, prepared inputs and schedules, all twelve final checkpoints,
+and all predictions have separate ordered freezes. Reserved analytic inputs
+are generated only after the complete checkpoint freeze validates.
+
+`audit_exposure_study` independently reconstructs sampling, targets, model
+outputs, scores and conjunctive gates, while a fixed sample of saved TRAIN
+windows checks the acoustic channels against raw PCM. Scientific success,
+artifact consistency and resource observations remain separate results. A
+prerequisite or execution failure terminates dependent work and preserves its
+attempt; it does not authorize a retry or revised evaluation set. This remains
+an offline research boundary with no model export, browser qualification or
+default DSP change. See the
+[prospective study plan](../research/voice-prosody/EXPOSURE_STUDY_PLAN.md).
+
+The first exposure-study attempt retains a failed terminal state after a final
+stdout serialization error, despite saved checkpoints, predictions and metrics.
+A separate post hoc forensic audit qualifies those saved artifacts using the
+frozen independent equations and the actual failed manifest. It cannot rewrite
+the attempt status, regenerate evaluation inputs, refit models or change gates.
