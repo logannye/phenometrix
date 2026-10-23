@@ -1,0 +1,9 @@
+{
+  "schema": "phenometrix-independent-audit-repair.v1",
+  "attempt": 2,
+  "source_sha256": "14a0f69c5966039e6c1f32268dd3ccfcf0b27e0481728fd1bfae703f78085fbb",
+  "tests_sha256": "a1b93d78b4352318673091d9fa425b4331594aeea790bc6731ce0721b87ec632",
+  "error": "ValueError: regression/step-100-200/original__seed20261022/step: field inventory differs",
+  "reason": "Historical independent_step returns three numerical fields; reported object also has the frozen explanatory criterion string. Add explicit exact validation of that unchanged string. Natural scores, coverage/headroom and DEV checkpoint outputs passed before this schema-only failure; no scientific source or metric changed.",
+  "stderr_sha256": "3f6d9bf2e137d900ac22ac66b37ac29aa35996061b009279a250025f52e7216b"
+}

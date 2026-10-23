@@ -312,3 +312,19 @@ score, inference and coverage auditors reconstruct the saved evidence. This
 boundary remains offline research; the experiment cannot change browser capture
 or promote a model. See the [augmentation plan](../research/voice-prosody/AUGMENTATION_EXPERIMENT_PLAN.md)
 and [results](../research/voice-prosody/AUGMENTATION_RESULTS.md).
+
+
+The no-fit candidate-coverage study adds a research-only `coverage_peaks.ts`
+worker with a finite-PCM/endpoints interface. It reproduces the original full40
+maximum, then retains the shortest already-admitted maximum under unchanged
+thresholds and interpolation. `candidate_coverage_features` replaces only that
+source channel, preserves legacy/suffix evidence and records candidate eviction.
+The six-candidate layout remains fixed. The experiment runner uses the same
+three frozen balance-augmentation selectors and original-feature MLP voicing;
+revised inputs never enter the voicing head. `coverage_cases` binds twelve new
+configurations to the source/checkpoint freeze, and predictions freeze before
+reference scoring. Independent score and equation-replay auditors verify both
+policies and all 62 cases. This boundary remains offline: repaired target
+coverage does not repair selection, natural error rises, and unchanged gates
+reject advancement. See the [candidate-coverage plan](../research/voice-prosody/CANDIDATE_COVERAGE_PLAN.md)
+and [results](../research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md).

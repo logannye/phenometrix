@@ -74,7 +74,7 @@ correctness and runtime behavior:
 | Evaluation | Result | What it establishes |
 | --- | --- | --- |
 | Frozen natural-speech evaluation | Hybrid joint error **9.67%**, DSP **11.85%**, original candidate MLP **9.12%** across 160 recordings from four previously reserved speakers and four fixed conditions | The MLP-voicing/YIN-pitch hybrid improves on classical comparators, while its own MLP remains better on mean natural error. Predictions froze before reference acquisition. |
-| Controlled selector augmentation | **8.4018%** mean development joint error; both augmentation variants repair the earlier 337.1/354.5 Hz failures in every seed | A reproducible partial advance. Stationary and harmonic-change training perform nearly identically; the unchanged overall advancement gates still fail. |
+| Candidate retention with frozen selectors | At 517.3/641.9 Hz, correct-candidate coverage rises **0/112 → 112/112**, while correct selections remain **0/112** in both phases and all three seeds | Recovering a missing candidate is insufficient: the fixed selector still chooses incorrectly. Unchanged advancement gates reject the revised pipeline. |
 | Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
 | Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
 
@@ -93,16 +93,20 @@ study. Queue bounds do not establish whole-browser heap bounds. Full methods,
 strata, failures, uncertainty, and timing definitions are in the
 [natural-speech and browser validation report](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md).
 
-The latest augmentation study repairs known candidate-ranking failures, but its
-natural-error improvement over the original MLP is **0.233 percentage points**,
-below the predeclared 0.5-point requirement. Fresh 517.3/641.9 Hz harmonic-change
-cases fail because the candidate pool contains no correct post-change frequency;
-a selector cannot choose a missing candidate. Stationary augmentation repairs the
-same earlier failures, so a specific benefit from harmonic-change training is not
-established. The [study report](research/voice-prosody/AUGMENTATION_RESULTS.md) and
-[aggregate evidence](benchmarks/voice-prosody/augmentation-summary.json) retain all
-comparisons, failures, and independent audits. The development set is reused
-exploratory evidence, separate from the reserved-speaker evaluation above.
+Earlier [augmentation](research/voice-prosody/AUGMENTATION_RESULTS.md) repaired
+337.1/354.5 Hz ranking failures in every seed. Stationary augmentation repaired
+the same cases, so a specific benefit from harmonic-change training is not
+established. The latest study then changed candidate retention with those
+selector weights fixed and no new training. On reused development speech, raw
+candidate coverage of reference-voiced targets fell from **88.1304% to 87.6029%**
+and mean joint error rose
+from **8.4018% to 8.4571%**. Both policies passed all twelve new synthetic
+configurations, showing retained performance on those cases rather than a gain.
+The [study report](research/voice-prosody/CANDIDATE_COVERAGE_RESULTS.md) and
+[aggregate evidence](benchmarks/voice-prosody/candidate-coverage-summary.json)
+retain all fifty earlier cases, unchanged gates, and independent scoring and
+inference audits. This development set remains exploratory evidence, separate
+from the reserved-speaker evaluation above.
 
 **The learned estimator remains a no-go for promotion.** Voicing and candidate
 probabilities are uncalibrated; benchmark improvements do not establish clinical

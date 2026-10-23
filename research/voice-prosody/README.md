@@ -24,6 +24,38 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Candidate-coverage follow-up
+
+The [bounded no-fit study](CANDIDATE_COVERAGE_RESULTS.md) restores correct raw and
+grouped candidates at 517.3/641.9 Hz from 0/112 to 112/112 in both phases. The
+same three frozen selectors still choose incorrectly on all those post-change
+targets. Natural development error rises from 8.4018% to 8.4571%; coverage losses
+outweigh gains. All twelve fresh configurations pass under both policies, and
+all fifty old cases remain recorded. The unchanged gates reject advancement.
+
+The [prospective plan](CANDIDATE_COVERAGE_PLAN.md) fixes one replacement policy:
+retain the shortest already-admitted full-window autocorrelation peak in the
+existing six-candidate budget. No thresholds, voicing, weights, scaling, timing
+or grouping rules change. The whole experiment runs locally on CPU with zero
+fits; previous browser timings do not qualify this offline path. See the
+[aggregate evidence](../../benchmarks/voice-prosody/candidate-coverage-summary.json),
+[independent scoring](../../benchmarks/voice-prosody/candidate-coverage-independent-audit.json),
+[checkpoint replay](../../benchmarks/voice-prosody/candidate-coverage-inference-audit.json)
+and [local validation](../../benchmarks/voice-prosody/candidate-coverage-local-validation.json).
+
+With the pinned environment and historical local artifacts present, a separately
+authorized reproduction from this directory uses a new ignored output path:
+
+```sh
+.venv/bin/python -m phenometrix_prosody.candidate_coverage_experiment --output runs/candidate-coverage-reproduction-v1
+```
+
+No dependencies are installed, old outputs overwritten or reserved speech read.
+Fresh configurations from this completed run are now consumed evidence; a new
+study needs its own prospective specification. The portable consumed-input
+`diagnose_candidate_coverage.ts` accepts `--output` in an existing ignored run
+directory and is run with `node --import tsx` from `apps/capture-web`.
+
 ## Harmonic-balance training augmentation
 
 The [fixed plan](AUGMENTATION_EXPERIMENT_PLAN.md) compares natural-only training,

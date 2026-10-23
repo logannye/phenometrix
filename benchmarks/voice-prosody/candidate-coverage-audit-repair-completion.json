@@ -1,0 +1,77 @@
+{
+  "schema": "phenometrix-candidate-coverage-audit-repair-completion.v1",
+  "status": "complete",
+  "created_at": "2026-10-23T00:25:49.010594+00:00",
+  "scope": "Auditor-only corrections; no experiment rerun, fitting, new waveform generation, or changes to scientific source, predictions, metrics, or acceptance criteria.",
+  "prior_repairs": [
+    "independent-audit-repair.json",
+    "independent-audit-repair2.json"
+  ],
+  "corrected_source_sha256": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+  "corrected_tests_sha256": "034f7a450e992096b474a3640f710aa8293f68822bf7894ab1f164bfb21f1bef",
+  "focused_tests": {
+    "passed": 11,
+    "elapsed_seconds": 0.47,
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=research/voice-prosody research/voice-prosody/.venv/bin/python -m pytest research/voice-prosody/tests/test_audit_candidate_coverage.py -q -p no:cacheprovider",
+    "evidence": "Observed focused test tool output before successful attempt 3; final full-suite validation is recorded separately by the parent."
+  },
+  "corrections": [
+    {
+      "attempt": 1,
+      "error": "ValueError: Reference content hashed before prediction freeze",
+      "rationale": "The acquisition manifest independently identifies exact role=ref paths. MIC WAVs share records/train and records/development directories, so a whole-directory heuristic rejected legitimate input-only bindings. Exact REF path rejection remains enforced.",
+      "prior_source_sha256": "a7db615f59d4a4b2db4dfe0c2f14fbcb3c7f1694ce41b50ca973b52523fdbd0c"
+    },
+    {
+      "attempt": 2,
+      "error": "ValueError: regression/step-100-200/original__seed20261022/step: field inventory differs",
+      "rationale": "The independent three numerical step-lag outputs were correct; the reported schema also contains an inherited fixed criterion string. The corrected auditor explicitly validates that exact string, without changing any numerical formula or tolerance. A fixture preserves signed target lag of -10 ms and availability lag of +10 ms.",
+      "prior_source_sha256": "14a0f69c5966039e6c1f32268dd3ccfcf0b27e0481728fd1bfae703f78085fbb",
+      "exact_criterion": "first of 3 consecutive final-frequency outputs within50c; acquisition end>=physical step; no negative-lag clamp"
+    }
+  ],
+  "successful_execution": {
+    "started_at": "2026-10-23T00:23:11.522762+00:00",
+    "completed_at": "2026-10-23T00:23:59.158421+00:00",
+    "elapsed_seconds": 47.63545291684568,
+    "exit_code": 0,
+    "command": [
+      "/Users/logannye/Projects/phenometrix/research/voice-prosody/.venv/bin/python",
+      "-m",
+      "phenometrix_prosody.audit_candidate_coverage",
+      "--run",
+      "research/voice-prosody/runs/candidate-coverage-v1",
+      "--output",
+      "research/voice-prosody/runs/candidate-coverage-v1/independent-audit.json"
+    ],
+    "peak_child_rss_bytes": 350568448,
+    "source_sha256": "09f069673e7edb15ae3d4ec7bc04019cdb759cf33a70b4219ad2ea018221c1bb",
+    "tests_sha256": "034f7a450e992096b474a3640f710aa8293f68822bf7894ab1f164bfb21f1bef"
+  },
+  "receipt_sha256": "8258c903feacffa2be8c19c512268739a56e6bf02fbd2a4e93292d2831ee6c65",
+  "numeric_comparisons": 77238,
+  "maximum_numeric_difference": 1.1102230246251565e-16,
+  "total_checkpoint_frame_pairs": 1602744,
+  "original_control_frame_pairs": 794316,
+  "bound_artifacts": 5800,
+  "stderr_bytes": 0,
+  "scientific_frozen_source_count": 40,
+  "scientific_sources_unchanged": true,
+  "run_manifest_sha256": "1e2d7fbec0cb2dd71b177a0a5b646eff04d1d6dcf72a1c86eaac8f42f267aeff",
+  "metrics_sha256": "8fc8deb5962b59a3785978e6f13692f18bf5300f783fbb12de51d67dd93e0ae8",
+  "promising_for_next_study": false,
+  "artifact_sha256": {
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit.json": "8258c903feacffa2be8c19c512268739a56e6bf02fbd2a4e93292d2831ee6c65",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt3-execution.json": "8d2cf52669069d933e6430449b7dfa84fb16a2dc4dc52300dfaba47cbdade79c",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt3.stdout.log": "a90cf02de125fc73d3c122db610033ce4e5e78909c91885858367a0e748fb7eb",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt3.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-repair.json": "888bfb38676f727bb6e68afb9517bb871bd72f8ba2853df8d49a713ee553e295",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-repair2.json": "ab425fe1fb3dffb14c4d0a4d06b8d8076ba1156df35922b14a00ebd9009632cd",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt1-source.py": "a7db615f59d4a4b2db4dfe0c2f14fbcb3c7f1694ce41b50ca973b52523fdbd0c",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt2-source.py": "14a0f69c5966039e6c1f32268dd3ccfcf0b27e0481728fd1bfae703f78085fbb",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit.stderr.log": "ec6ea55092b1a6aa3df09255ccbaa68a87d61b47d529a269b20cfa7dbcba224b",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt2.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "research/voice-prosody/runs/candidate-coverage-v1/independent-audit-attempt2.stderr.log": "3f6d9bf2e137d900ac22ac66b37ac29aa35996061b009279a250025f52e7216b"
+  }
+}
