@@ -3,6 +3,18 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
     super();
     this.dataPort = null;
     this.disposed = false;
+    this.naturalSource = null;
+    this.naturalEnded = false;
+    this.naturalCreditDrainSent = false;
+    this.naturalFirstSamples = [];
+    this.naturalFirstObservedFrame = null;
+    this.naturalDiscardedPartial = 0;
+    this.naturalTimelineEvents = [];
+    this.naturalTimelineCapacity = 64;
+    this.naturalTimelineOverflow = 0;
+    this.naturalTimelineError = null;
+    this.naturalResumeAudioFrame = null;
+    this.naturalResumeEvent = null;
     this.finalDiagnostics = null;
     this.activeRenderLease = null;
     this.blockRenderLease = null;
@@ -43,9 +55,23 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
               recycled.buffer.byteLength === this.blockSamples * Float32Array.BYTES_PER_ELEMENT) {
             this.inFlight.delete(recycled.transportId);
             this.pool.push(recycled.buffer);
+            this.acknowledgeNaturalCredits();
           }
         };
         this.dataPort.start();
+      } else if (message?.type === "research-natural-source") {
+        // Opt-in research fixture only. The ordinary microphone path never sends this.
+        const valid = this.sequence === 0 && this.absoluteSampleIndex === 0 && !this.naturalSource &&
+          message.captureEpoch === this.captureEpoch && Number.isSafeInteger(message.startAudioFrame) &&
+          message.startAudioFrame > currentFrame && message.startAudioFrame % 1920 === 0 &&
+          Number.isSafeInteger(message.sampleCount) && message.sampleCount >= 1920 && message.sampleCount <= 48000 * 120;
+        if (valid) {
+          this.naturalSource = { startAudioFrame: message.startAudioFrame, sampleCount: message.sampleCount };
+          this.dataPort?.postMessage({ type: "research-natural-start", captureEpoch: this.captureEpoch,
+            startAudioFrame: message.startAudioFrame, sampleCount: message.sampleCount });
+        }
+        this.port.postMessage({ type: "research-natural-armed", status: valid ? "armed" : "rejected",
+          captureEpoch: this.captureEpoch, startAudioFrame: message.startAudioFrame });
       } else if (message?.type === "render-freshness-lease") {
         const lease = message.lease;
         const valid = lease?.schemaVersion === "phenometric.voice-render-freshness.v1" &&
@@ -95,7 +121,7 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
           captureEpoch: this.captureEpoch, final: true, sequence: this.sequence,
           sampleClockEndExclusive: this.absoluteSampleIndex,
           droppedBlockCount: this.droppedBlockCount, droppedSampleCount: this.droppedSampleCount,
-          discardedPartialSampleCount: this.pendingLength,
+          discardedPartialSampleCount: this.pendingLength + this.naturalDiscardedPartial,
           inFlightBlockCountAtDispose: this.inFlight.size,
           maximumInFlightBlocks: this.maximumInFlightBlocks
         };
@@ -150,6 +176,125 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
     this.pendingLength = 0;
   }
 
+  acknowledgeNaturalCredits() {
+    if (!this.naturalEnded || this.naturalCreditDrainSent || this.inFlight.size !== 0) return;
+    this.naturalCreditDrainSent = true;
+    this.port.postMessage({ type: "research-natural-credits-drained", captureEpoch: this.captureEpoch,
+      scheduledStartAudioFrame: this.naturalSource.startAudioFrame, sourceSampleCount: this.naturalSource.sampleCount,
+      sequence: this.sequence, inFlightBlockCount: 0, pendingSampleCount: this.pendingLength });
+  }
+
+  finishNaturalSource() {
+    if (this.naturalEnded) return;
+    this.naturalEnded = true;
+    this.naturalDiscardedPartial = this.pendingLength;
+    this.droppedSampleCount += this.pendingLength;
+    this.pending.fill(0); this.pendingLength = 0;
+    const receipt = { type: "research-natural-ended", captureEpoch: this.captureEpoch,
+      scheduledStartAudioFrame: this.naturalSource.startAudioFrame,
+      observedStartAudioFrame: this.naturalFirstObservedFrame,
+      sourceSampleCount: this.naturalSource.sampleCount, sourceOffset: 0,
+      captureEndSampleExclusive: this.absoluteSampleIndex, firstSamples: this.naturalFirstSamples,
+      sequence: this.sequence, droppedBlockCount: this.droppedBlockCount,
+      droppedSampleCount: this.droppedSampleCount, discardedPartialSampleCount: this.naturalDiscardedPartial,
+      timeline: { schemaVersion: "phenometric.voice-natural-timeline.v2", status: this.naturalTimelineError ? "failed" : "complete",
+        error: this.naturalTimelineError, events: this.naturalTimelineEvents, capacity: this.naturalTimelineCapacity,
+        overflow: this.naturalTimelineOverflow } };
+    this.port.postMessage(receipt);
+    this.dataPort?.postMessage({ type: "research-natural-end", captureEpoch: this.captureEpoch, fenceId: 1 });
+    this.acknowledgeNaturalCredits();
+  }
+
+  recordNaturalTimeline(event) {
+    if (this.naturalTimelineEvents.length === this.naturalTimelineCapacity) {
+      this.naturalTimelineOverflow += 1;
+      this.naturalTimelineError = "timeline-event-overflow";
+      this.finishNaturalSource();
+      return false;
+    }
+    this.naturalTimelineEvents.push(event);
+    return true;
+  }
+
+  processNaturalSource(channel, quantumLength) {
+    if (this.naturalEnded) return true;
+    const start = this.naturalSource.startAudioFrame;
+    const end = start + this.naturalSource.sampleCount;
+    if (currentFrame + quantumLength <= start) return true;
+    const first = Math.max(0, start - currentFrame);
+    const renderStart = Math.min(end, currentFrame + first);
+    const renderEnd = Math.min(end, currentFrame + quantumLength);
+    const expected = this.expectedAudioFrame ?? start;
+    const event = { expectedAudioFrame: expected, observedStartAudioFrame: renderStart,
+      observedEndAudioFrameExclusive: renderEnd, discardedPendingSampleCount: this.pendingLength };
+    // A backward callback cannot establish what samples the source supplied.
+    // Retain the fault and stop accepting PCM; never reuse, clamp, or relabel it.
+    if (renderStart < expected) {
+      this.naturalTimelineError = "overlapping-render-quantum";
+      this.recordNaturalTimeline({ ...event, kind: "overlap-rejected", overlapSampleCount: expected - renderStart });
+      this.finishNaturalSource();
+      return true;
+    }
+    if (channel && channel.length !== quantumLength) {
+      this.naturalTimelineError = "unknown-input-quantum-length";
+      this.recordNaturalTimeline({ ...event, kind: "input-shape-rejected", inputSampleCount: channel.length, quantumLength });
+      this.finishNaturalSource();
+      return true;
+    }
+    if (!channel || renderStart > expected) {
+      const missingEnd = !channel ? renderEnd : renderStart;
+      const missing = missingEnd - expected;
+      if (!this.recordNaturalTimeline({ ...event, kind: channel ? "forward-gap" : "absent-input", missingSampleCount: missing })) return true;
+      this.droppedSampleCount += missing + this.pendingLength;
+      this.pending.fill(0); this.pendingLength = 0;
+      this.absoluteSampleIndex = missingEnd - start;
+      this.naturalResumeAudioFrame = null;
+      this.naturalResumeEvent = null;
+    }
+    this.expectedAudioFrame = renderEnd;
+    if (!channel || renderStart === end) {
+      if (renderEnd === end) this.finishNaturalSource();
+      return true;
+    }
+    channel = channel.subarray(first, first + renderEnd - renderStart);
+    if (this.naturalFirstObservedFrame === null) {
+      this.naturalFirstObservedFrame = renderStart;
+      this.naturalFirstSamples = Array.from(channel.subarray(0, 16));
+    }
+    let sourceIndex = 0;
+    // A gap discards partial support. Resume on the original transport grid,
+    // charging every skipped source sample; do not shift the reference grid.
+    if (this.pendingLength === 0 && this.naturalResumeAudioFrame === null && (renderStart - start) % this.blockSamples !== 0) {
+      this.naturalResumeAudioFrame = Math.min(end, start + Math.ceil((renderStart - start) / this.blockSamples) * this.blockSamples);
+      this.naturalResumeEvent = { kind: "grid-restart", startAudioFrame: renderStart,
+        endAudioFrameExclusive: renderStart, targetAudioFrame: this.naturalResumeAudioFrame, skippedSampleCount: 0 };
+      if (!this.recordNaturalTimeline(this.naturalResumeEvent)) return true;
+    }
+    if (this.naturalResumeAudioFrame !== null) {
+      sourceIndex = Math.min(channel.length, this.naturalResumeAudioFrame - renderStart);
+      this.droppedSampleCount += sourceIndex;
+      this.naturalResumeEvent.endAudioFrameExclusive += sourceIndex;
+      this.naturalResumeEvent.skippedSampleCount += sourceIndex;
+      this.absoluteSampleIndex = renderStart + sourceIndex - start;
+      if (renderStart + sourceIndex === this.naturalResumeAudioFrame) this.naturalResumeAudioFrame = null;
+    }
+    while (sourceIndex < channel.length) {
+      this.absoluteSampleIndex = renderStart + sourceIndex - start;
+      if (this.pendingLength === 0) {
+        this.pendingStartSampleIndex = this.absoluteSampleIndex;
+        this.blockRenderLease = this.activeRenderLease;
+      }
+      const count = Math.min(channel.length - sourceIndex, this.blockSamples - this.pendingLength);
+      this.pending.set(channel.subarray(sourceIndex, sourceIndex + count), this.pendingLength);
+      this.pendingLength += count;
+      sourceIndex += count;
+      this.absoluteSampleIndex = renderStart + sourceIndex - start;
+      if (this.pendingLength === this.blockSamples) this.emitBlock(renderStart + sourceIndex);
+    }
+    if (renderEnd === end) this.finishNaturalSource();
+    return true;
+  }
+
   process(inputs, outputs) {
     if (this.disposed) return false;
     if (this.pendingClockProbe) {
@@ -159,31 +304,33 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
         probeId: probe.probeId, captureEpoch: probe.captureEpoch, clockMappingId: probe.clockMappingId,
         renderStartFrame: currentFrame, sampleRateHz: sampleRate });
     }
-    const channel = inputs[0]?.[0];
+    let channel = inputs[0]?.[0];
     const quantumLength = outputs?.[0]?.[0]?.length ?? channel?.length ?? this.lastQuantumLength;
     this.lastQuantumLength = quantumLength;
+    if (this.naturalSource) return this.processNaturalSource(channel, quantumLength);
+    const renderStartFrame = currentFrame;
     if (!channel) {
       // Before the first observed input there is no capture sample origin yet.
       // Once established, charge absent quanta immediately, including at stop.
       if (this.expectedAudioFrame !== null) {
-        const missingSamples = Math.max(0, currentFrame - this.expectedAudioFrame) + quantumLength;
+        const missingSamples = Math.max(0, renderStartFrame - this.expectedAudioFrame) + quantumLength;
         this.absoluteSampleIndex += missingSamples;
         this.droppedSampleCount += missingSamples + this.pendingLength;
         this.pending.fill(0);
         this.pendingLength = 0;
-        this.expectedAudioFrame = currentFrame + quantumLength;
+        this.expectedAudioFrame = renderStartFrame + quantumLength;
       }
       return true;
     }
-    if (this.expectedAudioFrame !== null && currentFrame !== this.expectedAudioFrame) {
+    if (this.expectedAudioFrame !== null && renderStartFrame !== this.expectedAudioFrame) {
       // A missing input quantum is not observed silence. Preserve its sample gap.
-      const missingSamples = Math.max(0, currentFrame - this.expectedAudioFrame);
+      const missingSamples = Math.max(0, renderStartFrame - this.expectedAudioFrame);
       this.absoluteSampleIndex += missingSamples;
       this.droppedSampleCount += missingSamples + this.pendingLength;
       this.pending.fill(0);
       this.pendingLength = 0;
     }
-    this.expectedAudioFrame = currentFrame + channel.length;
+    this.expectedAudioFrame = renderStartFrame + channel.length;
     let sourceIndex = 0;
     while (sourceIndex < channel.length) {
       if (this.pendingLength === 0) {
@@ -195,7 +342,7 @@ class PhenoMetrixVoiceCaptureProcessor extends AudioWorkletProcessor {
       this.pendingLength += count;
       this.absoluteSampleIndex += count;
       sourceIndex += count;
-      if (this.pendingLength === this.blockSamples) this.emitBlock(currentFrame + sourceIndex);
+      if (this.pendingLength === this.blockSamples) this.emitBlock(renderStartFrame + sourceIndex);
     }
     return true;
   }

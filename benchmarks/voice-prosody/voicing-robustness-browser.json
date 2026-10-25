@@ -1,0 +1,4713 @@
+{
+  "schema": "phenometrix.natural-browser-pooled-summary.v2",
+  "executionStatus": "complete",
+  "artifactCompleteness": "complete",
+  "numericalVerification": "passed",
+  "browserQuality": "assessed",
+  "hardware": {
+    "assetBytes": {
+      "model": 14731,
+      "manifest": 4458,
+      "wasm": 11905541,
+      "module": 20321
+    },
+    "platform": "darwin",
+    "osRelease": "25.2.0",
+    "cpuModel": "Apple M4 Max",
+    "logicalCpus": 16,
+    "totalMemoryBytes": 137438953472,
+    "browser": "156.0.8078.47",
+    "onnxRuntimeWeb": "1.23.2",
+    "wasmNumThreads": 1,
+    "wasmProxy": false,
+    "measurementProcessCount": 1,
+    "backgroundLoad": "Operator must exclude concurrent fitting/auditing; uncontrolled OS background load remains.",
+    "timingBenchmark": false,
+    "memoryScope": "Renderer JS heap sampled after each source; not a peak or total browser memory bound."
+  },
+  "configurationSha256": "be2814796e0c7ce5a3941a3bab8adb16f9107750f25ed6df0a7ada82b768b115",
+  "inputManifestSha256": "ee352c7e734bc6a74c4ef7a34b0a5069f59afa07c257dbb6eea3221fc6cf86ed",
+  "sourceSha256": {
+    "apps/capture-web/src/ambient-core-adapter.test.ts": "33b5c7e3270b6eb5c7c8e47be5ce43b4b55bc905e0f69b816e9061d7769f7631",
+    "apps/capture-web/src/ambient-core-adapter.ts": "ddda3dbb7324bcdd42ba3d62400075796be444564fd9239dd376f8a7f3c88b24",
+    "apps/capture-web/src/ambient-finalization-worker.ts": "3934175dc8e4c5da0996637aabd431a6dbc7f9232b5b66cb89beaf6033b0e20a",
+    "apps/capture-web/src/ambient-finalization.ts": "e1f34c6dac262c019ab212ad852c22695f981d32024e3052a69816cf25c6d731",
+    "apps/capture-web/src/ambient-workflow.test.ts": "7d08affc5d2e45ae5a4d431c921b3f70949fec5f2c4beb0fc8585b69b7411654",
+    "apps/capture-web/src/ambient-workflow.ts": "74041f0ca45fdcaf78ed594f8679c7003ec6ed2104108bf3b399a98f8aae0c16",
+    "apps/capture-web/src/capture-calibration.test.ts": "f821b9efc5f340fe9af5aca4700c2eff25325da36b7859f38ffcad51705bd206",
+    "apps/capture-web/src/capture-calibration.ts": "1ba29c2731a93e11e9c29108b8d5794f6f6f002b3f194afd221ed80995c720f1",
+    "apps/capture-web/src/capture-lane-cleanup.test.ts": "011d20ec8a317265fdebe339459b85a955cb2c5bf932a70a5f4fe3122209c4a5",
+    "apps/capture-web/src/capture-lane-cleanup.ts": "14680dd1cc72d31875d7c48c40d795e0fe4604750ed175ba8dfd65fa36316bb9",
+    "apps/capture-web/src/capture-runtime.test.ts": "82aec228d73f5f3e4945ea0349d71f309d0182d89a0e7b5b901cf84fdc2058be",
+    "apps/capture-web/src/capture-runtime.ts": "b097479a1a6e630f6c6dc746cc49fedaf27ecc80ba337e99a851c7add97f7da0",
+    "apps/capture-web/src/condition-demo-controller.ts": "070b84105bd263bd2a12d0ceedf4dcc9fcf92ce1dfe4a8e54681173801b0bede",
+    "apps/capture-web/src/condition-demo-integration.test.ts": "5867a9704b1710f0db96a9413e8d438cdc634f70510dd0fc4afbb0cc0f4d9edc",
+    "apps/capture-web/src/condition-evidence-view.ts": "f6520b868d358247d5f8229247a942d84ce82247952640002da65e9720a87461",
+    "apps/capture-web/src/dsp-primitives.test.ts": "5f711fc12095e0f2743491dc90b636e02564287a813452e8064fae686d454878",
+    "apps/capture-web/src/dsp-primitives.ts": "b0ef4d3e801f9792727fff25f40ce51455cbf5dd9e755a69516137a1a1e09fa0",
+    "apps/capture-web/src/embedded-encounter.test.ts": "3404d4ebcaf34cf0dfd3bf70005aeff9841c771ed2bb90dba417f4ead31efa67",
+    "apps/capture-web/src/embedded-encounter.ts": "348a63349639c84bc8a69fddf3090da2dca78e590eb7477578bb3b52eec1f5fb",
+    "apps/capture-web/src/embedded.ts": "e7c74ea549eaf5b737914fb822033af91f15f8ae28c465c07d46c327c3294e93",
+    "apps/capture-web/src/face-features.test.ts": "a99aac4f075542de3877c8237b4486c8d554b3a46178aa6cfbfe49cd650d0f09",
+    "apps/capture-web/src/face-features.ts": "5ec875680497646c49b65488b47c8827b85ffc6ca31089954532ebf10294dcd0",
+    "apps/capture-web/src/face-mesh-gl-shaders.ts": "2dca302c9f8ed6a21f7d9567af813ad032370ba92d9d02e0c6ab2a024b8598cf",
+    "apps/capture-web/src/face-mesh-gl.test.ts": "4194ecbc91f5a77f58a9182d2a3978bfacb4cd4235843fe2c3a83ca5707888ae",
+    "apps/capture-web/src/face-mesh-gl.ts": "df6dfb94f0f105f0902c969909e6503f2e73fc7f717540348750633035881584",
+    "apps/capture-web/src/face-mesh-overlay.test.ts": "3f192a3da385f1b29056ec5c4a145f9d4af7e47b5ac645f5cb64a11a80ea4720",
+    "apps/capture-web/src/face-mesh-overlay.ts": "4835e4f2c84fc01ec9593107c4df8340e1cdc5747d822346a8aedbdc636b47f0",
+    "apps/capture-web/src/face-mesh-renderer.ts": "81b4be42888df058e305022cd5a61c2fd563374dedbe421d7edb282dfcf34d9c",
+    "apps/capture-web/src/face-overlay-controller.test.ts": "012b93f01a0c5f961dba9843dc5e5946788bbf055ad21a23e38c8cbbaec68a1c",
+    "apps/capture-web/src/face-overlay-controller.ts": "1e9438d6ba08a953f3f50ed594992ad339aaa1c6b6baf77af0f866568049f2b6",
+    "apps/capture-web/src/face-worker-protocol.test.ts": "10bfb58bd22826bce4717bae95c95424a9fb81938aedc17019f0d4f7b2470b84",
+    "apps/capture-web/src/face-worker-protocol.ts": "87c34ffcebc5d186f30d58324685dfed877fe9dc1bfdb6af131fae0889e602f3",
+    "apps/capture-web/src/face-worker.ts": "4f848356260428d99aabf8de4c13c7b4e53b0dc968b249c252ca4346a226f2ff",
+    "apps/capture-web/src/integrated-encounter.test.ts": "8db0168bc5bef840ab570efe7a088ed5245cd2c8936c754fb621409dfd59cef7",
+    "apps/capture-web/src/integrated-encounter.ts": "ffab0a2a3181f7c9d5e1214b99d7a0cc11095ffeaba89c98c59878458059ce42",
+    "apps/capture-web/src/live-voice-visualizer.test.ts": "64059f7b9b538164d42ef33eddbf76966c2e074d3d985817a5a55bd4210bf1d4",
+    "apps/capture-web/src/live-voice-visualizer.ts": "260e46558924a508dc71c66f44d5b4edd132f6f7bc17f17d224088bf4645774e",
+    "apps/capture-web/src/localize-intro.test.ts": "074e9fc03aad806a518e9151fa43da8fe48d47d124083f6a66f6ba208a107f08",
+    "apps/capture-web/src/localize-intro.ts": "3a38fd33c9dad29b6b1bade124f32decb78ed509020db526175afe0e3d2c45ca",
+    "apps/capture-web/src/main.ts": "23fecaae7fe5d35fdd4b0b980b9b965bed7102374e2b100af890d12ede991a60",
+    "apps/capture-web/src/mesh-depth.test.ts": "44db461cf055be5ccb7a01b162f013ecb1836b61967d5a903ead3e43acc6c50d",
+    "apps/capture-web/src/mesh-depth.ts": "7718d6dc6e7e5209a72662b6d1578973c03566e43223e512945eb5a1cf0c005f",
+    "apps/capture-web/src/passive-noise-calibration.test.ts": "3803e427745438d67dc16df08ac74def289348cf0ab0475aca46bc8497f7bd94",
+    "apps/capture-web/src/passive-noise-calibration.ts": "18370ba5d21b37162a5a71ff204dcabf9eb72cb3109f0560ffc2e98074ee6302",
+    "apps/capture-web/src/research-voice-config.test.ts": "d83681258b8b72385e0ed8418227f806ebeda88038bd163273e06781b4f8257d",
+    "apps/capture-web/src/research-voice-config.ts": "7ac04ad1e878af45b0e16526300678c97704f228af7808fb5f52cfd15f084b64",
+    "apps/capture-web/src/research-voice-hybrid-parity-worker.ts": "d5745c23db61a94aeb859a100fa29926ae4b4c35c9dc0116e13b80ad85467231",
+    "apps/capture-web/src/research-voice-mlp.test.ts": "89b5b072c3eb0fc1a96d3844a7208411ffeac0d6693fb0e294f3e42a121494a5",
+    "apps/capture-web/src/research-voice-mlp.ts": "203cb2c0446d6ce166ffde7c94b02bd767686141be73448fb5c4c9a74d689c7b",
+    "apps/capture-web/src/research-voice-model-worker.ts": "96099627ee177fd691f65f775c719da5a3c079cf12f12591d699647e0bd23c5a",
+    "apps/capture-web/src/research-voice-replay.ts": "4ef595103031c9f455d255f48d4bc064aa2615f5bde0d168f67ddcc76e2b92d2",
+    "apps/capture-web/src/research-voice-stall-worker.ts": "2626b3839bb0ccce330bda139fdbb3eb4519c0b1225165f4d5fb9b5eae4f9fc7",
+    "apps/capture-web/src/research-voice-trained-worker.ts": "373358fa11a57ed3eab350f3efe2af483f69e5616d6721e482b68fd4f9678c46",
+    "apps/capture-web/src/research-voice-yin.test.ts": "a836c8811337c96154cdfd9bfac34876469285ccd0b5ac0499a6c253e56c403b",
+    "apps/capture-web/src/research-voice-yin.ts": "4bb69cec11c739d41678b1ff886ed9d327f734fbbbccc5ca63869198fe2d1b57",
+    "apps/capture-web/src/static-assets.test.ts": "4217775c9a844c4309ea3764cc47c936bdcb80f90445a985ea25fae5fd585e75",
+    "apps/capture-web/src/static-assets.ts": "1f7600ed1106d3aae89bcef2907c166e61f11c4b308c95d3f9c76e5c805d43f7",
+    "apps/capture-web/src/visual-frame-pump.test.ts": "6e0091d9ae124dee1c5d6ceef4784275ae996715ab7f5226c619c6c6e0e9eceb",
+    "apps/capture-web/src/visual-frame-pump.ts": "23ed22489e77a98ea75210468ab9862283a8b897ff8b009bd98174cb1d0e7846",
+    "apps/capture-web/src/visual-image-quality.test.ts": "fab641634f8f80a97a8585fdd44d37dc7bb13076f792004425daf778d89729e9",
+    "apps/capture-web/src/visual-image-quality.ts": "44ad7114d051ec17edaeed6796629e569d6ddea185f7126e84628678c79cc8ac",
+    "apps/capture-web/src/voice-async-pump.ts": "53fcbc2155d89e59699837bd135d3e2c5b4369fd13c1c5ea67e6712c13d94398",
+    "apps/capture-web/src/voice-capture.test.ts": "7fc021f1e83609a4e1966e562d9098dd68f691feb51e1bcbb5dff30e8c11d4c3",
+    "apps/capture-web/src/voice-capture.ts": "66c649fd056bca537267fa2e2120a30abc09ce7b33d1de253735f0ac7ed58570",
+    "apps/capture-web/src/voice-clock-probe.test.ts": "99ad670913426dd566e33c83a17b572e5afd019000f8a13d7634a3d655205aa7",
+    "apps/capture-web/src/voice-clock-probe.ts": "cf2d9d9ac6bca616438103ea7605e994914ef5a05f49a8b9f82326a075bca2b8",
+    "apps/capture-web/src/voice-dsp.test.ts": "76962b12f7c2b17163c677498651c7dfbb092d8bc281d481f4b12595036bf629",
+    "apps/capture-web/src/voice-dsp.ts": "5228ab17d2ffdad2ec4577cf3dd84508f9a17c905c8ee3db43901584dae4d0f9",
+    "apps/capture-web/src/voice-natural-completion.test.ts": "af71fc7f646f5d022f6e94cd97edc1f1a84ecfe4ca3dd3022764a30aac58d0b8",
+    "apps/capture-web/src/voice-natural-completion.ts": "4c924832dd7ed93c48582e63a8d2549e539cb9960f367c29e7eef67b90e56209",
+    "apps/capture-web/src/voice-pitch-features-v2.test.ts": "2a56279ddca8f9a0062c41e5cdeeb3d001a994e46973ff73ee13bb10cf2f2869",
+    "apps/capture-web/src/voice-pitch-features-v2.ts": "765b1c718aa0cb5d441e260a7378c45222a29ca33dd69684ae2eb4fa6f370de0",
+    "apps/capture-web/src/voice-pitch-features.test.ts": "67b588e7ab050d933ec5e4eb44beb08378302c4fe667ae6e90f09e8b7c535032",
+    "apps/capture-web/src/voice-pitch-features.ts": "89ecc38dd968a44b456009b60c4d4c12e233f5c614a1b20fb0b1441211299208",
+    "apps/capture-web/src/voice-render-freshness.test.ts": "a1e6b1fbd64057aa2b28bb8505ae7e5adf5fa3c5775bc82094f09bd1814d8d97",
+    "apps/capture-web/src/voice-render-freshness.ts": "b433e6cd8a044ab4beab94cdd47231b233ed20cc1922b8f347566cc6a6757004",
+    "apps/capture-web/src/voice-replay.test.ts": "93f7f0287b6bbf234e9933df3042677df9791da1eaa1754829a650c11225a1db",
+    "apps/capture-web/src/voice-replay.ts": "8f311fbbaff5242e14509fb88b43fbceee34b93462242a950b33c34cbc57cc54",
+    "apps/capture-web/src/voice-research-hook.ts": "b2cb9dfd0b8c6ccf5607dd970c597ccc72252ae052fd9570871a3d75af35bf95",
+    "apps/capture-web/src/voice-result-transport.test.ts": "d3a24e1403b3a5187c8f61124b2bd6e1b8a6e41ad560e7e379cf313027c24b60",
+    "apps/capture-web/src/voice-result-transport.ts": "9b6adae54d198a3b57e688d789db7ff2493585a1dfeafbc6cf607f99083a8fd4",
+    "apps/capture-web/src/voice-stream-timing.test.ts": "376e7df81f92a5fd0fc777c87eeae3169e5b6e2ff3c9f8e79e423d4684dedf70",
+    "apps/capture-web/src/voice-stream-timing.ts": "1cd7962a229bad54602b81bf0c1b568febaf2cc9fa634cee8e56d4fc6d18dca4",
+    "apps/capture-web/src/voice-support-diagnostic.test.ts": "a9c172b91367cbf0d715a14151490e6fca5052e59c7652825216f8a701fb5ec1",
+    "apps/capture-web/src/voice-worker-protocol.test.ts": "52f2012e724edd7aae89a7b795f6225c885b9d817b1346e62156577feeeccad4",
+    "apps/capture-web/src/voice-worker-protocol.ts": "892e1998f6d27d4d808d848656fe6630327b9a627b4212a474785f21a8ec3f57",
+    "apps/capture-web/src/voice-worker.test.ts": "8f2836ca137640df28140f32fe0d5e5361058af16f7b40e7a990bc16ce89c8b7",
+    "apps/capture-web/src/voice-worker.ts": "906045b350c3a264e679167a6e04148dbb0bfbea2c242e90d0c24e1b14c4eb0b",
+    "apps/capture-web/src/voice-worklet.test.ts": "3e4f822ca0b8ed943d5eddd7a6752496c868490244b00cb2b30043fa4e64258e",
+    "apps/capture-web/public/voice-capture-worklet.js": "b86098b68b350e0d7e6c0c896f66b12c8bb82d398e5ff2b76a274b2d8b7bb3dd",
+    "apps/capture-web/e2e/voice-natural-research.spec.ts": "18327753d4fde4ec69ee9890fc3914f999d37d9c564e7bd16ba050c40e12f37b",
+    "apps/capture-web/playwright.research.config.ts": "76524df9766ccc277774d27867a3b33a8955eba8596acf08e5b1e4c27dcf3c37",
+    "apps/capture-web/vite.research.config.ts": "96ed1be3f6fa59f44d59261212fc0339f459f094b1644f25f9d0d2f60b5bbcb0",
+    "pnpm-lock.yaml": "5476555088bc6fa477ab53f8834bc0b18796660d2b29181beb0ff52293f2fe7d",
+    "research/voice-prosody/phenometrix_prosody/prepare_natural_browser.py": "54a4a48b6b7289d215ff7e03555cd162b6552458459a8909887b0142ca523e1f",
+    "research/voice-prosody/phenometrix_prosody/audit_natural_browser.py": "9b1809d2f9d7bbac6621ddfd88707f82d157065e154a3e10743957ac71c45804",
+    "research/voice-prosody/natural_browser_features.ts": "3816850dd281f19d4a8d36bb73d98e03dd4c9e02c68c8715d27cb8971d13a966"
+  },
+  "researchModel": {
+    "qualification": "unqualified-functional-fixture",
+    "modelSha256": "3df30ae54f4bf94b34dc7b1ae296864241fab6db7e711a8970198aeefab79c23",
+    "loadMs": 185.09999990463257,
+    "configurationSha256": "be2814796e0c7ce5a3941a3bab8adb16f9107750f25ed6df0a7ada82b768b115",
+    "modelManifestSha256": "1a438ebf5454b46deff703bd7aaddcd26f33b0c43b2dd5de6689e3fa485e4769",
+    "checkpointSha256": "06110469a9a643fb16806905569ebc939db2c0bdd5b3a6a1593b31789453d10d",
+    "estimatorContract": "phenometrix.mlp-voicing-yin-pitch.v1"
+  },
+  "startedAt": "2026-10-25T02:12:13.809Z",
+  "completedAt": "2026-10-25T02:17:45.567Z",
+  "runSha256": "6508fce6532a364dc2f2c4abb45a289c8550555f87c4746c5f336391e487afb4",
+  "auditSha256": "b9bb9ac8fc51159313c45b4e24cf449abab639db574d5c3ed339702d2ac73941",
+  "aggregation": "raw pooled processed-block times; nearest-rank quantiles; pooled correct/eligible and delivered/intended counts; no average of case quantiles",
+  "groups": {
+    "firstH": {
+      "cases": 16,
+      "originalSampleCountTotal": 6734400,
+      "prefixedSourceSampleCountTotal": 6737472,
+      "sourceDurationSeconds": 140.364,
+      "completeProcessedServiceMs": {
+        "n": 7012,
+        "p50": 2.9000000953674316,
+        "p95": 4.700000286102295,
+        "p99": 5.5,
+        "maximum": 26.199999809265137
+      },
+      "processedBlocksOver10Ms": 16,
+      "processedBlocksOver20Ms": 10,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 16,
+      "intendedTargets": 13982,
+      "deliveryCounts": {
+        "delivered": 13976,
+        "terminal-partial-support": 6
+      },
+      "deliveredFrames": 13976,
+      "deliveryAvailability": 0.9995708768416536,
+      "eligibleValidReferences": 13854,
+      "deliveredCorrectFrames": 12429,
+      "deliveredCorrectCoverage": 0.897141619748809,
+      "jointError": 0.102858380251191,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 3818,
+        "reference_unvoiced_frames": 10036,
+        "reference_voiced_success_count": 2611,
+        "voicing_false_positive_count": 218,
+        "voicing_false_negative_count": 794,
+        "voicing_false_negative_or_unavailable_count": 796,
+        "unavailable_frames": 2
+      },
+      "referenceStatusCounts": {
+        "boundary": 80,
+        "valid": 13854,
+        "missing": 48
+      },
+      "outputsWithoutProviderReference": 42,
+      "blockDispositions": {
+        "processed": 7012
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 7012,
+        "processedFrameCount": 13976,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 5952,
+      "terminalDroppedSamples": 5952,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 13976,
+        "p50": 34.5,
+        "p95": 47,
+        "p99": 49.69999980926514,
+        "maximum": 66.30000019073486
+      },
+      "validFrameTiming": 13807,
+      "invalidFrameTiming": 169,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 16,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 6985476,
+        "maximum": 13362624,
+        "samples": 16,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 12429,
+        "eligibleValidDeliveredReferences": 13854,
+        "correctCoverage": 0.897141619748809,
+        "jointError": 0.102858380251191,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 154,
+        "render_observed": 154
+      },
+      "frameTimingStatuses": {
+        "valid": 13807,
+        "unavailable": 169
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 16,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 42
+    },
+    "secondH": {
+      "cases": 16,
+      "originalSampleCountTotal": 6734400,
+      "prefixedSourceSampleCountTotal": 6737472,
+      "sourceDurationSeconds": 140.364,
+      "completeProcessedServiceMs": {
+        "n": 7012,
+        "p50": 3,
+        "p95": 5,
+        "p99": 5.799999713897705,
+        "maximum": 24.699999809265137
+      },
+      "processedBlocksOver10Ms": 16,
+      "processedBlocksOver20Ms": 9,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 16,
+      "intendedTargets": 13982,
+      "deliveryCounts": {
+        "delivered": 13976,
+        "terminal-partial-support": 6
+      },
+      "deliveredFrames": 13976,
+      "deliveryAvailability": 0.9995708768416536,
+      "eligibleValidReferences": 13854,
+      "deliveredCorrectFrames": 12429,
+      "deliveredCorrectCoverage": 0.897141619748809,
+      "jointError": 0.102858380251191,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 3818,
+        "reference_unvoiced_frames": 10036,
+        "reference_voiced_success_count": 2611,
+        "voicing_false_positive_count": 218,
+        "voicing_false_negative_count": 794,
+        "voicing_false_negative_or_unavailable_count": 796,
+        "unavailable_frames": 2
+      },
+      "referenceStatusCounts": {
+        "boundary": 80,
+        "valid": 13854,
+        "missing": 48
+      },
+      "outputsWithoutProviderReference": 42,
+      "blockDispositions": {
+        "processed": 7012
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 7012,
+        "processedFrameCount": 13976,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 5952,
+      "terminalDroppedSamples": 5952,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 13976,
+        "p50": 34.700000286102295,
+        "p95": 47.19999980926514,
+        "p99": 50.200000286102295,
+        "maximum": 59.60000038146973
+      },
+      "validFrameTiming": 13932,
+      "invalidFrameTiming": 44,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 16,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7116124,
+        "maximum": 13354128,
+        "samples": 16,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 12429,
+        "eligibleValidDeliveredReferences": 13854,
+        "correctCoverage": 0.897141619748809,
+        "jointError": 0.102858380251191,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 154,
+        "render_observed": 154
+      },
+      "frameTimingStatuses": {
+        "valid": 13932,
+        "unavailable": 44
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 16,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 42
+    },
+    "ordinaryPooled": {
+      "cases": 32,
+      "originalSampleCountTotal": 13468800,
+      "prefixedSourceSampleCountTotal": 13474944,
+      "sourceDurationSeconds": 280.728,
+      "completeProcessedServiceMs": {
+        "n": 14024,
+        "p50": 2.9000000953674316,
+        "p95": 4.899999618530273,
+        "p99": 5.600000381469727,
+        "maximum": 26.199999809265137
+      },
+      "processedBlocksOver10Ms": 32,
+      "processedBlocksOver20Ms": 19,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 32,
+      "intendedTargets": 27964,
+      "deliveryCounts": {
+        "delivered": 27952,
+        "terminal-partial-support": 12
+      },
+      "deliveredFrames": 27952,
+      "deliveryAvailability": 0.9995708768416536,
+      "eligibleValidReferences": 27708,
+      "deliveredCorrectFrames": 24858,
+      "deliveredCorrectCoverage": 0.897141619748809,
+      "jointError": 0.102858380251191,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 7636,
+        "reference_unvoiced_frames": 20072,
+        "reference_voiced_success_count": 5222,
+        "voicing_false_positive_count": 436,
+        "voicing_false_negative_count": 1588,
+        "voicing_false_negative_or_unavailable_count": 1592,
+        "unavailable_frames": 4
+      },
+      "referenceStatusCounts": {
+        "boundary": 160,
+        "valid": 27708,
+        "missing": 96
+      },
+      "outputsWithoutProviderReference": 84,
+      "blockDispositions": {
+        "processed": 14024
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 14024,
+        "processedFrameCount": 27952,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 11904,
+      "terminalDroppedSamples": 11904,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 27952,
+        "p50": 34.59999990463257,
+        "p95": 47.09999990463257,
+        "p99": 50,
+        "maximum": 66.30000019073486
+      },
+      "validFrameTiming": 27739,
+      "invalidFrameTiming": 213,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 32,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 6985476,
+        "maximum": 13362624,
+        "samples": 32,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 24858,
+        "eligibleValidDeliveredReferences": 27708,
+        "correctCoverage": 0.897141619748809,
+        "jointError": 0.102858380251191,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 308,
+        "render_observed": 308
+      },
+      "frameTimingStatuses": {
+        "valid": 27739,
+        "unavailable": 213
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 32,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 84
+    },
+    "injectedStall": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 483,
+        "p50": 3.1000003814697266,
+        "p95": 4.900000095367432,
+        "p99": 5.5,
+        "maximum": 24
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 960,
+        "worker-withheld-support": 8,
+        "transport-loss": 18,
+        "reset-warmup": 3,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 960,
+      "deliveryAvailability": 0.9696969696969697,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 882,
+      "deliveredCorrectCoverage": 0.8981670061099797,
+      "jointError": 0.10183299389002037,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 263,
+        "voicing_false_positive_count": 22,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 29
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 483,
+        "freshness-withheld": 4
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 483,
+        "processedFrameCount": 960,
+        "lostBlockCount": 13,
+        "droppedTransportBlockCount": 9,
+        "droppedTransportSampleCount": 8640,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 4,
+        "freshnessWithheldSampleCount": 3840,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 4,
+        "maximumInFlightResultBatches": 4,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 9312,
+      "workletDroppedBlocks": 9,
+      "certifiedRenderAgeMs": {
+        "n": 960,
+        "p50": 35,
+        "p95": 48.09999990463257,
+        "p99": 49.700000286102295,
+        "maximum": 54.40000009536743
+      },
+      "validFrameTiming": 960,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11983692,
+        "maximum": 11983692,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 882,
+        "eligibleValidDeliveredReferences": 953,
+        "correctCoverage": 0.925498426023085,
+        "jointError": 0.07450157397691501,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 5,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 960
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2
+    }
+  },
+  "perCase": {
+    "0-H-F01_si462__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 496,
+        "p50": 2.700000286102295,
+        "p95": 4.400000095367432,
+        "p99": 5.199999809265137,
+        "maximum": 14.900000095367432
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 989,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 989,
+      "deliveryAvailability": 0.998989898989899,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 912,
+      "deliveredCorrectCoverage": 0.9287169042769857,
+      "jointError": 0.07128309572301425,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 263,
+        "voicing_false_positive_count": 21,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 496
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 496,
+        "processedFrameCount": 989,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 989,
+        "p50": 33.700000286102295,
+        "p95": 45.700000286102295,
+        "p99": 48.09999990463257,
+        "maximum": 57.59999990463257
+      },
+      "validFrameTiming": 940,
+      "invalidFrameTiming": 49,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 13362624,
+        "maximum": 13362624,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 912,
+        "eligibleValidDeliveredReferences": 982,
+        "correctCoverage": 0.9287169042769857,
+        "jointError": 0.07128309572301425,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 940,
+        "unavailable": 49
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "F01",
+      "sourceRecordingId": "F01_si462",
+      "condition": "clean"
+    },
+    "0-H-F01_si462__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 496,
+        "p50": 2.8000001907348633,
+        "p95": 4.700000286102295,
+        "p99": 5.400000095367432,
+        "maximum": 15.199999809265137
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 989,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 989,
+      "deliveryAvailability": 0.998989898989899,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 865,
+      "deliveredCorrectCoverage": 0.8808553971486762,
+      "jointError": 0.11914460285132383,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 198,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 76,
+        "voicing_false_negative_or_unavailable_count": 76,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 496
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 496,
+        "processedFrameCount": 989,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 989,
+        "p50": 34.69999980926514,
+        "p95": 47.5,
+        "p99": 49.200000286102295,
+        "maximum": 56.39999961853027
+      },
+      "validFrameTiming": 953,
+      "invalidFrameTiming": 36,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 13328156,
+        "maximum": 13328156,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 865,
+        "eligibleValidDeliveredReferences": 982,
+        "correctCoverage": 0.8808553971486762,
+        "jointError": 0.11914460285132383,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 953,
+        "unavailable": 36
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "F01",
+      "sourceRecordingId": "F01_si462",
+      "condition": "first_difference"
+    },
+    "0-H-F03_si1013__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 525120,
+      "prefixedSourceSampleCountTotal": 525312,
+      "sourceDurationSeconds": 10.944,
+      "completeProcessedServiceMs": {
+        "n": 547,
+        "p50": 2.700000286102295,
+        "p95": 4.400000095367432,
+        "p99": 5.199999809265137,
+        "maximum": 18.59999990463257
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 1091,
+      "deliveryCounts": {
+        "delivered": 1091
+      },
+      "deliveredFrames": 1091,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 1083,
+      "deliveredCorrectFrames": 1016,
+      "deliveredCorrectCoverage": 0.938134810710988,
+      "jointError": 0.061865189289012,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 277,
+        "reference_unvoiced_frames": 806,
+        "reference_voiced_success_count": 250,
+        "voicing_false_positive_count": 40,
+        "voicing_false_negative_count": 7,
+        "voicing_false_negative_or_unavailable_count": 7,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 1083,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 547
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 547,
+        "processedFrameCount": 1091,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 1091,
+        "p50": 34,
+        "p95": 45.69999980926514,
+        "p99": 48.5,
+        "maximum": 60.5
+      },
+      "validFrameTiming": 1091,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11432440,
+        "maximum": 11432440,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 1016,
+        "eligibleValidDeliveredReferences": 1083,
+        "correctCoverage": 0.938134810710988,
+        "jointError": 0.061865189289012,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 12,
+        "render_observed": 12
+      },
+      "frameTimingStatuses": {
+        "valid": 1091
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F03",
+      "sourceRecordingId": "F03_si1013",
+      "condition": "clean"
+    },
+    "0-H-F03_si1013__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 525120,
+      "prefixedSourceSampleCountTotal": 525312,
+      "sourceDurationSeconds": 10.944,
+      "completeProcessedServiceMs": {
+        "n": 547,
+        "p50": 2.8000001907348633,
+        "p95": 4.699999809265137,
+        "p99": 5.100000381469727,
+        "maximum": 24
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 1091,
+      "deliveryCounts": {
+        "delivered": 1091
+      },
+      "deliveredFrames": 1091,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 1083,
+      "deliveredCorrectFrames": 996,
+      "deliveredCorrectCoverage": 0.9196675900277008,
+      "jointError": 0.08033240997229917,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 277,
+        "reference_unvoiced_frames": 806,
+        "reference_voiced_success_count": 194,
+        "voicing_false_positive_count": 4,
+        "voicing_false_negative_count": 59,
+        "voicing_false_negative_or_unavailable_count": 59,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 1083,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 547
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 547,
+        "processedFrameCount": 1091,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 1091,
+        "p50": 34.40000009536743,
+        "p95": 45.799999713897705,
+        "p99": 50.299999713897705,
+        "maximum": 66.30000019073486
+      },
+      "validFrameTiming": 1091,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11407276,
+        "maximum": 11407276,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 996,
+        "eligibleValidDeliveredReferences": 1083,
+        "correctCoverage": 0.9196675900277008,
+        "jointError": 0.08033240997229917,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 12,
+        "render_observed": 12
+      },
+      "frameTimingStatuses": {
+        "valid": 1091
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F03",
+      "sourceRecordingId": "F03_si1013",
+      "condition": "first_difference"
+    },
+    "0-H-F05_si1211__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 391680,
+      "prefixedSourceSampleCountTotal": 391872,
+      "sourceDurationSeconds": 8.164,
+      "completeProcessedServiceMs": {
+        "n": 408,
+        "p50": 2.700000286102295,
+        "p95": 4.5,
+        "p99": 5.5,
+        "maximum": 18.200000286102295
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 813,
+      "deliveryCounts": {
+        "delivered": 813
+      },
+      "deliveredFrames": 813,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 805,
+      "deliveredCorrectFrames": 768,
+      "deliveredCorrectCoverage": 0.9540372670807453,
+      "jointError": 0.04596273291925466,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 154,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 128,
+        "voicing_false_positive_count": 11,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 805,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 408
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 408,
+        "processedFrameCount": 813,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 813,
+        "p50": 34.90000009536743,
+        "p95": 48,
+        "p99": 49.69999980926514,
+        "maximum": 51.39999961853027
+      },
+      "validFrameTiming": 813,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10095180,
+        "maximum": 10095180,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 768,
+        "eligibleValidDeliveredReferences": 805,
+        "correctCoverage": 0.9540372670807453,
+        "jointError": 0.04596273291925466,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 813
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F05",
+      "sourceRecordingId": "F05_si1211",
+      "condition": "clean"
+    },
+    "0-H-F05_si1211__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 391680,
+      "prefixedSourceSampleCountTotal": 391872,
+      "sourceDurationSeconds": 8.164,
+      "completeProcessedServiceMs": {
+        "n": 408,
+        "p50": 3,
+        "p95": 4.900000095367432,
+        "p99": 5.400000095367432,
+        "maximum": 22.800000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 813,
+      "deliveryCounts": {
+        "delivered": 813
+      },
+      "deliveredFrames": 813,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 805,
+      "deliveredCorrectFrames": 739,
+      "deliveredCorrectCoverage": 0.9180124223602485,
+      "jointError": 0.08198757763975155,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 154,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 0,
+        "voicing_false_negative_count": 61,
+        "voicing_false_negative_or_unavailable_count": 62,
+        "unavailable_frames": 1
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 805,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 408
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 408,
+        "processedFrameCount": 813,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 813,
+        "p50": 35.09999990463257,
+        "p95": 47.5,
+        "p99": 49.90000009536743,
+        "maximum": 53.30000019073486
+      },
+      "validFrameTiming": 813,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10061724,
+        "maximum": 10061724,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 739,
+        "eligibleValidDeliveredReferences": 805,
+        "correctCoverage": 0.9180124223602485,
+        "jointError": 0.08198757763975155,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 813
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F05",
+      "sourceRecordingId": "F05_si1211",
+      "condition": "first_difference"
+    },
+    "0-H-F06_si1404__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 409920,
+      "prefixedSourceSampleCountTotal": 410112,
+      "sourceDurationSeconds": 8.544,
+      "completeProcessedServiceMs": {
+        "n": 427,
+        "p50": 2.5999999046325684,
+        "p95": 4.5,
+        "p99": 5.300000190734863,
+        "maximum": 22.5
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 851,
+      "deliveryCounts": {
+        "delivered": 851
+      },
+      "deliveredFrames": 851,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 843,
+      "deliveredCorrectFrames": 780,
+      "deliveredCorrectCoverage": 0.9252669039145908,
+      "jointError": 0.07473309608540925,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 290,
+        "reference_unvoiced_frames": 553,
+        "reference_voiced_success_count": 246,
+        "voicing_false_positive_count": 19,
+        "voicing_false_negative_count": 10,
+        "voicing_false_negative_or_unavailable_count": 10,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 843,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 427
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 427,
+        "processedFrameCount": 851,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 851,
+        "p50": 33.89999961853027,
+        "p95": 45.40000009536743,
+        "p99": 48.30000019073486,
+        "maximum": 50.30000019073486
+      },
+      "validFrameTiming": 851,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 12417152,
+        "maximum": 12417152,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 780,
+        "eligibleValidDeliveredReferences": 843,
+        "correctCoverage": 0.9252669039145908,
+        "jointError": 0.07473309608540925,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 851
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F06",
+      "sourceRecordingId": "F06_si1404",
+      "condition": "clean"
+    },
+    "0-H-F06_si1404__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 409920,
+      "prefixedSourceSampleCountTotal": 410112,
+      "sourceDurationSeconds": 8.544,
+      "completeProcessedServiceMs": {
+        "n": 427,
+        "p50": 3,
+        "p95": 4.800000190734863,
+        "p99": 5.400000095367432,
+        "maximum": 20
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 851,
+      "deliveryCounts": {
+        "delivered": 851
+      },
+      "deliveredFrames": 851,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 843,
+      "deliveredCorrectFrames": 749,
+      "deliveredCorrectCoverage": 0.8884934756820878,
+      "jointError": 0.11150652431791222,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 290,
+        "reference_unvoiced_frames": 553,
+        "reference_voiced_success_count": 200,
+        "voicing_false_positive_count": 4,
+        "voicing_false_negative_count": 60,
+        "voicing_false_negative_or_unavailable_count": 61,
+        "unavailable_frames": 1
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 843,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 427
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 427,
+        "processedFrameCount": 851,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 851,
+        "p50": 35,
+        "p95": 47.799999713897705,
+        "p99": 50.39999961853027,
+        "maximum": 58.700000286102295
+      },
+      "validFrameTiming": 851,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 6985476,
+        "maximum": 6985476,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 749,
+        "eligibleValidDeliveredReferences": 843,
+        "correctCoverage": 0.8884934756820878,
+        "jointError": 0.11150652431791222,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 851
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F06",
+      "sourceRecordingId": "F06_si1404",
+      "condition": "first_difference"
+    },
+    "0-H-M01_si462__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 2.8000001907348633,
+        "p95": 4.599999904632568,
+        "p99": 5.599999904632568,
+        "maximum": 22.5
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 780,
+      "deliveredCorrectCoverage": 0.8863636363636364,
+      "jointError": 0.11363636363636363,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 229,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 153,
+        "voicing_false_positive_count": 24,
+        "voicing_false_negative_count": 27,
+        "voicing_false_negative_or_unavailable_count": 27,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 34.19999980926514,
+        "p95": 46.90000009536743,
+        "p99": 49.30000019073486,
+        "maximum": 50.59999990463257
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7141632,
+        "maximum": 7141632,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 780,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8863636363636364,
+        "jointError": 0.11363636363636363,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M01",
+      "sourceRecordingId": "M01_si462",
+      "condition": "clean"
+    },
+    "0-H-M01_si462__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3,
+        "p95": 5,
+        "p99": 5.699999809265137,
+        "maximum": 26.199999809265137
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 736,
+      "deliveredCorrectCoverage": 0.8363636363636363,
+      "jointError": 0.16363636363636364,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 229,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 122,
+        "voicing_false_negative_or_unavailable_count": 122,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 35.09999990463257,
+        "p95": 48.59999990463257,
+        "p99": 50.700000286102295,
+        "maximum": 56.30000019073486
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7604176,
+        "maximum": 7604176,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 736,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8363636363636363,
+        "jointError": 0.16363636363636364,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M01",
+      "sourceRecordingId": "M01_si462",
+      "condition": "first_difference"
+    },
+    "0-H-M03_si1013__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 390720,
+      "prefixedSourceSampleCountTotal": 390912,
+      "sourceDurationSeconds": 8.144,
+      "completeProcessedServiceMs": {
+        "n": 407,
+        "p50": 3,
+        "p95": 5.100000381469727,
+        "p99": 5.799999713897705,
+        "maximum": 23.300000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 811,
+      "deliveryCounts": {
+        "delivered": 811
+      },
+      "deliveredFrames": 811,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 803,
+      "deliveredCorrectFrames": 721,
+      "deliveredCorrectCoverage": 0.8978829389788294,
+      "jointError": 0.10211706102117062,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 231,
+        "reference_unvoiced_frames": 572,
+        "reference_voiced_success_count": 172,
+        "voicing_false_positive_count": 23,
+        "voicing_false_negative_count": 16,
+        "voicing_false_negative_or_unavailable_count": 16,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 803,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 407
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 407,
+        "processedFrameCount": 811,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 811,
+        "p50": 34.700000286102295,
+        "p95": 47.40000009536743,
+        "p99": 50.30000019073486,
+        "maximum": 52.30000019073486
+      },
+      "validFrameTiming": 762,
+      "invalidFrameTiming": 49,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10078292,
+        "maximum": 10078292,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 721,
+        "eligibleValidDeliveredReferences": 803,
+        "correctCoverage": 0.8978829389788294,
+        "jointError": 0.10211706102117062,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 762,
+        "unavailable": 49
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M03",
+      "sourceRecordingId": "M03_si1013",
+      "condition": "clean"
+    },
+    "0-H-M03_si1013__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 390720,
+      "prefixedSourceSampleCountTotal": 390912,
+      "sourceDurationSeconds": 8.144,
+      "completeProcessedServiceMs": {
+        "n": 407,
+        "p50": 3.1999998092651367,
+        "p95": 4.900000095367432,
+        "p99": 5.400000095367432,
+        "maximum": 15.399999618530273
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 811,
+      "deliveryCounts": {
+        "delivered": 811
+      },
+      "deliveredFrames": 811,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 803,
+      "deliveredCorrectFrames": 660,
+      "deliveredCorrectCoverage": 0.821917808219178,
+      "jointError": 0.1780821917808219,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 231,
+        "reference_unvoiced_frames": 572,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 0,
+        "voicing_false_negative_count": 132,
+        "voicing_false_negative_or_unavailable_count": 132,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 803,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 407
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 407,
+        "processedFrameCount": 811,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 811,
+        "p50": 35,
+        "p95": 47.89999961853027,
+        "p99": 50.40000009536743,
+        "maximum": 52
+      },
+      "validFrameTiming": 811,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10044944,
+        "maximum": 10044944,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 660,
+        "eligibleValidDeliveredReferences": 803,
+        "correctCoverage": 0.821917808219178,
+        "jointError": 0.1780821917808219,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 811
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M03",
+      "sourceRecordingId": "M03_si1013",
+      "condition": "first_difference"
+    },
+    "0-H-M05_si1211__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 317760,
+      "prefixedSourceSampleCountTotal": 317952,
+      "sourceDurationSeconds": 6.624,
+      "completeProcessedServiceMs": {
+        "n": 331,
+        "p50": 3.1999998092651367,
+        "p95": 4.900000095367432,
+        "p99": 5.699999809265137,
+        "maximum": 22.199999809265137
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 659,
+      "deliveryCounts": {
+        "delivered": 659
+      },
+      "deliveredFrames": 659,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 651,
+      "deliveredCorrectFrames": 611,
+      "deliveredCorrectCoverage": 0.9385560675883257,
+      "jointError": 0.06144393241167435,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 153,
+        "reference_unvoiced_frames": 498,
+        "reference_voiced_success_count": 123,
+        "voicing_false_positive_count": 10,
+        "voicing_false_negative_count": 11,
+        "voicing_false_negative_or_unavailable_count": 11,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 651,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 331
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 331,
+        "processedFrameCount": 659,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 659,
+        "p50": 34.90000009536743,
+        "p95": 47.799999713897705,
+        "p99": 50.19999980926514,
+        "maximum": 58.19999980926514
+      },
+      "validFrameTiming": 659,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 8315196,
+        "maximum": 8315196,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 611,
+        "eligibleValidDeliveredReferences": 651,
+        "correctCoverage": 0.9385560675883257,
+        "jointError": 0.06144393241167435,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 7,
+        "render_observed": 7
+      },
+      "frameTimingStatuses": {
+        "valid": 659
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M05",
+      "sourceRecordingId": "M05_si1211",
+      "condition": "clean"
+    },
+    "0-H-M05_si1211__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 317760,
+      "prefixedSourceSampleCountTotal": 317952,
+      "sourceDurationSeconds": 6.624,
+      "completeProcessedServiceMs": {
+        "n": 331,
+        "p50": 3,
+        "p95": 4.600000381469727,
+        "p99": 5.200000286102295,
+        "maximum": 23.40000009536743
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 659,
+      "deliveryCounts": {
+        "delivered": 659
+      },
+      "deliveredFrames": 659,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 651,
+      "deliveredCorrectFrames": 563,
+      "deliveredCorrectCoverage": 0.8648233486943164,
+      "jointError": 0.13517665130568357,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 153,
+        "reference_unvoiced_frames": 498,
+        "reference_voiced_success_count": 66,
+        "voicing_false_positive_count": 1,
+        "voicing_false_negative_count": 75,
+        "voicing_false_negative_or_unavailable_count": 75,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 651,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 331
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 331,
+        "processedFrameCount": 659,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 659,
+        "p50": 34.30000019073486,
+        "p95": 46.19999980926514,
+        "p99": 49.5,
+        "maximum": 60.10000038146973
+      },
+      "validFrameTiming": 659,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 8234688,
+        "maximum": 8234688,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 563,
+        "eligibleValidDeliveredReferences": 651,
+        "correctCoverage": 0.8648233486943164,
+        "jointError": 0.13517665130568357,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 7,
+        "render_observed": 7
+      },
+      "frameTimingStatuses": {
+        "valid": 659
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M05",
+      "sourceRecordingId": "M05_si1211",
+      "condition": "first_difference"
+    },
+    "0-H-M06_si1404__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3,
+        "p95": 4.699999809265137,
+        "p99": 5.400000095367432,
+        "maximum": 20.5
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 785,
+      "deliveredCorrectCoverage": 0.8920454545454546,
+      "jointError": 0.10795454545454546,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 263,
+        "reference_unvoiced_frames": 617,
+        "reference_voiced_success_count": 220,
+        "voicing_false_positive_count": 52,
+        "voicing_false_negative_count": 8,
+        "voicing_false_negative_or_unavailable_count": 8,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 34.09999990463257,
+        "p95": 45.90000009536743,
+        "p99": 48.60000038146973,
+        "maximum": 62.19999980926514
+      },
+      "validFrameTiming": 852,
+      "invalidFrameTiming": 35,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7196072,
+        "maximum": 7196072,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 785,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8920454545454546,
+        "jointError": 0.10795454545454546,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 852,
+        "unavailable": 35
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M06",
+      "sourceRecordingId": "M06_si1404",
+      "condition": "clean"
+    },
+    "0-H-M06_si1404__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3,
+        "p95": 5,
+        "p99": 5.599999904632568,
+        "maximum": 23.299999713897705
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 748,
+      "deliveredCorrectCoverage": 0.85,
+      "jointError": 0.15,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 263,
+        "reference_unvoiced_frames": 617,
+        "reference_voiced_success_count": 134,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 112,
+        "voicing_false_negative_or_unavailable_count": 112,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 34.90000009536743,
+        "p95": 47.700000286102295,
+        "p99": 50.19999980926514,
+        "maximum": 53.5
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7113864,
+        "maximum": 7113864,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 748,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.85,
+        "jointError": 0.15,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M06",
+      "sourceRecordingId": "M06_si1404",
+      "condition": "first_difference"
+    },
+    "1-H-F01_si462__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 496,
+        "p50": 3.0999999046325684,
+        "p95": 5,
+        "p99": 5.5,
+        "maximum": 21.300000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 989,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 989,
+      "deliveryAvailability": 0.998989898989899,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 912,
+      "deliveredCorrectCoverage": 0.9287169042769857,
+      "jointError": 0.07128309572301425,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 263,
+        "voicing_false_positive_count": 21,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 496
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 496,
+        "processedFrameCount": 989,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 989,
+        "p50": 34.799999713897705,
+        "p95": 46.80000019073486,
+        "p99": 47.80000019073486,
+        "maximum": 59.40000009536743
+      },
+      "validFrameTiming": 989,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 13354128,
+        "maximum": 13354128,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 912,
+        "eligibleValidDeliveredReferences": 982,
+        "correctCoverage": 0.9287169042769857,
+        "jointError": 0.07128309572301425,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 989
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "F01",
+      "sourceRecordingId": "F01_si462",
+      "condition": "clean"
+    },
+    "1-H-F01_si462__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 496,
+        "p50": 3.200000286102295,
+        "p95": 5,
+        "p99": 5.599999904632568,
+        "maximum": 23.800000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 989,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 989,
+      "deliveryAvailability": 0.998989898989899,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 865,
+      "deliveredCorrectCoverage": 0.8808553971486762,
+      "jointError": 0.11914460285132383,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 198,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 76,
+        "voicing_false_negative_or_unavailable_count": 76,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 496
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 496,
+        "processedFrameCount": 989,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 989,
+        "p50": 35.40000009536743,
+        "p95": 48.89999961853027,
+        "p99": 51.30000019073486,
+        "maximum": 52.30000019073486
+      },
+      "validFrameTiming": 989,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 13282956,
+        "maximum": 13282956,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 865,
+        "eligibleValidDeliveredReferences": 982,
+        "correctCoverage": 0.8808553971486762,
+        "jointError": 0.11914460285132383,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 989
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "F01",
+      "sourceRecordingId": "F01_si462",
+      "condition": "first_difference"
+    },
+    "1-H-F03_si1013__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 525120,
+      "prefixedSourceSampleCountTotal": 525312,
+      "sourceDurationSeconds": 10.944,
+      "completeProcessedServiceMs": {
+        "n": 547,
+        "p50": 3.0999999046325684,
+        "p95": 4.899999618530273,
+        "p99": 5.400000095367432,
+        "maximum": 24.40000009536743
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 1091,
+      "deliveryCounts": {
+        "delivered": 1091
+      },
+      "deliveredFrames": 1091,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 1083,
+      "deliveredCorrectFrames": 1016,
+      "deliveredCorrectCoverage": 0.938134810710988,
+      "jointError": 0.061865189289012,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 277,
+        "reference_unvoiced_frames": 806,
+        "reference_voiced_success_count": 250,
+        "voicing_false_positive_count": 40,
+        "voicing_false_negative_count": 7,
+        "voicing_false_negative_or_unavailable_count": 7,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 1083,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 547
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 547,
+        "processedFrameCount": 1091,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 1091,
+        "p50": 34.10000038146973,
+        "p95": 46.19999980926514,
+        "p99": 48,
+        "maximum": 51.90000009536743
+      },
+      "validFrameTiming": 1091,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11438072,
+        "maximum": 11438072,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 1016,
+        "eligibleValidDeliveredReferences": 1083,
+        "correctCoverage": 0.938134810710988,
+        "jointError": 0.061865189289012,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 12,
+        "render_observed": 12
+      },
+      "frameTimingStatuses": {
+        "valid": 1091
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F03",
+      "sourceRecordingId": "F03_si1013",
+      "condition": "clean"
+    },
+    "1-H-F03_si1013__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 525120,
+      "prefixedSourceSampleCountTotal": 525312,
+      "sourceDurationSeconds": 10.944,
+      "completeProcessedServiceMs": {
+        "n": 547,
+        "p50": 3,
+        "p95": 4.800000190734863,
+        "p99": 5.5,
+        "maximum": 24
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 1091,
+      "deliveryCounts": {
+        "delivered": 1091
+      },
+      "deliveredFrames": 1091,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 1083,
+      "deliveredCorrectFrames": 996,
+      "deliveredCorrectCoverage": 0.9196675900277008,
+      "jointError": 0.08033240997229917,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 277,
+        "reference_unvoiced_frames": 806,
+        "reference_voiced_success_count": 194,
+        "voicing_false_positive_count": 4,
+        "voicing_false_negative_count": 59,
+        "voicing_false_negative_or_unavailable_count": 59,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 1083,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 547
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 547,
+        "processedFrameCount": 1091,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 1091,
+        "p50": 35,
+        "p95": 48.5,
+        "p99": 50.80000019073486,
+        "maximum": 59.60000038146973
+      },
+      "validFrameTiming": 1091,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11419860,
+        "maximum": 11419860,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 996,
+        "eligibleValidDeliveredReferences": 1083,
+        "correctCoverage": 0.9196675900277008,
+        "jointError": 0.08033240997229917,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 12,
+        "render_observed": 12
+      },
+      "frameTimingStatuses": {
+        "valid": 1091
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F03",
+      "sourceRecordingId": "F03_si1013",
+      "condition": "first_difference"
+    },
+    "1-H-F05_si1211__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 391680,
+      "prefixedSourceSampleCountTotal": 391872,
+      "sourceDurationSeconds": 8.164,
+      "completeProcessedServiceMs": {
+        "n": 408,
+        "p50": 2.8000001907348633,
+        "p95": 4.599999904632568,
+        "p99": 5.400000095367432,
+        "maximum": 16.299999713897705
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 813,
+      "deliveryCounts": {
+        "delivered": 813
+      },
+      "deliveredFrames": 813,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 805,
+      "deliveredCorrectFrames": 768,
+      "deliveredCorrectCoverage": 0.9540372670807453,
+      "jointError": 0.04596273291925466,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 154,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 128,
+        "voicing_false_positive_count": 11,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 805,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 408
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 408,
+        "processedFrameCount": 813,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 813,
+        "p50": 34.299999713897705,
+        "p95": 45.69999980926514,
+        "p99": 49.09999990463257,
+        "maximum": 52
+      },
+      "validFrameTiming": 813,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10089304,
+        "maximum": 10089304,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 768,
+        "eligibleValidDeliveredReferences": 805,
+        "correctCoverage": 0.9540372670807453,
+        "jointError": 0.04596273291925466,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 813
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F05",
+      "sourceRecordingId": "F05_si1211",
+      "condition": "clean"
+    },
+    "1-H-F05_si1211__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 391680,
+      "prefixedSourceSampleCountTotal": 391872,
+      "sourceDurationSeconds": 8.164,
+      "completeProcessedServiceMs": {
+        "n": 408,
+        "p50": 3,
+        "p95": 4.800000190734863,
+        "p99": 5.400000095367432,
+        "maximum": 18.699999809265137
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 813,
+      "deliveryCounts": {
+        "delivered": 813
+      },
+      "deliveredFrames": 813,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 805,
+      "deliveredCorrectFrames": 739,
+      "deliveredCorrectCoverage": 0.9180124223602485,
+      "jointError": 0.08198757763975155,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 154,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 0,
+        "voicing_false_negative_count": 61,
+        "voicing_false_negative_or_unavailable_count": 62,
+        "unavailable_frames": 1
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 805,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 408
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 408,
+        "processedFrameCount": 813,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 813,
+        "p50": 34.5,
+        "p95": 46.40000009536743,
+        "p99": 50.19999980926514,
+        "maximum": 51.90000009536743
+      },
+      "validFrameTiming": 813,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10069016,
+        "maximum": 10069016,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 739,
+        "eligibleValidDeliveredReferences": 805,
+        "correctCoverage": 0.9180124223602485,
+        "jointError": 0.08198757763975155,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 813
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F05",
+      "sourceRecordingId": "F05_si1211",
+      "condition": "first_difference"
+    },
+    "1-H-F06_si1404__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 409920,
+      "prefixedSourceSampleCountTotal": 410112,
+      "sourceDurationSeconds": 8.544,
+      "completeProcessedServiceMs": {
+        "n": 427,
+        "p50": 2.9000000953674316,
+        "p95": 5.799999713897705,
+        "p99": 6.5,
+        "maximum": 14.800000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 851,
+      "deliveryCounts": {
+        "delivered": 851
+      },
+      "deliveredFrames": 851,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 843,
+      "deliveredCorrectFrames": 780,
+      "deliveredCorrectCoverage": 0.9252669039145908,
+      "jointError": 0.07473309608540925,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 290,
+        "reference_unvoiced_frames": 553,
+        "reference_voiced_success_count": 246,
+        "voicing_false_positive_count": 19,
+        "voicing_false_negative_count": 10,
+        "voicing_false_negative_or_unavailable_count": 10,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 843,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 427
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 427,
+        "processedFrameCount": 851,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 851,
+        "p50": 34.80000019073486,
+        "p95": 46.5,
+        "p99": 49.80000019073486,
+        "maximum": 53.89999961853027
+      },
+      "validFrameTiming": 849,
+      "invalidFrameTiming": 2,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 12475928,
+        "maximum": 12475928,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 780,
+        "eligibleValidDeliveredReferences": 843,
+        "correctCoverage": 0.9252669039145908,
+        "jointError": 0.07473309608540925,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 849,
+        "unavailable": 2
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F06",
+      "sourceRecordingId": "F06_si1404",
+      "condition": "clean"
+    },
+    "1-H-F06_si1404__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 409920,
+      "prefixedSourceSampleCountTotal": 410112,
+      "sourceDurationSeconds": 8.544,
+      "completeProcessedServiceMs": {
+        "n": 427,
+        "p50": 3,
+        "p95": 5.200000286102295,
+        "p99": 6.199999809265137,
+        "maximum": 24.699999809265137
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 851,
+      "deliveryCounts": {
+        "delivered": 851
+      },
+      "deliveredFrames": 851,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 843,
+      "deliveredCorrectFrames": 749,
+      "deliveredCorrectCoverage": 0.8884934756820878,
+      "jointError": 0.11150652431791222,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 290,
+        "reference_unvoiced_frames": 553,
+        "reference_voiced_success_count": 200,
+        "voicing_false_positive_count": 4,
+        "voicing_false_negative_count": 60,
+        "voicing_false_negative_or_unavailable_count": 61,
+        "unavailable_frames": 1
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 843,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 427
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 427,
+        "processedFrameCount": 851,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 851,
+        "p50": 34,
+        "p95": 46.299999713897705,
+        "p99": 48.200000286102295,
+        "maximum": 51
+      },
+      "validFrameTiming": 850,
+      "invalidFrameTiming": 1,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 12440056,
+        "maximum": 12440056,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 749,
+        "eligibleValidDeliveredReferences": 843,
+        "correctCoverage": 0.8884934756820878,
+        "jointError": 0.11150652431791222,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 850,
+        "unavailable": 1
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "F06",
+      "sourceRecordingId": "F06_si1404",
+      "condition": "first_difference"
+    },
+    "1-H-M01_si462__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3.0999999046325684,
+        "p95": 4.900000095367432,
+        "p99": 5.599999904632568,
+        "maximum": 22.799999713897705
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 780,
+      "deliveredCorrectCoverage": 0.8863636363636364,
+      "jointError": 0.11363636363636363,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 229,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 153,
+        "voicing_false_positive_count": 24,
+        "voicing_false_negative_count": 27,
+        "voicing_false_negative_or_unavailable_count": 27,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 34.59999990463257,
+        "p95": 46.299999713897705,
+        "p99": 50.299999713897705,
+        "maximum": 52.59999990463257
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7154984,
+        "maximum": 7154984,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 780,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8863636363636364,
+        "jointError": 0.11363636363636363,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M01",
+      "sourceRecordingId": "M01_si462",
+      "condition": "clean"
+    },
+    "1-H-M01_si462__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3.3999996185302734,
+        "p95": 5.199999809265137,
+        "p99": 5.699999809265137,
+        "maximum": 24.5
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 736,
+      "deliveredCorrectCoverage": 0.8363636363636363,
+      "jointError": 0.16363636363636364,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 229,
+        "reference_unvoiced_frames": 651,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 122,
+        "voicing_false_negative_or_unavailable_count": 122,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 35.5,
+        "p95": 48.5,
+        "p99": 51.40000009536743,
+        "maximum": 56.39999961853027
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7116124,
+        "maximum": 7116124,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 736,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8363636363636363,
+        "jointError": 0.16363636363636364,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M01",
+      "sourceRecordingId": "M01_si462",
+      "condition": "first_difference"
+    },
+    "1-H-M03_si1013__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 390720,
+      "prefixedSourceSampleCountTotal": 390912,
+      "sourceDurationSeconds": 8.144,
+      "completeProcessedServiceMs": {
+        "n": 407,
+        "p50": 3.3000001907348633,
+        "p95": 5.5,
+        "p99": 6.5,
+        "maximum": 14.599999904632568
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 811,
+      "deliveryCounts": {
+        "delivered": 811
+      },
+      "deliveredFrames": 811,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 803,
+      "deliveredCorrectFrames": 721,
+      "deliveredCorrectCoverage": 0.8978829389788294,
+      "jointError": 0.10211706102117062,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 231,
+        "reference_unvoiced_frames": 572,
+        "reference_voiced_success_count": 172,
+        "voicing_false_positive_count": 23,
+        "voicing_false_negative_count": 16,
+        "voicing_false_negative_or_unavailable_count": 16,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 803,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 407
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 407,
+        "processedFrameCount": 811,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 811,
+        "p50": 35.200000286102295,
+        "p95": 49.09999990463257,
+        "p99": 50.90000009536743,
+        "maximum": 52.09999990463257
+      },
+      "validFrameTiming": 811,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10106276,
+        "maximum": 10106276,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 721,
+        "eligibleValidDeliveredReferences": 803,
+        "correctCoverage": 0.8978829389788294,
+        "jointError": 0.10211706102117062,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 811
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M03",
+      "sourceRecordingId": "M03_si1013",
+      "condition": "clean"
+    },
+    "1-H-M03_si1013__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 390720,
+      "prefixedSourceSampleCountTotal": 390912,
+      "sourceDurationSeconds": 8.144,
+      "completeProcessedServiceMs": {
+        "n": 407,
+        "p50": 2.9000000953674316,
+        "p95": 4.899999618530273,
+        "p99": 5.599999904632568,
+        "maximum": 23.90000009536743
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 811,
+      "deliveryCounts": {
+        "delivered": 811
+      },
+      "deliveredFrames": 811,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 803,
+      "deliveredCorrectFrames": 660,
+      "deliveredCorrectCoverage": 0.821917808219178,
+      "jointError": 0.1780821917808219,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 231,
+        "reference_unvoiced_frames": 572,
+        "reference_voiced_success_count": 88,
+        "voicing_false_positive_count": 0,
+        "voicing_false_negative_count": 132,
+        "voicing_false_negative_or_unavailable_count": 132,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 803,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 407
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 407,
+        "processedFrameCount": 811,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 811,
+        "p50": 34.799999713897705,
+        "p95": 47.30000019073486,
+        "p99": 49.69999980926514,
+        "maximum": 58.09999990463257
+      },
+      "validFrameTiming": 811,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 10069232,
+        "maximum": 10069232,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 660,
+        "eligibleValidDeliveredReferences": 803,
+        "correctCoverage": 0.821917808219178,
+        "jointError": 0.1780821917808219,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 9,
+        "render_observed": 9
+      },
+      "frameTimingStatuses": {
+        "valid": 811
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M03",
+      "sourceRecordingId": "M03_si1013",
+      "condition": "first_difference"
+    },
+    "1-H-M05_si1211__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 317760,
+      "prefixedSourceSampleCountTotal": 317952,
+      "sourceDurationSeconds": 6.624,
+      "completeProcessedServiceMs": {
+        "n": 331,
+        "p50": 2.700000286102295,
+        "p95": 4.599999904632568,
+        "p99": 5.200000286102295,
+        "maximum": 13.300000190734863
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 659,
+      "deliveryCounts": {
+        "delivered": 659
+      },
+      "deliveredFrames": 659,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 651,
+      "deliveredCorrectFrames": 611,
+      "deliveredCorrectCoverage": 0.9385560675883257,
+      "jointError": 0.06144393241167435,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 153,
+        "reference_unvoiced_frames": 498,
+        "reference_voiced_success_count": 123,
+        "voicing_false_positive_count": 10,
+        "voicing_false_negative_count": 11,
+        "voicing_false_negative_or_unavailable_count": 11,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 651,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 331
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 331,
+        "processedFrameCount": 659,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 659,
+        "p50": 34.5,
+        "p95": 47.59999990463257,
+        "p99": 49.40000009536743,
+        "maximum": 50.90000009536743
+      },
+      "validFrameTiming": 632,
+      "invalidFrameTiming": 27,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 8281936,
+        "maximum": 8281936,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 611,
+        "eligibleValidDeliveredReferences": 651,
+        "correctCoverage": 0.9385560675883257,
+        "jointError": 0.06144393241167435,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 7,
+        "render_observed": 7
+      },
+      "frameTimingStatuses": {
+        "valid": 632,
+        "unavailable": 27
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M05",
+      "sourceRecordingId": "M05_si1211",
+      "condition": "clean"
+    },
+    "1-H-M05_si1211__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 317760,
+      "prefixedSourceSampleCountTotal": 317952,
+      "sourceDurationSeconds": 6.624,
+      "completeProcessedServiceMs": {
+        "n": 331,
+        "p50": 2.700000286102295,
+        "p95": 4.5,
+        "p99": 5.400000095367432,
+        "maximum": 24.5
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 659,
+      "deliveryCounts": {
+        "delivered": 659
+      },
+      "deliveredFrames": 659,
+      "deliveryAvailability": 1.0,
+      "eligibleValidReferences": 651,
+      "deliveredCorrectFrames": 563,
+      "deliveredCorrectCoverage": 0.8648233486943164,
+      "jointError": 0.13517665130568357,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 153,
+        "reference_unvoiced_frames": 498,
+        "reference_voiced_success_count": 66,
+        "voicing_false_positive_count": 1,
+        "voicing_false_negative_count": 75,
+        "voicing_false_negative_or_unavailable_count": 75,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 651,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 3,
+      "blockDispositions": {
+        "processed": 331
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 331,
+        "processedFrameCount": 659,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 2,
+        "maximumInFlightResultBatches": 2,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 192,
+      "terminalDroppedSamples": 192,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 659,
+        "p50": 34.299999713897705,
+        "p95": 46.40000009536743,
+        "p99": 47.799999713897705,
+        "maximum": 51.80000019073486
+      },
+      "validFrameTiming": 646,
+      "invalidFrameTiming": 13,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 8224328,
+        "maximum": 8224328,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 563,
+        "eligibleValidDeliveredReferences": 651,
+        "correctCoverage": 0.8648233486943164,
+        "jointError": 0.13517665130568357,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 7,
+        "render_observed": 7
+      },
+      "frameTimingStatuses": {
+        "valid": 646,
+        "unavailable": 13
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 3,
+      "speaker": "M05",
+      "sourceRecordingId": "M05_si1211",
+      "condition": "first_difference"
+    },
+    "1-H-M06_si1404__clean": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 2.799999713897705,
+        "p95": 4.599999904632568,
+        "p99": 5.200000286102295,
+        "maximum": 13
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 785,
+      "deliveredCorrectCoverage": 0.8920454545454546,
+      "jointError": 0.10795454545454546,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 263,
+        "reference_unvoiced_frames": 617,
+        "reference_voiced_success_count": 220,
+        "voicing_false_positive_count": 52,
+        "voicing_false_negative_count": 8,
+        "voicing_false_negative_or_unavailable_count": 8,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 35,
+        "p95": 47.30000019073486,
+        "p99": 49.40000009536743,
+        "maximum": 50.90000009536743
+      },
+      "validFrameTiming": 886,
+      "invalidFrameTiming": 1,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7159868,
+        "maximum": 7159868,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 785,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.8920454545454546,
+        "jointError": 0.10795454545454546,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 886,
+        "unavailable": 1
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M06",
+      "sourceRecordingId": "M06_si1404",
+      "condition": "clean"
+    },
+    "1-H-M06_si1404__first_difference": {
+      "cases": 1,
+      "originalSampleCountTotal": 427680,
+      "prefixedSourceSampleCountTotal": 427872,
+      "sourceDurationSeconds": 8.914,
+      "completeProcessedServiceMs": {
+        "n": 445,
+        "p50": 3,
+        "p95": 4.800000190734863,
+        "p99": 5.599999904632568,
+        "maximum": 19
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 0,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 888,
+      "deliveryCounts": {
+        "delivered": 887,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 887,
+      "deliveryAvailability": 0.9988738738738738,
+      "eligibleValidReferences": 880,
+      "deliveredCorrectFrames": 748,
+      "deliveredCorrectCoverage": 0.85,
+      "jointError": 0.15,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 263,
+        "reference_unvoiced_frames": 617,
+        "reference_voiced_success_count": 134,
+        "voicing_false_positive_count": 3,
+        "voicing_false_negative_count": 112,
+        "voicing_false_negative_or_unavailable_count": 112,
+        "unavailable_frames": 0
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 880,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 445
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 445,
+        "processedFrameCount": 887,
+        "lostBlockCount": 0,
+        "droppedTransportBlockCount": 0,
+        "droppedTransportSampleCount": 0,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 0,
+        "freshnessWithheldSampleCount": 0,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 1,
+        "maximumInFlightResultBatches": 1,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 672,
+      "workletDroppedBlocks": 0,
+      "certifiedRenderAgeMs": {
+        "n": 887,
+        "p50": 34.90000009536743,
+        "p95": 47.40000009536743,
+        "p99": 50.5,
+        "maximum": 51.19999980926514
+      },
+      "validFrameTiming": 887,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 7133460,
+        "maximum": 7133460,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 748,
+        "eligibleValidDeliveredReferences": 880,
+        "correctCoverage": 0.85,
+        "jointError": 0.15,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 0,
+      "clockProbeCounts": {
+        "probes": 10,
+        "render_observed": 10
+      },
+      "frameTimingStatuses": {
+        "valid": 887
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "M06",
+      "sourceRecordingId": "M06_si1404",
+      "condition": "first_difference"
+    },
+    "injected-stall": {
+      "cases": 1,
+      "originalSampleCountTotal": 476640,
+      "prefixedSourceSampleCountTotal": 476832,
+      "sourceDurationSeconds": 9.934,
+      "completeProcessedServiceMs": {
+        "n": 483,
+        "p50": 3.1000003814697266,
+        "p95": 4.900000095367432,
+        "p99": 5.5,
+        "maximum": 24
+      },
+      "processedBlocksOver10Ms": 1,
+      "processedBlocksOver20Ms": 1,
+      "pooledRuntimeP99GoalMet": true,
+      "perCaseRuntimeGoalsPassed": 1,
+      "intendedTargets": 990,
+      "deliveryCounts": {
+        "delivered": 960,
+        "worker-withheld-support": 8,
+        "transport-loss": 18,
+        "reset-warmup": 3,
+        "terminal-partial-support": 1
+      },
+      "deliveredFrames": 960,
+      "deliveryAvailability": 0.9696969696969697,
+      "eligibleValidReferences": 982,
+      "deliveredCorrectFrames": 882,
+      "deliveredCorrectCoverage": 0.8981670061099797,
+      "jointError": 0.10183299389002037,
+      "pooledReferenceCounts": {
+        "reference_voiced_frames": 312,
+        "reference_unvoiced_frames": 670,
+        "reference_voiced_success_count": 263,
+        "voicing_false_positive_count": 22,
+        "voicing_false_negative_count": 9,
+        "voicing_false_negative_or_unavailable_count": 9,
+        "unavailable_frames": 29
+      },
+      "referenceStatusCounts": {
+        "boundary": 5,
+        "valid": 982,
+        "missing": 3
+      },
+      "outputsWithoutProviderReference": 2,
+      "blockDispositions": {
+        "processed": 483,
+        "freshness-withheld": 4
+      },
+      "workerLossReasons": {},
+      "hostWithheldReasons": {},
+      "diagnosticCounts": {
+        "receivedBlockCount": 483,
+        "processedFrameCount": 960,
+        "lostBlockCount": 13,
+        "droppedTransportBlockCount": 9,
+        "droppedTransportSampleCount": 8640,
+        "researchCancelledBlockCount": 0,
+        "researchCancelledFrameCount": 0,
+        "researchQueueDroppedBlockCount": 0,
+        "researchQueueDroppedSampleCount": 0,
+        "resultBackpressureBlockCount": 0,
+        "hostDiscardedFrameCount": 0,
+        "freshnessWithheldBlockCount": 4,
+        "freshnessWithheldSampleCount": 3840,
+        "timestampRegressionCount": 0,
+        "invalidClockMappingCount": 0
+      },
+      "highWater": {
+        "maximumInFlightBlocks": 4,
+        "maximumInFlightResultBatches": 4,
+        "researchMaximumQueuedBlocks": 0,
+        "ringBufferCapacitySamples": 96000
+      },
+      "finalPartialSamples": 672,
+      "terminalDroppedSamples": 9312,
+      "workletDroppedBlocks": 9,
+      "certifiedRenderAgeMs": {
+        "n": 960,
+        "p50": 35,
+        "p95": 48.09999990463257,
+        "p99": 49.700000286102295,
+        "maximum": 54.40000009536743
+      },
+      "validFrameTiming": 960,
+      "invalidFrameTiming": 0,
+      "sourceTimelineEvents": {},
+      "successfulCompletionFences": 1,
+      "sampledRendererJsHeapBytes": {
+        "minimum": 11983692,
+        "maximum": 11983692,
+        "samples": 1,
+        "scope": "after each fresh-context source; not peak heap"
+      },
+      "conditionalAmongDelivered": {
+        "correctFrames": 882,
+        "eligibleValidDeliveredReferences": 953,
+        "correctCoverage": 0.925498426023085,
+        "jointError": 0.07450157397691501,
+        "scope": "Secondary; excludes intended eligible targets with no delivered output"
+      },
+      "resetEvents": 5,
+      "clockProbeCounts": {
+        "probes": 11,
+        "render_observed": 11
+      },
+      "frameTimingStatuses": {
+        "valid": 960
+      },
+      "allProbeAffineConsistency": {
+        "feasibleCases": 0,
+        "totalCases": 1,
+        "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+      },
+      "deliveredOutputsWithoutProviderReference": 2,
+      "speaker": "F01",
+      "sourceRecordingId": "F01_si462",
+      "condition": "clean"
+    }
+  },
+  "all34Cases": {
+    "cases": 34,
+    "originalSampleCountTotal": 13993577,
+    "prefixedSourceSampleCountTotal": 13999913,
+    "sourceDurationSeconds": 291.66485416666666,
+    "completeProcessedServiceMs": {
+      "n": 14557,
+      "p50": 2.9000000953674316,
+      "p95": 4.899999618530273,
+      "p99": 5.599999904632568,
+      "maximum": 26.199999809265137
+    },
+    "processedBlocksOver10Ms": 34,
+    "processedBlocksOver20Ms": 20,
+    "pooledRuntimeP99GoalMet": true,
+    "perCaseRuntimeGoalsPassed": 33,
+    "intendedTargets": 29051,
+    "deliveryCounts": {
+      "delivered": 29009,
+      "terminal-partial-support": 13,
+      "worker-withheld-support": 8,
+      "transport-loss": 18,
+      "reset-warmup": 3
+    },
+    "deliveredFrames": 29009,
+    "deliveryAvailability": 0.9985542666345393,
+    "eligibleValidReferences": 28690,
+    "deliveredCorrectFrames": 25740,
+    "deliveredCorrectCoverage": 0.8971767166260021,
+    "jointError": 0.1028232833739979,
+    "pooledReferenceCounts": {
+      "reference_voiced_frames": 7948,
+      "reference_unvoiced_frames": 20742,
+      "reference_voiced_success_count": 5485,
+      "voicing_false_positive_count": 458,
+      "voicing_false_negative_count": 1597,
+      "voicing_false_negative_or_unavailable_count": 1601,
+      "unavailable_frames": 33
+    },
+    "referenceStatusCounts": {
+      "boundary": 165,
+      "valid": 28690,
+      "missing": 99
+    },
+    "outputsWithoutProviderReference": 86,
+    "blockDispositions": {
+      "processed": 14557,
+      "freshness-withheld": 4
+    },
+    "workerLossReasons": {},
+    "hostWithheldReasons": {},
+    "diagnosticCounts": {
+      "receivedBlockCount": 14557,
+      "processedFrameCount": 29009,
+      "lostBlockCount": 13,
+      "droppedTransportBlockCount": 9,
+      "droppedTransportSampleCount": 8640,
+      "researchCancelledBlockCount": 0,
+      "researchCancelledFrameCount": 0,
+      "researchQueueDroppedBlockCount": 0,
+      "researchQueueDroppedSampleCount": 0,
+      "resultBackpressureBlockCount": 0,
+      "hostDiscardedFrameCount": 0,
+      "freshnessWithheldBlockCount": 4,
+      "freshnessWithheldSampleCount": 3840,
+      "timestampRegressionCount": 0,
+      "invalidClockMappingCount": 0
+    },
+    "highWater": {
+      "maximumInFlightBlocks": 4,
+      "maximumInFlightResultBatches": 4,
+      "researchMaximumQueuedBlocks": 0,
+      "ringBufferCapacitySamples": 96000
+    },
+    "finalPartialSamples": 12713,
+    "terminalDroppedSamples": 21353,
+    "workletDroppedBlocks": 9,
+    "certifiedRenderAgeMs": {
+      "n": 29009,
+      "p50": 34.60000038146973,
+      "p95": 47.09999990463257,
+      "p99": 50,
+      "maximum": 66.30000019073486
+    },
+    "validFrameTiming": 28785,
+    "invalidFrameTiming": 224,
+    "sourceTimelineEvents": {},
+    "successfulCompletionFences": 34,
+    "sampledRendererJsHeapBytes": {
+      "minimum": 4150920,
+      "maximum": 13362624,
+      "samples": 34,
+      "scope": "after each fresh-context source; not peak heap"
+    },
+    "conditionalAmongDelivered": {
+      "correctFrames": 25740,
+      "eligibleValidDeliveredReferences": 28661,
+      "correctCoverage": 0.8980845050765849,
+      "jointError": 0.10191549492341509,
+      "scope": "Secondary; excludes intended eligible targets with no delivered output"
+    },
+    "resetEvents": 5,
+    "clockProbeCounts": {
+      "probes": 321,
+      "render_observed": 321
+    },
+    "frameTimingStatuses": {
+      "valid": 28785,
+      "unavailable": 224
+    },
+    "allProbeAffineConsistency": {
+      "feasibleCases": 1,
+      "totalCases": 34,
+      "scope": "All callback brackets; no discarded outliers; infeasibility allows scheduling/phase variation and does not invalidate same-main-clock render certificates"
+    },
+    "deliveredOutputsWithoutProviderReference": 86
+  },
+  "maximumParityAbsoluteErrors": {
+    "feature": 0.0,
+    "voicing_logit": 1.9073486328125e-06,
+    "candidate_logit": 1.1920928955078125e-06,
+    "raw_yin_hz": 9.663381206337363e-13
+  },
+  "parityScope": {
+    "cases": 34,
+    "frames": 29009,
+    "features": "Shared pure TypeScript equations; actual source support and history resets reconstructed outside transport",
+    "model": "Independent NumPy equations from authenticated original weights",
+    "pitch": "librosa0.11.0 Float64 YIN; unchanged40ms support retains known low-frequency support warning"
+  },
+  "capacityConstants": {
+    "pcmCredits": 4,
+    "resultCredits": 4,
+    "queuedResearchBlocks": 3,
+    "pcmRingSamples": 96000,
+    "transportBlockSamples": 960,
+    "pendingWorkletBlockSamples": 960,
+    "sourceMaximumSamples": 5760000,
+    "rawPendingRecords": 200,
+    "rawBatchRecords": 100,
+    "workerLossResetEvents": 20000,
+    "naturalTimelineEvents": 64,
+    "numericStatisticsPerMetric": 200000,
+    "renderLeasePendingRequests": 1,
+    "renderLeaseLedgerEntries": 8,
+    "renderLeaseRenewalMs": 25,
+    "renderLeaseMaximumAgeMs": 100,
+    "workerDrainTimeoutMs": 5000,
+    "mainCompletionTimeoutMs": 6000
+  },
+  "estimatorContract": {
+    "sampleRateHz": 48000,
+    "supportSamples": 1920,
+    "outputHopSamples": 480,
+    "targetDelaySamples": 960,
+    "targetDelayMs": 20,
+    "ptdbPrefixSamples": 192,
+    "inferenceThreshold": 0.5,
+    "supportedPitchHzInclusive": [
+      50,
+      700
+    ],
+    "referenceEligibleStartBoundaryOriginalSamples": 3072,
+    "firstEligibleProviderTargetOriginalSamples": 3168,
+    "referenceTrailingBoundarySamples": 1536
+  },
+  "workload": {
+    "uniqueOriginalRecordings": 8,
+    "speakers": 8,
+    "uniqueOriginalSampleCounts": {
+      "F01_si462": 476640,
+      "F03_si1013": 525120,
+      "F05_si1211": 391680,
+      "F06_si1404": 409920,
+      "M01_si462": 427680,
+      "M03_si1013": 390720,
+      "M05_si1211": 317760,
+      "M06_si1404": 427680
+    },
+    "uniqueOriginalDurationSeconds": 70.15,
+    "conditions": [
+      "clean",
+      "first_difference"
+    ],
+    "ordinaryPlaylist": [
+      "H",
+      "H"
+    ],
+    "ordinaryCases": 32,
+    "indexFixtures": 1,
+    "injectedStallCases": 1,
+    "loops": 0,
+    "candidateControlRuntime": "not run; candidate failed development",
+    "independence": "Eight already-observed development recordings; conditions and repeated H passes are dependent observations"
+  },
+  "injectedStallRecovery": {
+    "requestedWorkerStallAtReplayMs": 800,
+    "requestedWorkerStallDurationMs": 250,
+    "resetEvents": 5,
+    "outputSegments": [
+      {
+        "segmentId": "audio-1-1",
+        "completedPredictions": 47,
+        "firstSupportEndSample": 1920,
+        "lastSupportEndSample": 24000
+      },
+      {
+        "segmentId": "audio-1-6",
+        "completedPredictions": 913,
+        "firstSupportEndSample": 38400,
+        "lastSupportEndSample": 476160
+      }
+    ],
+    "sourceGridPredictionGapMs": 300.0,
+    "recoveredPredictionCount": 913,
+    "lossCategories": {
+      "delivered": 960,
+      "worker-withheld-support": 8,
+      "transport-loss": 18,
+      "reset-warmup": 3,
+      "terminal-partial-support": 1
+    },
+    "withheldBlockReasons": {
+      "expired-lease": 4
+    },
+    "recoveryParity": "passed",
+    "scope": "Source-grid prediction gap; not physical latency. The injected worker task stall occurs outside completed-block service measurement; its losses remain in full delivery/quality denominators."
+  },
+  "failureLineage": {
+    "attempt1": {
+      "executionStatus": "failed",
+      "cases": 34,
+      "failures": [
+        "1-H-M05_si1211__first_difference: natural-source-origin-mismatch"
+      ],
+      "runSha256": "15dd057f8805c8a31e6b8717153590b082f8be9fce98d6abe5e000368c548afe",
+      "auditFailureSha256": "687d5e594ee5c3579c8852fbb99fafd5f80d87d18d7cb211e243efdde24df5dd",
+      "auditError": "ValueError('Prediction does not match the exact reference grid.')",
+      "workletSha256": "765f2b756b08f4830476b9480ef61b653aaa70a67c4603b0e303daa61bcf87e5",
+      "auditorSha256": "37536c5f1d155ac6d5aee9407b3021f8b85a6d3e889245a01fb883f1dd6a4fc7",
+      "preservedTraceSha256": "75e46af8ab3ef76ee575522c2d3d8c09f6da155323a1c624376675d0cd5baa75",
+      "diagnosis": "Exact source start, then capture coordinate128 samples ahead of render clock after reset; original callbacks not retained, so duplicated/overlapping quantum is inferred, not proven."
+    },
+    "repair": {
+      "receiptSha256": "2d80c6c889d3303589605907e1b7f723ccaea2d6cde89b14c710a140a2ade1ae",
+      "sourceSha256": {
+        "apps/capture-web/public/voice-capture-worklet.js": "b86098b68b350e0d7e6c0c896f66b12c8bb82d398e5ff2b76a274b2d8b7bb3dd",
+        "apps/capture-web/public/asset-manifest.json": "16734be48e7637cf834c55938f2ab35a91cae45363a7d0e23f87a91eb5e4e694",
+        "apps/capture-web/src/research-voice-replay.ts": "4ef595103031c9f455d255f48d4bc064aa2615f5bde0d168f67ddcc76e2b92d2",
+        "apps/capture-web/src/voice-worklet.test.ts": "3e4f822ca0b8ed943d5eddd7a6752496c868490244b00cb2b30043fa4e64258e",
+        "research/voice-prosody/phenometrix_prosody/audit_natural_browser.py": "9b1809d2f9d7bbac6621ddfd88707f82d157065e154a3e10743957ac71c45804",
+        "research/voice-prosody/tests/test_natural_browser.py": "fd992be74d230d64c27fbb98f5621c1128aa7a14c5d17a59f0a61d4ed5c61007",
+        "research/voice-prosody/NATURAL_BROWSER_PROTOCOL.md": "b916708318dca6ffb0ba126c095eb70739784929a6036a4ba76b525eedbae708"
+      },
+      "amendment": "Natural execution policy after retained attempt1, before attempt2; unchanged 1920 support/480 hop/960 delay, model bytes, inputs and reference eligibility. Forward gaps discard partial support and actual samples up to the next ORIGINAL 960-sample transport boundary with explicit loss accounting. Overlap or unknown input shape rejects before consuming ambiguous PCM. No endpoint clamp or reference rounding."
+    },
+    "attempt2": {
+      "executionStatus": "complete",
+      "completeRouteTests": 8,
+      "runSha256": "6508fce6532a364dc2f2c4abb45a289c8550555f87c4746c5f336391e487afb4",
+      "auditSha256": "b9bb9ac8fc51159313c45b4e24cf449abab639db574d5c3ed339702d2ac73941",
+      "sourceTimelineEventsObserved": 0,
+      "underlyingBrowserCauseResolved": false,
+      "qualification": "No overlap occurred in this attempt; synthetic tests establish fail-closed handling, not elimination of the browser cause."
+    }
+  },
+  "validation": [
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm exec vitest run src/voice-worklet.test.ts src/voice-natural-completion.test.ts src/voice-worker.test.ts",
+      "status": "passed",
+      "tests": 51
+    },
+    {
+      "cwd": "research/voice-prosody",
+      "command": ".venv/bin/python -m pytest tests/test_natural_browser.py tests/test_audit_hybrid_browser.py -q",
+      "status": "passed",
+      "tests": 40
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm exec tsc --noEmit",
+      "status": "passed"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm run build",
+      "status": "passed",
+      "scope": "standard and embedded production builds"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm run verify:assets",
+      "status": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "production output inventory assertion",
+      "status": "passed",
+      "scope": "No .local research artifacts, ONNX, ort runtime, natural PCM or research route in standard/embedded output; normal product MediaPipe WASM remains"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "VOICE_RESEARCH_METHOD=hybrid VOICE_RESEARCH_CLOCK_DIAGNOSTICS=1 VOICE_RESEARCH_MODEL_CONFIG=public/.local/voice-mlp/hybrid-config.json VOICE_NATURAL_MANIFEST=../../research/voice-prosody/runs/voicing-robustness-assessment-v2/natural-inputs/manifest.json VOICE_RESEARCH_OUTPUT_DIR=../../research/voice-prosody/runs/voicing-robustness-assessment-v2/browser-attempt-2 pnpm exec playwright test --config playwright.research.config.ts --workers=1",
+      "status": "passed",
+      "tests": 8,
+      "skipped": 0
+    },
+    {
+      "cwd": "research/voice-prosody",
+      "command": ".venv/bin/python -m phenometrix_prosody.audit_natural_browser --run runs/voicing-robustness-assessment-v2/browser-attempt-2 --inputs runs/voicing-robustness-assessment-v2/natural-inputs/manifest.json --data data/ptdb-tug --config ../../apps/capture-web/public/.local/voice-mlp/hybrid-config.json --export runs/delayed-mlp-export --output runs/voicing-robustness-assessment-v2/natural-browser-audit-attempt-2",
+      "status": "passed",
+      "cases": 34
+    }
+  ],
+  "scope": "Descriptive local research execution. Default product remains DSP. Service times and certified same-main-clock software-render ages are not physical microphone/input/display latency. Fresh-context sampled JS heap is not peak total memory. No training or other heavy process ran concurrently; uncontrolled OS background load remains.",
+  "scriptSha256": "8c72f15584c430d551fe87e88a9c54d3a7a1c6d125705057b502b0e72eb20564",
+  "previousSummarySha256": "708895d44922662f2438130b0c6f31a53a10cea203aebaea9dc8f1262e57dc7c"
+}

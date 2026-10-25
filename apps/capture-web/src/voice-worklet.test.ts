@@ -52,6 +52,132 @@ function fixture() {
 }
 
 describe("voice capture AudioWorklet", () => {
+  it("binds scheduled finite source zero exactly and fences a retained final partial without post-source silence", () => {
+    const f = fixture();
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7,
+      startAudioFrame: 49920, sampleCount: 2017 } });
+    expect(f.controlMessages.at(-1)).toMatchObject({ status: "armed" });
+    f.render(1920, 0); // Before the scheduled source; must not enter capture coordinates.
+    expect(f.blocks.filter(block => block.type === "pcm-block")).toHaveLength(0);
+    const waveform = Float32Array.from({ length: 2048 }, (_, i) => i < 2017 ? (i + 1) / 4096 : -1);
+    f.processor.process([[waveform]]);
+    const pcmBlocks = f.blocks.filter(block => block.type === "pcm-block");
+    expect(pcmBlocks.map(block => block.absoluteSampleIndex)).toEqual([0, 960]);
+    expect(pcmBlocks.map(block => block.endAudioFrameExclusive)).toEqual([50880, 51840]);
+    expect(new Float32Array(pcmBlocks[0].buffer)).toEqual(waveform.slice(0, 960));
+    expect(new Float32Array(pcmBlocks[1].buffer)).toEqual(waveform.slice(960, 1920));
+    expect(f.blocks.at(-1)).toMatchObject({ type: "research-natural-end", fenceId: 1 });
+    expect(f.controlMessages.at(-1)).toMatchObject({ type: "research-natural-ended", scheduledStartAudioFrame: 49920,
+      observedStartAudioFrame: 49920, sourceOffset: 0, captureEndSampleExclusive: 2017,
+      discardedPartialSampleCount: 97, droppedSampleCount: 97, firstSamples: Array.from(waveform.slice(0, 16)) });
+    f.context.currentFrame += 2048;
+    f.render(128, 0);
+    f.processor.port.onmessage?.({ data: { type: "dispose" } });
+    expect(f.controlMessages.at(-1)).toMatchObject({ sampleClockEndExclusive: 2017, discardedPartialSampleCount: 97, droppedSampleCount: 97 });
+  });
+
+  it("acknowledges finite PCM credit drain only after the final delayed recycle is observed", () => {
+    const f = fixture();
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: 49920, sampleCount: 1920 } });
+    f.context.currentFrame = 49920;
+    f.render(1920, .1);
+    const pcm = f.blocks.filter(block => block.type === "pcm-block");
+    expect(f.controlMessages.some(row => row.type === "research-natural-ended")).toBe(true);
+    expect(f.controlMessages.some(row => row.type === "research-natural-credits-drained")).toBe(false);
+    f.recycle(pcm[0]);
+    expect(f.controlMessages.some(row => row.type === "research-natural-credits-drained")).toBe(false);
+    f.recycle(pcm[1]);
+    expect(f.controlMessages.at(-1)).toMatchObject({ type: "research-natural-credits-drained", captureEpoch: 7,
+      sourceSampleCount: 1920, sequence: 2, inFlightBlockCount: 0, pendingSampleCount: 0 });
+    f.recycle(pcm[1]);
+    expect(f.controlMessages.filter(row => row.type === "research-natural-credits-drained")).toHaveLength(1);
+    f.processor.port.onmessage?.({ data: { type: "dispose" } });
+    expect(f.controlMessages.at(-1)).toMatchObject({ inFlightBlockCountAtDispose: 0 });
+  });
+
+  it("rejects late and off-grid finite-source starts, preserving the ordinary transport", () => {
+    const f = fixture();
+    for (const startAudioFrame of [48000, 49921]) {
+      f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame, sampleCount: 1920 } });
+      expect(f.controlMessages.at(-1)).toMatchObject({ status: "rejected" });
+    }
+    f.render(); expect(f.blocks[0].absoluteSampleIndex).toBe(0);
+  });
+
+  it("retains source-coordinate loss when initial input is absent instead of rebinding zero", () => {
+    const f = fixture();
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: 49920, sampleCount: 1920 } });
+    f.context.currentFrame = 49920;
+    f.processor.process([[]], [[new Float32Array(128)]]);
+    f.context.currentFrame += 128; f.render(1792, .2);
+    expect(f.blocks.find(block => block.type === "pcm-block")).toMatchObject({ absoluteSampleIndex: 960, droppedSampleCount: 960 });
+    expect(f.controlMessages.at(-1)).toMatchObject({ observedStartAudioFrame: 50048,
+      captureEndSampleExclusive: 1920, droppedSampleCount: 960, discardedPartialSampleCount: 0 });
+  });
+
+  it("retains a positive source gap and resumes at the original block grid with exact PCM and endcap", () => {
+    const f = fixture();
+    const start = 49920;
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: start, sampleCount: 3969 } });
+    const renderAt = (offset: number, length: number) => {
+      f.context.currentFrame = start + offset;
+      f.processor.process([[Float32Array.from({ length }, (_, i) => (offset + i) / 8192)]]);
+    };
+    renderAt(0, 128);
+    renderAt(256, 128); // One missing quantum; first128 is discarded partial support.
+    renderAt(384, 640); // Finish charging grid restart, then begin source960.
+    renderAt(1024, 3072); // Exact3969 end falls within this callback.
+    const blocks = f.blocks.filter(row => row.type === "pcm-block");
+    expect(blocks.map(row => row.absoluteSampleIndex)).toEqual([960, 1920, 2880]);
+    for (const block of blocks) {
+      expect(block.endAudioFrameExclusive).toBe(start + block.absoluteSampleIndex + 960);
+      expect(new Float32Array(block.buffer)).toEqual(Float32Array.from({ length: 960 }, (_, i) => (block.absoluteSampleIndex + i) / 8192));
+    }
+    const receipt = f.controlMessages.find(row => row.type === "research-natural-ended");
+    expect(receipt).toMatchObject({ captureEndSampleExclusive: 3969, discardedPartialSampleCount: 129, droppedSampleCount: 1089,
+      timeline: { status: "complete", overflow: 0, events: [
+        { kind: "forward-gap", expectedAudioFrame: start + 128, observedStartAudioFrame: start + 256,
+          missingSampleCount: 128, discardedPendingSampleCount: 128 },
+        { kind: "grid-restart", startAudioFrame: start + 256, endAudioFrameExclusive: start + 960, skippedSampleCount: 704 }
+      ] } });
+  });
+
+  it.each([128, 64])("rejects a %i-sample duplicate/overlap before consuming ambiguous PCM", rewind => {
+    const f = fixture();
+    const start = 49920;
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: start, sampleCount: 3840 } });
+    f.context.currentFrame = start;
+    f.render(1792); // One emitted block and exactly832 pending samples, matching attempt1.
+    f.context.currentFrame -= rewind;
+    f.render(128, -.5);
+    const receipt = f.controlMessages.find(row => row.type === "research-natural-ended");
+    expect(receipt).toMatchObject({ captureEndSampleExclusive: 1792, discardedPartialSampleCount: 832, droppedSampleCount: 832,
+      timeline: { status: "failed", error: "overlapping-render-quantum", overflow: 0,
+        events: [{ kind: "overlap-rejected", expectedAudioFrame: start + 1792,
+          observedStartAudioFrame: start + 1792 - rewind, overlapSampleCount: rewind, discardedPendingSampleCount: 832 }] } });
+    expect(f.blocks.filter(row => row.type === "pcm-block")).toHaveLength(1);
+    f.context.currentFrame = start + 3840; f.render();
+    expect(f.controlMessages.filter(row => row.type === "research-natural-ended")).toHaveLength(1);
+    expect(f.blocks.filter(row => row.type === "pcm-block")).toHaveLength(1);
+  });
+
+  it("rejects unknown finite input shapes and bounds retained discontinuity receipts", () => {
+    const f = fixture();
+    f.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: 49920, sampleCount: 48000 } });
+    f.context.currentFrame = 49920;
+    f.processor.process([[new Float32Array(64)]], [[new Float32Array(128)]]);
+    expect(f.controlMessages.at(-1)).toMatchObject({ type: "research-natural-credits-drained" });
+    expect(f.controlMessages.find(row => row.type === "research-natural-ended")).toMatchObject({
+      timeline: { status: "failed", error: "unknown-input-quantum-length" } });
+    const g = fixture();
+    g.processor.port.onmessage?.({ data: { type: "research-natural-source", captureEpoch: 7, startAudioFrame: 49920, sampleCount: 48000 } });
+    g.context.currentFrame = 49920;
+    for (let i = 0; i < 65; i += 1) { g.processor.process([[]], [[new Float32Array(128)]]); g.context.currentFrame += 128; }
+    const receipt = g.controlMessages.find(row => row.type === "research-natural-ended");
+    expect(receipt).toMatchObject({ timeline: { status: "failed", error: "timeline-event-overflow", capacity: 64, overflow: 1 } });
+    expect((receipt?.timeline as { events: unknown[] }).events).toHaveLength(64);
+  });
+
   it("snapshots the lease before the first block sample and never refreshes partial support", () => {
     const f = fixture();
     const first: VoiceRenderLease = { schemaVersion: "phenometric.voice-render-freshness.v1", leaseId: 1,

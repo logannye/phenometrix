@@ -1,0 +1,97 @@
+{
+  "schema": "phenometrix.voicing-robustness.external-intake.v1",
+  "status": "blocked",
+  "external_assessment_admitted": false,
+  "reason": "Retained release documentation cautions against ground-truth comparison with different estimator parameters; reference uses 25.6 ms autocorrelation, study fixes 40 ms raw YIN support. Imperfect acoustic-delay correction is documented. No prospective compatible reference procedure is authorized in this intervention.",
+  "reference_document_member": "KEELE/_metadata.json",
+  "reference_document_sha256": "9a2575643d5d19448fe11f6faf71c13dd696bc589811ac8a7580f7cbcbfc50ba",
+  "access_utc": "2026-10-25T01:17:12.673906+00:00",
+  "metadata_receipt_sha256": "d5295b19250fede666d8af2304b36471f40aa40484004498d21e03f02aead2b7",
+  "metadata_only": true,
+  "waveforms_accessed": false,
+  "reference_arrays_accessed": false,
+  "feature_summaries_accessed": false,
+  "model_predictions_generated": false,
+  "outcomes_accessed": false,
+  "incidental_metadata_exposure": "Item JSON contains the common North Wind transcript and coarse segment boundaries; neither used for selection or outcomes.",
+  "range_bytes_transferred": 18893,
+  "zip_member_count": 85,
+  "json_members_read": 31,
+  "archive": {
+    "record": "3921794",
+    "version": "1.1.0",
+    "filename": "KEELE.zip",
+    "bytes": 22782212,
+    "publisher_md5": "f5a87014bad14744660b90187de7d43f",
+    "publisher_md5_locally_verified": false,
+    "local_sha256": null
+  },
+  "declared_record_ids": [
+    "f1nw0000",
+    "f2nw0000",
+    "f3nw0000",
+    "f4nw0000",
+    "f5nw0000",
+    "m1nw0000",
+    "m2nw0000",
+    "m3nw0000",
+    "m4nw0000",
+    "m5nw0000"
+  ],
+  "rights": "Zenodo record describes noncommercial use; historical terms link unavailable; retained README has no separate license grant. No corpus redistribution performed.",
+  "converter": {
+    "commit": "de3e2cbcc8ab0ccb7df60af68c6e6f72c59afdb0",
+    "sha256": "aa3d2285a7397fb086391c97db8344d672a43755d5661ce0e6491b6c2cf0edcd",
+    "archive_commit_binding_verified": false
+  },
+  "documents": [
+    {
+      "url": "https://zenodo.org/records/3921794",
+      "role": "release metadata and rights description",
+      "sha256": null
+    },
+    {
+      "url": "https://zenodo.org/records/3921794/preview/KEELE.zip?include_deleted=0",
+      "role": "member listing",
+      "sha256": null
+    },
+    {
+      "url": "https://zenodo.org/records/3921794/files/KEELE.zip?download=1",
+      "member": "KEELE/_metadata.json",
+      "role": "retained release README",
+      "sha256": "9a2575643d5d19448fe11f6faf71c13dd696bc589811ac8a7580f7cbcbfc50ba"
+    },
+    {
+      "url": "https://github.com/bastibe/Replication-Dataset-Scripts/blob/de3e2cbcc8ab0ccb7df60af68c6e6f72c59afdb0/keele.py",
+      "role": "pinned converter",
+      "sha256": "aa3d2285a7397fb086391c97db8344d672a43755d5661ce0e6491b6c2cf0edcd"
+    },
+    {
+      "url": "https://www.isca-archive.org/eurospeech_1995/plante95b_eurospeech.html",
+      "role": "original paper metadata, 15-speaker core",
+      "sha256": null
+    },
+    {
+      "url": "https://sls.csail.mit.edu/archives/root/publications/2001/Wang_phd_thesis.pdf",
+      "role": "section 2.5.1, uncertain reference interpretation",
+      "sha256": null
+    }
+  ],
+  "source_files": {
+    "research/voice-prosody/phenometrix_prosody/keele_adapter.py": "fda3ed7c2f59ed06f9b51b72a2a6a785fdefd0137ef49d385e9a7794c63e0864",
+    "research/voice-prosody/tests/test_keele_adapter.py": "a8d158a076f0fadb3fe19d9379404b1b67e216e0e0924722cd1cbdeb27928c18",
+    "research/voice-prosody/KEELE_INTAKE.md": "507c8dbe6907b1d553b34d24d5e52fcd7b63682d696672a0bc1a175f20b63635"
+  },
+  "synthetic_validation": {
+    "tests_passed": 35,
+    "corpus_inference": false,
+    "native_compilation": false
+  },
+  "next_step": "Use the prescribed eight non-TRAIN PTDB speaker natural-browser fallback. Do not score KEELE or search for another external corpus in this sprint.",
+  "declared_trailing_unlabeled_source_samples": {
+    "m1nw0000": 100,
+    "m2nw0000": 100,
+    "m3nw0000": 300
+  },
+  "source_quote_location": "research/voice-prosody/KEELE_INTAKE.md: Decision and evidence"
+}

@@ -1,0 +1,3 @@
+# Prefit storage allowance
+
+Recorded before any new fit or learned prediction on 2026-10-25 UTC. The original prospective plan and its 4 GiB estimate remain preserved. The new study allowance is 8 GiB, with the same 15 GiB minimum free-disk floor. PCM/features were larger than the initial estimate; retained seven-model predictions and finite browser traces also need space. This resource-only amendment preserves the six-fit limit, input definitions, objective, seeds, final-epoch rule and all scientific gates. It authorizes no new environment or native build. The ignored resource-amendment receipt binds the original plan and observed disk use.

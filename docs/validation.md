@@ -188,3 +188,29 @@ technically tested; their deltas have no established health meaning. Every
 active metric and the HFS protocol remain clinically unvalidated. No study has
 established peak response, wearing off, causal efficacy, dosing guidance, or
 equivalence to an HFS or facial-palsy clinical scale for this implementation.
+
+## Matched voicing research and finite browser validation
+
+The [fixed study protocol](../research/voice-prosody/VOICING_ROBUSTNESS_PLAN.md)
+and [finite browser protocol](../research/voice-prosody/NATURAL_BROWSER_PROTOCOL.md)
+separate preparation, six matched fits, input-only prediction freezes,
+independent scoring, scientific gates, runtime execution and acoustic audits.
+The consumed PTDB split is development/regression evidence. KEELE is blocked by
+its retained reference contract; synthetic adapter tests cannot establish an
+external result. A failed gate stops fitting and candidate promotion.
+
+The `voicing-research-synthetic` hosted job checks only synthetic construction,
+MLP arithmetic, schedules, gates, corpus-adapter edge cases and browser-audit
+corruption rejection using CPU binary dependencies. It neither downloads corpus
+recordings nor fits models or validates local research results. Local corpus and
+browser receipts must bind their own source/model/config/input identities.
+Required local software checks include `npm run check`, capture-web unit tests,
+TypeScript checking, both production builds with research-asset exclusion, and
+the complete research pytest suite. Native source builds are not required.
+
+The natural spec is explicitly included in `playwright.research.config.ts`.
+Discovery is checked before execution, and a skipped environment-gated spec is
+not a browser pass. The raw replay, actual-reset inference parity and full-target
+delivery audit must all complete before any new natural-browser claim. Service
+p99, target-relative 20 ms support and software delivery-age certificates have
+different boundaries; none measures physical microphone-to-display latency.

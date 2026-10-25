@@ -1,3 +1,4 @@
+import { NaturalSourceCompletionFence } from "./voice-natural-completion.js";
 import { VoiceRenderLeaseIssuer, VOICE_RENDER_LEASE_RENEWAL_MS } from "./voice-render-freshness.js";
 import { VoiceClockProbeTracker, type VoiceClockObservation } from "./voice-clock-probe.js";
 import type { VoiceResearchModelConfig, VoiceResearchConfigDocument, VoiceResearchIdentity } from "./voice-research-hook.js";
@@ -11,7 +12,13 @@ export interface ReplayTelemetryBatch {
   sequence: number;
   records: Array<{ kind: "frame" | "block-timing" | "clock-probe"; value: Record<string, unknown> }>;
 }
+export interface NaturalPcmSource {
+  id: string; pcmUrl: string; pcmSha256: string; sampleCount: number;
+  adapter: "ptdb-prefix-192-v1" | "keele-zero-phase-v1" | "synthetic-index-v1";
+}
 export interface ReplayOptions {
+  /** Full finite 48 kHz float32 source; local research assets only. */
+  naturalPcm?: NaturalPcmSource;
   durationMs?: number;
   /** Independent 1 Hz clock diagnostics; never re-anchors or changes admission. */
   clockDiagnostics?: boolean;
@@ -30,7 +37,8 @@ export interface ReplayOptions {
 }
 export interface ReplayResult {
   status: "complete" | "failed";
-  evidence: "paced-synthetic-browser-replay";
+  evidence: "paced-synthetic-browser-replay" | "finite-natural-pcm-browser-replay";
+  naturalSource: Record<string, unknown> | null;
   durationMs: number;
   requestedSourceDurationMs: number;
   pacedSourceDurationMs: number;
@@ -65,9 +73,27 @@ const boundedLimit = (value: number | undefined, fallback: number) => {
 /** Real-time synthetic replay, never microphone capture or a hardware-input latency test. */
 export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promise<ReplayResult> {
   if (options.syntheticTone !== undefined && options.syntheticTone !== "200hz" && options.syntheticTone !== "300hz-harmonic") throw new Error("Unknown synthetic tone.");
-  const knownPitchHz = options.syntheticTone === "300hz-harmonic" ? 300 : 200;
-  const durationMs = options.durationMs ?? 4_000;
-  if (!Number.isFinite(durationMs) || durationMs < 1_000 || durationMs > 31 * 60 * 1_000) throw new Error("Invalid replay duration.");
+  const knownPitchHz = options.naturalPcm ? null : options.syntheticTone === "300hz-harmonic" ? 300 : 200;
+  let naturalSamples: Float32Array | null = null;
+  if (options.naturalPcm) {
+    const fixture = options.naturalPcm;
+    if (!options.modelConfig || options.syntheticTone || options.durationMs !== undefined ||
+        !["ptdb-prefix-192-v1", "keele-zero-phase-v1", "synthetic-index-v1"].includes(fixture.adapter) ||
+        !Number.isSafeInteger(fixture.sampleCount) || fixture.sampleCount < 1920 || fixture.sampleCount > 48000 * 120 ||
+        !/^[a-f0-9]{64}$/.test(fixture.pcmSha256)) throw new Error("Invalid natural PCM contract.");
+    const url = new URL(fixture.pcmUrl, location.href);
+    if (url.origin !== location.origin) throw new Error("Natural PCM must stay local to the research origin.");
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Natural PCM HTTP ${response.status}`);
+    const bytes = await response.arrayBuffer();
+    const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)), v => v.toString(16).padStart(2, "0")).join("");
+    if (digest !== fixture.pcmSha256 || bytes.byteLength !== fixture.sampleCount * 4) throw new Error("Natural PCM identity mismatch.");
+    naturalSamples = new Float32Array(bytes);
+    if (!naturalSamples.every(Number.isFinite)) throw new Error("Nonfinite natural PCM.");
+    if (fixture.adapter === "ptdb-prefix-192-v1" && naturalSamples.subarray(0, 192).some(v => v !== 0)) throw new Error("Missing exact PTDB zero prefix.");
+  }
+  const durationMs = naturalSamples ? naturalSamples.length / 48 : options.durationMs ?? 4_000;
+  if (!Number.isFinite(durationMs) || durationMs < (naturalSamples ? 40 : 1_000) || durationMs > 31 * 60 * 1_000) throw new Error("Invalid replay duration.");
   if (options.mainStallAtMs !== undefined && (!Number.isFinite(options.mainStallAtMs) || options.mainStallAtMs < 0 ||
       !Number.isFinite(options.mainStallDurationMs ?? 300) || (options.mainStallDurationMs ?? 300) < 0 ||
       (options.mainStallDurationMs ?? 300) > 1_000)) throw new Error("Invalid main-thread stall.");
@@ -133,6 +159,14 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
   let sourceStartedAtMs = 0;
   let sourceStoppedAtMs = 0;
   let stopping = false;
+  let naturalArmed: ((value: Record<string, unknown>) => void) | undefined;
+  const naturalCompletion = new NaturalSourceCompletionFence();
+  let naturalCredits: Record<string, unknown> | null = null;
+  let naturalCompletionReceipt: { status: "complete" | "timeout"; missing: string[] } | null = null;
+  let naturalOrigin: Record<string, unknown> | null = null;
+  let naturalDrain: Record<string, unknown> | null = null;
+  let sourceEnded = false;
+  let scheduledStartAudioFrame: number | null = null;
   const began = performance.now();
   const fail = (reason: string) => {
     if (!errors.includes(reason)) errors.push(reason);
@@ -250,7 +284,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         if (message.research.rawYin) addStatistic(statistics.yinService, message.research.rawYin.serviceMs ?? null);
         if (message.research.state === "voiced") {
           researchVoicedFrameCount += 1;
-          researchCorrectKnownPitchFrameCount += Number(message.research.f0Hz !== null && Math.abs(message.research.f0Hz - knownPitchHz) <= 2);
+          researchCorrectKnownPitchFrameCount += Number(message.research.f0Hz !== null && knownPitchHz !== null && Math.abs(message.research.f0Hz - knownPitchHz) <= 2);
         }
         addStatistic(statistics.modelInference, message.research.inferenceServiceMs);
         addStatistic(statistics.modelReady, message.research.elapsedFromFrameStartMs ?? null);
@@ -268,7 +302,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         if (segments.length < 64) segments.push(message.frame.trackSegmentId);
         previousSegment = message.frame.trackSegmentId;
       }
-      if (message.frame.periodic && message.frame.f0Hz !== null) {
+      if (knownPitchHz !== null && message.frame.periodic && message.frame.f0Hz !== null) {
         periodicFrameCount += 1;
         const error = Math.abs(message.frame.f0Hz - knownPitchHz);
         maximumKnownPitchErrorHz = Math.max(maximumKnownPitchErrorHz, error);
@@ -288,6 +322,12 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
   const resultReceiver = new VoiceResultBatchReceiver(message => worker.postMessage(message),
     { policy: "required-render-lease-v1", issuer: leaseIssuer, mainTimeOriginMs: performance.timeOrigin });
   worker.addEventListener("message", (event: MessageEvent<VoiceWorkerResponse>) => {
+    const control = event.data as unknown as Record<string, unknown>;
+    if (options.naturalPcm && control.type === "research-natural-drained" && control.captureEpoch === 1) {
+      naturalDrain = control;
+      if (control.eventOverflow !== 0) fail("natural-event-ledger-overflow");
+      naturalCompletion.receive("worker"); return;
+    }
     let received: ReturnType<VoiceResultBatchReceiver["receive"]>;
     try { received = resultReceiver.receive(event.data, 1, performance.now(), 1); }
     catch { fail("invalid-voice-result-transport"); return; }
@@ -331,6 +371,25 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
       outputChannelCount: [1] });
     node.addEventListener("processorerror", () => fail("replay-worklet-processor-error"));
     node.port.onmessage = event => {
+      if (options.naturalPcm && event.data?.type === "research-natural-armed") { naturalArmed?.(event.data); return; }
+      if (options.naturalPcm && event.data?.type === "research-natural-credits-drained") {
+        naturalCredits = event.data;
+        if (event.data.captureEpoch !== 1 || event.data.scheduledStartAudioFrame !== scheduledStartAudioFrame ||
+            event.data.sourceSampleCount !== naturalSamples!.length || event.data.inFlightBlockCount !== 0 || event.data.pendingSampleCount !== 0)
+          fail("natural-credit-drain-mismatch");
+        naturalCompletion.receive("credits");
+        return;
+      }
+      if (options.naturalPcm && event.data?.type === "research-natural-ended") {
+        naturalOrigin = event.data;
+        naturalCompletion.receive("origin");
+        if (event.data.timeline?.schemaVersion !== "phenometric.voice-natural-timeline.v2" ||
+            event.data.timeline?.status !== "complete" || event.data.timeline?.overflow !== 0)
+          fail(`natural-source-timeline-failed:${event.data.timeline?.error ?? "missing-receipt"}`);
+        if (event.data.observedStartAudioFrame !== scheduledStartAudioFrame || event.data.sourceOffset !== 0 ||
+            event.data.captureEndSampleExclusive !== naturalSamples!.length) fail("natural-source-origin-mismatch");
+        return;
+      }
       if (leaseIssuer.acknowledge(event.data)) {
         if (event.data.disposition === "accepted") initialLeaseAcknowledged?.();
         return;
@@ -374,15 +433,32 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     });
     leaseTimer = setInterval(renewLease, VOICE_RENDER_LEASE_RENEWAL_MS);
     if (context.state !== "running") throw new Error(`Audio context not running:${context.state}`);
-    const buffer = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
+    if (naturalSamples && context.sampleRate !== 48000) throw new Error("Natural source requires exact 48 kHz rendering.");
+    const buffer = context.createBuffer(1, naturalSamples?.length ?? context.sampleRate * 2, context.sampleRate);
     const samples = buffer.getChannelData(0);
-    for (let i = 0; i < samples.length; i += 1) samples[i] = options.syntheticTone === "300hz-harmonic"
+    if (naturalSamples) samples.set(naturalSamples);
+    else for (let i = 0; i < samples.length; i += 1) samples[i] = options.syntheticTone === "300hz-harmonic"
       ? .075 * (Math.sin(2 * Math.PI * 300 * i / context.sampleRate) + .5 * Math.sin(2 * Math.PI * 600 * i / context.sampleRate) + .25 * Math.sin(2 * Math.PI * 900 * i / context.sampleRate))
       : .12 * Math.sin(2 * Math.PI * 200 * i / context.sampleRate) + .03 * Math.sin(2 * Math.PI * 400 * i / context.sampleRate);
     source = context.createBufferSource();
-    source.buffer = buffer; source.loop = true; source.connect(node);
-    sourceStartedAtMs = performance.now();
-    source.start();
+    source.buffer = buffer; source.loop = !naturalSamples;
+    if (naturalSamples) {
+      scheduledStartAudioFrame = Math.ceil((context.currentTime * context.sampleRate + 12000) / 1920) * 1920;
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error("Natural source arm timed out.")), 1000);
+        naturalArmed = receipt => { clearTimeout(timeout); naturalArmed = undefined;
+          if (receipt.status !== "armed") reject(new Error("Natural source arm rejected.")); else resolve(); };
+        node!.port.postMessage({ type: "research-natural-source", captureEpoch: 1,
+          startAudioFrame: scheduledStartAudioFrame, sampleCount: naturalSamples!.length });
+      });
+      if (context.currentTime * context.sampleRate >= scheduledStartAudioFrame) throw new Error("Natural source missed scheduled start.");
+      source.connect(node);
+      source.onended = () => { sourceEnded = true; finishPaced?.(); };
+      sourceStartedAtMs = performance.now();
+      source.start(scheduledStartAudioFrame / context.sampleRate);
+    } else {
+      source.connect(node); sourceStartedAtMs = performance.now(); source.start();
+    }
     if (options.clockDiagnostics) {
       clockProbeTracker = new VoiceClockProbeTracker(mapping, 1, performance);
       const probe = () => {
@@ -402,10 +478,21 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     await new Promise<void>(resolve => {
       finishPaced = resolve;
       if (errors.length) resolve();
-      else pacedTimer = setTimeout(resolve, durationMs);
+      else pacedTimer = setTimeout(() => {
+        if (naturalSamples) fail("natural-source-ended-timeout");
+        resolve();
+      }, durationMs + (naturalSamples ? 1500 : 0));
     });
     if (pacedTimer) clearTimeout(pacedTimer);
     sourceStoppedAtMs = performance.now();
+    if (naturalSamples) {
+      // Keep leases, acknowledgements, clock probes and the telemetry sink alive.
+      // onended is only the source endpoint, never an inference completion claim.
+      naturalCompletionReceipt = await naturalCompletion.wait(6000);
+      if (naturalCompletionReceipt.status !== "complete") fail("natural-drain-timeout:" + naturalCompletionReceipt.missing.join(","));
+      const drain = naturalDrain as Record<string, unknown> | null;
+      if (!sourceEnded || !naturalOrigin || drain?.status !== "drained" || drain?.pumpIdle !== true) fail("natural-completion-fence-failed");
+    }
     stopping = true;
     stopClockProbes();
     if (leaseTimer !== undefined) clearInterval(leaseTimer);
@@ -425,7 +512,12 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
     await finishTelemetry();
     const completedAtMs = performance.now();
     const frameService = quantiles(statistics.frameService);
-    return { status: errors.length ? "failed" : "complete", evidence: "paced-synthetic-browser-replay",
+    return { status: errors.length ? "failed" : "complete", evidence: naturalSamples ? "finite-natural-pcm-browser-replay" : "paced-synthetic-browser-replay",
+      naturalSource: options.naturalPcm ? { ...options.naturalPcm, scheduledStartAudioFrame, sourceEnded,
+        origin: naturalOrigin, drain: naturalDrain, credits: naturalCredits, completion: naturalCompletionReceipt,
+        drainTimeoutMs: 5000, mainDrainTimeoutMs: 6000,
+        finalPartialPolicy: "discard-retain-count-no-padding", sourceOffset: 0,
+        referenceOffsetSamples: options.naturalPcm.adapter === "ptdb-prefix-192-v1" ? 192 : 0 } : null,
       durationMs: completedAtMs - began, requestedSourceDurationMs: durationMs,
       pacedSourceDurationMs: sourceStoppedAtMs - sourceStartedAtMs,
       setupDurationMs: sourceStartedAtMs - began, teardownDurationMs: completedAtMs - sourceStoppedAtMs,
@@ -461,7 +553,7 @@ export async function runVoiceResearchReplay(options: ReplayOptions = {}): Promi
         rawTelemetry: { enabled: !!options.streamRawTelemetry, status: telemetryFailed ? "failed" : "complete",
           batchCount: telemetryBatchSequence, streamedRecordCount, maximumPendingRecords: maximumPendingTelemetryRecords,
           pendingRecordLimit: 200, maximumBatchRecords: 100 },
-        note: "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim." } };
+        note: naturalSamples ? "Finite full-source natural PCM through scheduled AudioBufferSource, worklet, model worker and main delivery. Descriptive software timing; no hardware acquisition or display latency claim." : "Whole replay numeric statistics with bounded retained frames; raw batch delivery is optional. No hardware acquisition, natural-speech, or display latency claim." } };
   } finally {
     stopping = true;
     stopLeases();

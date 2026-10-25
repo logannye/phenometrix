@@ -8,6 +8,7 @@ export class BoundedVoiceAsyncPump<T> {
     private readonly discard: (item: T) => void,
     private readonly failed: (error: unknown) => void,
     readonly capacity = 3) {}
+  get idle(): boolean { return !this.running && this.queue.length === 0; }
   submit(item: T): void {
     if (this.disposed || (this.running && this.queue.length >= this.capacity)) { this.discard(item); return; }
     if (this.running) {

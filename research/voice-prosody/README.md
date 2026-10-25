@@ -8,8 +8,10 @@ reserved speakers: joint error 9.6747%, versus DSP 11.8482%. Its own candidate
 MLP remains better on natural speech at 9.1158%, so the pitch repair has a
 measurable tradeoff. A separately versioned browser numerical repair passes the
 unchanged bounded parity checks. The complete local runtime series and 30 min
-hybrid soak also pass: complete-block p99 6.1 ms, zero 20 ms cadence misses and
-maximum certified software render age 54.4 ms in the soak.
+hybrid synthetic soak also pass their declared checks: complete-block p99 6.1 ms,
+zero processed blocks with service above 20 ms, and maximum certified software
+render age 54.4 ms. The run still recorded 29 lost blocks and eight discarded
+predictions; service cadence is not an end-to-end delivery guarantee.
 See [HYBRID_VALIDATION_RESULTS.md](HYBRID_VALIDATION_RESULTS.md) for the preceding
 hybrid stage and [HYBRID_RESULTS.md](HYBRID_RESULTS.md) for the earlier reused-development
 follow-up. Neither stage establishes calibrated correctness or clinical use.
@@ -24,9 +26,41 @@ clock behavior and same-main-clock freshness gate.
 This public-corpus research path is separate from encounter media and the optional
 WavLM service. Software, measurement, and clinical validation are distinct.
 
+## Matched voicing robustness and natural browser work
+
+The [matched six-fit study](VOICING_ROBUSTNESS_RESULTS.md) is complete and
+independently audited: **no-go**. Continuous TRAIN acoustic exposure reduces
+shifted false-negative-or-unavailable voicing by only **0.1248 percentage points
+(0.83% relative)** against matched controls, below the fixed 20% requirement.
+The designated candidate fails overall joint-error improvement, and another seed
+regresses on M05 first-difference. All analytic/transition/event checks pass;
+these do not override the failed primary gates. The audit reconstructed
+12,972,330 frame/model comparisons. No further fit or candidate promotion follows.
+
+All eight non-TRAIN PTDB speakers are consumed development/regression data.
+[KEELE intake](KEELE_INTAKE.md) is blocked without waveform or reference-array
+access. The [finite natural-browser protocol](NATURAL_BROWSER_PROTOCOL.md) uses
+the original hybrid H twice. Its second finite execution and 34-case independent
+audit pass: ordinary pooled service p99 is 5.6 ms, target delivery 99.9571% and
+full-reference delivered-correct coverage 89.7142%; partial targets, 19 blocks
+over 20 ms, the separate stall losses and failed first attempt remain visible.
+Required local checks pass; current-head hosted status is supplied by PR checks. The
+[aggregate](../../benchmarks/voice-prosody/voicing-robustness-summary.json)
+retains every seed, speaker/condition cell, source/model identity and failure.
+
+## Completed exposure versus acoustic-evidence study
+
+The [four-arm, three-seed experiment](EXPOSURE_STUDY_RESULTS.md) is complete.
+Targeted exposure clears all 78 analytic gates for each seed, but natural joint
+error improves only 0.2214 percentage points against the original candidate MLP,
+below the unchanged 0.5-point gate. Advancement remains **no-go**. Its producer
+saved artifacts and then failed at terminal JSON printing; separate independent
+audits qualified those saved results without rewriting the failed execution.
+All twelve formerly reserved synthetic configurations are now consumed.
+
 ## TRAIN-only frequency diversity
 
-The latest [frozen coverage experiment](FREQUENCY_DIVERSITY_RESULTS.md) refines
+The preceding [frozen coverage experiment](FREQUENCY_DIVERSITY_RESULTS.md) refines
 the previous carrier grid without changing candidates, grouping, timing or
 support gates. Its **1,536 new TRAIN configurations** supply **11,456 added-only
 correct-candidate rows across 104 cases and 13 numeric carriers**, above the
@@ -35,27 +69,27 @@ and 90 carriers. Both strata pass all five support floors on the new bank alone.
 The old 512-case no-go remains a separately audited historical comparison.
 
 The runner is terminal after coverage reporting on either outcome: **zero fits,
-zero schedules, zero learned inference and zero evaluation cases**. The proposed
-exposure-versus-acoustic-evidence comparison remains untested and the learned
-estimator remains a no-go for promotion. Nearby noiseless carriers are dependent;
+zero schedules, zero learned inference and zero evaluation cases**. That coverage-only stage did not fit models. The subsequent
+[exposure comparison](EXPOSURE_STUDY_RESULTS.md) ran and remains a no-go for
+promotion under its unchanged natural-speech gate. Nearby noiseless carriers are dependent;
 frequency counts alone do not establish acoustic diversity or generalization.
 
 See the [prospective plan](FREQUENCY_DIVERSITY_PLAN.md),
 [aggregate result](../../benchmarks/voice-prosody/frequency-diversity-summary.json),
 [independent audit](../../benchmarks/voice-prosody/frequency-diversity-independent-audit.json),
 and [local validation](../../benchmarks/voice-prosody/frequency-diversity-local-validation.json).
-The result report includes read-only inspection commands. All 74 consumed
-analytic cases remain regressions; the twelve reserved evaluation configurations
-remain ungenerated. Raw TRAIN media and features stay local and ignored.
+The result report includes read-only inspection commands. At that coverage stage, 74 analytic cases were consumed and twelve configurations
+remained reserved. Those twelve were subsequently evaluated once in the
+[completed exposure study](EXPOSURE_STUDY_RESULTS.md). Raw TRAIN media and features stay local and ignored.
 
 ## Exposure and acoustic-evidence feasibility
 
 The preceding [bounded study](EVIDENCE_RESULTS.md) stopped at its TRAIN-support
 prerequisite, before fitting. The fixed 512-case bank supplied 3,660 added-only
 correct-candidate rows across 32 configurations, but only **4 distinct carriers
-against a floor of 6**. The counterexample stratum passed. All gates remain
-unchanged; training exposure versus candidate-conditioned acoustic evidence is
-still an untested comparison.
+against a floor of 6**. The counterexample stratum passed. Its gates remain unchanged. The later
+[exposure comparison](EXPOSURE_STUDY_RESULTS.md) tested that question and retained
+a scientific no-go.
 
 The shipped research harness includes a trailing-window periodicity feature in
 TypeScript and NumPy, a zero-initialized residual scorer, frozen study/sampling
@@ -69,9 +103,9 @@ The [fixed plan](EVIDENCE_EXPERIMENT_PLAN.md),
 [feasibility audit](../../benchmarks/voice-prosody/evidence-feasibility-independent-audit.json),
 [terminal audit](../../benchmarks/voice-prosody/evidence-study-independent-audit.json),
 and [local validation](../../benchmarks/voice-prosody/evidence-local-validation.json)
-retain the no-go and repair lineage. All 74 consumed cases remain historical
-regressions, without rerunning them; the twelve reserved fresh configurations
-remain ungenerated. The overnight authorization has ended. See the results for
+retain the no-go and repair lineage. That earlier stage retained 74 consumed cases without rerunning them. The twelve
+then-reserved configurations were subsequently consumed by the completed
+exposure study. The earlier overnight authorization ended. See the results for
 commands that inspect saved artifacts without launching an experiment.
 
 ## Additive candidate pool and matched retraining
