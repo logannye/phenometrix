@@ -1,180 +1,211 @@
 # PhenoMetrix
 
-**Face and voice measurements with inspectable evidence.**
+**Face and voice measurements from everyday video visits.**
 
-PhenoMetrix turns consented audiovisual signals into versioned measurements,
-compares compatible observations over time, and presents the result for human
-review. It is a **nonclinical research prototype**, built around local signal
-processing, explicit quality limits, and reproducible ML experiments.
+PhenoMetrix is an open-source research prototype for measuring facial movement
+and voice during telehealth conversations. It processes consented camera and
+microphone signals in the browser, compares compatible observations from the
+same person, and presents the measurements with their supporting evidence for
+human review.
 
-A telehealth conversation contains observable changes in facial movement and
-voice. Turning those signals into useful measurements requires distinguishing
-changes in the person from changes in the microphone, lighting, task, or software.
-PhenoMetrix records those conditions and withholds measurements when the evidence
-is insufficient. Clinical interpretation and utility require separate validation.
+The goal is to make observations across visits easier to examine: what was
+measured, under what conditions, what changed, and whether the comparison is
+supported by the available data. The intended home is inside an existing
+telehealth workflow. This repository contains a runnable local demonstration,
+components for integrating with a host application, and experiments evaluating
+voice-measurement methods.
 
-## Three capabilities
+**Status:** nonclinical research software. The project has not established
+clinical measurement validity or usefulness for diagnosis or treatment decisions.
+It began as the **NeuroTrax** neurological hackathon demo and is developing toward
+a reusable face-and-voice measurement platform.
 
-| Capability | What it does |
+## Why this project exists
+
+A video visit contains observable facial movement and voice patterns, but a
+number alone does not make an observation useful. A change in a microphone,
+lighting, head pose, or capture context can change a measurement. A comparison
+also needs to account for which method produced each value and whether enough
+usable signal was available.
+
+PhenoMetrix makes those conditions part of the result. For example, it can
+report an eye-aperture measurement, identify the periods of signal that support it,
+and compare it with an eligible prior observation. If the signal is inadequate
+or the observations are incompatible, it reports **not measurable** or explains
+why the comparison was withheld. A numerical difference does not, by itself,
+indicate improvement or worsening of health.
+
+## What it does
+
+The project has three capabilities:
+
+| Capability | Purpose |
 | --- | --- |
-| **Ambient Capture** | Processes consented face and voice signals independently, checks source quality, and returns measured or reason-coded withheld outcomes. The current registry contains 20 facial and 7 voice metrics. |
-| **Personal Trajectory** | Selects compatible prior observations, preserves inclusion/exclusion reasons, and computes transparent within-person comparisons. |
-| **Clinician Evidence Card** | Connects each descriptive result to its source, protocol, versions, and uncertainty so a reviewer can inspect, correct, or dismiss it. |
+| **Ambient Capture** | Extract face and voice measurements during consented conversation, screen signal quality, and retain reasons for missing or withheld results. |
+| **Personal Trajectory** | Compare a person's observations when their source, protocol, and measurement conditions are compatible; show which observations were included or excluded. |
+| **Clinician Evidence Card** | Present values, differences, quality information, and source references together so a human can inspect the evidence and record a review. |
 
-The local demo supports independently consented captures and a page-memory
-reference. The encounter integration adds durable derived observations,
-versioned history, and scoped review. Medical contexts belong in separately
-versioned protocol packs; an engineering measurement is not a diagnosis,
-disease-severity score, or treatment recommendation.
-
-## How it works
+The current measurement registry contains **20 facial and 7 voice metrics**.
+Examples include eye aperture, lid closure, facial asymmetry, pitch variability,
+and pause timing. These are engineering measurements with explicit quality
+requirements. Their presence in the registry does not establish that they measure
+a disease or its severity.
 
 ```mermaid
 flowchart LR
-    A[Consented camera and microphone] --> B[Local browser workers]
-    B --> C[Quality-qualified derived observations]
-    C --> D[Versioned history and compatible comparisons]
-    D --> E[Source-linked evidence card]
+    A[Consented face and voice signals] --> B[Local extraction and quality checks]
+    B --> C[Measurements with source evidence]
+    C --> D[Compatible within-person comparisons]
+    D --> E[Evidence card for human review]
 ```
 
-- **Local acquisition and bounded streaming.** Face processing uses MediaPipe
-  in a worker. Audio flows through an AudioWorklet and a worker with fixed PCM
-  and result credits. Dropped input, stale results, and discontinuities remain
-  explicit gaps and reset feature history. Raw media and native model outputs
-  do not enter durable observation payloads.
-- **Time is part of the measurement contract.** Voice frames carry sample
-  support, processing time, segment identity, and loss information. A same-clock
-  lease requires a recorded software render-age bound of at most 100 ms before
-  delivery. This bounds age since the last required rendered input; physical
-  microphone latency, timestamp precision, and later display delay remain
-  unqualified.
-- **Deterministic analysis and durable provenance.** Shared TypeScript contracts
-  connect capture, trajectory, and evidence. The encounter service uses scoped
-  authorization, append-only PostgreSQL history, transactional analysis jobs,
-  worker leases, and revision checks that prevent stale publication. Corrections
-  create new versions rather than rewriting previous evidence.
-- **ML experiments stay attributable.** The voice research pipeline uses the
-  browser's feature extractor, PyTorch training, ONNX browser inference, frozen
-  checkpoints and predictions, and independent scoring and inference audits.
-  Candidate support, unavailable outputs, measurement delay, and failed
-  advancement gates are retained alongside aggregate results.
+## What you can use today
 
-**The default capture path uses the versioned DSP estimator. Learned estimators
-remain research options.** The embedded API can attach to a host-owned patient
-stream without taking ownership of the call. A deployed Zoom/EHR connection,
-clinical authorization, and acquisition validation are not bundled. See the
-[architecture](docs/architecture.md) and
-[encounter integration guide](docs/encounter-integration.md).
+The local demo and encounter integration implement the same capabilities at
+different levels:
 
-The [matched voicing robustness study](research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md)
-completed six fits and an independent audit: **no-go**. Its mean shifted
-false-negative-or-unavailable reduction is only **0.1248 percentage points
-(0.83%)** versus matched controls, below the required 20%; the designated
-candidate also fails the overall-utility gate. All analytic/event checks pass.
-[KEELE intake](research/voice-prosody/KEELE_INTAKE.md) is blocked without external
-outcome access. The [audited finite natural-browser replay](research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md#natural-browser-execution-and-delivery)
-measured 5.6 ms service p99 and 89.7142% delivered-correct coverage, with explicit
-partial-target and injected-stall losses. Local checks pass; current-head hosted
-status is supplied by PR checks. Production stays DSP.
-
-## Evidence so far
-
-The strongest completed results distinguish signal accuracy from software
-correctness and runtime behavior:
-
-| Evaluation | Result | What it establishes |
+| | Local demonstration | Encounter integration |
 | --- | --- | --- |
-| Frozen natural-speech evaluation | Hybrid joint error **9.67%**, DSP **11.85%**, original candidate MLP **9.12%** across 160 recordings from four previously reserved speakers and four fixed conditions | The MLP-voicing/YIN-pitch hybrid improves on classical comparators, while its own MLP remains better on mean natural error. Predictions froze before reference acquisition. |
-| Expanded candidate pool with matched retraining | Development joint error **8.4589%**, versus **8.4020%** for the matched original pool; targeted 517.3/641.9 Hz selections remain **0/112** despite correct candidates on every post-change frame | Preserving the original candidates and retraining does not resolve selection errors. Unchanged advancement gates reject the expanded pipeline. |
-| Python/browser arithmetic parity | **15,232 analytic and natural-input frames**, zero final-state mismatches after one declared numerical repair | Agreement on fixed input windows under unchanged tolerances. The original failed comparison remains recorded. |
-| Sustained browser replay | **30 minutes**, **179,923 certified frames**, complete-block p99 **6.1 ms**, maximum recorded software age bound **54.4 ms** | Bounded transport and recovery from injected worker/main-thread stalls on the tested local configuration. |
-| Exposure versus acoustic evidence: four arms, three seeds | Targeted exposure clears **78/78 analytic gates in every seed**, versus **72/78** with existing exposure; candidate development joint error is **8.4135%**, versus original MLP **8.6349%** | Targeted training repairs retained pitch-selection failures. The **0.2214 percentage-point** natural-error improvement misses the required **0.5-point** gate; promotion remains a no-go. Saved results survive a preserved terminal reporting failure. |
+| **Capture** | Camera and microphone access in a standalone browser page | Analysis attached to an authorized media stream supplied by the host telehealth application |
+| **Comparison** | Two live sessions, with the first explicitly accepted as an in-memory reference | Versioned derived observations and descriptive comparisons across visits |
+| **Review** | A report and six-row facial comparison card; review state lasts only for the page session | An embeddable evidence panel and a service API for authenticated review |
+| **Storage** | No saved recordings or durable results | PostgreSQL history of derived observations and reviews; routine capture does not upload raw media |
 
-Natural joint error counts incorrect voicing, unavailable outputs, and pitch
-errors greater than 50 cents. Results average speakers and conditions equally.
-These research estimators use 40 ms windows with **20 ms measurement delay**,
-which is separate from processing latency. The natural references are
-laryngograph-derived PTDB-TUG labels; this is one corpus, not external clinical
-validation. The reserved sample is now consumed and cannot serve as a fresh
-holdout again. Some transformed-speech strata remain substantially worse than
-the aggregate. The expanded-pool figures use reused development speech and
-are not directly comparable to the reserved-speaker results.
+The standalone demo retains its original unilateral facial-movement research
+context. This explains its affected-side selector and facial comparison card;
+the generic session report also contains voice measurements. The integration
+code includes a narrow hemifacial-spasm treatment-alignment research protocol,
+which places selected eye measurements alongside documented treatment dates.
+It does not establish spasm burden or treatment effectiveness.
 
-The browser run was a source-frozen functional replay on an Apple M4 Max with
-128 GiB RAM, not a controlled hardware benchmark or a real-microphone latency
-study. Queue bounds do not establish whole-browser heap bounds. Full methods,
-strata, failures, uncertainty, and timing definitions are in the
-[natural-speech and browser validation report](research/voice-prosody/HYBRID_VALIDATION_RESULTS.md).
+A deployed Zoom integration, connected electronic health record, clinical
+identity system, and institutional authorization must be supplied separately.
+See the [integration guide](docs/encounter-integration.md) for those boundaries.
 
-The ML research separates three sources of error: whether the correct pitch is
-available, whether the model selects it, and whether the output is reliable
-enough to report. Earlier augmentation repaired specific harmonic-balance
-failures, but adding correct candidates and retraining still left systematic
-selection errors. The [expanded-pool study](research/voice-prosody/EXPANDED_POOL_RESULTS.md)
-records those failures alongside its modest increase in candidate coverage.
+## Try the local demo
 
-A [frozen four-arm, three-seed study](research/voice-prosody/EXPOSURE_STUDY_RESULTS.md)
-now separates targeted training exposure from one compact causal acoustic
-feature. Using the audited 1,536-configuration TRAIN bank, targeted exposure
-repairs the retained 517.3, 633.1 and 641.9 Hz failures with the feature either
-off or on. The feature alone does not repair them, and adds only a small natural
-error reduction. This supports improving training exposure within this study;
-it does not show that acoustic evidence is unnecessary in general.
-
-All four arms also succeed on all twelve fresh synthetic configurations, so
-those cases do not distinguish the interventions. The natural development set
-is reused, and the synthetic bank remains narrow, noiseless and associated with
-frequency. No external or untouched-speaker generalization is established.
-The run saved all twelve checkpoints, frozen predictions and metrics, then
-failed while printing its final summary. That execution failure remains
-preserved. A separate audit verified **3.26 million frame-model comparisons**
-with zero state or pitch mismatches, without repeating fits or generating more
-cases. The [prior support no-go](research/voice-prosody/EVIDENCE_RESULTS.md),
-[TRAIN coverage study](research/voice-prosody/FREQUENCY_DIVERSITY_RESULTS.md), and
-all observed failures remain part of the evidence.
-
-**The learned estimator remains a no-go for promotion.** Voicing and candidate
-probabilities are uncalibrated; benchmark improvements do not establish clinical
-usefulness or qualify a learned estimator for the default path.
-
-## Run locally
-
-Use Node 22.12+ on the Node 22 line or Node 24+, pnpm 9.12.3, and Chrome on macOS.
+Use **Node 22.12+ on the Node 22 line, or Node 24+**, **pnpm 9.12.3**, and
+**Chrome on macOS** with hardware acceleration. Camera and microphone permissions
+are independent; either modality can run when the other is unavailable. Device
+access requires localhost or HTTPS. Other browser/device configurations have not
+been validated.
 
 ```sh
+git clone https://github.com/logannye/phenometrix.git
+cd phenometrix
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open **http://127.0.0.1:4173** for the live local demonstration. Camera and
-microphone consent are independent. The page-local reference is discarded on
-reset, visibility loss, or reload; it is not durable clinical history. Use
-synthetic participants for development.
+Open [http://127.0.0.1:4173](http://127.0.0.1:4173). No database or API key is
+required for this demo. Use synthetic participant identities for development.
+
+1. Read the research notice, select the demo's participant-asserted side, and
+   consent to capture. The application does not infer or verify that side.
+2. Complete camera/microphone setup and start a live conversational session.
+3. End the session to see measured and withheld outcomes with their reasons.
+4. Choose **Use this session as in-memory reference**, then consent to a second
+   live session to inspect the comparison card.
+
+The reference, results, and page-local review state are cleared on reset,
+visibility loss, or reload. No recording is saved. The
+[operator guide](docs/operator-guide.md) explains the workflow and common failures.
+
+To explore the evidence interface without device capture, run:
 
 ```sh
-pnpm dev:evidence  # synthetic evidence-card preview on port 4175
-pnpm test          # structure checks, unit tests, TypeScript, and builds
+pnpm dev:evidence
 ```
 
-The [service guide](apps/encounter-service/README.md) covers PostgreSQL and
-`pnpm dev:encounter`. The [research guide](research/voice-prosody/README.md)
-provides the pinned Python environment, corpus/provenance rules, reproduction
-commands, and exact validation receipts. Browser suites, PostgreSQL tests, and
-the optional disconnected voice sidecar have separate prerequisites documented
-there and in the integration guides.
+Open [http://127.0.0.1:4175](http://127.0.0.1:4175) for the **synthetic** evidence
+preview. Durable history requires the separate
+[encounter service and PostgreSQL setup](apps/encounter-service/README.md).
 
-## Explore the repository
+## How it is built
 
-| Area | Start here |
+The application is a TypeScript monorepo. MediaPipe extracts facial landmarks
+inside a browser worker; shared measurement code derives facial geometry from
+those transient outputs. Voice processing uses an AudioWorklet and a worker
+with bounded buffers, explicit gaps when input is lost, and stale-result checks.
+**The default voice estimator uses digital signal processing (DSP).**
+
+Shared contracts connect measurements, comparisons, and evidence cards. The
+encounter service stores derived observations in PostgreSQL, preserves earlier
+versions when a source is corrected, and runs descriptive analysis against a
+fixed history snapshot. Host adapters supply encounter identity and consent;
+FHIR R4 interfaces support imported clinical context. The
+[architecture document](docs/architecture.md) explains the component contracts.
+
+## Voice research and evidence
+
+The voice research asks whether a small learned model can improve pitch and
+voicing measurements while preserving explicit timing and failure limits.
+Experiments use frozen inputs and predictions, matched comparisons, and separate
+numerical/scoring audits. Learned estimators run through an opt-in research path;
+they have not replaced the default DSP estimator.
+
+The work is documented in [PR #33](https://github.com/logannye/phenometrix/pull/33)
+and [PR #34](https://github.com/logannye/phenometrix/pull/34). The linked reports
+below are pinned to a specific research commit and identify the source and
+artifacts used for each evaluation. These are experimental models.
+
+| Evaluation | Finding | Scope |
+| --- | --- | --- |
+| [Frozen speech evaluation](https://github.com/logannye/phenometrix/blob/dec24f22241ed4655023c35671f6aab226c155e6/research/voice-prosody/HYBRID_VALIDATION_RESULTS.md) | A 3,143-parameter learned-voicing/YIN-pitch hybrid achieved **9.67% joint error**, versus **11.85%** for DSP. | 160 PTDB-TUG recordings from four then-reserved speakers, under four conditions. The candidate-selecting MLP had lower error at **9.12%**, with separate known pitch failures. |
+| [Natural-audio browser replay](https://github.com/logannye/phenometrix/blob/dec24f22241ed4655023c35671f6aab226c155e6/research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md#natural-browser-execution-and-delivery) | The same frozen hybrid completed audited finite replay with **5.6 ms** processed-block service p99 and **99.9571%** target delivery, and **89.7142%** delivered-correct coverage. | One predetermined source from each of eight previously used speakers, two conditions, two passes. Twelve targets lacked final partial support; 19 processed blocks exceeded 20 ms. The first failed attempt and separate stall losses remain recorded. |
+| [Matched robustness experiment](https://github.com/logannye/phenometrix/blob/dec24f22241ed4655023c35671f6aab226c155e6/research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md) | Six fits tested additional acoustic variation during training. The mean missed-or-unavailable voicing reduction was **0.83% relative** versus matched controls, below the required **20%**. | The update was rejected. No new model advanced, and external-corpus evaluation remained blocked by the reference contract. |
+
+Joint error counts incorrect voicing, unavailable output, and pitch error above
+50 cents (half a semitone). The historical quality result averages speakers and conditions equally;
+target delivery counts received outputs over all intended targets, while
+delivered-correct coverage counts correct received outputs over eligible targets
+with valid references, including missing outputs in that denominator. Processing p99 is the 99th
+percentile of block service time, separate from the estimator's **20 ms
+target-relative measurement delay** and from physical microphone-to-display
+latency. These are public-corpus and local engineering results, not clinical
+validation or independent external-corpus generalization.
+
+For methods, reproduction instructions, and retained negative results, start with
+the [voice research guide](https://github.com/logannye/phenometrix/blob/dec24f22241ed4655023c35671f6aab226c155e6/research/voice-prosody/README.md).
+
+## Data handling and validation
+
+Capture requires explicit consent. The browser processes raw media locally;
+routine observation payloads exclude recordings, raw landmarks, transcripts,
+and voice embeddings. The standalone demo keeps results only in page memory.
+The governed encounter integration can retain derived observations and review
+history. Optional research-media retention has a separate consent and governance
+boundary and is disabled by default.
+
+Software tests and signal-processing benchmarks do not establish clinical
+accuracy, repeatability across devices, or meaningful health change. Any medical
+use needs its own protocol, reference standard, validation, and human workflow.
+The prototype does not provide diagnosis, disease grading, treatment advice,
+or emergency detection. See [validation](docs/validation.md) and
+[safety](docs/safety.md) for the current limits.
+
+## Development and repository guide
+
+```sh
+pnpm test          # structure checks, unit tests, TypeScript, and builds
+pnpm test:browser  # browser suites; requires Chrome
+```
+
+PostgreSQL tests and the optional Python voice service have separate prerequisites.
+See [Contributing](CONTRIBUTING.md) and the
+[service guide](apps/encounter-service/README.md) before running the complete
+verification suite. The optional WavLM service is disconnected from browser
+capture and is not needed for the demo.
+
+| Area | Entry point |
 | --- | --- |
-| Product direction and boundaries | [Platform vision](docs/telehealth-platform-vision.md), [validation](docs/validation.md), [safety](docs/safety.md) |
-| Capture and streaming | [Browser app](apps/capture-web), [voice foundation](docs/voice-foundation.md) |
-| Measurements and contracts | [Ambient core](packages/ambient-core), [contracts](packages/contracts) |
-| Longitudinal evidence | [Trajectory core](packages/trajectory-core), [evidence core](packages/evidence-core), [review panel](apps/clinician-review) |
-| Host integration and persistence | [Encounter service](apps/encounter-service), [integration runbook](docs/encounter-integration.md) |
-| ML experiments and reproducibility | [Voice research](research/voice-prosody/README.md), [public aggregate evidence](benchmarks/voice-prosody) |
+| Purpose and roadmap | [Platform vision](docs/telehealth-platform-vision.md) |
+| Browser demo and host capture | [Capture app](apps/capture-web), [operator guide](docs/operator-guide.md) |
+| Measurements and data contracts | [Ambient core](packages/ambient-core), [contracts](packages/contracts) |
+| Comparisons and evidence | [Trajectory core](packages/trajectory-core), [evidence core](packages/evidence-core), [review panel](apps/clinician-review) |
+| Persistence and integration | [Encounter service](apps/encounter-service), [integration guide](docs/encounter-integration.md) |
+| Voice experiments | [Research guide](https://github.com/logannye/phenometrix/blob/dec24f22241ed4655023c35671f6aab226c155e6/research/voice-prosody/README.md), [research PR](https://github.com/logannye/phenometrix/pull/34) |
 
-Routine capture retains derived observations through the governed service.
-Research-media retention requires separate consent and is disabled by default.
-No clinical validation, autonomous clinical action, or production deployment is
-established by this repository.
+## License
+
+The repository's software is available under the [MIT License](LICENSE).
