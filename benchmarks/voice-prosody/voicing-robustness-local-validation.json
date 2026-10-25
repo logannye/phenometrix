@@ -87,10 +87,15 @@
       "command": ".venv/bin/python -m phenometrix_prosody.audit_natural_browser --run runs/voicing-robustness-assessment-v2/browser-attempt-2 --inputs runs/voicing-robustness-assessment-v2/natural-inputs/manifest.json --data data/ptdb-tug --config ../../apps/capture-web/public/.local/voice-mlp/hybrid-config.json --export runs/delayed-mlp-export --output runs/voicing-robustness-assessment-v2/natural-browser-audit-attempt-2",
       "status": "passed",
       "cases": 34
+    },
+    {
+      "command": "actionlint .github/workflows/ci.yml",
+      "cwd": ".",
+      "status": "passed after moving runner.temp to test-step env"
     }
   ],
   "changed_source_sha256": {
-    ".github/workflows/ci.yml": "c70aecb88c99f56357c581f225a2192cfe8088e01b5dfd0ed3815e32a5b305c6",
+    ".github/workflows/ci.yml": "5985c96af7b811f9d759fd31333bdf351a0ece254d240c4aab0e7d9641abef4b",
     "apps/capture-web/e2e/voice-natural-research.spec.ts": "18327753d4fde4ec69ee9890fc3914f999d37d9c564e7bd16ba050c40e12f37b",
     "apps/capture-web/playwright.research.config.ts": "76524df9766ccc277774d27867a3b33a8955eba8596acf08e5b1e4c27dcf3c37",
     "apps/capture-web/public/asset-manifest.json": "16734be48e7637cf834c55938f2ab35a91cae45363a7d0e23f87a91eb5e4e694",
@@ -125,5 +130,14 @@
     "sha256": "eafec482eeb1fe9a8a2d2e6a9738904354d5b369a2f4a792e5b62e2e94b29fe7",
     "run_sha256": "6508fce6532a364dc2f2c4abb45a289c8550555f87c4746c5f336391e487afb4",
     "audit_sha256": "b9bb9ac8fc51159313c45b4e24cf449abab639db574d5c3ed339702d2ac73941"
-  }
+  },
+  "previous_receipt_sha256": "451aa4017a2b72824cee10a08f6d6b86d758f051ba78e0383b3c6df75899d444",
+  "retained_hosted_workflow_failure": {
+    "revision": "7a370a768553473f637c5bf6b318fb02114c2e68",
+    "run": "https://github.com/logannye/phenometrix/actions/runs/40154255368",
+    "status": "failed before any jobs started",
+    "diagnostic": "actionlint: runner context is not allowed in job-level env; moved NUMBA_CACHE_DIR to the test step env",
+    "code_or_model_changed": false
+  },
+  "source_change_since_full_tests": "Only CI configuration changed after full tests; runtime/model/test source hashes remain identical."
 }

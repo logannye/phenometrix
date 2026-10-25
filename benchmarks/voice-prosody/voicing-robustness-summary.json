@@ -53206,6 +53206,6 @@
   },
   "local_validation": {
     "path": "benchmarks/voice-prosody/voicing-robustness-local-validation.json",
-    "sha256": "451aa4017a2b72824cee10a08f6d6b86d758f051ba78e0383b3c6df75899d444"
+    "sha256": "69c0b6468553b05be8e3876db129f51052535e564b4067cf450d37a508d14eed"
   }
 }

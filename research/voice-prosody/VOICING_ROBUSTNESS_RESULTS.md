@@ -297,7 +297,11 @@ records **1,316 Python tests**, **356 web unit tests**, repository checks,
 TypeScript checking, both production builds and research-asset exclusion, all
 passing. The complete research browser route passed **8 tests with zero skips**;
 the separate independent audit covered all 34 finite cases. Four known Python
-warnings remain recorded. Hosted synthetic checks run on the PR revision; consult
+warnings remain recorded. The initial hosted workflow at `7a370a7` failed before any jobs started because
+`runner.temp` was used in job-level environment scope. The CI-only repair moves
+it to the test step; installed `actionlint` verifies the corrected workflow.
+The failed run remains recorded in the validation receipt.
+Hosted synthetic checks run on the PR revision; consult
 its current checks rather than an older commit's status. They do not validate
 local corpus results. Raw recordings, references, weights, frame predictions and
 traces remain ignored; all public outputs contain aggregate evidence only.
