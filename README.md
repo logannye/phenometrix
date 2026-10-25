@@ -66,6 +66,17 @@ clinical authorization, and acquisition validation are not bundled. See the
 [architecture](docs/architecture.md) and
 [encounter integration guide](docs/encounter-integration.md).
 
+The [matched voicing robustness study](research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md)
+completed six fits and an independent audit: **no-go**. Its mean shifted
+false-negative-or-unavailable reduction is only **0.1248 percentage points
+(0.83%)** versus matched controls, below the required 20%; the designated
+candidate also fails the overall-utility gate. All analytic/event checks pass.
+[KEELE intake](research/voice-prosody/KEELE_INTAKE.md) is blocked without external
+outcome access. The [audited finite natural-browser replay](research/voice-prosody/VOICING_ROBUSTNESS_RESULTS.md#natural-browser-execution-and-delivery)
+measured 5.6 ms service p99 and 89.7142% delivered-correct coverage, with explicit
+partial-target and injected-stall losses. Local checks pass; current-head hosted
+status is supplied by PR checks. Production stays DSP.
+
 ## Evidence so far
 
 The strongest completed results distinguish signal accuracy from software

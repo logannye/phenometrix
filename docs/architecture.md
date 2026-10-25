@@ -422,3 +422,33 @@ stdout serialization error, despite saved checkpoints, predictions and metrics.
 A separate post hoc forensic audit qualifies those saved artifacts using the
 frozen independent equations and the actual failed manifest. It cannot rewrite
 the attempt status, regenerate evaluation inputs, refit models or change gates.
+
+### Matched voicing robustness and finite source replay
+
+The [voicing study](../research/voice-prosody/VOICING_ROBUSTNESS_PLAN.md) adds a
+versioned input-bank/training/evaluation boundary. The original 57-feature MLP,
+raw-YIN rule and declared 20 ms target-relative support stay fixed. TRAIN-only
+continuous channel views are constructed before six paired fits; original
+normalization buffers, source/view slots, valid masks and optimizer schedules
+are explicitly bound. All PTDB evaluation speakers are now consumed development.
+External-corpus admission is separate and currently blocked by the retained
+KEELE reference contract. No scientific pass is implied by artifact completeness.
+
+The [finite browser route](../research/voice-prosody/NATURAL_BROWSER_PROTOCOL.md)
+adds an opt-in scheduled source contract to the existing AudioWorklet/worker
+transport. Source zero maps to an explicitly scheduled render frame. A
+same-port PCM fence closes admission, and completion waits for worker inference,
+result acknowledgements, origin receipt and observed worklet credit return.
+Timeouts, final partial PCM, resets and missing targets remain accounted losses.
+The research-only bounded event ledger records worker drops and resets; ordinary
+product capture never enables it. The default DSP estimator and original hybrid
+checkpoint guard remain intact.
+
+The natural auditor reconstructs exact support and feature-history resets,
+compares independent NumPy model outputs and librosa YIN, then joins unchanged
+provider references on integer source samples. All intended targets remain in
+the delivery denominator, including withheld and canceled results. Shared pure
+feature equations, descriptive local timing, software age certificates and
+unvalidated total browser heap are explicit limits. Research assets remain
+excluded from both production builds; corpus material stays in ignored local
+storage and is not part of CI.

@@ -452,6 +452,26 @@ describe("actual DSP worker with simulated transport queues", () => {
     expect(dispose).toHaveBeenCalledOnce();
   });
 
+  it("natural completion fence waits for acoustic inference and the main result acknowledgement", async () => {
+    let release!: (value: VoiceResearchPrediction) => void;
+    const hook: VoiceResearchHook = { prepare: (samples, rate) => extractVoicePitchFeaturesV2(samples, rate), reset() {},
+      predict: () => new Promise(resolve => { release = resolve; }), async dispose() {} };
+    const f = await fixture(false, false, hook);
+    f.block();
+    f.rawPcm({ data: { type: "research-natural-end", captureEpoch: 1, fenceId: 1 } });
+    const drained = () => f.wireResponses.filter(row => (row as unknown as { type: string }).type === "research-natural-drained");
+    expect(drained()).toHaveLength(0);
+    release({} as VoiceResearchPrediction);
+    await new Promise(resolve => setTimeout(resolve, 15));
+    expect(drained()).toHaveLength(0);
+    const batch = f.wireResponses.find(row => row.type === "result-batch") as Extract<VoiceWorkerResponse, { type: "result-batch" }>;
+    f.send({ schemaVersion: VOICE_WORKER_MESSAGE_VERSION, type: "result-ack", captureEpoch: 1,
+      batchId: batch.batchId, discardedFrameCount: 0, staleFrameCount: 0 });
+    await new Promise(resolve => setTimeout(resolve, 15));
+    expect(drained()).toEqual([expect.objectContaining({ status: "drained", pumpIdle: true,
+      diagnostics: expect.objectContaining({ inFlightResultBatchCount: 0, researchCancelledFrameCount: 0 }) })]);
+  });
+
   it("acknowledges disposal immediately during pending inference and recycles active PCM only once", async () => {
     let finish!: () => void;
     const hook: VoiceResearchHook = { prepare: (samples, rate) => extractVoicePitchFeaturesV2(samples, rate), reset() {},

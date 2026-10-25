@@ -68,6 +68,7 @@ const researchPump = new BoundedVoiceAsyncPump<ResearchPcmRequest>(
   request => {
     const block = request.event.data as VoiceWorkletPcmBlock;
     if (block.captureEpoch === captureEpoch) {
+      naturalBlockLoss(block, "inference-queue-discard");
       researchQueueDroppedBlockCount += 1;
       researchQueueDroppedSampleCount += block.buffer instanceof ArrayBuffer ? block.buffer.byteLength / 4 : 0;
     }
@@ -81,7 +82,47 @@ const researchPump = new BoundedVoiceAsyncPump<ResearchPcmRequest>(
       type: "error", captureEpoch, reason: `research-model-failed:${String(error)}` });
   }
 );
+let naturalDrainPending = false;
+let naturalAuditEnabled = false;
+const naturalEventCapacity = 20_000; // Fixed finite-source diagnostic ledger, never per-drop IPC.
+const naturalEvents: Array<Record<string, unknown>> = [];
+let naturalEventOverflow = 0;
+function recordNaturalEvent(value: Record<string, unknown>): void {
+  if (!naturalAuditEnabled) return;
+  if (naturalEvents.length < naturalEventCapacity) naturalEvents.push(value);
+  else naturalEventOverflow += 1;
+}
+function naturalBlockLoss(block: VoiceWorkletPcmBlock, reason: string): void {
+  if (!naturalAuditEnabled || block.captureEpoch !== captureEpoch) return;
+  recordNaturalEvent({ kind: "block-loss", reason,
+    blockSequence: block.sequence, supportStartSample: block.absoluteSampleIndex,
+    supportEndSampleExclusive: block.absoluteSampleIndex + block.buffer.byteLength / 4,
+    trackSegmentId: `audio-${captureEpoch}-${segmentNumber}` });
+}
 function receivePcm(event: MessageEvent<unknown>, sourcePort: MessagePort): void {
+  // The fence shares the PCM port: no earlier admitted block can arrive after it.
+  const fence = event.data as { type?: string; captureEpoch?: number; fenceId?: number };
+  if (fence?.type === "research-natural-start") {
+    if (researchHook && sourcePort === port && fence.captureEpoch === captureEpoch && !naturalAuditEnabled) naturalAuditEnabled = true;
+    return;
+  }
+  if (fence?.type === "research-natural-end") {
+    if (!researchHook || naturalDrainPending || sourcePort !== port || fence.captureEpoch !== captureEpoch || fence.fenceId !== 1) return;
+    naturalDrainPending = true;
+    const began = performance.now();
+    const check = () => {
+      if (workerDisposed) return;
+      const drained = researchPump.idle && inFlightResults.size === 0;
+      if (drained || performance.now() - began >= 5000) {
+        worker.postMessage({ type: "research-natural-drained", captureEpoch, fenceId: 1,
+          status: drained ? "drained" : "timeout", elapsedMs: performance.now() - began,
+          pumpIdle: researchPump.idle, diagnostics: diagnostics(),
+          events: naturalEvents, eventCapacity: naturalEventCapacity, eventOverflow: naturalEventOverflow });
+      } else setTimeout(check, 5);
+    };
+    check();
+    return;
+  }
   if (!researchHook) { void handleBlock(event, sourcePort); return; }
   const request = { event, sourcePort, receivedAtLocalMs: performance.now(), recycled: false };
   if (researchFailed) { recycleResearchRequest(request); return; }
@@ -203,6 +244,7 @@ function resetFeatureState(): void {
   lastNucleusAtMs = Number.NEGATIVE_INFINITY;
   priorNucleusScore = 0;
   segmentNumber += 1;
+  recordNaturalEvent({ kind: "reset", featureGeneration, trackSegmentId: `audio-${captureEpoch}-${segmentNumber}` });
 }
 
 function reset(epoch: number, nextNoiseFloorRms?: number): void {
@@ -465,6 +507,7 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
     return;
   }
   if (block.buffer.byteLength / 4 > Math.ceil(block.sampleRateHz * VOICE_MAXIMUM_PCM_BLOCK_MS / 1_000)) {
+    naturalBlockLoss(block, "oversized-pcm");
     oversizedPcmBlockCount += 1;
     resetFeatureState();
     recycle();
@@ -515,6 +558,7 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
     (lastAbsoluteSampleIndex > 0 &&
       block.absoluteSampleIndex < lastAbsoluteSampleIndex)
   ) {
+    naturalBlockLoss(block, "timestamp-regression");
     timestampRegressionCount += 1;
     resetFeatureState();
     recycle();
@@ -569,6 +613,7 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
   lastAbsoluteSampleIndex =
     block.absoluteSampleIndex + samples.length;
   if (noResultCredit) {
+    naturalBlockLoss(block, "result-backpressure");
     if (!resultBackpressured) {
       resultBackpressureEpisodeCount += 1;
       lastResultBackpressureSpan = { supportStartSample: block.absoluteSampleIndex,
@@ -636,6 +681,7 @@ function handleBlock(event: MessageEvent<unknown>, sourcePort: MessagePort, rese
   const cancel = (): void => {
     if (cancelled) return;
     cancelled = true;
+    naturalBlockLoss(block, "inference-canceled");
     inFlightResults.delete(resultBatchId);
     if (block.captureEpoch === captureEpoch) {
       researchCancelledBlockCount += 1;

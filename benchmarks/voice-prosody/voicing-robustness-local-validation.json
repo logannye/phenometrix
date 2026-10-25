@@ -1,0 +1,129 @@
+{
+  "schema": "phenometrix.voicing-robustness.local-validation.v1",
+  "recorded_at_utc": "2026-10-25T02:21:01.723109+00:00",
+  "source_identity": "working-tree SHA-256 inventory; commit identity is supplied by Git after publication",
+  "base_revision": "56906cebae330d0736469b21e89bec217cfbba66",
+  "platform": {
+    "os": "macOS 26.2",
+    "architecture": "arm64",
+    "processor": "Apple M4 Max",
+    "logical_cores": 16,
+    "memory_gib": 128,
+    "python": "3.11.15",
+    "node": "24.3.0",
+    "pnpm": "9.12.3",
+    "torch": "2.9.1",
+    "training_device": "mps"
+  },
+  "checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q -p no:cacheprovider tests",
+      "cwd": "research/voice-prosody",
+      "status": "passed",
+      "tests": 1316,
+      "warnings": 4,
+      "warning_notes": "Three retained historical selector-headroom NumPy matmul warnings; one fixed 40ms/50Hz librosa YIN support warning."
+    },
+    {
+      "command": "npm run check",
+      "cwd": ".",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm --filter @phenometrix/capture-web test:unit",
+      "cwd": ".",
+      "status": "passed",
+      "tests": 356,
+      "test_files": 38
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm exec vitest run src/voice-worklet.test.ts src/voice-natural-completion.test.ts src/voice-worker.test.ts",
+      "status": "passed",
+      "tests": 51
+    },
+    {
+      "cwd": "research/voice-prosody",
+      "command": ".venv/bin/python -m pytest tests/test_natural_browser.py tests/test_audit_hybrid_browser.py -q",
+      "status": "passed",
+      "tests": 40
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm exec tsc --noEmit",
+      "status": "passed"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm run build",
+      "status": "passed",
+      "scope": "standard and embedded production builds"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "pnpm run verify:assets",
+      "status": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "status": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "production output inventory assertion",
+      "status": "passed",
+      "scope": "No .local research artifacts, ONNX, ort runtime, natural PCM or research route in standard/embedded output; normal product MediaPipe WASM remains"
+    },
+    {
+      "cwd": "apps/capture-web",
+      "command": "VOICE_RESEARCH_METHOD=hybrid VOICE_RESEARCH_CLOCK_DIAGNOSTICS=1 VOICE_RESEARCH_MODEL_CONFIG=public/.local/voice-mlp/hybrid-config.json VOICE_NATURAL_MANIFEST=../../research/voice-prosody/runs/voicing-robustness-assessment-v2/natural-inputs/manifest.json VOICE_RESEARCH_OUTPUT_DIR=../../research/voice-prosody/runs/voicing-robustness-assessment-v2/browser-attempt-2 pnpm exec playwright test --config playwright.research.config.ts --workers=1",
+      "status": "passed",
+      "tests": 8,
+      "skipped": 0
+    },
+    {
+      "cwd": "research/voice-prosody",
+      "command": ".venv/bin/python -m phenometrix_prosody.audit_natural_browser --run runs/voicing-robustness-assessment-v2/browser-attempt-2 --inputs runs/voicing-robustness-assessment-v2/natural-inputs/manifest.json --data data/ptdb-tug --config ../../apps/capture-web/public/.local/voice-mlp/hybrid-config.json --export runs/delayed-mlp-export --output runs/voicing-robustness-assessment-v2/natural-browser-audit-attempt-2",
+      "status": "passed",
+      "cases": 34
+    }
+  ],
+  "changed_source_sha256": {
+    ".github/workflows/ci.yml": "c70aecb88c99f56357c581f225a2192cfe8088e01b5dfd0ed3815e32a5b305c6",
+    "apps/capture-web/e2e/voice-natural-research.spec.ts": "18327753d4fde4ec69ee9890fc3914f999d37d9c564e7bd16ba050c40e12f37b",
+    "apps/capture-web/playwright.research.config.ts": "76524df9766ccc277774d27867a3b33a8955eba8596acf08e5b1e4c27dcf3c37",
+    "apps/capture-web/public/asset-manifest.json": "16734be48e7637cf834c55938f2ab35a91cae45363a7d0e23f87a91eb5e4e694",
+    "apps/capture-web/public/voice-capture-worklet.js": "b86098b68b350e0d7e6c0c896f66b12c8bb82d398e5ff2b76a274b2d8b7bb3dd",
+    "apps/capture-web/src/research-voice-replay.ts": "4ef595103031c9f455d255f48d4bc064aa2615f5bde0d168f67ddcc76e2b92d2",
+    "apps/capture-web/src/voice-async-pump.ts": "53fcbc2155d89e59699837bd135d3e2c5b4369fd13c1c5ea67e6712c13d94398",
+    "apps/capture-web/src/voice-natural-completion.test.ts": "af71fc7f646f5d022f6e94cd97edc1f1a84ecfe4ca3dd3022764a30aac58d0b8",
+    "apps/capture-web/src/voice-natural-completion.ts": "4c924832dd7ed93c48582e63a8d2549e539cb9960f367c29e7eef67b90e56209",
+    "apps/capture-web/src/voice-worker.test.ts": "8f2836ca137640df28140f32fe0d5e5361058af16f7b40e7a990bc16ce89c8b7",
+    "apps/capture-web/src/voice-worker.ts": "906045b350c3a264e679167a6e04148dbb0bfbea2c242e90d0c24e1b14c4eb0b",
+    "apps/capture-web/src/voice-worklet.test.ts": "3e4f822ca0b8ed943d5eddd7a6752496c868490244b00cb2b30043fa4e64258e",
+    "research/voice-prosody/natural_browser_features.ts": "3816850dd281f19d4a8d36bb73d98e03dd4c9e02c68c8715d27cb8971d13a966",
+    "research/voice-prosody/phenometrix_prosody/audit_natural_browser.py": "9b1809d2f9d7bbac6621ddfd88707f82d157065e154a3e10743957ac71c45804",
+    "research/voice-prosody/phenometrix_prosody/audit_voicing_robustness.py": "04ebe5727ed0d60d95e2f98828613fe9f757cae5dd89c8475420adc7a973d0dc",
+    "research/voice-prosody/phenometrix_prosody/keele_adapter.py": "fda3ed7c2f59ed06f9b51b72a2a6a785fdefd0137ef49d385e9a7794c63e0864",
+    "research/voice-prosody/phenometrix_prosody/prepare_natural_browser.py": "54a4a48b6b7289d215ff7e03555cd162b6552458459a8909887b0142ca523e1f",
+    "research/voice-prosody/phenometrix_prosody/voicing_robustness.py": "ecaa51ad57254bfba5aa368efe2be878d9b50ac70c8ac4ecbfb92803e91066f5",
+    "research/voice-prosody/phenometrix_prosody/voicing_robustness_diagnostics.py": "2b6dc9b522f826bc7f9c486fe1ab71c6b5db113921b2a0b83e29e8a989035256",
+    "research/voice-prosody/phenometrix_prosody/voicing_robustness_evaluate.py": "e8747ca5c81e93ac81fd7830672b4e90f621ac9b96c829ef509b1907739f41b0",
+    "research/voice-prosody/phenometrix_prosody/voicing_robustness_inputs.py": "e2b779f10ee1f822cc3b4c6790bf3f2c0b8818441bb9c7002f32a39e796931d3",
+    "research/voice-prosody/tests/test_audit_voicing_robustness.py": "9acad6b766255e9d8d7becd76c13e571ac9d366de36a9274e735429f18eacbc9",
+    "research/voice-prosody/tests/test_keele_adapter.py": "a8d158a076f0fadb3fe19d9379404b1b67e216e0e0924722cd1cbdeb27928c18",
+    "research/voice-prosody/tests/test_natural_browser.py": "fd992be74d230d64c27fbb98f5621c1128aa7a14c5d17a59f0a61d4ed5c61007",
+    "research/voice-prosody/tests/test_voicing_robustness.py": "8e7c6d56834998d864891cf4e4d29100dad46090ad63f536184122b12fb50060",
+    "research/voice-prosody/tests/test_voicing_robustness_diagnostics.py": "5ae576c39e320c09a7be1e80007295a8882b8147256c754d23d97d5ecc74830e",
+    "research/voice-prosody/tests/test_voicing_robustness_evaluate.py": "28b890bdb9ac12b647f245226439ee3bc7bd7714254fe372f6de04c7e371ed5f"
+  },
+  "native_builds": "No local Rust/native source compilation, extension rebuild, package installation or environment synchronization. Existing prebuilt inference libraries reused.",
+  "hosted_ci": "Synthetic software checks are tracked on the pull request at its exact head; they do not validate local corpus results.",
+  "browser_evidence": {
+    "path": "benchmarks/voice-prosody/voicing-robustness-browser.json",
+    "sha256": "eafec482eeb1fe9a8a2d2e6a9738904354d5b369a2f4a792e5b62e2e94b29fe7",
+    "run_sha256": "6508fce6532a364dc2f2c4abb45a289c8550555f87c4746c5f336391e487afb4",
+    "audit_sha256": "b9bb9ac8fc51159313c45b4e24cf449abab639db574d5c3ed339702d2ac73941"
+  }
+}
